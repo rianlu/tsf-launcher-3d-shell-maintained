@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tsfui="http://tsfui.com">
+    <CheckBoxPreference android:title="@string/memory_pemanent" android:key="memory_pemanent" android:summary="@string/memory_pemanent_summary" />
+    <Preference android:title="@string/home_key_patch" android:key="home_key_patch" android:summary="@string/home_key_patch_summary" />
+    <PreferenceScreen android:icon="@drawable/ic_pref_restart" android:title="@string/mn_restartshell" android:key="restart_shell" />
+</PreferenceScreen>

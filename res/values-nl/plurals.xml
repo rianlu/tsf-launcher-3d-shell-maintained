@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="permission_denied_guide_desc">
+        <item quantity="other">%s machtigingen zijn niet toegestaan, klik op OK om in te schakelen</item>
+        <item quantity="one">%s machtiging is niet toegestaan, klik op OK om in te schakelen</item>
+    </plurals>
+</resources>

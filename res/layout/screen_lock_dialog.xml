@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textSize="14.0sp" android:textColor="@android:color/tertiary_text_light" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10.0dp" android:layout_marginTop="5.0dp" android:layout_marginRight="10.0dp" android:layout_marginBottom="10.0dp" android:text="@string/mn_lock_unlock" />
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginLeft="8.0dp" android:layout_marginRight="10.0dp">
+        <RelativeLayout android:id="@id/sliding_layout" android:layout_width="wrap_content" android:layout_height="40.0dp" android:layout_marginLeft="10.0dp" android:layout_marginRight="5.0dp" android:layout_toLeftOf="@id/unlock_icon" />
+        <ImageView android:id="@id/unlock_icon" android:layout_width="20.0dp" android:layout_height="20.0dp" android:layout_marginTop="8.0dp" android:layout_alignParentRight="true" />
+    </RelativeLayout>
+    <RelativeLayout android:gravity="left|center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10.0dp" android:layout_marginTop="5.0dp" android:layout_marginRight="10.0dp">
+        <CheckBox android:id="@id/checkbox" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentLeft="true" />
+        <TextView android:textColor="@android:color/tertiary_text_light" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/mn_lock_relock" android:layout_toRightOf="@id/checkbox" android:layout_centerVertical="true" />
+    </RelativeLayout>
+    <TextView android:textSize="12.0sp" android:textColor="@android:color/tertiary_text_light" android:id="@id/relock_notic_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10.0dp" android:layout_marginRight="10.0dp" android:layout_marginBottom="10.0dp" />
+</LinearLayout>

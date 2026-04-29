@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.tsf.extend.wallpaper.WallpaperOnLinePager android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:orientation="horizontal" android:id="@id/title_bar" android:background="#ffffff" android:layout_width="match_parent" android:layout_height="50.0dp">
+        <TextView android:textSize="20.0sp" android:textColor="#333333" android:gravity="left|center" android:id="@id/title" android:background="@drawable/wallpaper_mine_bg_selector" android:paddingLeft="9.0dp" android:paddingRight="9.0dp" android:layout_width="wrap_content" android:layout_height="match_parent" android:text="@string/select_online_title" android:drawableLeft="@drawable/actionbar_back" android:drawablePadding="6.0dp" />
+    </LinearLayout>
+    <include android:id="@id/wallpaper_pager" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_weight="1.0" layout="@layout/wallpaper_pager" />
+</com.tsf.extend.wallpaper.WallpaperOnLinePager>

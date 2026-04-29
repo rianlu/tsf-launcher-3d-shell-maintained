@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout android:id="@id/margin_top" android:visibility="visible" android:layout_width="match_parent" android:layout_height="20.0dp" />
+    <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="match_parent">
+        <ImageView android:layout_gravity="center" android:id="@id/imageView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10.0dp" android:src="@drawable/ic_list_weather" android:tint="@color/material_catalog_color" />
+        <TextView android:layout_gravity="center" android:id="@id/textView1" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Title" style="@style/TSFText.Material.ItemCatalog" />
+    </LinearLayout>
+    <FrameLayout android:visibility="gone" android:layout_width="match_parent" android:layout_height="10.0dp" />
+</LinearLayout>

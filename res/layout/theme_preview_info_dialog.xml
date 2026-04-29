@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:padding="10.0dp" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textSize="18.0sp" android:id="@id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TextView" />
+    <TextView android:textSize="14.0sp" android:id="@id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TextView" />
+    <TextView android:textSize="14.0sp" android:id="@id/textView3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TextView" />
+    <TextView android:textSize="14.0sp" android:id="@id/textView4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TextView" />
+</LinearLayout>

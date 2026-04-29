@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.tsf.extend.theme.ThemeLikedPager android:orientation="vertical" android:paddingTop="25.0dp" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <include layout="@layout/wallpaper_title_layout" />
+    <FrameLayout android:id="@id/theme_liked_list_content" android:background="#ffeeeeee" android:layout_width="match_parent" android:layout_height="match_parent" />
+    <include layout="@layout/no_liked_layout" />
+</com.tsf.extend.theme.ThemeLikedPager>

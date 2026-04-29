@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:orientation="vertical" android:id="@id/alertRoot" android:background="#9000" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:gravity="center_horizontal" android:layout_gravity="center" android:orientation="vertical" android:background="@drawable/dialog_full_holo_dark" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true" android:layout_centerVertical="true">
+        <TextView android:ellipsize="end" android:gravity="center" android:id="@id/alertTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:singleLine="true" style="?android:attr/textAppearanceLarge" />
+        <LinearLayout android:layout_gravity="fill_vertical|center" android:orientation="horizontal" android:id="@id/clockView" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1.0" />
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" style="@android:style/ButtonBar">
+            <Button android:id="@id/snooze" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/alarm_alert_snooze_text" android:layout_weight="3.0" />
+            <View android:layout_gravity="fill_horizontal" android:layout_width="2.0dp" android:layout_height="2.0dp" android:layout_weight="1.0" />
+            <Button android:id="@id/dismiss" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/alarm_alert_dismiss_text" android:layout_weight="3.0" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

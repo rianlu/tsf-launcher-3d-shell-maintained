@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="@drawable/material_list_view_bg_with_divide" android:paddingTop="10.0dp" android:paddingBottom="10.0dp" android:layout_width="match_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <TextView android:id="@id/textView1" android:layout_width="0.0dp" android:layout_height="wrap_content" android:maxWidth="140.0dp" android:text="Title" android:layout_weight="1.0" style="@style/TSFText.Material.ItemTitle" />
+        <TextView android:id="@id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Summary" android:maxLength="25" style="@style/TSFText.Material.ItemSummary" />
+    </LinearLayout>
+    <SeekBar android:id="@id/seekBar1" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="10.0dp" style="@style/TSFTheme.Material.SeekBarStyle" />
+</LinearLayout>

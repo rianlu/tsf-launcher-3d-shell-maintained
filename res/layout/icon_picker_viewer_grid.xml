@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:orientation="vertical" android:id="@id/RelativeLayout1" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <GridView android:gravity="center" android:id="@id/icongrid" android:padding="2.0dp" android:layout_width="match_parent" android:layout_height="match_parent" android:horizontalSpacing="20.0dp" android:verticalSpacing="20.0dp" android:stretchMode="columnWidth" android:columnWidth="46.0dp" android:numColumns="auto_fit" android:layout_alignParentLeft="true" android:layout_alignParentTop="true" />
+    <ProgressBar android:id="@id/mainprogress" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxWidth="25.0dp" android:maxHeight="25.0dp" android:indeterminateDrawable="@drawable/icon_picker_item_loading" android:minWidth="25.0dp" android:minHeight="25.0dp" android:layout_centerHorizontal="true" android:layout_centerVertical="true" style="?android:attr/progressBarStyleSmall" />
+    <ImageView android:id="@id/imageView1" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_gallery_empty2" android:layout_centerInParent="true" />
+</RelativeLayout>

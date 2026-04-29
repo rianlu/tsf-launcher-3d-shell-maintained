@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.tsf.extend.keyboard.KeyboardPager android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout android:layout_width="match_parent" android:layout_height="50.0dp">
+        <TextView android:textSize="19.0sp" android:textColor="#99333333" android:gravity="left|center" android:layout_gravity="left|center" android:id="@id/title" android:background="@drawable/wallpaper_mine_bg_selector" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="24.0dp" android:text="@string/keyboard_tab" />
+        <View android:layout_gravity="bottom" android:background="@drawable/personal_indicator_bottom_divider" android:layout_width="match_parent" android:layout_height="1.0dp" />
+    </FrameLayout>
+    <FrameLayout android:id="@id/list_content" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginTop="50.0dp" />
+</com.tsf.extend.keyboard.KeyboardPager>

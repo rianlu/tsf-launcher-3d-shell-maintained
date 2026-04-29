@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="abbrev_wday_month_day_no_year">MMMM d, EEEE</string>
+    <string name="alarm_app_name">الساعة</string>
+    <string name="cubeclock_app_name">الساعة</string>
+    <string name="full_wday_month_day_no_year">MMMM d, EEEE</string>
+</resources>

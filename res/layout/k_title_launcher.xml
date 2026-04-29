@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:gravity="center_vertical" android:id="@id/k_title" android:background="#ff233647" android:layout_width="match_parent" android:layout_height="48.0dp"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout android:id="@id/title_head" android:layout_width="match_parent" android:layout_height="match_parent">
+        <TextView android:textSize="20.0sp" android:textColor="@color/white" android:gravity="center_vertical" android:id="@id/title_back" android:paddingLeft="16.0dp" android:paddingRight="10.0dp" android:visibility="visible" android:layout_width="match_parent" android:layout_height="match_parent" android:singleLine="true" android:drawableLeft="@drawable/actionbar_back_title" android:drawablePadding="16.0dp" android:layout_alignParentLeft="true" />
+        <Button android:textSize="20.0sp" android:textColor="@color/white" android:layout_gravity="right|center" android:id="@id/action_btn" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="match_parent" android:minWidth="50.0dp" android:singleLine="true" android:layout_alignParentRight="true" />
+        <ImageButton android:textSize="20.0sp" android:textColor="@color/white" android:layout_gravity="right|center" android:id="@id/action_img_btn" android:padding="13.0dp" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="match_parent" android:singleLine="true" android:layout_alignParentRight="true" />
+    </RelativeLayout>
+</FrameLayout>

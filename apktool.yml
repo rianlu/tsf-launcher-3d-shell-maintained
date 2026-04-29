@@ -1,0 +1,21 @@
+version: 3.0.1
+apkFileName: TSF Launcher 3D Shell_3.9.4_APKPure.apk
+usesFramework:
+  ids:
+  - 1
+sdkInfo:
+  minSdkVersion: 8
+  targetSdkVersion: 26
+versionInfo:
+  versionCode: 30904
+  versionName: 3.9.4
+resourcesInfo:
+  packageId: 127
+  keepRawValues: true
+doNotCompress:
+- arsc
+- jpg
+- mp4
+- ogg
+- png
+- assets/kctrl.dat

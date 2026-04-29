@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="abbrev_wday_month_day_no_year">EEE d MMMM</string>
+    <string name="abc_action_bar_home_description">"Navega a la pàgina d'inici"</string>
+    <string name="abc_action_bar_home_description_format">%1$s, %2$s</string>
+    <string name="abc_action_bar_home_subtitle_description_format">%1$s, %2$s, %3$s</string>
+    <string name="abc_action_bar_up_description">Navega cap a dalt</string>
+    <string name="abc_action_menu_overflow_description">Més opcions</string>
+    <string name="abc_action_mode_done">Fet</string>
+    <string name="abc_activity_chooser_view_see_all">"Mostra'ls tots"</string>
+    <string name="abc_activitychooserview_choose_application">Selecciona una aplicació</string>
+    <string name="abc_capital_off">DESACTIVAT</string>
+    <string name="abc_capital_on">ACTIVAT</string>
+    <string name="abc_search_hint">Cerca...</string>
+    <string name="abc_searchview_description_clear">Esborra la consulta</string>
+    <string name="abc_searchview_description_query">Consulta de cerca</string>
+    <string name="abc_searchview_description_search">Cerca</string>
+    <string name="abc_searchview_description_submit">Envia la consulta</string>
+    <string name="abc_searchview_description_voice">Cerca per veu</string>
+    <string name="abc_shareactionprovider_share_with">Comparteix amb</string>
+    <string name="abc_shareactionprovider_share_with_application">Comparteix amb %s</string>
+    <string name="abc_toolbar_collapse_description">Replega</string>
+    <string name="alarm_app_name">Hodiny</string>
+    <string name="cubeclock_app_name">Hodiny</string>
+    <string name="full_wday_month_day_no_year">EEEE d MMMM</string>
+    <string name="status_bar_notification_info_overflow">+999</string>
+    <string name="plugin_crop_cancel">Cancel·la</string>
+    <string name="plugin_crop_crop_free">Gratuït</string>
+    <string name="plugin_crop_crop_square">Quadrat</string>
+    <string name="plugin_crop_custom">Personalitzat</string>
+    <string name="plugin_crop_ok">"D'acord"</string>
+    <string name="theme_picker_delete_target_uninstall_label">Desinstal·la</string>
+    <string name="theme_picker_discard_changes">Descarta els canvis</string>
+    <string name="theme_picker_edit_shortcut">Edita la drecera</string>
+    <string name="theme_picker_info_target_label">"Informació de l'aplicació"</string>
+    <string name="theme_picker_system">Sistema</string>
+    <string name="theme_picker_theme_picker_gallery_apps">"Galeria d'apps"</string>
+    <string name="update_notic_update_available">Hi ha una actualització</string>
+    <string name="update_notic_updateapk_beta">Beta</string>
+</resources>

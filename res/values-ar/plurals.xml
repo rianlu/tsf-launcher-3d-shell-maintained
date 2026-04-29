@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="permission_denied_guide_desc">
+        <item quantity="other">%s الأذونات لم تمنح، يرجى النقر على موافق للتفعيل</item>
+        <item quantity="zero">%s الإذن لم يمنح، يرجى النقر على موافق للتفعيل</item>
+        <item quantity="one">%s الإذن لم يمنح، يرجى النقر على موافق للتفعيل</item>
+        <item quantity="two">%s الأذونات لم تمنح، يرجى النقر على موافق للتفعيل</item>
+        <item quantity="few">%s الأذونات لم تمنح، يرجى النقر على موافق للتفعيل</item>
+        <item quantity="many">%s الأذونات لم تمنح، يرجى النقر على موافق للتفعيل</item>
+    </plurals>
+</resources>

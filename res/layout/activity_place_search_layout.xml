@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:id="@id/LinearLayout1" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout android:orientation="vertical" android:background="@color/material_title_bg_color" android:layout_width="match_parent" android:layout_height="61.0dp">
+        <TextView android:layout_gravity="center" android:id="@id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/settingtitle" android:layout_centerInParent="true" style="@style/TSFText.Material.AppTitle" />
+    </RelativeLayout>
+    <LinearLayout android:gravity="center" android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="10.0dp">
+        <EditText android:textSize="16.0sp" android:textColor="@color/material_item_text_color" android:id="@id/edittext_cityname" android:background="@drawable/material_edit_text_background" android:layout_width="0.0dp" android:layout_height="wrap_content" android:layout_marginLeft="10.0dp" android:hint="@string/tapcityname" android:maxLines="1" android:singleLine="true" android:maxLength="40" android:layout_weight="1.0" />
+        <ImageView android:id="@id/imageButton1" android:background="@drawable/activity_list_bg_selector" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10.0dp" android:layout_marginRight="10.0dp" android:src="@drawable/activity_ico_search" android:tint="@color/material_catalog_color" />
+    </LinearLayout>
+    <ListView android:id="@id/searchcity_list" android:layout_width="match_parent" android:layout_height="match_parent" style="@style/TSFTheme.Material.ListViewStyle" />
+</LinearLayout>

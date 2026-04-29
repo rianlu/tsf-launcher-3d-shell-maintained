@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="permission_denied_guide_desc">
+        <item quantity="other">%s άδειες δεν επιτρέπονται. Κάντε κλικ στο OK για ενεργοποίηση</item>
+        <item quantity="one">%s άδεια δεν επιτρέπεται. Κάντε κλικ στο OK για ενεργοποίηση</item>
+    </plurals>
+</resources>

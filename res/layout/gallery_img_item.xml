@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout android:id="@id/wallpaper_layout" android:layout_width="match_parent" android:layout_height="320.0dp">
+        <com.tsf.extend.wallpaper.WallpaperImageView android:id="@id/img" android:layout_width="match_parent" android:layout_height="match_parent" />
+        <ProgressBar android:id="@id/progresbar" android:layout_width="70.0dp" android:layout_height="70.0dp" android:layout_centerInParent="true" />
+        <LinearLayout android:orientation="vertical" android:id="@id/retry" android:background="@drawable/retry_bg" android:paddingLeft="15.0dp" android:paddingRight="15.0dp" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="80.0dp" android:minWidth="80.0dp" android:layout_centerInParent="true">
+            <ImageView android:layout_gravity="center" android:id="@id/refresh_icon" android:duplicateParentState="true" android:layout_width="30.0dp" android:layout_height="30.0dp" android:layout_marginTop="17.0dp" android:src="@drawable/icon_btn_refresh" />
+            <TextView android:textSize="16.0dp" android:textColor="@drawable/wallpaper_detail_retry_text_color" android:ellipsize="end" android:layout_gravity="center" android:id="@id/retry_text" android:duplicateParentState="true" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2.0dp" android:maxWidth="176.0dp" android:text="@string/detail_retry" android:singleLine="true" />
+        </LinearLayout>
+        <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
+            <TextView android:textSize="15.0sp" android:textColor="@android:color/white" android:id="@id/wallpaper_progress" android:background="@android:color/transparent" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" />
+        </RelativeLayout>
+        <RelativeLayout android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="48.0dp" android:layout_above="@id/controll_view">
+            <FrameLayout android:id="@id/expand_panel" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="16.0dp" android:layout_centerVertical="true">
+                <TextView android:textSize="12.0sp" android:textColor="#ffffff" android:layout_gravity="center_vertical" android:id="@id/author" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            </FrameLayout>
+        </RelativeLayout>
+        <RelativeLayout android:id="@id/controll_view" android:background="#4d000000" android:clickable="true" android:layout_width="match_parent" android:layout_height="48.0dp" android:layout_alignParentBottom="true">
+            <View android:background="#4dffffff" android:layout_width="match_parent" android:layout_height="0.5dp" />
+            <ImageView android:id="@id/preview" android:paddingLeft="24.0dp" android:paddingRight="24.0dp" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" />
+            <TextView android:textSize="16.0sp" android:textColor="@drawable/set_wallpaper_text_color" android:ellipsize="end" android:gravity="center" android:id="@id/set_wallpaper" android:paddingLeft="24.0dp" android:paddingRight="24.0dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/set_as_wallpaper" android:maxLines="2" android:layout_weight="1.0" android:layout_centerInParent="true" />
+            <ImageView android:gravity="center" android:id="@id/favorite" android:visibility="gone" android:layout_width="30.0dp" android:layout_height="30.0dp" android:layout_marginLeft="24.0dp" android:layout_marginRight="24.0dp" android:src="@drawable/favorite_theme_selector" android:layout_alignParentRight="true" android:layout_centerVertical="true" />
+            <ImageView android:id="@id/delete" android:paddingLeft="24.0dp" android:paddingRight="24.0dp" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_launcher_clear_normal_holo" android:layout_alignParentRight="true" android:layout_centerVertical="true" />
+        </RelativeLayout>
+    </RelativeLayout>
+    <RelativeLayout android:id="@id/load_relevance_layout" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16.0dp" android:layout_marginBottom="5.0dp">
+        <TextView android:textSize="12.0sp" android:textColor="#333333" android:id="@id/load_relevance_tips" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/theme_detail_padding_left" android:text="@string/wallpaper_detail_related_theme" android:layout_centerVertical="true" />
+    </RelativeLayout>
+</LinearLayout>

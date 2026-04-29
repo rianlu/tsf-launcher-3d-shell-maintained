@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="permission_denied_guide_desc">
+        <item quantity="other">A(z) %s engedélye nincs megadva, kérjük, kattints az OK-ra az aktiválásához</item>
+        <item quantity="one">A(z) %s engedélye nincs megadva, kérjük, kattints az OK-ra az aktiválásához</item>
+    </plurals>
+</resources>

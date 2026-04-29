@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<element>
+	<lasso lassoColor="#FFFF0000" lassoTargetColor="#FFFF7800" labelBgColor="#BB111111" labelTextColor="#FFBBBBBB" />
+	<smartButton windowColor="#99222222" />
+	<desktopEffect hue="0" saturation="0" selectColor="#FFFFFFFF" />
+</element>
+
+

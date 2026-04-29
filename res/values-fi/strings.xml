@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="abbrev_wday_month_day_no_year">E d. MMMM</string>
+    <string name="abc_action_bar_home_description">Siirry etusivulle</string>
+    <string name="abc_action_bar_home_description_format">%1$s, %2$s</string>
+    <string name="abc_action_bar_home_subtitle_description_format">%1$s, %2$s, %3$s</string>
+    <string name="abc_action_bar_up_description">Siirry ylös</string>
+    <string name="abc_action_menu_overflow_description">Lisää</string>
+    <string name="abc_action_mode_done">Valmis</string>
+    <string name="abc_activity_chooser_view_see_all">Näytä kaikki</string>
+    <string name="abc_activitychooserview_choose_application">Valitse sovellus</string>
+    <string name="abc_capital_off">POIS KÄYTÖSTÄ</string>
+    <string name="abc_capital_on">KÄYTÖSSÄ</string>
+    <string name="abc_search_hint">Haku…</string>
+    <string name="abc_searchview_description_clear">Tyhjennä kysely</string>
+    <string name="abc_searchview_description_query">Hakulauseke</string>
+    <string name="abc_searchview_description_search">Haku</string>
+    <string name="abc_searchview_description_submit">Lähetä kysely</string>
+    <string name="abc_searchview_description_voice">Puhehaku</string>
+    <string name="abc_shareactionprovider_share_with">Jakaminen:</string>
+    <string name="abc_shareactionprovider_share_with_application">Jakaminen: %s</string>
+    <string name="abc_toolbar_collapse_description">Kutista</string>
+    <string name="alarm_app_name">Kello</string>
+    <string name="cubeclock_app_name">Kello</string>
+    <string name="full_wday_month_day_no_year">E d. MMMM</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="plugin_crop_cancel">Peruuta</string>
+    <string name="plugin_crop_crop_free">Vapaa</string>
+    <string name="plugin_crop_crop_square">Neliö</string>
+    <string name="plugin_crop_custom">Mukautettu</string>
+    <string name="plugin_crop_ok">Ok</string>
+    <string name="theme_picker_delete_target_uninstall_label">Poista</string>
+    <string name="theme_picker_discard_changes">Hylkää muutokset</string>
+    <string name="theme_picker_edit_shortcut">Muokkaa pikakuvaketta</string>
+    <string name="theme_picker_info_target_label">Sovelluksen tiedot</string>
+    <string name="theme_picker_system">Järjestelmä</string>
+    <string name="theme_picker_theme_picker_gallery_apps">Galleria-sovellukset</string>
+    <string name="update_notic_update_available">Päivitys saatavilla</string>
+    <string name="update_notic_updateapk_beta">Beta</string>
+</resources>

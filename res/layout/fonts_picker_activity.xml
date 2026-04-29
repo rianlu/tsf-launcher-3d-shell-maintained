@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:id="@id/LinearLayout1" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:background="#ff263238" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="61.0dp">
+        <LinearLayout android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_margin="10.0dp" android:layout_weight="1.0">
+            <TextView android:textSize="18.0sp" android:textStyle="bold" android:textColor="#ffffffff" android:layout_gravity="center_vertical" android:id="@id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/font_type" />
+            <TextView android:textSize="10.0sp" android:textColor="#ffffffff" android:layout_gravity="center_vertical" android:id="@id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/font_scan_summary" />
+        </LinearLayout>
+        <RelativeLayout android:id="@id/imageView1" android:background="@drawable/fonts_list_background_selector" android:layout_width="60.0dp" android:layout_height="match_parent">
+            <ImageView android:layout_width="25.0dp" android:layout_height="25.0dp" android:layout_margin="10.0dp" android:src="@drawable/fonts_activity_ico_search" android:layout_centerInParent="true" />
+        </RelativeLayout>
+    </LinearLayout>
+    <ListView android:id="@id/listView1" android:background="@color/list_background_released" android:layout_width="match_parent" android:layout_height="wrap_content" android:listSelector="@drawable/fonts_list_background_selector" android:divider="#ffdddddd" android:dividerHeight="0.5dp" />
+</LinearLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:scrollbars="none" android:layout_width="match_parent" android:layout_height="match_parent" android:overScrollMode="never"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
+        <View android:id="@id/background" android:layout_width="match_parent" android:layout_height="match_parent" />
+        <View android:background="#33000000" android:layout_width="match_parent" android:layout_height="match_parent" />
+        <ImageView android:id="@id/btn_back" android:paddingLeft="16.0dp" android:paddingRight="32.0dp" android:layout_width="68.0dp" android:layout_height="20.0dp" android:layout_marginLeft="9.0dp" android:layout_marginTop="16.0dp" android:src="@drawable/back" android:scaleType="centerInside" />
+        <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginLeft="16.0dp" android:layout_marginTop="58.0dp" android:layout_marginRight="16.0dp">
+            <TextView android:textSize="18.0sp" android:textColor="#ffffff" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="150.0dp" android:text="@string/theme_submit_name_title" />
+            <FrameLayout android:background="@drawable/upload_wallpaper_edit_bk" android:layout_width="match_parent" android:layout_height="37.0dp" android:layout_marginTop="12.0dp">
+                <EditText android:textSize="16.0sp" android:textColor="#ffffff" android:textColorHint="#99ffffff" android:gravity="center_vertical" android:id="@id/theme_name" android:background="@color/transparent" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginLeft="16.0dp" android:hint="@string/theme_submit_name_tips" android:singleLine="true" />
+                <ImageView android:layout_gravity="right|center" android:id="@id/delete_theme_name" android:layout_width="19.0dp" android:layout_height="19.0dp" android:layout_marginTop="14.0dp" android:layout_marginRight="16.0dp" android:layout_marginBottom="14.0dp" android:src="@drawable/icon_search_delete" />
+            </FrameLayout>
+            <TextView android:textSize="18.0sp" android:textColor="#ffffff" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="22.0dp" android:text="@string/upload_wallpaper_submitpage_titleTip" />
+            <FrameLayout android:background="@drawable/upload_wallpaper_edit_bk" android:layout_width="match_parent" android:layout_height="37.0dp" android:layout_marginTop="12.0dp">
+                <EditText android:textSize="16.0sp" android:textColor="#ffffff" android:textColorHint="#99ffffff" android:gravity="center_vertical" android:id="@id/user_name" android:background="@color/transparent" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginLeft="16.0dp" android:hint="@string/theme_submit_user_name_tips" android:singleLine="true" />
+                <ImageView android:layout_gravity="right|center" android:id="@id/delete_user_name" android:layout_width="19.0dp" android:layout_height="19.0dp" android:layout_marginTop="14.0dp" android:layout_marginRight="16.0dp" android:layout_marginBottom="14.0dp" android:src="@drawable/icon_search_delete" />
+            </FrameLayout>
+            <FrameLayout android:background="@drawable/upload_wallpaper_edit_bk" android:layout_width="match_parent" android:layout_height="37.0dp" android:layout_marginTop="10.0dp">
+                <EditText android:textSize="16.0sp" android:textColor="#ffffff" android:textColorHint="#99ffffff" android:gravity="center_vertical" android:id="@id/user_email" android:background="@color/transparent" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginLeft="16.0dp" android:hint="@string/theme_submit_user_email_tips" android:singleLine="true" />
+                <ImageView android:layout_gravity="right|center" android:id="@id/delete_user_email" android:layout_width="19.0dp" android:layout_height="19.0dp" android:layout_marginTop="14.0dp" android:layout_marginRight="16.0dp" android:layout_marginBottom="14.0dp" android:src="@drawable/icon_search_delete" />
+            </FrameLayout>
+            <TextView android:textSize="13.0sp" android:textColor="#b2ffffff" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24.0dp" android:text="@string/theme_submit_copyright" />
+            <TextView android:textSize="16.0sp" android:textColor="#ffffff" android:gravity="center" android:layout_gravity="bottom" android:id="@id/btn_commit" android:background="@drawable/theme_diy_btn_selector" android:layout_width="match_parent" android:layout_height="48.0dp" android:layout_marginTop="18.0dp" android:layout_marginBottom="10.0dp" android:text="@string/wallpaper_upload_text" />
+        </LinearLayout>
+    </FrameLayout>
+</ScrollView>

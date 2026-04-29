@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="permission_denied_guide_desc">
+        <item quantity="other">%s разрешений отсутствует, нажмите OK, чтобы предоставить разрешения</item>
+        <item quantity="one">%s разрешение отсутствует, нажмите OK, чтобы предоставить разрешение</item>
+        <item quantity="few">%s разрешения отсутствуют, нажмите OK, чтобы предоставить разрешения</item>
+        <item quantity="many">%s разрешений отсутствует, нажмите OK, чтобы предоставить разрешения</item>
+    </plurals>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="permission_denied_guide_desc">
+        <item quantity="other">%s autorisations ont été refusées, veuillez cliquer sur « OK » pour les activer</item>
+        <item quantity="one">%s autorisation a été refusée, veuillez cliquer sur « OK » pour l’activer</item>
+    </plurals>
+</resources>

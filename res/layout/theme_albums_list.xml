@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.tsf.extend.theme.ThemeAlbumsPager android:paddingTop="@dimen/workspace_margin_top" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:orientation="vertical" android:id="@id/container" android:background="#ffffff" android:layout_width="match_parent" android:layout_height="match_parent">
+        <RelativeLayout android:orientation="horizontal" android:clickable="true" android:layout_width="wrap_content" android:layout_height="48.0dp">
+            <ImageView android:id="@id/title_share_googleplus" android:layout_width="28.0dp" android:layout_height="28.0dp" android:layout_marginLeft="8.0dp" android:layout_marginRight="16.0dp" android:src="@drawable/shere_googleplus" android:layout_alignParentRight="true" android:layout_centerVertical="true" />
+            <ImageView android:id="@id/title_share_facebook" android:layout_width="28.0dp" android:layout_height="28.0dp" android:layout_marginLeft="8.0dp" android:layout_marginRight="8.0dp" android:src="@drawable/share_facebook" android:layout_toLeftOf="@id/title_share_googleplus" android:layout_centerVertical="true" />
+            <TextView android:textSize="19.0sp" android:textColor="@color/personal_text_color" android:gravity="left|center" android:id="@id/title" android:background="@drawable/wallpaper_mine_bg_selector" android:paddingLeft="16.0dp" android:paddingRight="9.0dp" android:layout_width="wrap_content" android:layout_height="match_parent" android:singleLine="true" android:layout_toLeftOf="@id/title_share_facebook" android:layout_alignParentLeft="true" />
+        </RelativeLayout>
+    </LinearLayout>
+    <View android:background="@drawable/personal_indicator_bottom_divider" android:layout_width="match_parent" android:layout_height="1.0dp" />
+</com.tsf.extend.theme.ThemeAlbumsPager>

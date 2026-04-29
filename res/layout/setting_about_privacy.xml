@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:orientation="vertical" android:id="@id/setting_about_layout" android:background="@color/white" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <include layout="@layout/k_title_launcher" />
+    <WebView android:id="@id/setting_about_privacy" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginTop="48.0dp" />
+</FrameLayout>

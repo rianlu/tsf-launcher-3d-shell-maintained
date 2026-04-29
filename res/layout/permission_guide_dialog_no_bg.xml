@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:gravity="center_horizontal" android:background="@drawable/perm_guide_layout_bg" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textSize="15.0sp" android:textColor="#000000" android:layout_gravity="center|bottom" android:id="@id/perm_desc" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="20.0dp" android:layout_marginTop="20.0dp" android:layout_marginRight="20.0dp" android:layout_marginBottom="20.0dp" android:lineSpacingExtra="4.0dp" />
+    <View android:background="#32000000" android:layout_width="match_parent" android:layout_height="0.5dp" android:layout_below="@id/perm_desc" />
+    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="48.0dp" android:layout_below="@id/perm_desc">
+        <TextView android:textSize="16.0sp" android:textColor="#000000" android:gravity="center" android:id="@id/iv_close" android:layout_width="0.0dp" android:layout_height="match_parent" android:text="@string/dialog_cancel" android:layout_weight="1.0" />
+        <View android:id="@id/seprator" android:background="#32000000" android:layout_width="0.5dp" android:layout_height="match_parent" />
+        <TextView android:textSize="16.0sp" android:textStyle="bold" android:textColor="#4480f7" android:gravity="center" android:id="@id/perm_ok" android:layout_width="0.0dp" android:layout_height="match_parent" android:text="OK" android:layout_weight="1.0" />
+    </LinearLayout>
+</RelativeLayout>

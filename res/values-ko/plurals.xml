@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="permission_denied_guide_desc">
+        <item quantity="other">%s 권한이 허용되지 않습니다. 활성화하려면 확인을 클릭하세요</item>
+    </plurals>
+</resources>

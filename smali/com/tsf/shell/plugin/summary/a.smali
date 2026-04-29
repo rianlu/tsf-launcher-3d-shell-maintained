@@ -1,0 +1,25 @@
+.class public final Lcom/tsf/shell/plugin/summary/a;
+.super Ljava/lang/Object;
+.source "SourceFile"
+
+
+# static fields
+.field public static final a:Ljava/lang/Boolean;
+
+
+# direct methods
+.method static constructor <clinit>()V
+    .locals 1
+
+    .prologue
+    .line 14
+    const/4 v0, 0x0
+
+    invoke-static {v0}, Ljava/lang/Boolean;->valueOf(Z)Ljava/lang/Boolean;
+
+    move-result-object v0
+
+    sput-object v0, Lcom/tsf/shell/plugin/summary/a;->a:Ljava/lang/Boolean;
+
+    return-void
+.end method

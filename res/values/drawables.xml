@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <drawable name="bottom_dialog_btn_color">#33888888</drawable>
+    <drawable name="deepgrey">#666666</drawable>
+    <drawable name="grey">#999999</drawable>
+    <drawable name="k_actionbar_press_bg">#22000000</drawable>
+    <drawable name="lightgray">#88cccccc</drawable>
+    <drawable name="list_press">#4b4b4b</drawable>
+    <drawable name="list_release">#d9dfdf</drawable>
+    <drawable name="list_view_bg_pressed">#47ffffff</drawable>
+    <drawable name="list_view_bg_release">#00ffffff</drawable>
+    <drawable name="notification_template_icon_bg">#3333b5e5</drawable>
+    <drawable name="theme_content_dark_holo_title">#99000000</drawable>
+    <drawable name="theme_content_dark_holo_title_press">#33ffffff</drawable>
+    <drawable name="tips_button_normal">#cc666666</drawable>
+    <drawable name="tips_button_press">#ff37c5f8</drawable>
+    <drawable name="translucent_background">#00000000</drawable>
+    <drawable name="transparent_drawable">#00000000</drawable>
+    <drawable name="white">#ffffff</drawable>
+</resources>

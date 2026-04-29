@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="alarm_set">
+        <item>已将此闹钟设置为从现在起不到 1 分钟后提醒。</item>
+        <item>已将此闹钟设置为从现在起 %1$s后启动。</item>
+        <item>已将此闹钟设置为从现在起 %2$s后启动。</item>
+        <item>已将此闹钟设置为从现在起 %1$s%2$s后启动。</item>
+        <item>已将此闹钟设置为从现在起 %3$s后启动。</item>
+        <item>已将此闹钟设置为从现在起 %1$s%3$s后启动。</item>
+        <item>已将此闹钟设置为从现在起 %2$s%3$s后启动。</item>
+        <item>已将此闹钟设置为从现在起 %1$s%2$s%3$s后启动。</item>
+    </string-array>
+</resources>

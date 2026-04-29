@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item
+        package="com.tsf.shell.widget.adornment"
+        preview="http://aiches.com/images/work_1.jpg"
+        title="adornment"/>
+    <item
+        package="com.tsf.shell.widget.gallery"
+        preview="http://aiches.com/images/work_2.jpg"
+        title="gallery"/>
+    <item
+        package="com.tsf.shell.widget.message"
+        preview="http://aiches.com/images/work_3.jpg"
+        title="message"/>
+    <item
+        package="com.tsf.shell.widget.weather"
+        preview="http://aiches.com/images/work_4.jpg"
+        title="weather"/>
+    <item
+        package="com.tsf.shell.widget.music"
+        preview="http://aiches.com/images/work_5.jpg"
+        title="music"/>
+    <item
+        package="com.tsf.shell.widget.memo"
+        preview="http://aiches.com/images/work_6.jpg"
+        title="memo"/>
+    <item
+        package="com.tsf.shell.widget.alarm"
+        preview="http://aiches.com/images/work_7.jpg"
+        title="alarm"/>
+    <item
+        package="com.tsf.shell.widget.calendar"
+        preview="http://aiches.com/images/work_8.png"
+        title="calendar"/>
+    <item
+        package="com.tsf.shell.widget.cubeclock"
+        preview="http://aiches.com/images/work_9.png"
+        title="cubeclock"/>
+
+</resources>

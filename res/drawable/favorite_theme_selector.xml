@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true" android:drawable="@drawable/locker_wallpaper_detail_favorite_btn_checked" />
+    <item android:state_enabled="false" android:drawable="@drawable/locker_wallpaper_favorite_btn" />
+    <item android:drawable="@drawable/locker_wallpaper_favorite_btn" />
+</selector>

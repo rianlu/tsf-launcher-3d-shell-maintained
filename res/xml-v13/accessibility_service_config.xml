@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<accessibility-service android:description="@string/accessibility_service_description" android:accessibilityEventTypes="0x0" android:packageNames="com.tsf.shell" android:accessibilityFeedbackType="0x0" android:notificationTimeout="100" android:canRetrieveWindowContent="false"
+  xmlns:android="http://schemas.android.com/apk/res/android" />

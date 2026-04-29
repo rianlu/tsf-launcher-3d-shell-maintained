@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:paddingBottom="16.0dp" android:layout_width="match_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:orientation="horizontal" android:id="@id/titlebar" android:background="@drawable/ab_transparent_dark_holo" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8.0dp" android:divider="@drawable/list_divider_holo_dark" android:layout_alignParentTop="true" android:showDividers="middle" android:dividerPadding="16.0dp">
+        <TextView android:textAppearance="?android:textAppearanceLarge" android:gravity="center_vertical" android:id="@id/dialog_title" android:padding="16.0dp" android:layout_width="320.0dp" android:layout_height="match_parent" android:text="Dimensions" android:layout_weight="1.0" />
+    </LinearLayout>
+    <TextView android:textSize="18.0sp" android:textColor="#ffffff" android:id="@id/textView1" android:padding="16.0dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Image Size : 2248x3264" />
+    <TextView android:textSize="16.0sp" android:textColor="#ffffff" android:id="@id/textView2" android:paddingLeft="16.0dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Full Crop: 256x256" />
+    <TextView android:textSize="16.0sp" android:textColor="#ffffff" android:id="@id/textView3" android:paddingLeft="16.0dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Protrait Crop: 256x256" />
+    <TextView android:textSize="16.0sp" android:textColor="#ffffff" android:id="@id/textView4" android:paddingLeft="16.0dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Landscape Crop: 256x256" />
+</LinearLayout>

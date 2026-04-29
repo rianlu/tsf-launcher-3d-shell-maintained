@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="horizontal" android:background="#ffeeeeee" android:layout_width="match_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:orientation="horizontal" android:id="@id/theme_search_bar" android:background="@drawable/theme_search_bar_bg" android:layout_width="0.0dp" android:layout_height="36.0dp" android:layout_marginLeft="8.0dp" android:layout_marginTop="8.0dp" android:layout_marginBottom="8.0dp" android:layout_weight="1.0">
+        <ImageView android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_marginLeft="8.0dp" android:layout_marginRight="8.0dp" android:src="@drawable/theme_search_icon" />
+        <TextView android:textSize="14.0sp" android:textColor="#66333333" android:gravity="center_vertical" android:id="@id/theme_search" android:layout_width="0.0dp" android:layout_height="match_parent" android:singleLine="true" android:layout_weight="1.0" android:fontFamily="OpenSans-Light" />
+    </LinearLayout>
+    <TextView android:textSize="15.0sp" android:textStyle="bold" android:textColor="#06c08f" android:gravity="center" android:id="@id/theme_search_go" android:layout_width="60.0dp" android:layout_height="match_parent" android:text="@string/search_btn_text_go" />
+</LinearLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="permission_denied_guide_desc">
+        <item quantity="other">%s izin gerekli, lütfen etkinleştirmek için TAMAM düğmesine tıkla</item>
+        <item quantity="one">%s izin gerekli, lütfen etkinleştirmek için TAMAM düğmesine tıkla</item>
+    </plurals>
+</resources>

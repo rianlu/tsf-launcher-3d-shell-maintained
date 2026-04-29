@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<folder>
+	<order>
+		<backPlane width="59dp" height="59dp" x="0dp" y="8dp" />
+		<childContainer x="0dp" y="7dp" />
+	</order>
+	<child>
+		<item x="-11dp" y="-11dp" z="0dp" rx="0" ry="0" rz="360" sx="0.75" sy="0.75" sz="1" />
+		<item x="0dp" y="0dp" z="0dp" rx="0" ry="0" rz="360" sx="0.65" sy="0.65" sz="1" />
+		<item x="11dp" y="11dp" z="0dp" rx="0" ry="0" rz="360" sx="0.55" sy="0.55" sz="1" />
+	</child>
+</folder> 

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="permission_denied_guide_desc">
+        <item quantity="other">%s de permisiuni nu sunt acceptate, te rugăm să faci clic pe OK pentru a activa</item>
+        <item quantity="one">%s permisiune nu este acceptată, te rugăm să faci clic pe OK pentru a activa</item>
+        <item quantity="few">%s permisiuni nu sunt acceptate, te rugăm să faci clic pe OK pentru a activa</item>
+    </plurals>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="#9000" android:padding="20.0dp" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:gravity="center" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_weight="1.0">
+        <RelativeLayout android:orientation="vertical" android:id="@id/RelativeLayout1" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <TextView android:textSize="80.0sp" android:textStyle="bold" android:textColor="#ffffffff" android:id="@id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="12:32" android:layout_alignParentLeft="true" android:layout_alignParentTop="true" />
+            <TextView android:textColor="#ffffffff" android:id="@id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="8月25日 周一" android:layout_below="@id/textView1" android:layout_alignLeft="@id/textView1" />
+            <LinearLayout android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toRightOf="@id/textView1" android:layout_alignBaseline="@id/textView1" android:layout_centerVertical="true">
+                <ImageView android:id="@id/imageView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/stat_notify_alarm" />
+                <TextView android:textColor="#ffffffff" android:id="@id/textView3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="AM" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+        <Button android:textColor="#ffffffff" android:id="@id/button1" android:background="@drawable/button_background" android:layout_width="wrap_content" android:layout_height="40.0dp" android:layout_margin="10.0dp" android:text="@string/alarm_alert_snooze_text" android:layout_weight="1.0" />
+        <Button android:textColor="#ffffffff" android:id="@id/button2" android:background="@drawable/button_background" android:layout_width="wrap_content" android:layout_height="40.0dp" android:layout_margin="10.0dp" android:text="@string/alarm_alert_dismiss_text" android:layout_weight="1.0" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:id="@id/LinearLayout1" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout android:orientation="vertical" android:background="@color/material_title_bg_color" android:layout_width="match_parent" android:layout_height="61.0dp">
+        <TextView android:layout_gravity="center" android:id="@id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/settingtitle" android:layout_centerInParent="true" style="@style/TSFText.Material.AppTitle" />
+        <RelativeLayout android:id="@id/relativeLayout1" android:background="@drawable/activity_list_bg_selector" android:layout_width="61.0dp" android:layout_height="61.0dp" android:layout_alignParentRight="true" android:layout_centerVertical="true">
+            <ImageView android:id="@id/imageView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/edit_city_plus" android:layout_centerInParent="true" />
+        </RelativeLayout>
+    </RelativeLayout>
+    <ListView android:id="@id/settinglist" android:layout_width="match_parent" android:layout_height="match_parent" style="@style/TSFTheme.Material.ListViewStyle.NoDevider" />
+</LinearLayout>

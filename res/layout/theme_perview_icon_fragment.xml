@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <GridView android:id="@id/gridView" android:paddingLeft="10.0dp" android:paddingRight="10.0dp" android:layout_width="match_parent" android:layout_height="match_parent" android:horizontalSpacing="@dimen/image_thumbnail_spacing" android:verticalSpacing="@dimen/image_thumbnail_spacing" android:stretchMode="columnWidth" android:columnWidth="@dimen/image_thumbnail_size" android:numColumns="auto_fit" style="@style/PhotoGridLayout" />
+    <LinearLayout android:gravity="center_vertical" android:id="@id/linearLayout1" android:background="@drawable/theme_preview_icon_package_title_bg" android:padding="5.0dp" android:layout_width="match_parent" android:layout_height="100.0dp">
+        <ImageView android:id="@id/imageView1" android:layout_width="50.0dp" android:layout_height="50.0dp" android:layout_margin="10.0dp" android:src="@drawable/ic_launcher" android:layout_weight="0.0" />
+        <LinearLayout android:gravity="center_vertical" android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_margin="10.0dp" android:layout_weight="1.0">
+            <TextView android:textSize="18.0dp" android:textColor="#ffffff" android:id="@id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TextView" />
+            <TextView android:textSize="16.0dp" android:textColor="#ffffff" android:id="@id/textView2" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TextView" />
+            <TextView android:textSize="16.0dp" android:textColor="#ff33b5e5" android:id="@id/textView3" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TextView" android:singleLine="true" />
+        </LinearLayout>
+        <ImageView android:id="@id/imageView2" android:background="@drawable/item_background_holo_dark" android:layout_width="40.0dp" android:layout_height="40.0dp" android:layout_margin="10.0dp" android:src="@drawable/ic_pref_store" android:layout_weight="0.0" />
+    </LinearLayout>
+</RelativeLayout>

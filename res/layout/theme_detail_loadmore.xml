@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:paddingBottom="56.0dp" android:layout_width="match_parent" android:layout_height="116.0dp"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ProgressBar android:layout_gravity="center" android:id="@id/loadmore_progress" android:layout_width="30.0dp" android:layout_height="30.0dp" android:layout_marginTop="15.0dp" android:layout_marginBottom="15.0dp" />
+    <TextView android:textSize="12.5sp" android:textColor="#ffaeaeae" android:gravity="center" android:layout_gravity="center" android:id="@id/loadmore_tips" android:layout_width="wrap_content" android:layout_height="30.0dp" android:layout_marginTop="15.0dp" android:layout_marginBottom="15.0dp" />
+    <LinearLayout android:orientation="vertical" android:id="@id/nomore_group" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="15.0dp" android:layout_marginBottom="15.0dp">
+        <TextView android:textSize="12.5sp" android:textColor="#ffaeaeae" android:gravity="left|center" android:id="@id/diy_tips" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/theme_detail_padding_left" android:layout_marginRight="@dimen/theme_detail_padding_left" android:text="@string/theme_detial_no_more" />
+        <TextView android:textSize="12.0sp" android:textColor="#ff29bbed" android:gravity="left|center" android:id="@id/diy_btn" android:layout_width="100.0dp" android:layout_height="40.0dp" android:layout_marginLeft="@dimen/theme_detail_padding_left" android:layout_marginTop="-6.0dp" android:layout_marginRight="@dimen/theme_detail_padding_left" android:text="@string/theme_diy_start" />
+    </LinearLayout>
+</FrameLayout>

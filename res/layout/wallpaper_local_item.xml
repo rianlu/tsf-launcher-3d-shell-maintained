@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="horizontal" android:paddingLeft="@dimen/local_wallpaper_list_padding_horizontal" android:paddingRight="@dimen/local_wallpaper_list_padding_horizontal" android:layout_width="match_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout android:id="@id/favorite" android:background="#ffff5b64" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <TextView android:textSize="17.0sp" android:textColor="#ffffffff" android:gravity="center" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/wallpaper_mine_favorite" android:singleLine="true" android:drawableTop="@drawable/locker_wallpaper_favorite_btn" android:drawablePadding="3.0dp" />
+    </FrameLayout>
+    <FrameLayout android:id="@id/local" android:background="#ff2dcaff" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <TextView android:textSize="17.0sp" android:textColor="#ffffffff" android:gravity="center" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/local" android:singleLine="true" android:drawableTop="@drawable/wallpaper_mine_local" android:drawablePadding="3.0dp" />
+    </FrameLayout>
+</LinearLayout>

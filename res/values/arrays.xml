@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="alarm_set">
+        <item>This alarm is set for less than 1 minute from now.</item>
+        <item>This alarm is set for %1$s from now.</item>
+        <item>This alarm is set for %2$s from now.</item>
+        <item>This alarm is set for %1$s and %2$s from now.</item>
+        <item>This alarm is set for %3$s from now.</item>
+        <item>This alarm is set for %1$s and %3$s from now.</item>
+        <item>This alarm is set for %2$s and %3$s from now.</item>
+        <item>This alarm is set for %1$s, %2$s, and %3$s from now.</item>
+    </string-array>
+    <array name="extra_wallpapers" />
+    <string-array name="folder_classify_name">
+        <item>Beautifier</item>
+        <item>Learning</item>
+        <item>Games</item>
+        <item>Media</item>
+        <item>Network</item>
+        <item>Tools</item>
+        <item>Lifestyle</item>
+        <item>Social</item>
+        <item>Travel</item>
+        <item>Business</item>
+        <item>Reading</item>
+        <item>System</item>
+    </string-array>
+    <string-array name="icon_pick_select_dialog_items">
+        <item>Default</item>
+        <item>Gallery</item>
+        <item>Files</item>
+        <item>Icon Pack</item>
+    </string-array>
+    <string-array name="wallpaperlist">
+        <item>default_wallpaper</item>
+    </string-array>
+</resources>

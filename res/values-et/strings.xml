@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="abbrev_wday_month_day_no_year">E MMMM d</string>
+    <string name="alarm_app_name">Reloj</string>
+    <string name="cubeclock_app_name">Reloj</string>
+    <string name="full_wday_month_day_no_year">E MMMM d</string>
+</resources>

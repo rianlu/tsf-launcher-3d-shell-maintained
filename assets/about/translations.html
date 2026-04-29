@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<style type="text/css">
+
+/*
+Simple Little Table by João Sardinha
+Visit me at http://johnsardine.com/
+*/
+
+/*
+Im reseting this style for optimal view using Eric Meyer's CSS Reset - http://meyerweb.com/eric/tools/css/reset/
+------------------------------------------------------------------ */
+body, html  { height: 100%; }
+html, body, div, span, applet, object, iframe,
+/*h1, h2, h3, h4, h5, h6,*/ p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+body { line-height: 1; }
+ol, ul { list-style: none; }
+blockquote, q { quotes: none; }
+blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }
+:focus { outline: 0; }
+del { text-decoration: line-through; }
+table {border-spacing: 0; } /* IMPORTANT, I REMOVED border-collapse: collapse; FROM THIS LINE IN ORDER TO MAKE THE OUTER BORDER RADIUS WORK */
+
+a:visited,
+a:link {
+    color: #666;
+    font-weight: bold;
+    text-decoration:underline;
+}
+
+
+/*------------------------------------------------------------------ */
+
+/*
+Table Style - This is what you want
+------------------------------------------------------------------ */
+table a:link {
+	color: #666;
+	font-weight: bold;
+	text-decoration:none;
+}
+table a:visited {
+	color: #999999;
+	font-weight:bold;
+	text-decoration:none;
+}
+table {
+	font-family:Arial, Helvetica, sans-serif;
+	color:#666;
+	font-size:12px;
+	text-shadow: 1px 1px 0px #fff;
+	background:#eaebec;
+	margin:8px;
+	border:#ccc 1px solid;
+
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+
+	-moz-box-shadow: 0 1px 2px #d1d1d1;
+	-webkit-box-shadow: 0 1px 2px #d1d1d1;
+	box-shadow: 0 1px 2px #d1d1d1;
+}
+table th {
+	padding:0px 15px 0px 15px;
+	border-top:1px solid #fafafa;
+	border-bottom:1px solid #e0e0e0;
+
+	background: #ededed;
+	background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
+	background: -moz-linear-gradient(top,  #ededed,  #ebebeb);
+}
+table th:first-child{
+	text-align: left;
+	padding-left:20px;
+}
+table tr:first-child th:first-child{
+	-moz-border-radius-topleft:3px;
+	-webkit-border-top-left-radius:3px;
+	border-top-left-radius:3px;
+}
+table tr:first-child th:last-child{
+	-moz-border-radius-topright:3px;
+	-webkit-border-top-right-radius:3px;
+	border-top-right-radius:3px;
+}
+table tr{
+	text-align: center;
+	padding-left:20px;
+}
+table tr td:first-child{
+	text-align: left;
+	padding-left:20px;
+	border-left: 0;
+}
+table tr td {
+	padding:18px;
+	border-top: 1px solid #ffffff;
+	border-bottom:1px solid #e0e0e0;
+	border-left: 1px solid #e0e0e0;
+    vertical-align:middle;
+	
+	background: #fafafa;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fbfbfb), to(#fafafa));
+	background: -moz-linear-gradient(top,  #fbfbfb,  #fafafa);
+}
+table tr.even td{
+	background: #f6f6f6;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6f6));
+	background: -moz-linear-gradient(top,  #f8f8f8,  #f6f6f6);
+}
+table tr:last-child td{
+	border-bottom:0;
+}
+table tr:last-child td:first-child{
+	-moz-border-radius-bottomleft:3px;
+	-webkit-border-bottom-left-radius:3px;
+	border-bottom-left-radius:3px;
+}
+table tr:last-child td:last-child{
+	-moz-border-radius-bottomright:3px;
+	-webkit-border-bottom-right-radius:3px;
+	border-bottom-right-radius:3px;
+}
+table tr:nth-child(odd) td{
+	background: #f2f2f2;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
+	background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);	
+}
+
+</style>
+
+</head>
+
+<body style="background-color: #f0f0f0" >
+
+<center>
+<table cellspacing='0'> <!-- cellspacing='0' is important, must stay -->
+	<tr><th>Language</th><th>Translator(s)</th></tr><!-- Table Header -->
+    <tr><td>Chinese Traditional</td><td>Frankie159</td></tr>
+    <tr><td>Danish</td><td><p>Henrik Thomsen</p>
+    <p>HeThomsen</p>
+    <p>Nwanu</p></td></tr>
+    <tr>
+      <td>French</td>
+      <td><p>Sinjiyo</p>
+        <p>johan</p>
+        <p>yong</p>
+        <p>Danny</p></td>
+    </tr>
+    <tr>
+      <td>Italian</td><td><p>tunerskynet</p>
+    <tr><td>Hebrew</td><td>elyashiv_sabach</td></tr>
+    <tr><td>Hungarian</td><td>Roland Szamosi</td></tr>
+    <tr><td>Korean</td><td>Jang Seung Hun</td></tr>
+    <tr><td>Norwegian</td><td>sahus</td></tr>
+    <tr><td>Polish</td><td><p>Pieterro</p>
+    <p>yaatzek</p>
+    <p>Elmoi</p></td></tr>
+    <tr><td>Portuguese</td><td><p>Luis Bastos</p>
+      <p>ChristhianC</p></td></tr>
+    <tr><td>Spanish</td><td><p>linuosx</p>
+    <p>Nabil Ajmal</p>
+    <p>Erik Rojas Zúñiga</p></td></tr>
+    <tr>
+      <td>Turkish</td>
+      <td>bariskazak</td>
+    </tr>
+    <tr>
+      <td>German</td>
+      <td><p>Martin Groß</p>
+        <p>Volker Heil</p>
+        <p>lubber</p></td>
+    </tr>
+    <tr>
+      <td>Dutch</td>
+      <td><p>GarlonNL</p>
+        <p>Nwanu</p>
+    </tr>
+    <tr>
+      <td>Arabic</td>
+      <td><p>Omar Al-Hamad</p>
+    </tr>
+    <tr>
+      <td>Czech</td>
+      <td><p>BenDarevan</p>
+        <p>Martin Cada</p>
+        <p>Adam Zahumensky</p></td>
+    </tr>
+    <tr>
+      <td>Russian</td><td><p>Lazaruss</p>
+        <p>Сережка</p>
+        <p>Boris</p>
+        <p>Sergey Prozorov </p>
+        <p>Сергей Приклонский</p>
+        <p>dlyalubovi</p>
+    <p>Сергей Терещенко</p></td></tr>
+</table>
+</center>
+<br /><br />
+<center><h2><a href="http://crowdin.net/project/TSF_SHELL">Help Translate</a></h2></center>
+<center>
+  <h4><a href="http://crowdin.net/project/TSF_SHELL">http://crowdin.net/project/TSF_SHELL</a></h4></center>
+<br /><br /><br /><br />
+</body>
+</html>

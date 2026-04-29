@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:background="#ededed" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:launcher="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent">
+        <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+            <LinearLayout android:layout_gravity="top" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
+                <RelativeLayout android:orientation="horizontal" android:id="@id/title_bar" android:background="#272727" android:layout_width="match_parent" android:layout_height="50.0dp">
+                    <TextView android:textSize="19.0sp" android:textColor="#ffffff" android:gravity="left|center" android:id="@id/title" android:background="@drawable/wallpaper_mine_bg_selector" android:paddingLeft="9.0dp" android:paddingRight="9.0dp" android:layout_width="wrap_content" android:layout_height="match_parent" android:text="@string/theme_diy_title" android:drawableLeft="@drawable/back" android:drawablePadding="6.0dp" />
+                    <TextView android:textSize="19.0sp" android:textColor="#01b0ff" android:gravity="center" android:id="@id/new_diy" android:background="@drawable/wallpaper_mine_bg_selector" android:paddingLeft="9.0dp" android:paddingRight="16.0dp" android:layout_width="wrap_content" android:layout_height="match_parent" android:text="@string/theme_more_diy" android:layout_alignParentRight="true" />
+                </RelativeLayout>
+                <LinearLayout android:orientation="horizontal" android:background="#272727" android:paddingLeft="9.0dp" android:paddingRight="9.0dp" android:layout_width="match_parent" android:layout_height="50.0dp">
+                    <TextView android:textSize="14.0sp" android:textColor="@color/theme_diy_tab_selector" android:ellipsize="end" android:gravity="center" android:id="@id/tab_choose_wallpaper" android:layout_width="0.0dp" android:layout_height="match_parent" android:text="@string/theme_diy_choose_wallpaper" android:singleLine="true" android:layout_weight="1.0" />
+                    <ImageView android:layout_gravity="center" android:id="@id/tab_arrow1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="15.0dp" android:layout_marginRight="15.0dp" android:src="@drawable/arrow_right_selector" />
+                    <TextView android:textSize="14.0sp" android:textColor="@color/theme_diy_tab_selector" android:ellipsize="end" android:gravity="center" android:id="@id/tab_choose_icon" android:layout_width="0.0dp" android:layout_height="match_parent" android:text="@string/theme_diy_choose_icon" android:singleLine="true" android:layout_weight="1.0" />
+                </LinearLayout>
+            </LinearLayout>
+            <FrameLayout android:id="@id/theme_diy_head_mask" android:background="#000000" android:visibility="gone" android:layout_width="match_parent" android:layout_height="match_parent" />
+        </FrameLayout>
+        <FrameLayout android:id="@id/content" android:background="#5a5c61" android:layout_width="match_parent" android:layout_height="0.0dp" android:layout_weight="1.0">
+            <LinearLayout android:orientation="vertical" android:id="@id/content_layout" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginBottom="118.0dp">
+                <LinearLayout android:orientation="vertical" android:id="@id/theme_save_succ_group" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10.0dp">
+                    <TextView android:textSize="16.0sp" android:textColor="#2ccaff" android:layout_gravity="center" android:id="@id/theme_save_succ" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/theme_diy_save_succ" android:drawableLeft="@drawable/theme_diy_done" android:drawablePadding="12.0dp" />
+                    <TextView android:textSize="11.0sp" android:textColor="#9b9b9b" android:layout_gravity="center" android:id="@id/theme_done" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="6.0dp" android:text="@string/theme_diy_generate_done" />
+                </LinearLayout>
+                <FrameLayout android:id="@id/theme_diy_preview_container" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginTop="20.0dp">
+                    <com.tsf.extend.wallpaper.ThemePreview android:layout_gravity="center_horizontal" android:id="@id/theme_diy_preview_pager" android:background="@drawable/theme_diy_preview_bg" android:layout_width="match_parent" android:layout_height="match_parent">
+                        <ImageView android:id="@id/theme_diy_wallpaper_iv" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="fitXY" />
+                    </com.tsf.extend.wallpaper.ThemePreview>
+                    <ImageView android:layout_gravity="right|bottom" android:id="@id/theme_icons_btn" android:layout_width="40.0dp" android:layout_height="40.0dp" android:layout_marginLeft="10.0dp" android:layout_marginRight="10.0dp" android:src="@drawable/theme_icons_up" android:scaleType="centerInside" />
+                </FrameLayout>
+            </LinearLayout>
+            <FrameLayout android:layout_gravity="bottom" android:id="@id/icons_chooser_panel" android:background="#2a292e" android:visibility="gone" android:layout_width="match_parent" android:layout_height="@dimen/theme_diy_list_panel_height">
+                <ListView android:id="@id/gridview" android:paddingLeft="@dimen/theme_diy_list_padding" android:paddingRight="@dimen/theme_diy_list_padding" android:scrollbars="none" android:layout_width="match_parent" android:layout_height="match_parent" android:listSelector="@color/transparent" android:cacheColorHint="@color/transparent" android:divider="@null" />
+                <LinearLayout android:layout_gravity="center" android:orientation="vertical" android:id="@id/load_error_page" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content">
+                    <ImageView android:layout_gravity="center" android:duplicateParentState="true" android:layout_width="30.0dp" android:layout_height="30.0dp" android:src="@drawable/icon_btn_refresh" android:tint="#000000" />
+                    <TextView android:textSize="16.0sp" android:textColor="#000000" android:gravity="center" android:layout_gravity="bottom" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8.0dp" android:text="@string/theme_diy_icons_failed" />
+                </LinearLayout>
+                <com.tsf.extend.theme.diy.view.ThemeLoadingAnim android:id="@id/thumb_loading_progress" android:visibility="visible" android:layout_width="match_parent" android:layout_height="match_parent" />
+            </FrameLayout>
+            <FrameLayout android:id="@id/content_mask" android:visibility="gone" android:layout_width="match_parent" android:layout_height="match_parent">
+                <ImageView android:id="@id/content_top_mask" android:background="#000000" android:layout_width="match_parent" android:layout_height="match_parent" />
+            </FrameLayout>
+            <LinearLayout android:layout_gravity="bottom" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20.0dp">
+                <FrameLayout android:id="@id/theme_btn_group" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="16.0dp" android:layout_marginRight="16.0dp">
+                    <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/theme_select_group" android:layout_width="match_parent" android:layout_height="match_parent">
+                        <TextView android:textSize="16.0sp" android:textColor="#ffffff" android:gravity="center" android:layout_gravity="center" android:id="@id/theme_btn" android:background="@drawable/theme_diy_btn_selector" android:layout_width="match_parent" android:layout_height="48.0dp" android:text="@string/theme_diy_btn_choose_wallpaper" />
+                        <TextView android:textSize="16.0sp" android:textColor="#2dcaff" android:gravity="center" android:id="@id/theme_choose_link" android:background="@drawable/select_online_wallpaper" android:layout_width="match_parent" android:layout_height="48.0dp" android:layout_marginTop="11.0dp" android:layout_marginBottom="8.0dp" android:text="@string/select_online_title" android:singleLine="true" />
+                        <LinearLayout android:layout_gravity="right" android:orientation="horizontal" android:id="@id/theme_btn_next_default" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="11.0dp">
+                            <TextView android:textSize="15.0sp" android:textColor="#2dcaff" android:gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/theme_btn_next" />
+                            <ImageView android:layout_gravity="center" android:background="@drawable/arrow_right_selected" android:layout_width="12.0dp" android:layout_height="12.0dp" android:layout_marginLeft="6.0dp" />
+                        </LinearLayout>
+                        <LinearLayout android:orientation="vertical" android:id="@id/choose_button_padding" android:visibility="gone" android:layout_width="match_parent" android:layout_height="16.0dp" />
+                    </LinearLayout>
+                    <LinearLayout android:orientation="horizontal" android:id="@id/choose_next_group" android:visibility="gone" android:layout_width="match_parent" android:layout_height="48.0dp" android:layout_marginBottom="16.0dp">
+                        <TextView android:textSize="16.0sp" android:textColor="#9b9b9b" android:gravity="center" android:layout_gravity="center" android:id="@id/theme_btn_choose_wallpaper" android:background="@drawable/theme_white_btn_bg" android:layout_width="0.0dp" android:layout_height="match_parent" android:layout_marginRight="16.0dp" android:text="@string/theme_diy_reselect_wallpaper" android:layout_weight="1.0" />
+                        <TextView android:textSize="16.0sp" android:textColor="#ffffff" android:gravity="center" android:layout_gravity="center" android:id="@id/theme_btn_next" android:background="@drawable/theme_diy_btn_selector" android:layout_width="0.0dp" android:layout_height="match_parent" android:text="@string/theme_btn_next" android:layout_weight="1.0" />
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+    <com.tsf.extend.theme.diy.view.ThemeLoadingAnim android:id="@id/loading_progress" android:background="#b2000000" android:visibility="gone" android:layout_width="match_parent" android:layout_height="match_parent" />
+</FrameLayout>

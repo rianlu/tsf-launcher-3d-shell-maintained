@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="permission_denied_guide_desc">
+        <item quantity="other">%s uprawnień nie zostało nadanych. Kliknij OK, by włączyć.</item>
+        <item quantity="one">%s uprawnienie nie zostało nadane. Kliknij OK, by włączyć.</item>
+        <item quantity="few">%s uprawnienia nie zostały nadane. Kliknij OK, by włączyć.</item>
+        <item quantity="many">%s uprawnień nie zostało nadanych. Kliknij OK, by włączyć.</item>
+    </plurals>
+</resources>

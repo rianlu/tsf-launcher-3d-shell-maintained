@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout android:background="@drawable/plugin_floating_widget_picker_setting_bg" android:padding="0.0dp" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_margin="20.0dp">
+        <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginLeft="22.0dp" android:layout_marginTop="12.0dp" android:layout_marginRight="22.0dp" android:layout_marginBottom="12.0dp">
+            <ListView android:scrollbarThumbVertical="@drawable/plugin_floating_widget_picker_scrollbar" android:id="@id/listView1" android:layout_width="90.0dp" android:layout_height="match_parent" android:layout_alignParentLeft="true" android:layout_centerVertical="true" />
+            <ListView android:scrollbarThumbVertical="@drawable/plugin_floating_widget_picker_scrollbar" android:id="@id/listView2" android:layout_width="match_parent" android:layout_height="match_parent" android:divider="@drawable/plugin_floating_widget_picker_item_line" android:layout_toRightOf="@id/listView1" android:layout_centerVertical="true" />
+        </RelativeLayout>
+        <ImageView android:id="@id/imageView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/version_close" android:layout_alignParentTop="true" android:layout_alignParentRight="true" />
+    </RelativeLayout>
+</RelativeLayout>

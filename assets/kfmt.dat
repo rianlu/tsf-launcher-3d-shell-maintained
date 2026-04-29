@@ -1,0 +1,15 @@
+tsflauncher_public:1 xaid:string mcc:short ver:string cn:string cn2:string cl:string apilevel:byte brand:string model:string rom:bit root:bit nettype:byte mnc:short
+tsflauncher_event_public:61 xaid:string imei:binary mcc:short mnc:short cl:string cn:int cn2:int prodid:int ver:int brand:string model:string root:byte
+tsflauncher_event_sactive:81 ext_map:string uptime:int
+tsflauncher_event_active:82 ext_map:string uptime:int
+tsflauncher_active:101 vga:string dpi:string cores:byte mem:short
+tsflauncher_themecenter_display:102 display:byte
+tsflauncher_themecenter_click:103 click:byte
+tsflauncher_themecenter_theme:104 tab:byte
+tsflauncher_themecenter_themeid:105 themeid:string
+tsflauncher_themecenter_wallpaper:106 tab:byte
+tsflauncher_themecenter_wallpaperid:107 wallpaperid:string
+tsflauncher_themecenter_keyboard:108 tab:byte
+tsflauncher_themecenter_keyboardid:109 keyboardid:string
+tsflauncher_keyboard_display:110 display:byte
+tsflauncher_keyboard_click:111 click:byte

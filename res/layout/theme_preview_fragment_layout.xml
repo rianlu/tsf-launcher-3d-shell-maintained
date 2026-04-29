@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridView android:id="@id/gridView1" android:paddingLeft="10.0dp" android:paddingRight="10.0dp" android:layout_width="match_parent" android:layout_height="match_parent" android:horizontalSpacing="@dimen/theme_preview_spacing" android:verticalSpacing="@dimen/theme_preview_spacing" android:stretchMode="columnWidth" android:columnWidth="@dimen/theme_preview_width_size" android:numColumns="auto_fit" style="@style/PhotoGridLayout"
+  xmlns:android="http://schemas.android.com/apk/res/android" />

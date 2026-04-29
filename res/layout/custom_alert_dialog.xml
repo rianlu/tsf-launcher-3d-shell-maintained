@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:background="@drawable/custom_dialog_bg" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout android:id="@id/header_layout" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" />
+    <LinearLayout android:id="@id/title_layout" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <TextView android:textSize="15.0sp" android:textColor="#000000" android:id="@id/title_text" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="20.0dp" android:layout_marginTop="33.0dp" android:layout_marginRight="20.0dp" android:layout_marginBottom="29.0dp" android:singleLine="true" />
+    </LinearLayout>
+    <FrameLayout android:id="@id/content_layout" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <TextView android:textSize="15.0sp" android:textColor="#000000" android:id="@id/content" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="20.0dp" android:layout_marginTop="33.0dp" android:layout_marginRight="20.0dp" android:layout_marginBottom="29.0dp" />
+    </FrameLayout>
+    <View android:id="@id/hori_seprator" android:background="#33000000" android:visibility="gone" android:layout_width="match_parent" android:layout_height="0.5dp" />
+    <LinearLayout android:orientation="horizontal" android:id="@id/btn_layout" android:paddingLeft="7.0dp" android:paddingRight="7.0dp" android:paddingBottom="7.0dp" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <LinearLayout android:id="@id/btn_negative_layout" android:background="@drawable/message_dialog_negative_selector" android:layout_width="0.0dp" android:layout_height="wrap_content" android:layout_marginRight="7.0dp" android:layout_weight="1.0">
+            <Button android:textSize="17.0sp" android:textColor="#000000" android:id="@id/btn_negative" android:background="@color/transparent" android:layout_width="match_parent" android:layout_height="match_parent" android:text="@string/btn_dislike" />
+        </LinearLayout>
+        <View android:id="@id/seprator" android:background="#33000000" android:visibility="gone" android:layout_width="0.5dp" android:layout_height="match_parent" />
+        <LinearLayout android:layout_gravity="center_horizontal" android:id="@id/btn_positive_layout" android:background="@drawable/message_dialog_btn_selector" android:layout_width="0.0dp" android:layout_height="wrap_content" android:layout_weight="1.0">
+            <Button android:textSize="17.0sp" android:textColor="#ffffff" android:id="@id/btn_positive" android:background="@color/transparent" android:layout_width="match_parent" android:layout_height="match_parent" android:text="@string/five_start_rating" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

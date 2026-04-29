@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:orientation="vertical" android:id="@id/folder_item" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginBottom="40.0px">
+        <ImageView android:id="@id/imageView1" android:layout_width="match_parent" android:layout_height="match_parent" />
+        <ImageView android:id="@id/imageView2" android:layout_width="64.0px" android:layout_height="64.0px" android:src="@drawable/video_play_button" android:layout_centerHorizontal="true" android:layout_centerVertical="true" />
+    </RelativeLayout>
+    <RelativeLayout android:id="@id/folder_description_bar" android:background="#9000" android:layout_width="match_parent" android:layout_height="20.0dp" android:layout_alignParentBottom="true" android:layout_centerVertical="true">
+        <TextView android:id="@id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Photo" android:layout_centerInParent="true" />
+    </RelativeLayout>
+</RelativeLayout>

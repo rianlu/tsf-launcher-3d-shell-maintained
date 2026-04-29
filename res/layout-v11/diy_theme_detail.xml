@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.tsf.extend.theme.DIYThemeDetail android:paddingTop="@dimen/workspace_margin_top" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:launcher="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:layout_gravity="top" android:orientation="horizontal" android:background="#ffffff" android:layout_width="match_parent" android:layout_height="50.0dp">
+        <TextView android:textSize="19.0sp" android:textColor="@color/personal_text_color" android:gravity="left|center" android:id="@id/title" android:background="@drawable/wallpaper_mine_bg_selector" android:paddingLeft="9.0dp" android:paddingRight="9.0dp" android:layout_width="wrap_content" android:layout_height="match_parent" android:drawableLeft="@drawable/actionbar_back" android:drawablePadding="6.0dp" />
+        <View android:layout_width="0.0dp" android:layout_height="wrap_content" android:layout_weight="1.0" />
+        <ImageView android:layout_gravity="center_vertical" android:id="@id/delete" android:background="@drawable/wallpaper_mine_bg_selector" android:layout_width="57.0dp" android:layout_height="50.0dp" android:src="@drawable/theme_title_delete" android:scaleType="centerInside" />
+    </LinearLayout>
+    <LinearLayout android:layout_gravity="top" android:orientation="vertical" android:background="#ffeeeeee" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginTop="50.0dp">
+        <View android:background="@drawable/personal_indicator_bottom_divider" android:layout_width="match_parent" android:layout_height="1.0dp" />
+        <com.ksmobile.support.view.ViewPager android:id="@id/theme_preview_pager" android:paddingLeft="16.0dp" android:paddingRight="16.0dp" android:layout_width="match_parent" android:layout_height="0.0dp" android:layout_marginTop="16.0dp" android:layout_marginBottom="16.0dp" android:layout_weight="1.0" />
+        <com.tsf.extend.base.view.PageIndicatorCompat android:layout_gravity="center" android:id="@id/indicator_view" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="10.0dp" android:animateLayoutChanges="true" launcher:windowSize="5" />
+        <LinearLayout android:orientation="vertical" android:id="@id/diy_link" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="16.0dp" android:layout_marginRight="16.0dp">
+            <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content">
+                <TextView android:textSize="15.0sp" android:textColor="#333333" android:layout_width="wrap_content" android:layout_height="match_parent" android:text="@string/theme_mine_diy_more" />
+                <TextView android:textSize="15.0sp" android:textColor="#06c08f" android:id="@id/more_diy_click" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginLeft="5.0dp" android:text="@string/theme_click_here" />
+            </LinearLayout>
+            <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6.0dp">
+                <TextView android:textSize="15.0sp" android:textColor="#333333" android:layout_width="wrap_content" android:layout_height="match_parent" android:text="@string/theme_mine_diy_club" />
+                <TextView android:textSize="15.0sp" android:textColor="#06c08f" android:id="@id/club_click" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginLeft="5.0dp" android:text="@string/theme_click_here" />
+            </LinearLayout>
+        </LinearLayout>
+        <View android:layout_gravity="bottom" android:background="#33000000" android:layout_width="match_parent" android:layout_height="0.5dp" android:layout_marginTop="12.0dp" />
+        <LinearLayout android:layout_gravity="bottom" android:orientation="horizontal" android:background="#ffffff" android:paddingTop="8.0dp" android:paddingBottom="8.0dp" android:layout_width="match_parent" android:layout_height="wrap_content">
+            <ImageView android:layout_gravity="center_vertical" android:id="@id/favorite_theme" android:layout_width="30.0dp" android:layout_height="30.0dp" android:layout_marginLeft="12.0dp" android:layout_marginRight="12.0dp" />
+            <TextView android:textSize="16.0sp" android:textColor="#ffffff" android:gravity="center" android:id="@id/theme_controll" android:background="@drawable/theme_btn_selector" android:layout_width="0.0dp" android:layout_height="40.0dp" android:layout_marginRight="12.0dp" android:layout_weight="1.0" />
+            <com.tsf.extend.base.view.TextProgressBar android:layout_gravity="center" android:id="@id/cmt_download_pb" android:visibility="gone" android:layout_width="0.0dp" android:layout_height="40.0dp" android:maxHeight="40.0dp" android:max="100" android:progress="0" android:minHeight="40.0dp" android:layout_weight="1.0" style="@android:style/Widget.ProgressBar.Horizontal" />
+            <ImageView android:layout_gravity="center_vertical" android:id="@id/share" android:layout_width="33.0dp" android:layout_height="33.0dp" android:layout_marginRight="12.0dp" android:src="@drawable/share_icon" />
+        </LinearLayout>
+    </LinearLayout>
+    <FrameLayout android:layout_gravity="center" android:id="@id/theme_detail_progress_view" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <ProgressBar android:id="@id/theme_detail_progress" android:layout_width="70.0dp" android:layout_height="70.0dp" />
+    </FrameLayout>
+    <include android:layout_gravity="center" android:visibility="gone" android:layout_width="match_parent" android:layout_height="match_parent" layout="@layout/wallpaper_favorite_anim_layout" />
+</com.tsf.extend.theme.DIYThemeDetail>

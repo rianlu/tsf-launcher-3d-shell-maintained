@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge android:layout_width="match_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:id="@id/loading_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/search_loading_circle_big" android:layout_centerHorizontal="true" />
+    <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5.0dp" android:layout_marginBottom="5.0dp">
+        <TextView android:id="@id/loading_text" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        <TextView android:id="@id/loading_symbol" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="3.0dp" android:minWidth="20.0dp" />
+    </LinearLayout>
+</merge>

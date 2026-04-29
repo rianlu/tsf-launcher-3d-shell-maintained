@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="horizontal" android:paddingLeft="14.0dp" android:paddingTop="14.0dp" android:paddingRight="14.0dp" android:layout_width="match_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <FrameLayout android:id="@id/left_group" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="6.0dp" android:layout_weight="0.5">
+        <com.tsf.extend.base.view.RoundedImageView android:id="@id/left_img" android:background="#ffdddddd" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="fitXY" app:riv_corner_radius="@dimen/theme_list_image_corner_radius" />
+        <ImageView android:layout_gravity="right|bottom" android:id="@id/keyboard_ad_bg_left" android:background="@drawable/cms_ad_bg" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="2.0dp" />
+    </FrameLayout>
+    <FrameLayout android:id="@id/right_group" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="6.0dp" android:layout_weight="0.5">
+        <com.tsf.extend.base.view.RoundedImageView android:id="@id/right_img" android:background="#ffdddddd" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="fitXY" app:riv_corner_radius="@dimen/theme_list_image_corner_radius" />
+        <ImageView android:layout_gravity="right|bottom" android:id="@id/keyboard_ad_bg_right" android:background="@drawable/cms_ad_bg" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="2.0dp" />
+    </FrameLayout>
+</LinearLayout>

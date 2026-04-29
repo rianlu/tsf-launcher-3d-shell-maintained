@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.tsf.extend.wallpaper.WallpaperCategoryList android:orientation="vertical" android:background="#272727" android:paddingTop="@dimen/workspace_margin_top" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <include layout="@layout/wallpaper_title_layout" />
+    <FrameLayout android:id="@id/container" android:layout_width="match_parent" android:layout_height="match_parent">
+        <View android:background="@drawable/personal_indicator_bottom_divider" android:layout_width="match_parent" android:layout_height="1.0dp" />
+    </FrameLayout>
+</com.tsf.extend.wallpaper.WallpaperCategoryList>

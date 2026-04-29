@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="abbrev_wday_month_day_no_year">d MMMM, EEE</string>
+    <string name="abc_action_bar_home_description">Придвижване към „Начало“</string>
+    <string name="abc_action_bar_home_description_format">„%1$s“ – %2$s</string>
+    <string name="abc_action_bar_home_subtitle_description_format">„%1$s“, „%2$s“ – %3$s</string>
+    <string name="abc_action_bar_up_description">Придвижване нагоре</string>
+    <string name="abc_action_menu_overflow_description">Още опции</string>
+    <string name="abc_action_mode_done">Готово</string>
+    <string name="abc_activity_chooser_view_see_all">Вижте всички</string>
+    <string name="abc_activitychooserview_choose_application">Изберете приложение</string>
+    <string name="abc_capital_off">ИЗКЛ.</string>
+    <string name="abc_capital_on">ВКЛ.</string>
+    <string name="abc_search_hint">Търсете…</string>
+    <string name="abc_searchview_description_clear">Изчистване на заявката</string>
+    <string name="abc_searchview_description_query">Заявка за търсене</string>
+    <string name="abc_searchview_description_search">Търсене</string>
+    <string name="abc_searchview_description_submit">Изпращане на заявката</string>
+    <string name="abc_searchview_description_voice">Гласово търсене</string>
+    <string name="abc_shareactionprovider_share_with">Споделяне със:</string>
+    <string name="abc_shareactionprovider_share_with_application">Споделяне със: %s</string>
+    <string name="abc_toolbar_collapse_description">Свиване</string>
+    <string name="alarm_app_name">Kell</string>
+    <string name="cubeclock_app_name">Kell</string>
+    <string name="full_wday_month_day_no_year">d MMMM, EEEE</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="plugin_crop_cancel">Отказ</string>
+    <string name="plugin_crop_crop_free">Безплатно</string>
+    <string name="plugin_crop_crop_square">Квадрат</string>
+    <string name="plugin_crop_custom">По избор</string>
+    <string name="plugin_crop_ok">OK</string>
+    <string name="theme_picker_delete_target_uninstall_label">Деинсталиране</string>
+    <string name="theme_picker_discard_changes">Отхвърляне на промените</string>
+    <string name="theme_picker_edit_shortcut">Редакция на пряк път</string>
+    <string name="theme_picker_info_target_label">Информация за приложението</string>
+    <string name="theme_picker_system">Система</string>
+    <string name="theme_picker_theme_picker_gallery_apps">Галерия с приложения</string>
+    <string name="update_notic_update_available">Налична е актуализация</string>
+    <string name="update_notic_updateapk_beta">Бета</string>
+</resources>

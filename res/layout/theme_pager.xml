@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.tsf.extend.theme.ThemePager android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.tsf.extend.base.support.ViewPager android:id="@id/viewpager" android:layout_width="match_parent" android:layout_height="match_parent" />
+    <LinearLayout android:orientation="vertical" android:id="@id/theme_banner_group" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <ViewStub android:id="@id/theme_search_entry_stub" android:layout="@layout/theme_pager_search_entry" android:layout_width="match_parent" android:layout_height="wrap_content" />
+        <include layout="@layout/wallpaper_indicator" />
+        <View android:background="@drawable/personal_indicator_bottom_divider" android:layout_width="match_parent" android:layout_height="1.0dp" />
+    </LinearLayout>
+</com.tsf.extend.theme.ThemePager>

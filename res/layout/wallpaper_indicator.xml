@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.tsf.extend.base.view.PagerIndicator android:orientation="vertical" android:id="@id/wallpaper_indicator" android:background="#ffeeeeee" android:layout_width="match_parent" android:layout_height="@dimen/personal_indicator_height"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:gravity="center_vertical" android:id="@id/content_layout" android:layout_width="match_parent" android:layout_height="0.0dp" android:layout_weight="1.0">
+        <LinearLayout android:gravity="center" android:id="@id/tab_new_layout" android:layout_width="0.0dp" android:layout_height="match_parent" android:layout_weight="1.0">
+            <TextView android:textSize="15.0sp" android:gravity="center_horizontal" android:id="@id/tab_new" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/wallpaper_categories" />
+        </LinearLayout>
+        <LinearLayout android:gravity="center" android:id="@id/tab_hot_layout" android:layout_width="0.0dp" android:layout_height="match_parent" android:layout_weight="1.0">
+            <TextView android:textSize="15.0sp" android:gravity="center_horizontal" android:id="@id/tab_hot" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/tab_new" />
+        </LinearLayout>
+        <LinearLayout android:gravity="center" android:id="@id/tab_category_layout" android:layout_width="0.0dp" android:layout_height="match_parent" android:layout_weight="1.0">
+            <TextView android:textSize="15.0sp" android:gravity="center_horizontal" android:id="@id/tab_category" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/tab_hot" />
+        </LinearLayout>
+        <LinearLayout android:gravity="center" android:id="@id/tab_pg_template_layout" android:layout_width="0.0dp" android:layout_height="match_parent" android:layout_weight="1.0">
+            <TextView android:textSize="15.0sp" android:gravity="center_horizontal" android:id="@id/tab_pg_template" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/tab_pg_live_wallpaper" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:id="@id/mark_layout" android:paddingBottom="0.5dp" android:layout_width="match_parent" android:layout_height="3.0dp">
+        <View android:id="@id/mark" android:background="#06c08f" android:layout_width="0.0dp" android:layout_height="match_parent" />
+    </LinearLayout>
+</com.tsf.extend.base.view.PagerIndicator>

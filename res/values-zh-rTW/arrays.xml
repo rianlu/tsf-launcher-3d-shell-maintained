@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="alarm_set">
+        <item>已將此鬧鐘設為 1 分鐘後啟動。</item>
+        <item>已將此鬧鐘設為 %1$s後啟動。</item>
+        <item>已將此鬧鐘設為 %2$s後啟動。</item>
+        <item>已將此鬧鐘設為 %1$s又 %2$s後啟動。</item>
+        <item>已將此鬧鐘設為 %3$s後啟動。</item>
+        <item>已將此鬧鐘設為 %1$s又 %3$s後啟動。</item>
+        <item>已將此鬧鐘設為 %2$s%3$s後啟動。</item>
+        <item>已將此鬧鐘設為 %1$s又 %2$s%3$s後啟動。</item>
+    </string-array>
+</resources>

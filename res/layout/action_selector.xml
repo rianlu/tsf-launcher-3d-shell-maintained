@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:swipeytabs="http://schemas.android.com/apk/res-auto">
+    <com.tsf.shell.activity.actionselector.SwipeyTabs android:id="@id/swipeytabs" android:background="#ff000000" android:layout_width="match_parent" android:layout_height="wrap_content" swipeytabs:bottomBarColor="#ff14b6ea" swipeytabs:bottomBarHeight="2.0dp" swipeytabs:tabIndicatorHeight="3.0dp" />
+    <android.support.v4.view.ViewPager android:id="@id/viewpager" android:layout_width="match_parent" android:layout_height="0.0px" android:layout_weight="1.0" />
+</LinearLayout>

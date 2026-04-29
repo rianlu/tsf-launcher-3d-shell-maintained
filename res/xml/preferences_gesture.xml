@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tsfui="http://tsfui.com" xmlns:settings="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:title="@string/mn_hotkey">
+        <Preference android:title="@string/mn_home_key_action" android:key="home_key_action" android:summary="" />
+        <Preference android:title="@string/mn_back_key_action" android:key="back_key_action" android:summary="" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/mn_gesture">
+        <com.tsf.shell.preference.widget.IconPreference android:title="@string/mn_gesture_double_tap" android:key="gesture_double_tap" android:summary="none" settings:ico="@drawable/ic_pref_gesture_double_tap" />
+        <com.tsf.shell.preference.widget.IconPreference android:title="@string/mn_gesture_swipe_up" android:key="gesture_swipe_up" android:summary="none" settings:ico="@drawable/ic_pref_gesture_swipe_up" />
+        <com.tsf.shell.preference.widget.IconPreference android:title="@string/mn_gesture_swipe_down" android:key="gesture_swipe_down" android:summary="none" settings:ico="@drawable/ic_pref_gesture_swipe_down" />
+        <com.tsf.shell.preference.widget.IconPreference android:title="@string/mn_gesture_pinch_in" android:key="gesture_pinch_in" android:summary="none" settings:ico="@drawable/ic_pref_gesture_pinch" />
+        <com.tsf.shell.preference.widget.IconPreference android:title="@string/mn_gesture_pinch_out" android:key="gesture_pinch_out" android:summary="none" settings:ico="@drawable/ic_pref_gesture_pinch_out" />
+        <com.tsf.shell.preference.widget.IconPreference android:title="@string/mn_gesture_swipe_up_two" android:key="gesture_two_up" android:summary="none" settings:ico="@drawable/ic_pref_gesture_two_up" />
+        <com.tsf.shell.preference.widget.IconPreference android:title="@string/mn_gesture_swipe_down_two" android:key="gesture_two_down" android:summary="none" settings:ico="@drawable/ic_pref_gesture_two_down" />
+        <com.tsf.shell.preference.widget.IconPreference android:title="@string/mn_gesture_swipe_left_two" android:key="gesture_two_left" android:summary="none" settings:ico="@drawable/ic_pref_gesture_two_left" />
+        <com.tsf.shell.preference.widget.IconPreference android:title="@string/mn_gesture_swipe_right_two" android:key="gesture_two_right" android:summary="none" settings:ico="@drawable/ic_pref_gesture_two_right" />
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:background="#4480f7" android:layout_width="match_parent" android:layout_height="64.0dp"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout android:id="@id/theme_notify_img_container" android:layout_width="40.0dp" android:layout_height="40.0dp" android:layout_marginLeft="12.0dp" android:layout_centerVertical="true">
+        <ImageView android:id="@id/theme_notify_type_icon" android:layout_width="match_parent" android:layout_height="match_parent" android:src="@drawable/theme" android:scaleType="centerInside" android:layout_centerInParent="true" />
+    </RelativeLayout>
+    <LinearLayout android:gravity="center_vertical" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="12.0dp" android:layout_marginRight="12.0dp" android:minHeight="40.0dp" android:layout_toLeftOf="@id/apply" android:layout_toRightOf="@id/theme_notify_img_container" android:layout_centerVertical="true">
+        <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content">
+            <TextView android:textSize="16.0sp" android:textColor="#ffffff" android:ellipsize="end" android:id="@id/theme_notify_title" android:fadingEdge="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="2" />
+        </LinearLayout>
+    </LinearLayout>
+    <TextView android:textSize="13.0sp" android:textColor="#ffffff" android:ellipsize="marquee" android:gravity="center" android:id="@id/apply" android:background="@drawable/theme_notifition_aplly_bg_border" android:paddingLeft="8.0dp" android:paddingRight="8.0dp" android:layout_width="wrap_content" android:layout_height="32.0dp" android:layout_marginRight="8.0dp" android:minWidth="65.0dp" android:text="@string/free" android:singleLine="true" android:layout_alignParentRight="true" android:layout_centerVertical="true" />
+</RelativeLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <include layout="@layout/activity_video_layout" />
+    <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/content" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true">
+        <RelativeLayout android:id="@id/relativeLayout1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="-10.0dp">
+            <ImageView android:id="@id/imageView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/tsf_shell_logo_summary" />
+            <ImageView android:id="@id/imageView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/tsf_shell_logo_light_summary" android:layout_centerHorizontal="true" android:layout_centerVertical="true" />
+        </RelativeLayout>
+        <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/linearlayer1" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <ImageView android:id="@id/imageView3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="6.0dp" android:src="@drawable/tsf_text_title" />
+            <ImageView android:id="@id/imageView4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="2.0dp" android:src="@drawable/launcher_text_summary_en" />
+        </LinearLayout>
+        <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/policy" android:layout_width="wrap_content" android:layout_height="50.0dp" android:layout_marginBottom="10.0dp">
+            <TextView android:textSize="12.0sp" android:textColor="#ffcccccc" android:gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/text_terms_privacy_policy_des" />
+            <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content">
+                <TextView android:textSize="12.0sp" android:textColor="#ffcccccc" android:gravity="center" android:id="@id/tv_terms" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/text_terms_service" />
+                <TextView android:textSize="12.0sp" android:textColor="#ffcccccc" android:gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=" &amp; " />
+                <TextView android:textSize="12.0sp" android:textColor="#ffcccccc" android:gravity="center" android:id="@id/tv_private_policy" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/text_private_policy" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

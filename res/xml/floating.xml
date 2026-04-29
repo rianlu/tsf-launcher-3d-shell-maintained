@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<descript>
+    <type drawable="cloud_ico" defaultDirection="horizontal_right" defaultOverturn="false" defaultSpeedRangeMax="3" defaultSpeedRangeMin="0.1" defaultWave="0">
+        <item drawable="cloud1" />
+        <item drawable="cloud2" />
+        <item drawable="cloud3" />
+        <item drawable="cloud4" />
+    </type>
+    <type drawable="animals_ico" defaultDirection="horizontal_right" defaultOverturn="true" defaultSpeedRangeMax="3" defaultSpeedRangeMin="0.4" defaultWave="0">
+        <item drawable="animals1" />
+        <item drawable="animals2">
+            <animation direction="horizontal_right" overturn="true" speedRangeMax="20" speedRangeMin="0.8" wave="0" />
+        </item>
+        <item drawable="animals3">
+            <animation direction="horizontal_right" overturn="true" speedRangeMax="4" speedRangeMin="0.8" wave="80" />
+        </item>
+        <item drawable="animals4" />
+        <item drawable="animals5" />
+        <item drawable="animals6" />
+        <item drawable="animals7">
+            <animation direction="horizontal_right" overturn="true" speedRangeMax="1" speedRangeMin="0.1" wave="0" />
+        </item>
+        <item />
+    </type>
+</descript>

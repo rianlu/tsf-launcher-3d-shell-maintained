@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources duration="8640000" >
+
+    <update>
+        <item
+            beta="true"
+            intent="https://drive.google.com/#folders/0B7XrXtLaly9TTW40NzRWbmpCcG8"
+            max="2"
+            packageName="com.tsf.shell"
+            versionCode="87"
+            versionName="3.0"/>
+    </update>
+
+</resources>

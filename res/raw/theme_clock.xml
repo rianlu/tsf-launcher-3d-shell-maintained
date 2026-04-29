@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <high color="#FFF66C40" />
+
+    <low color="#FF00BEFF" />
+
+    <week color="#FFFFFFFF" />
+
+    <ampm color="#FFFFFFFF" />
+
+    <text color="#FFCCCCCC" />
+
+</resources>

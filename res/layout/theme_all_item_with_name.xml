@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:orientation="vertical" android:id="@id/theme_item_left" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_weight="1.0">
+        <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+            <com.tsf.extend.base.view.RoundedImageView android:id="@id/theme_img_left" android:background="@drawable/theme_list_item_bg" android:layout_width="match_parent" android:layout_height="wrap_content" android:scaleType="fitXY" app:riv_corner_radius="@dimen/theme_list_image_corner_radius" />
+            <com.tsf.extend.base.view.RoundedImageView android:layout_gravity="left|top" android:id="@id/suggest_left" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/theme_recommend" app:riv_corner_radius_top_left="@dimen/theme_list_image_corner_radius" />
+        </FrameLayout>
+        <LinearLayout android:orientation="vertical" android:id="@id/theme_item_download_layout_left" android:layout_width="match_parent" android:layout_height="42.0dp">
+            <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4.0dp">
+                <TextView android:textSize="12.0sp" android:textStyle="bold" android:textColor="#333333" android:ellipsize="end" android:id="@id/theme_name_left" android:layout_width="0.0dp" android:layout_height="wrap_content" android:layout_marginBottom="1.0dp" android:singleLine="true" android:layout_weight="1.0" />
+                <ImageView android:id="@id/theme_download_left" android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_marginLeft="8.0dp" android:src="@drawable/theme_downloads_icon" />
+            </LinearLayout>
+            <TextView android:textSize="10.0sp" android:textColor="#80333333" android:ellipsize="end" android:gravity="center_vertical" android:id="@id/theme_down_left" android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true" android:drawablePadding="6.0dp" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:orientation="vertical" android:id="@id/theme_item_mid" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_weight="1.0">
+        <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+            <com.tsf.extend.base.view.RoundedImageView android:id="@id/theme_img_mid" android:background="@drawable/theme_list_item_bg" android:layout_width="match_parent" android:layout_height="wrap_content" android:scaleType="fitXY" app:riv_corner_radius="@dimen/theme_list_image_corner_radius" />
+            <com.tsf.extend.base.view.RoundedImageView android:layout_gravity="left|top" android:id="@id/suggest_mid" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/theme_recommend" app:riv_corner_radius_top_left="@dimen/theme_list_image_corner_radius" />
+        </FrameLayout>
+        <LinearLayout android:orientation="vertical" android:id="@id/theme_item_download_layout_mid" android:layout_width="match_parent" android:layout_height="42.0dp">
+            <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4.0dp">
+                <TextView android:textSize="12.0sp" android:textStyle="bold" android:textColor="#333333" android:ellipsize="end" android:id="@id/theme_name_mid" android:layout_width="0.0dp" android:layout_height="wrap_content" android:layout_marginBottom="1.0dp" android:singleLine="true" android:layout_weight="1.0" />
+                <ImageView android:id="@id/theme_download_mid" android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_marginLeft="8.0dp" android:src="@drawable/theme_downloads_icon" />
+            </LinearLayout>
+            <TextView android:textSize="10.0sp" android:textColor="#80333333" android:ellipsize="end" android:gravity="center_vertical" android:id="@id/theme_down_mid" android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true" android:drawablePadding="6.0dp" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:orientation="vertical" android:id="@id/theme_item_right" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_weight="1.0">
+        <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+            <com.tsf.extend.base.view.RoundedImageView android:id="@id/theme_img_right" android:background="@drawable/theme_list_item_bg" android:layout_width="match_parent" android:layout_height="wrap_content" android:scaleType="fitXY" app:riv_corner_radius="@dimen/theme_list_image_corner_radius" />
+            <com.tsf.extend.base.view.RoundedImageView android:layout_gravity="left|top" android:id="@id/suggest_right" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/theme_recommend" app:riv_corner_radius_top_left="@dimen/theme_list_image_corner_radius" />
+        </FrameLayout>
+        <LinearLayout android:orientation="vertical" android:id="@id/theme_item_download_layout_right" android:layout_width="match_parent" android:layout_height="42.0dp" android:layout_marginTop="4.0dp">
+            <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content">
+                <TextView android:textSize="12.0sp" android:textStyle="bold" android:textColor="#333333" android:ellipsize="end" android:id="@id/theme_name_right" android:layout_width="0.0dp" android:layout_height="wrap_content" android:layout_marginBottom="1.0dp" android:singleLine="true" android:layout_weight="1.0" />
+                <ImageView android:id="@id/theme_download_right" android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_marginLeft="8.0dp" android:src="@drawable/theme_downloads_icon" />
+            </LinearLayout>
+            <TextView android:textSize="10.0sp" android:textColor="#80333333" android:ellipsize="end" android:gravity="center_vertical" android:id="@id/theme_down_right" android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true" android:drawablePadding="6.0dp" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
