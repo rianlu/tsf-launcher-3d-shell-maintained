@@ -7,9 +7,7 @@ config_file="$script_dir/release.conf"
 local_signing_dir="$repo_root/.local/signing"
 signing_env="$local_signing_dir/release.env"
 apktool_yml="$repo_root/apktool.yml"
-assets_version_props="$repo_root/assets/version.properties"
 build_dir="$repo_root/build/release"
-
 fail() {
   printf '%s\n' "FAIL: $1" >&2
   exit 1
@@ -21,6 +19,78 @@ need_cmd() {
 
 require_file() {
   [ -f "$1" ] || fail "missing required file: $1"
+}
+
+clean_macos_metadata() {
+  apk_source_dirs | while IFS= read -r target_dir; do
+    find "$target_dir" -type f -name .DS_Store -exec rm -f {} +
+  done
+}
+
+assert_clean_macos_metadata() {
+  leftovers=$(
+    apk_source_dirs | while IFS= read -r target_dir; do
+      find "$target_dir" -type f -name .DS_Store -print
+    done
+  )
+
+  [ -z "$leftovers" ] || fail "APK source tree still contains .DS_Store files:\n$leftovers"
+}
+
+cleanup_macos_metadata_on_exit() {
+  clean_macos_metadata >/dev/null 2>&1 || true
+}
+
+apk_source_dirs() {
+  for target_dir in \
+    "$repo_root/assets" \
+    "$repo_root/lib" \
+    "$repo_root/original" \
+    "$repo_root/res" \
+    "$repo_root/unknown" \
+    "$repo_root"/smali*
+  do
+    [ -d "$target_dir" ] || continue
+    printf '%s\n' "$target_dir"
+  done
+}
+
+clean_apktool_workspace() {
+  if [ -d "$repo_root/build/apk" ]; then
+    find "$repo_root/build/apk" -mindepth 1 -exec rm -rf {} +
+  fi
+  rm -f "$repo_root/build/resources.zip"
+}
+
+find_sdk_tool() {
+  tool_name="$1"
+
+  if command -v "$tool_name" >/dev/null 2>&1; then
+    command -v "$tool_name"
+    return 0
+  fi
+
+  for sdk_root in \
+    "$repo_root/.local/android-sdk" \
+    "${ANDROID_HOME:-}" \
+    "${ANDROID_SDK_ROOT:-}" \
+    "$HOME/Library/Android/sdk" \
+    "$HOME/Android/Sdk"
+  do
+    [ -d "$sdk_root/build-tools" ] || continue
+    found_tool=
+    for candidate in "$sdk_root"/build-tools/*/"$tool_name"; do
+      if [ -x "$candidate" ]; then
+        found_tool="$candidate"
+      fi
+    done
+    if [ -n "${found_tool:-}" ]; then
+      printf '%s\n' "$found_tool"
+      return 0
+    fi
+  done
+
+  return 1
 }
 
 load_config() {
@@ -52,7 +122,7 @@ load_config() {
     release_version_name="$RELEASE_BASE_VERSION"
   fi
 
-  output_basename="handshaker-maintained-$release_version_name-release"
+  output_basename="tsf-launcher-maintained-$release_version_name-release"
   unsigned_apk="$build_dir/$output_basename-unsigned.apk"
   aligned_apk="$build_dir/$output_basename-aligned.apk"
   signed_apk="$build_dir/$output_basename.apk"
@@ -72,24 +142,21 @@ sync_versions() {
     s/(versionCode:\s*)\d+/${1}.$ENV{"RELEASE_VERSION_CODE_VALUE"}/ge;
     s/(versionName:\s*)[^\n]+/${1}.$ENV{"RELEASE_VERSION_NAME"}/ge;
   ' "$apktool_yml"
-
-  RELEASE_VERSION_CODE_VALUE="$RELEASE_VERSION_CODE" \
-  perl -0pi -e '
-    s/(VERSION_CODE=)\d+/${1}.$ENV{"RELEASE_VERSION_CODE_VALUE"}/ge;
-  ' "$assets_version_props"
 }
 
 build_apk() {
   mkdir -p "$build_dir"
+  clean_macos_metadata
+  assert_clean_macos_metadata
   # Apktool reuses build intermediates and can keep stale version metadata.
-  rm -rf "$repo_root/build/apk" "$repo_root/build/resources.zip"
+  clean_apktool_workspace
   rm -f "$unsigned_apk" "$aligned_apk" "$signed_apk"
   apktool b "$repo_root" -o "$unsigned_apk"
 }
 
 sign_with_apksigner() {
-  zipalign -f 4 "$unsigned_apk" "$aligned_apk"
-  if ! apksigner sign \
+  "$zipalign_bin" -f 4 "$unsigned_apk" "$aligned_apk"
+  if ! "$apksigner_bin" sign \
     --ks "$keystore_path" \
     --ks-key-alias "$RELEASE_KEY_ALIAS" \
     --ks-pass "pass:$RELEASE_STORE_PASSWORD" \
@@ -99,8 +166,8 @@ sign_with_apksigner() {
     rm -f "$signed_apk"
     fail "apksigner failed"
   fi
-  apksigner verify "$signed_apk" >/dev/null
-  signer_tool="apksigner"
+  "$apksigner_bin" verify "$signed_apk" >/dev/null
+  signer_tool="$apksigner_bin"
 }
 
 sign_with_jarsigner() {
@@ -121,7 +188,7 @@ sign_with_jarsigner() {
 }
 
 sign_apk() {
-  if command -v apksigner >/dev/null 2>&1 && command -v zipalign >/dev/null 2>&1; then
+  if apksigner_bin=$(find_sdk_tool apksigner) && zipalign_bin=$(find_sdk_tool zipalign); then
     sign_with_apksigner
   else
     sign_with_jarsigner
@@ -145,6 +212,7 @@ print_summary() {
 need_cmd apktool
 need_cmd perl
 need_cmd jarsigner
+trap cleanup_macos_metadata_on_exit EXIT
 
 load_config
 sync_versions

@@ -1,0 +1,4 @@
+build/
+.local/
+.DS_Store
+scratch/

@@ -4,57 +4,198 @@ set -eu
 script_dir=$(CDPATH= cd -- "$(dirname "$0")" && pwd)
 repo_root=$(CDPATH= cd -- "$script_dir/.." && pwd)
 build_dir="$repo_root/build"
-unsigned_apk="$build_dir/handshaker-debug-unsigned.apk"
-signed_apk="$build_dir/handshaker-debug-signed.apk"
-keystore_dir="$build_dir/signing"
-keystore_path="$keystore_dir/debug.keystore"
+unsigned_apk="$build_dir/tsf-launcher-debug-unsigned.apk"
+aligned_apk="$build_dir/tsf-launcher-debug-aligned.apk"
+signed_apk="$build_dir/tsf-launcher-debug-signed.apk"
+keystore_dir="$repo_root/.local/signing"
+release_env="$keystore_dir/release.env"
+
+if [ -f "$release_env" ]; then
+  # Load release signing config
+  . "$release_env"
+  keystore_path="$keystore_dir/$RELEASE_KEYSTORE_FILE"
+  keystore_alias="$RELEASE_KEY_ALIAS"
+  keystore_pass="$RELEASE_STORE_PASSWORD"
+  key_pass="$RELEASE_KEY_PASSWORD"
+  echo "Using release signing: $keystore_path"
+else
+  # Fallback to debug signing
+  keystore_dir="$build_dir/signing"
+  keystore_path="$keystore_dir/debug.keystore"
+  keystore_alias="androiddebugkey"
+  keystore_pass="android"
+  key_pass="android"
+  echo "Using debug signing: $keystore_path"
+fi
+
+fail() {
+  echo "FAIL: $1" >&2
+  exit 1
+}
 
 need_cmd() {
-  command -v "$1" >/dev/null 2>&1 || {
-    echo "missing required command: $1" >&2
-    exit 1
-  }
+  command -v "$1" >/dev/null 2>&1 || fail "missing required command: $1"
+}
+
+clean_macos_metadata() {
+  apk_source_dirs | while IFS= read -r target_dir; do
+    find "$target_dir" -type f -name .DS_Store -exec rm -f {} +
+  done
+}
+
+assert_clean_macos_metadata() {
+  leftovers=$(
+    apk_source_dirs | while IFS= read -r target_dir; do
+      find "$target_dir" -type f -name .DS_Store -print
+    done
+  )
+
+  [ -z "$leftovers" ] || fail "APK source tree still contains .DS_Store files:\n$leftovers"
+}
+
+cleanup_macos_metadata_on_exit() {
+  clean_macos_metadata >/dev/null 2>&1 || true
+}
+
+apk_source_dirs() {
+  for target_dir in \
+    "$repo_root/assets" \
+    "$repo_root/lib" \
+    "$repo_root/original" \
+    "$repo_root/res" \
+    "$repo_root/unknown" \
+    "$repo_root"/smali*
+  do
+    [ -d "$target_dir" ] || continue
+    printf '%s\n' "$target_dir"
+  done
+}
+
+clean_apktool_workspace() {
+  if [ -d "$build_dir/apk" ]; then
+    find "$build_dir/apk" -mindepth 1 -exec rm -rf {} +
+  fi
+  rm -f "$build_dir/resources.zip"
+}
+
+find_adb() {
+  if command -v adb >/dev/null 2>&1; then
+    command -v adb
+    return 0
+  fi
+
+  for sdk_root in \
+    "${ANDROID_HOME:-}" \
+    "${ANDROID_SDK_ROOT:-}" \
+    "$repo_root/.local/android-sdk" \
+    "$HOME/Library/Android/sdk" \
+    "$HOME/Android/Sdk"
+  do
+    [ -n "$sdk_root" ] || continue
+    adb_bin="$sdk_root/platform-tools/adb"
+    if [ -x "$adb_bin" ]; then
+      printf '%s\n' "$adb_bin"
+      return 0
+    fi
+  done
+
+  return 1
 }
 
 build_apk() {
   mkdir -p "$build_dir"
-  rm -f "$unsigned_apk" "$signed_apk"
+  clean_macos_metadata
+  assert_clean_macos_metadata
+  clean_apktool_workspace
+  rm -f "$unsigned_apk" "$aligned_apk" "$signed_apk"
   apktool b "$repo_root" -o "$unsigned_apk"
 }
 
+find_sdk_tool() {
+  tool_name="$1"
+
+  if command -v "$tool_name" >/dev/null 2>&1; then
+    command -v "$tool_name"
+    return 0
+  fi
+
+  for sdk_root in \
+    "$repo_root/.local/android-sdk" \
+    "${ANDROID_HOME:-}" \
+    "${ANDROID_SDK_ROOT:-}" \
+    "$HOME/Library/Android/sdk" \
+    "$HOME/Android/Sdk"
+  do
+    [ -d "$sdk_root/build-tools" ] || continue
+    found_tool=
+    for candidate in "$sdk_root"/build-tools/*/"$tool_name"; do
+      if [ -x "$candidate" ]; then
+        found_tool="$candidate"
+      fi
+    done
+    if [ -n "${found_tool:-}" ]; then
+      printf '%s\n' "$found_tool"
+      return 0
+    fi
+  done
+
+  return 1
+}
+
 ensure_keystore() {
-  mkdir -p "$keystore_dir"
-  if [ ! -f "$keystore_path" ]; then
-    keytool -genkeypair \
-      -keystore "$keystore_path" \
-      -storepass android \
-      -keypass android \
-      -alias androiddebugkey \
-      -dname "CN=Android Debug,O=Android,C=US" \
-      -keyalg RSA \
-      -keysize 2048 \
-      -validity 10000
+  # Only create keystore if we are in debug mode and it doesn't exist
+  if [ ! -f "$release_env" ]; then
+    mkdir -p "$(dirname "$keystore_path")"
+    if [ ! -f "$keystore_path" ]; then
+      keytool -genkeypair \
+        -keystore "$keystore_path" \
+        -storepass "$keystore_pass" \
+        -keypass "$key_pass" \
+        -alias "$keystore_alias" \
+        -dname "CN=Android Debug,O=Android,C=US" \
+        -keyalg RSA \
+        -keysize 2048 \
+        -validity 10000 >/dev/null
+    fi
   fi
 }
 
 sign_apk() {
-  cp "$unsigned_apk" "$signed_apk"
-  jarsigner \
-    -keystore "$keystore_path" \
-    -storepass android \
-    -keypass android \
-    "$signed_apk" \
-    androiddebugkey >/dev/null
-  jarsigner -verify "$signed_apk" >/dev/null
+  if apksigner_bin=$(find_sdk_tool apksigner) && zipalign_bin=$(find_sdk_tool zipalign); then
+    "$zipalign_bin" -f 4 "$unsigned_apk" "$aligned_apk"
+    "$apksigner_bin" sign \
+      --ks "$keystore_path" \
+      --ks-key-alias "$keystore_alias" \
+      --ks-pass "pass:$keystore_pass" \
+      --key-pass "pass:$key_pass" \
+      --out "$signed_apk" \
+      "$aligned_apk"
+    "$apksigner_bin" verify "$signed_apk" >/dev/null
+  else
+    cp "$unsigned_apk" "$signed_apk"
+    jarsigner \
+      -sigalg SHA256withRSA \
+      -digestalg SHA-256 \
+      -keystore "$keystore_path" \
+      -storepass "$keystore_pass" \
+      -keypass "$key_pass" \
+      "$signed_apk" \
+      "$keystore_alias" >/dev/null
+    jarsigner -verify "$signed_apk" >/dev/null
+    echo "warn: apksigner not found, used jarsigner (v1 only)" >&2
+  fi
 }
 
 select_device() {
+  adb_bin="$1"
+
   if [ -n "${ANDROID_SERIAL:-}" ]; then
     printf '%s\n' "$ANDROID_SERIAL"
     return 0
   fi
 
-  devices=$(adb devices | awk 'NR>1 && $2=="device" {print $1}')
+  # adb 输出为 serial<TAB>state；序列号可能含空格，不能用默认 FS 按列取 $2
+  devices=$("$adb_bin" devices | awk -F'\t' 'NR>1 && $2=="device" {print $1}')
   count=$(printf '%s\n' "$devices" | sed '/^$/d' | wc -l | tr -d ' ')
 
   if [ "$count" -eq 0 ]; then
@@ -69,21 +210,60 @@ select_device() {
   printf '%s\n' "$devices" | sed '/^$/d'
 }
 
+list_devices() {
+  adb_bin="$1"
+  "$adb_bin" devices | awk -F'\t' 'NR>1 && $2=="device" {print $1}'
+}
+
+install_to_device() {
+  adb_bin="$1"
+  device_serial="$2"
+
+  "$adb_bin" -s "$device_serial" install -r "$signed_apk"
+  echo "adb install -r succeeded on $device_serial"
+}
+
 install_apk() {
-  if ! command -v adb >/dev/null 2>&1; then
+  if ! adb_bin=$(find_adb); then
     echo "adb not found, skipped install"
     return 0
   fi
 
-  if ! device_serial=$(select_device); then
+  if [ -n "${ANDROID_SERIAL:-}" ]; then
+    install_to_device "$adb_bin" "$ANDROID_SERIAL"
+    return 0
+  fi
+
+  if [ -n "${ANDROID_SERIALS:-}" ]; then
+    printf '%s\n' "$ANDROID_SERIALS" | tr ', ' '\n\n' | sed '/^$/d' | while IFS= read -r device_serial; do
+      install_to_device "$adb_bin" "$device_serial"
+    done
+    return 0
+  fi
+
+  if [ "${INSTALL_ALL_DEVICES:-1}" = "1" ]; then
+    devices=$(list_devices "$adb_bin")
+    if [ -z "$devices" ]; then
+      echo "no adb device detected, skipped install"
+      return 0
+    fi
+
+    printf '%s\n' "$devices" | while IFS= read -r device_serial; do
+      [ -n "$device_serial" ] || continue
+      install_to_device "$adb_bin" "$device_serial"
+    done
+    return 0
+  fi
+
+  if ! device_serial=$(select_device "$adb_bin"); then
     echo "no adb device detected, skipped install"
     return 0
   fi
 
   if [ -n "${ANDROID_SERIAL:-}" ]; then
-    adb -s "$device_serial" install -r "$signed_apk"
+    "$adb_bin" -s "$device_serial" install -r "$signed_apk"
   else
-    adb install -r "$signed_apk"
+    "$adb_bin" install -r "$signed_apk"
   fi
 
   echo "adb install -r succeeded"
@@ -92,6 +272,7 @@ install_apk() {
 need_cmd apktool
 need_cmd keytool
 need_cmd jarsigner
+trap cleanup_macos_metadata_on_exit EXIT
 
 build_apk
 ensure_keystore
