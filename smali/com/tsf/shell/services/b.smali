@@ -94,7 +94,7 @@
     .line 57
     iget-object v1, p0, Lcom/tsf/shell/services/b;->a:Landroid/content/Context;
 
-    invoke-virtual {v1, v0}, Landroid/content/Context;->startService(Landroid/content/Intent;)Landroid/content/ComponentName;
+    invoke-static {v1, v0}, Lcom/tsf/shell/component/a;->a(Landroid/content/Context;Landroid/content/Intent;)V
 
     .line 59
     return-void

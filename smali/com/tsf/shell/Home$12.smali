@@ -37,7 +37,7 @@
 
 # virtual methods
 .method public a(IZLcom/tsf/shell/a/a/d$a;)V
-    .locals 2
+    .locals 4
 
     .prologue
     .line 393
@@ -59,5 +59,16 @@
 
     .line 405
     :cond_0
+    iget-object v0, p0, Lcom/tsf/shell/Home$12;->a:Lcom/tsf/shell/Home;
+
+    const/4 v1, 0x0
+
+    const/16 v2, 0x80
+
+    sget-object v3, Lcom/tsf/shell/a/a/d;->h:[Ljava/lang/String;
+
+    invoke-virtual {v0, v1, v1, v2, v3}, Lcom/tsf/shell/Home;->a(Lcom/tsf/shell/a/a/d$b;ZI[Ljava/lang/String;)Z
+
+    .line 406
     return-void
 .end method

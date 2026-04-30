@@ -25,6 +25,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="com.tsf.shell.plugin.PERMISSION"/>
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-feature android:name="android.hardware.telephony" android:required="false"/>
     <uses-feature android:name="android.hardware.bluetooth" android:required="false"/>
     <uses-feature android:name="android.hardware.location" android:required="false"/>
@@ -39,7 +40,7 @@
         <activity android:label="@string/launcher_name_prime" android:name="com.tsf.shell.plugin.crop.CropImageActivity" android:process=":picker" android:theme="@style/AppCompat.NoTitle"/>
         <activity android:name="com.tsf.shell.plugin.themepicker.themepreview.ThemePreviewDetilActivity" android:process=":picker" android:theme="@style/HoloWallpaperTheme.IndocatprStyle"/>
         <activity android:name="com.tsf.shell.plugin.themepicker.themepreview.ThemePreviewActivity" android:process=":picker" android:theme="@style/HoloWallpaperTheme.IndocatprStyle"/>
-        <activity android:name="com.tsf.shell.plugin.themepicker.wallpaper.WallpaperPickerActivity" android:process=":wallpaperSelector" android:theme="@style/HoloWallpaperTheme">
+        <activity android:exported="true" android:name="com.tsf.shell.plugin.themepicker.wallpaper.WallpaperPickerActivity" android:process=":wallpaperSelector" android:theme="@style/HoloWallpaperTheme">
             <intent-filter>
                 <action android:name="android.intent.action.SET_WALLPAPER"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -61,7 +62,7 @@
         <activity android:name="com.tsf.shell.preference.video.VideoOptionDialogActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity android:configChanges="keyboard|keyboardHidden|orientation" android:launchMode="singleTask" android:name="com.tsf.shell.RestartActivity" android:process=":restart" android:theme="@style/Theme.NoTitleBar.NoBackground"/>
         <activity android:excludeFromRecents="true" android:finishOnTaskLaunch="true" android:launchMode="singleInstance" android:name="org.acra.CrashReportDialog" android:theme="@style/DialogTheme"/>
-        <activity android:clearTaskOnLaunch="true" android:configChanges="mcc|mnc|locale|touchscreen|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|layoutDirection|fontScale" android:excludeFromRecents="true" android:icon="@drawable/tsf_ico" android:label="@string/launcher_name_prime" android:launchMode="singleTask" android:name="com.tsf.shell.Home" android:stateNotNeeded="true" android:theme="@style/AppTheme" android:windowSoftInputMode="adjustPan">
+        <activity android:clearTaskOnLaunch="true" android:configChanges="mcc|mnc|locale|touchscreen|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|layoutDirection|fontScale" android:excludeFromRecents="true" android:exported="true" android:icon="@drawable/tsf_ico" android:label="@string/launcher_name_prime" android:launchMode="singleTask" android:name="com.tsf.shell.Home" android:stateNotNeeded="true" android:theme="@style/AppTheme" android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.HOME"/>
@@ -71,7 +72,7 @@
                 <action android:name="com.tsf.shell.themes"/>
             </intent-filter>
         </activity>
-        <activity android:label="@string/launcher_name_prime" android:launchMode="singleTask" android:name="com.tsf.shell.ShellActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:windowSoftInputMode="adjustPan">
+        <activity android:exported="true" android:label="@string/launcher_name_prime" android:launchMode="singleTask" android:name="com.tsf.shell.ShellActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -82,7 +83,7 @@
                 <action android:name="com.tsf.shell.services.FOREGROUND"/>
             </intent-filter>
         </service>
-        <service android:enabled="true" android:name="com.tsf.shell.services.LauncherAccessibilityService" android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+        <service android:enabled="true" android:exported="false" android:name="com.tsf.shell.services.LauncherAccessibilityService" android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService"/>
             </intent-filter>
@@ -111,7 +112,7 @@
                 <action android:name="com.tsf.shell.widget.alarm.inshell.cancel_snooze"/>
             </intent-filter>
         </receiver>
-        <activity android:label="@string/alarm_app_name" android:name="com.tsf.shell.widget.alarm.setting.SettingActivity" android:process=":alarm" android:theme="@style/TSFTheme.Material.NoTitleBar">
+        <activity android:exported="true" android:label="@string/alarm_app_name" android:name="com.tsf.shell.widget.alarm.setting.SettingActivity" android:process=":alarm" android:theme="@style/TSFTheme.Material.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
@@ -120,26 +121,26 @@
         <activity android:label="Fonts Picker" android:name="com.tsf.shell.plugin.fontspicker.FontsPickerActivity" android:process=":picker" android:theme="@style/AppTheme.NoActionBar"/>
         <service android:exported="false" android:name="component.ForegroundService" android:process=":fore"/>
         <provider android:authorities="com.tsf.shell.plugin.icondesigner.provider" android:enabled="true" android:exported="false" android:name="com.tsf.shell.plugin.themepicker.icondesigner.ThemeIconDesignerProvider"/>
-        <activity android:configChanges="keyboardHidden|orientation|screenSize" android:launchMode="singleTask" android:name="com.tsf.extend.wallpaper.PersonalizationActivity" android:screenOrientation="portrait" android:theme="@style/PersonalizationThemeWithAnim">
+        <activity android:configChanges="keyboardHidden|orientation|screenSize" android:exported="true" android:launchMode="singleTask" android:name="com.tsf.extend.wallpaper.PersonalizationActivity" android:screenOrientation="portrait" android:theme="@style/PersonalizationThemeWithAnim">
             <intent-filter>
                 <action android:name="android.intent.action.SET_WALLPAPER"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity android:configChanges="keyboardHidden|orientation|screenSize" android:launchMode="singleTask" android:name="com.tsf.extend.theme.ThemeDetailActivity" android:screenOrientation="portrait" android:theme="@style/PersonalizationTheme"/>
-        <activity android:configChanges="keyboardHidden|orientation|screenSize" android:launchMode="singleTask" android:name="com.tsf.extend.theme.ThemeSubmitActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.NoTitleBar" android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
+        <activity android:configChanges="keyboardHidden|orientation|screenSize" android:exported="true" android:launchMode="singleTask" android:name="com.tsf.extend.theme.ThemeSubmitActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.NoTitleBar" android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:configChanges="keyboardHidden|orientation|screenSize" android:launchMode="singleTask" android:name="com.tsf.extend.theme.cmclub.ThemeCmClubActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.NoTitleBar">
+        <activity android:configChanges="keyboardHidden|orientation|screenSize" android:exported="true" android:launchMode="singleTask" android:name="com.tsf.extend.theme.cmclub.ThemeCmClubActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:configChanges="keyboardHidden|orientation|screenSize" android:launchMode="singleTask" android:name="com.tsf.extend.theme.diy.ThemeDIYActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.NoTitleBar">
+        <activity android:configChanges="keyboardHidden|orientation|screenSize" android:exported="true" android:launchMode="singleTask" android:name="com.tsf.extend.theme.diy.ThemeDIYActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -147,14 +148,14 @@
         </activity>
         <activity android:excludeFromRecents="true" android:name="com.tsf.extend.theme.diy.ThemeDIYShareActivity" android:screenOrientation="portrait" android:theme="@style/Theme"/>
         <activity android:exported="true" android:name="com.tsf.extend.wallpaper.WallpaperActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity android:configChanges="keyboardHidden|orientation|screenSize" android:launchMode="singleTask" android:name="com.tsf.extend.wallpaper.upload.UploadWallpaperActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.NoTitleBar" android:windowSoftInputMode="adjustPan">
+        <activity android:configChanges="keyboardHidden|orientation|screenSize" android:exported="true" android:launchMode="singleTask" android:name="com.tsf.extend.wallpaper.upload.UploadWallpaperActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.NoTitleBar" android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity android:configChanges="keyboardHidden|orientation|screenSize" android:name="com.tsf.extend.wallpaper.WallpaperOnLineActivity" android:screenOrientation="portrait" android:theme="@style/PersonalizationTheme"/>
-        <service android:name="com.tsf.extend.wallpaper.upload.UploadWallpaperService">
+        <service android:exported="true" android:name="com.tsf.extend.wallpaper.upload.UploadWallpaperService">
             <intent-filter>
                 <action android:name="com.ksmobile.launcher.UPLOAD_WALLPAPER"/>
             </intent-filter>
@@ -168,7 +169,7 @@
         <service android:exported="false" android:name="com.tsf.extend.theme.pull.PullStubService" android:process=":gcm_service"/>
         <service android:exported="false" android:name="com.tsf.extend.theme.pull.ThemePullService" android:process=":gcm_service"/>
         <service android:exported="false" android:name="com.tsf.extend.theme.ThemeService"/>
-        <receiver android:name="com.tsf.extend.theme.pull.PowerStateReceiver">
+        <receiver android:exported="false" android:name="com.tsf.extend.theme.pull.PowerStateReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
             </intent-filter>

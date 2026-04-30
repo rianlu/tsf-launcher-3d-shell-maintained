@@ -269,10 +269,65 @@
 .end method
 
 .method public onCreate()V
-    .locals 0
+    .locals 5
 
     .prologue
     .line 48
+    invoke-super {p0}, Landroid/app/Service;->onCreate()V
+
+    .line 49
+    sget v0, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 v1, 0x1a
+
+    if-lt v0, v1, :cond_0
+
+    .line 50
+    const-string v0, "notification"
+
+    invoke-virtual {p0, v0}, Lcom/tsf/shell/services/ForegroundService;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/app/NotificationManager;
+
+    .line 51
+    new-instance v1, Landroid/app/NotificationChannel;
+
+    const-string v2, "tsf_foreground_service"
+
+    const-string v3, "TSF Foreground Service"
+
+    const/4 v4, 0x2
+
+    invoke-direct {v1, v2, v3, v4}, Landroid/app/NotificationChannel;-><init>(Ljava/lang/String;Ljava/lang/CharSequence;I)V
+
+    invoke-virtual {v0, v1}, Landroid/app/NotificationManager;->createNotificationChannel(Landroid/app/NotificationChannel;)V
+
+    .line 52
+    new-instance v0, Landroid/app/Notification$Builder;
+
+    const-string v1, "tsf_foreground_service"
+
+    invoke-direct {v0, p0, v1}, Landroid/app/Notification$Builder;-><init>(Landroid/content/Context;Ljava/lang/String;)V
+
+    .line 53
+    sget v1, Lcom/tsf/b$d;->tsf_ico_grey:I
+
+    invoke-virtual {v0, v1}, Landroid/app/Notification$Builder;->setSmallIcon(I)Landroid/app/Notification$Builder;
+
+    .line 54
+    invoke-virtual {v0}, Landroid/app/Notification$Builder;->build()Landroid/app/Notification;
+
+    move-result-object v0
+
+    .line 55
+    const/16 v1, 0x64
+
+    invoke-virtual {p0, v1, v0}, Lcom/tsf/shell/services/ForegroundService;->startForeground(ILandroid/app/Notification;)V
+
+    .line 57
+    :cond_0
     return-void
 .end method
 
