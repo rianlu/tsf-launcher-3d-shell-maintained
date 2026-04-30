@@ -61,58 +61,101 @@
 .end method
 
 .method public static a(Landroid/content/pm/ActivityInfo;)Landroid/graphics/Bitmap;
-    .locals 2
+    .locals 3
 
     .prologue
     .line 334
-    :try_start_0
     sget-object v0, Lcom/tsf/shell/manager/r/c/a;->a:Landroid/content/pm/PackageManager;
 
-    iget-object v1, p0, Landroid/content/pm/ActivityInfo;->applicationInfo:Landroid/content/pm/ApplicationInfo;
+    if-nez v0, :cond_0
 
-    invoke-virtual {v0, v1}, Landroid/content/pm/PackageManager;->getResourcesForApplication(Landroid/content/pm/ApplicationInfo;)Landroid/content/res/Resources;
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
+
+    move-result-object v0
+
+    sput-object v0, Lcom/tsf/shell/manager/r/c/a;->a:Landroid/content/pm/PackageManager;
+
+    .line 338
+    :cond_0
+    :try_start_0
+    invoke-virtual {p0, v0}, Landroid/content/pm/ActivityInfo;->loadIcon(Landroid/content/pm/PackageManager;)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v1
+
+    invoke-static {v1}, Lcom/tsf/extend/base/view/e;->b(Landroid/graphics/drawable/Drawable;)Landroid/graphics/Bitmap;
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
     move-result-object v0
 
-    .line 338
-    :goto_0
-    if-eqz v0, :cond_0
-
-    .line 339
-    invoke-virtual {p0}, Landroid/content/pm/ActivityInfo;->getIconResource()I
-
-    move-result v1
-
-    .line 340
-    if-eqz v1, :cond_0
-
-    .line 341
-    invoke-static {v0, v1}, Lcom/tsf/shell/manager/r/c/a;->a(Landroid/content/res/Resources;I)Landroid/graphics/Bitmap;
-
-    move-result-object v0
+    .line 343
+    if-eqz v0, :cond_1
 
     .line 344
-    :goto_1
+    :goto_0
     return-object v0
 
-    .line 335
+    .line 340
     :catch_0
-    move-exception v0
+    move-exception v1
 
-    .line 336
+    .line 341
     const/4 v0, 0x0
+
+    .line 343
+    :cond_1
+    sget-object v0, Lcom/tsf/shell/manager/r/c/a;->a:Landroid/content/pm/PackageManager;
+
+    if-eqz v0, :cond_2
+
+    :try_start_1
+    iget-object v1, p0, Landroid/content/pm/ActivityInfo;->applicationInfo:Landroid/content/pm/ApplicationInfo;
+
+    invoke-virtual {v0, v1}, Landroid/content/pm/PackageManager;->getResourcesForApplication(Landroid/content/pm/ApplicationInfo;)Landroid/content/res/Resources;
+    :try_end_1
+    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_1
+
+    move-result-object v1
+
+    .line 347
+    :goto_1
+    if-eqz v1, :cond_2
+
+    .line 348
+    invoke-virtual {p0}, Landroid/content/pm/ActivityInfo;->getIconResource()I
+
+    move-result v2
+
+    .line 349
+    if-eqz v2, :cond_2
+
+    .line 350
+    invoke-static {v1, v2}, Lcom/tsf/shell/manager/r/c/a;->a(Landroid/content/res/Resources;I)Landroid/graphics/Bitmap;
+
+    move-result-object v0
 
     goto :goto_0
 
     .line 344
-    :cond_0
+    :catch_1
+    move-exception v1
+
+    .line 345
+    const/4 v1, 0x0
+
+    goto :goto_1
+
+    .line 353
+    :cond_2
     invoke-static {}, Lcom/tsf/shell/manager/r/c/a;->a()Landroid/graphics/Bitmap;
 
     move-result-object v0
 
-    goto :goto_1
+    goto :goto_0
 .end method
 
 .method public static a(Landroid/content/pm/ResolveInfo;)Landroid/graphics/Bitmap;
