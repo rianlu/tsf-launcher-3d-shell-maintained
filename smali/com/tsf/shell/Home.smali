@@ -1529,6 +1529,8 @@
     :goto_2
     invoke-super {p0, p1}, Landroid/app/ActivityGroup;->onCreate(Landroid/os/Bundle;)V
 
+    invoke-direct {p0}, Lcom/tsf/shell/Home;->requestStartupPermissions()V
+
     .line 297
     iget-boolean v2, p0, Lcom/tsf/shell/Home;->s:Z
 
@@ -2501,9 +2503,6 @@
 
     invoke-virtual {v0, v1, p2, p3}, Lcom/tsf/shell/a/a/a;->a(I[Ljava/lang/String;[I)V
 
-    .line 1392
-    invoke-static {p0}, Lcom/tsf/shell/a/a/e;->a(Landroid/content/Context;)Z
-
     .line 1394
     :cond_0
     return-void
@@ -2766,5 +2765,95 @@
     invoke-super {p0, p1, p2}, Landroid/app/ActivityGroup;->startActivityForResult(Landroid/content/Intent;I)V
 
     .line 913
+    return-void
+.end method
+
+.method private requestStartupPermissions()V
+    .locals 5
+
+    .prologue
+    # Build list of missing runtime permissions
+    new-instance v0, Ljava/util/ArrayList;
+
+    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+
+    # POST_NOTIFICATIONS: Android 13+ (SDK 33)
+    sget v1, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 v2, 0x21
+
+    if-lt v1, v2, :skip_post_notif
+
+    const-string v1, "android.permission.POST_NOTIFICATIONS"
+
+    invoke-virtual {p0, v1}, Lcom/tsf/shell/Home;->checkSelfPermission(Ljava/lang/String;)I
+
+    move-result v2
+
+    if-eqz v2, :skip_post_notif
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    :skip_post_notif
+
+    # ACCESS_FINE_LOCATION: Android 6+ (SDK 23)
+    sget v1, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 v2, 0x17
+
+    if-lt v1, v2, :skip_runtime
+
+    const-string v1, "android.permission.ACCESS_FINE_LOCATION"
+
+    invoke-virtual {p0, v1}, Lcom/tsf/shell/Home;->checkSelfPermission(Ljava/lang/String;)I
+
+    move-result v2
+
+    if-eqz v2, :skip_fine_loc
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    :skip_fine_loc
+
+    const-string v1, "android.permission.ACCESS_COARSE_LOCATION"
+
+    invoke-virtual {p0, v1}, Lcom/tsf/shell/Home;->checkSelfPermission(Ljava/lang/String;)I
+
+    move-result v2
+
+    if-eqz v2, :skip_coarse_loc
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    :skip_coarse_loc
+
+    # Issue requestPermissions if any are missing
+    invoke-virtual {v0}, Ljava/util/ArrayList;->isEmpty()Z
+
+    move-result v1
+
+    if-nez v1, :skip_runtime
+
+    invoke-virtual {v0}, Ljava/util/ArrayList;->size()I
+
+    move-result v1
+
+    new-array v1, v1, [Ljava/lang/String;
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->toArray([Ljava/lang/Object;)[Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, [Ljava/lang/String;
+
+    const/16 v1, 0x3ea
+
+    invoke-virtual {p0, v0, v1}, Lcom/tsf/shell/Home;->requestPermissions([Ljava/lang/String;I)V
+
+    :skip_runtime
+
+    # WRITE_SETTINGS: special permission, shows guide dialog if not granted
+    invoke-static {p0}, Lcom/tsf/shell/a/a/e;->a(Landroid/content/Context;)Z
+
     return-void
 .end method

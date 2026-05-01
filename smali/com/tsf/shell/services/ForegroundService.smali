@@ -269,7 +269,7 @@
 .end method
 
 .method public onCreate()V
-    .locals 5
+    .locals 6
 
     .prologue
     .line 48
@@ -317,16 +317,54 @@
     invoke-virtual {v0, v1}, Landroid/app/Notification$Builder;->setSmallIcon(I)Landroid/app/Notification$Builder;
 
     .line 54
+    sget v1, Lcom/tsf/b$i;->tsf_shell_running:I
+
+    invoke-virtual {p0, v1}, Lcom/tsf/shell/services/ForegroundService;->getString(I)Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Landroid/app/Notification$Builder;->setContentTitle(Ljava/lang/CharSequence;)Landroid/app/Notification$Builder;
+
+    .line 55
+    sget v1, Lcom/tsf/b$i;->tsf_shell_notification_touch:I
+
+    invoke-virtual {p0, v1}, Lcom/tsf/shell/services/ForegroundService;->getString(I)Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Landroid/app/Notification$Builder;->setContentText(Ljava/lang/CharSequence;)Landroid/app/Notification$Builder;
+
+    .line 56
+    new-instance v1, Landroid/content/Intent;
+
+    invoke-direct {v1}, Landroid/content/Intent;-><init>()V
+
+    const-class v2, Lcom/tsf/shell/preference/SettingAdvancedPerferenceActivity;
+
+    invoke-virtual {v1, p0, v2}, Landroid/content/Intent;->setClass(Landroid/content/Context;Ljava/lang/Class;)Landroid/content/Intent;
+
+    .line 57
+    const/4 v2, 0x0
+
+    const/high16 v3, 0xc000000
+
+    invoke-static {p0, v2, v1, v3}, Landroid/app/PendingIntent;->getActivity(Landroid/content/Context;ILandroid/content/Intent;I)Landroid/app/PendingIntent;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Landroid/app/Notification$Builder;->setContentIntent(Landroid/app/PendingIntent;)Landroid/app/Notification$Builder;
+
+    .line 58
     invoke-virtual {v0}, Landroid/app/Notification$Builder;->build()Landroid/app/Notification;
 
     move-result-object v0
 
-    .line 55
+    .line 59
     const/16 v1, 0x64
 
     invoke-virtual {p0, v1, v0}, Lcom/tsf/shell/services/ForegroundService;->startForeground(ILandroid/app/Notification;)V
 
-    .line 57
+    .line 60
     :cond_0
     return-void
 .end method
