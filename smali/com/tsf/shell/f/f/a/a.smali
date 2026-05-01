@@ -64,6 +64,8 @@
     .locals 2
 
     .prologue
+    if-ltz p1, :cond_0
+
     .line 801
     invoke-virtual {p0}, Lcom/tsf/shell/f/f/a/a;->numChildren()I
 
@@ -1953,14 +1955,17 @@
 .end method
 
 .method public removeChild(Lcom/censivn/C3DEngine/b/f/i;)Z
-    .locals 5
+    .locals 6
 
     .prologue
     .line 332
     iget-object v0, p0, Lcom/tsf/shell/f/f/a/a;->b:Lcom/tsf/shell/f/f/a/a$a;
 
+    if-eqz v0, :skip_j
+
     invoke-interface {v0}, Lcom/tsf/shell/f/f/a/a$a;->j_()V
 
+    :skip_j
     .line 334
     invoke-virtual {p0, p1}, Lcom/tsf/shell/f/f/a/a;->getChildIndexOf(Lcom/censivn/C3DEngine/b/f/i;)I
 
@@ -1980,6 +1985,8 @@
 
     .line 340
     iget-object v0, p0, Lcom/tsf/shell/f/f/a/a;->b:Lcom/tsf/shell/f/f/a/a$a;
+
+    if-eqz v0, :goto_0
 
     iget-object v1, p0, Lcom/tsf/shell/f/f/a/a;->c:Lcom/tsf/shell/f/f/a/a;
 
@@ -2023,13 +2030,26 @@
     .line 352
     sget-object v0, Lcom/tsf/shell/f/f/a/h;->E:Ljava/util/ArrayList;
 
-    invoke-virtual {p0}, Lcom/tsf/shell/f/f/a/a;->numChildren()I
+    invoke-virtual {v0}, Ljava/util/ArrayList;->size()I
 
     move-result v4
 
+    if-lez v4, :cond_1
+
+    invoke-virtual {p0}, Lcom/tsf/shell/f/f/a/a;->numChildren()I
+
+    move-result v5
+
+    add-int/lit8 v5, v5, -0x1
+
     add-int/lit8 v4, v4, -0x1
 
-    invoke-virtual {v0, v4}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+    if-le v5, v4, :no_clamp
+
+    move v5, v4
+
+    :no_clamp
+    invoke-virtual {v0, v5}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
 
     move-result-object v0
 
@@ -2063,6 +2083,8 @@
 
     .line 369
     :cond_1
+    if-ltz v1, :goto_0
+
     const/4 v0, 0x1
 
     invoke-direct {p0, v1, v0}, Lcom/tsf/shell/f/f/a/a;->a(IZ)V
