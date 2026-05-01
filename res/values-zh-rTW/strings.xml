@@ -150,6 +150,8 @@
     <string name="group_widgets">小工具</string>
     <string name="home_key_patch">Home鍵補丁</string>
     <string name="home_key_patch_summary">適用於重啟後需要重新設置默認桌面的設備。</string>
+    <string name="set_default_home">設定預設桌面</string>
+    <string name="set_default_home_summary">選擇預設的主螢幕桌面應用程式。</string>
     <string name="httpError">發生網路錯誤。</string>
     <string name="icon_picker_main_item_0">預設</string>
     <string name="icon_picker_main_item_1">從圖庫中選擇</string>

@@ -149,6 +149,8 @@
     <string name="group_widgets">桌面小部件</string>
     <string name="home_key_patch">Home键补丁</string>
     <string name="home_key_patch_summary">适用于重启后需要重新设置默认桌面的设备。</string>
+    <string name="set_default_home">设置默认桌面</string>
+    <string name="set_default_home_summary">选择默认的主屏幕桌面应用。</string>
     <string name="httpError">发生了网络错误。</string>
     <string name="icon_picker_main_item_0">恢复默认</string>
     <string name="icon_picker_main_item_1">相册</string>

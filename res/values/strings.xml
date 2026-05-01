@@ -151,6 +151,8 @@ Attention: You may receive standard privacy warnings. There's no need to worry, 
     <string name="group_widgets">Widgets</string>
     <string name="home_key_patch">Home button patch</string>
     <string name="home_key_patch_summary">For devices need to reset default home launcher after rebooting device.</string>
+    <string name="set_default_home">Set Default Home</string>
+    <string name="set_default_home_summary">Choose the default home screen launcher.</string>
     <string name="httpError">There was a network error.</string>
     <string name="icon_picker_main_item_0">Default</string>
     <string name="icon_picker_main_item_1">Gallery</string>
