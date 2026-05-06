@@ -269,54 +269,13 @@
 .end method
 
 .method public static a(Landroid/content/Context;I)Z
-    .locals 4
+    .locals 1
 
     .prologue
-    const/4 v0, 0x0
-
     .line 124
-    :try_start_0
-    sget-object v1, Lcom/tsf/shell/services/d;->a:Ljava/lang/String;
-
-    const/4 v2, 0x2
-
-    invoke-virtual {p0, v1, v2}, Landroid/content/Context;->createPackageContext(Ljava/lang/String;I)Landroid/content/Context;
-
-    move-result-object v1
-
-    .line 126
-    invoke-virtual {v1}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
-
-    move-result-object v1
-
-    sget-object v2, Lcom/tsf/shell/services/d;->a:Ljava/lang/String;
-
-    const/4 v3, 0x0
-
-    invoke-virtual {v1, v2, v3}, Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String;I)Landroid/content/pm/PackageInfo;
-
-    move-result-object v1
-
-    iget v1, v1, Landroid/content/pm/PackageInfo;->versionCode:I
-    :try_end_0
-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
-
-    .line 128
-    if-lt v1, p1, :cond_0
-
-    .line 130
     const/4 v0, 0x1
 
-    .line 138
-    :cond_0
-    :goto_0
     return v0
-
-    .line 134
-    :catch_0
-    move-exception v1
-
-    goto :goto_0
 .end method
 
 .method private e()Ljava/lang/String;
@@ -352,15 +311,7 @@
 
     .prologue
     .line 55
-    iget-object v0, p0, Lcom/tsf/shell/services/d;->k:Landroid/content/Context;
-
-    const/4 v1, 0x2
-
-    invoke-static {v0, v1}, Lcom/tsf/shell/services/d;->a(Landroid/content/Context;I)Z
-
-    move-result v0
-
-    if-nez v0, :cond_0
+    goto :cond_0
 
     .line 83
     :goto_0
@@ -428,17 +379,11 @@
 .end method
 
 .method public a()Z
-    .locals 2
+    .locals 1
 
     .prologue
     .line 87
-    sget-object v0, Lcom/tsf/shell/services/d;->a:Ljava/lang/String;
-
-    const/4 v1, 0x2
-
-    invoke-static {v0, v1}, Lcom/tsf/shell/utils/a;->a(Ljava/lang/String;I)Z
-
-    move-result v0
+    const/4 v0, 0x1
 
     return v0
 .end method
@@ -448,56 +393,65 @@
 
     .prologue
     .line 95
-    iget-object v0, p0, Lcom/tsf/shell/services/d;->k:Landroid/content/Context;
+    iget-object v0, p0, Lcom/tsf/shell/services/d;->m:Lcom/c/a/a/a/a;
 
-    const/4 v1, 0x2
+    if-eqz v0, :cond_init
 
-    invoke-static {v0, v1}, Lcom/tsf/shell/services/d;->a(Landroid/content/Context;I)Z
-
-    move-result v0
-
-    if-nez v0, :cond_1
-
-    .line 112
-    :cond_0
-    :goto_0
+    .line 96
     return-void
 
     .line 101
-    :cond_1
-    new-instance v0, Landroid/content/Intent;
+    :cond_init
+    new-instance v0, Lcom/tsf/shell/toggle/LocalToggleImpl;
 
-    invoke-direct {p0}, Lcom/tsf/shell/services/d;->e()Ljava/lang/String;
+    iget-object v1, p0, Lcom/tsf/shell/services/d;->k:Landroid/content/Context;
 
-    move-result-object v1
+    invoke-direct {v0, v1}, Lcom/tsf/shell/toggle/LocalToggleImpl;-><init>(Landroid/content/Context;)V
 
-    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+    iput-object v0, p0, Lcom/tsf/shell/services/d;->m:Lcom/c/a/a/a/a;
 
-    .line 103
-    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+    .line 105
+    :goto_drain
+    iget-object v0, p0, Lcom/tsf/shell/services/d;->l:Ljava/util/List;
 
-    move-result-object v1
+    invoke-interface {v0}, Ljava/util/List;->isEmpty()Z
 
-    invoke-static {v1, v0}, Lcom/tsf/shell/utils/i;->a(Landroid/content/Context;Landroid/content/Intent;)Landroid/content/Intent;
+    move-result v0
+
+    if-nez v0, :cond_done
+
+    .line 107
+    iget-object v0, p0, Lcom/tsf/shell/services/d;->l:Ljava/util/List;
+
+    const/4 v1, 0x0
+
+    invoke-interface {v0, v1}, Ljava/util/List;->remove(I)Ljava/lang/Object;
 
     move-result-object v0
 
-    .line 105
-    if-eqz v0, :cond_0
+    check-cast v0, Lcom/tsf/shell/services/d$a;
 
-    .line 106
-    iget-object v1, p0, Lcom/tsf/shell/services/d;->k:Landroid/content/Context;
+    iget-object v1, p0, Lcom/tsf/shell/services/d;->m:Lcom/c/a/a/a/a;
 
-    invoke-static {v1, v0}, Lcom/tsf/shell/component/a;->a(Landroid/content/Context;Landroid/content/Intent;)V
+    .line 109
+    :try_start_drain
+    invoke-interface {v0, v1}, Lcom/tsf/shell/services/d$a;->a(Lcom/c/a/a/a/a;)V
+    :try_end_drain
+    .catch Ljava/lang/Exception; {:try_start_drain .. :try_end_drain} :catch_drain
 
-    .line 108
-    iget-object v1, p0, Lcom/tsf/shell/services/d;->k:Landroid/content/Context;
+    goto :goto_drain
 
-    const/4 v2, 0x1
+    .line 110
+    :catch_drain
+    move-exception v2
 
-    invoke-virtual {v1, v0, p0, v2}, Landroid/content/Context;->bindService(Landroid/content/Intent;Landroid/content/ServiceConnection;I)Z
+    invoke-virtual {v2}, Ljava/lang/Exception;->printStackTrace()V
 
-    goto :goto_0
+    goto :goto_drain
+
+    .line 112
+    :cond_done
+    return-void
 .end method
 
 .method public c()V
@@ -556,7 +510,7 @@
 .end method
 
 .method public d()V
-    .locals 2
+    .locals 1
 
     .prologue
     .line 193
@@ -564,63 +518,28 @@
 
     .line 195
     :try_start_0
-    iget-object v0, p0, Lcom/tsf/shell/services/d;->m:Lcom/c/a/a/a/a;
-    :try_end_0
-    .catchall {:try_start_0 .. :try_end_0} :catchall_0
-
-    if-eqz v0, :cond_0
-
-    .line 201
-    :try_start_1
-    iget-object v0, p0, Lcom/tsf/shell/services/d;->k:Landroid/content/Context;
-
-    invoke-virtual {v0, p0}, Landroid/content/Context;->unbindService(Landroid/content/ServiceConnection;)V
-
-    .line 203
     const/4 v0, 0x0
 
     iput-object v0, p0, Lcom/tsf/shell/services/d;->m:Lcom/c/a/a/a/a;
-    :try_end_1
-    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_0
-    .catchall {:try_start_1 .. :try_end_1} :catchall_0
 
-    .line 213
-    :cond_0
-    :goto_0
-    :try_start_2
-    new-instance v0, Landroid/content/Intent;
+    .line 197
+    iget-object v0, p0, Lcom/tsf/shell/services/d;->l:Ljava/util/List;
 
-    sget-object v1, Lcom/tsf/shell/services/d;->b:Ljava/lang/String;
+    invoke-interface {v0}, Ljava/util/List;->clear()V
 
-    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
-
-    .line 215
-    iget-object v1, p0, Lcom/tsf/shell/services/d;->k:Landroid/content/Context;
-
-    invoke-virtual {v1, v0}, Landroid/content/Context;->stopService(Landroid/content/Intent;)Z
-
-    .line 217
+    .line 199
     monitor-exit p0
 
     .line 219
     return-void
-
-    .line 205
-    :catch_0
-    move-exception v0
-
-    .line 207
-    invoke-virtual {v0}, Ljava/lang/Exception;->printStackTrace()V
-
-    goto :goto_0
 
     .line 217
     :catchall_0
     move-exception v0
 
     monitor-exit p0
-    :try_end_2
-    .catchall {:try_start_2 .. :try_end_2} :catchall_0
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
     throw v0
 .end method

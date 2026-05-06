@@ -855,4 +855,8 @@ you have read and understood the"</string>
     <string name="widget_dots_clock_color">Color</string>
     <string name="widget_dots_clock_setting">Clock Setting</string>
     <string name="widget_dots_clock_shownumber">Display digital</string>
+    <string name="toast_toggle_redirect_settings">Please toggle this option in system settings.</string>
+    <string name="toast_toggle_lock_request_admin">Activate device admin to enable lock screen. If the system page does not appear, please go to Settings → Device admin apps and enable it manually.</string>
+    <string name="toast_toggle_request_write_settings">Please grant the \"Modify system settings\" permission in the page that opens.</string>
+    <string name="toast_toggle_failed">Toggle failed.</string>
 </resources>

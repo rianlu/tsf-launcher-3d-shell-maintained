@@ -812,4 +812,8 @@
     <string name="video_app_name">ShellSummary</string>
     <string name="weathersetting">天气设置</string>
     <string name="widget_duration_title">小部件刷新间隔</string>
+    <string name="toast_toggle_redirect_settings">请在系统设置中切换</string>
+    <string name="toast_toggle_lock_request_admin">锁屏需先激活设备管理员，如系统页未弹出，请到 设置 → 设备管理应用 中手动开启</string>
+    <string name="toast_toggle_request_write_settings">请在弹出页面中授予"修改系统设置"权限</string>
+    <string name="toast_toggle_failed">切换失败</string>
 </resources>

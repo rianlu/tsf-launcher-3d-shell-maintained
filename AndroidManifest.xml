@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="internalOnly" package="com.tsf.shell" platformBuildVersionCode="26" platformBuildVersionName="8.0.0">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="internalOnly" package="com.tsf.shell" platformBuildVersionCode="28" platformBuildVersionName="9">
     <original-package android:name="com.tsf.shell"/>
     <permission android:name="com.tsf.shell.plugin.PERMISSION"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
@@ -27,6 +27,10 @@
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-feature android:name="android.hardware.camera.flash" android:required="false"/>
     <uses-feature android:name="android.hardware.telephony" android:required="false"/>
     <uses-feature android:name="android.hardware.bluetooth" android:required="false"/>
     <uses-feature android:name="android.hardware.location" android:required="false"/>
@@ -35,6 +39,7 @@
     <uses-feature android:glEsVersion="0x20000" android:required="true"/>
     <supports-screens android:anyDensity="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
     <application android:allowBackup="true" android:hardwareAccelerated="true" android:icon="@drawable/tsf_ico" android:label="@string/launcher_name_prime" android:largeHeap="true" android:name="com.tsf.shell.ShellApplication" android:networkSecurityConfig="@xml/network_security_config" android:persistent="true" android:process="com.tsf.shell" android:supportsRtl="true">
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
         <activity android:name="com.tsf.shell.plugin.themepicker.IconPickerActivity" android:process=":picker" android:theme="@style/HoloWallpaperTheme"/>
         <activity android:name="com.tsf.shell.plugin.themepicker.theme.ThemePickerActivity" android:process=":picker" android:theme="@style/HoloWallpaperTheme"/>
         <activity android:name="com.tsf.shell.plugin.themepicker.AppIconEditorActivity" android:process=":picker" android:theme="@style/HoloDialogTheme"/>
@@ -177,5 +182,12 @@
         </receiver>
         <provider android:authorities="com.tsf.extend.wallpaper" android:name="com.tsf.extend.wallpaper.WallpaperContentProvider" android:process=":wallpaper"/>
         <provider android:authorities="com.tsf.shell.ThemeCmClubProvider" android:exported="false" android:name="com.tsf.extend.theme.ThemeCmClubProvider"/>
+        <receiver android:name="com.tsf.shell.toggle.LockReceiver" android:exported="false" android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data android:name="android.app.device_admin" android:resource="@xml/device_admin"/>
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED"/>
+            </intent-filter>
+        </receiver>
+        <activity android:name="com.tsf.shell.toggle.PermissionRequestActivity" android:exported="false" android:excludeFromRecents="true" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
     </application>
 </manifest>
