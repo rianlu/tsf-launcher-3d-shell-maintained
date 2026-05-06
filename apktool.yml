@@ -4,11 +4,11 @@ usesFramework:
   ids:
   - 1
 sdkInfo:
-  minSdkVersion: 8
-  targetSdkVersion: 26
+  minSdkVersion: 21
+  targetSdkVersion: 28
 versionInfo:
   versionCode: 30904
-  versionName: 3.9.4
+  versionName: 3.9.4-r1
 resourcesInfo:
   packageId: 127
   keepRawValues: true
