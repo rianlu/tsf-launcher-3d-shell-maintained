@@ -57,15 +57,10 @@
 
 # direct methods
 .method static constructor <clinit>()V
-    .locals 1
+    .locals 0
 
     .prologue
     .line 803
-    const-string v0, "uwpp"
-
-    invoke-static {v0}, Ljava/lang/System;->loadLibrary(Ljava/lang/String;)V
-
-    .line 804
     return-void
 .end method
 
@@ -3087,5 +3082,12 @@
     goto :goto_0
 .end method
 
-.method public native requestKey()Ljava/lang/String;
+.method public requestKey()Ljava/lang/String;
+    .locals 1
+
+    .prologue
+    .line 803
+    const-string v0, ""
+
+    return-object v0
 .end method

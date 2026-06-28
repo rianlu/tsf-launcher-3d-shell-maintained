@@ -9,6 +9,7 @@ aligned_apk="$build_dir/tsf-launcher-debug-aligned.apk"
 signed_apk="$build_dir/tsf-launcher-debug-signed.apk"
 keystore_dir="$repo_root/.local/signing"
 release_env="$keystore_dir/release.env"
+android_user="${ANDROID_USER:-0}"
 
 if [ -f "$release_env" ]; then
   # Load release signing config
@@ -219,8 +220,8 @@ install_to_device() {
   adb_bin="$1"
   device_serial="$2"
 
-  "$adb_bin" -s "$device_serial" install -r "$signed_apk"
-  echo "adb install -r succeeded on $device_serial"
+  "$adb_bin" -s "$device_serial" install --user "$android_user" -r "$signed_apk"
+  echo "adb install --user $android_user -r succeeded on $device_serial"
 }
 
 install_apk() {
@@ -260,13 +261,7 @@ install_apk() {
     return 0
   fi
 
-  if [ -n "${ANDROID_SERIAL:-}" ]; then
-    "$adb_bin" -s "$device_serial" install -r "$signed_apk"
-  else
-    "$adb_bin" install -r "$signed_apk"
-  fi
-
-  echo "adb install -r succeeded"
+  install_to_device "$adb_bin" "$device_serial"
 }
 
 need_cmd apktool

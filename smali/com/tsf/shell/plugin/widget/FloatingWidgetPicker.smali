@@ -781,11 +781,6 @@
 
     .line 287
     :cond_c
-    const-string v0, "com.tsf.shell.widget.floating.demo"
-
-    const-string v1, "widget_floating_default"
-
-    invoke-direct {p0, v0, v1}, Lcom/tsf/shell/plugin/widget/FloatingWidgetPicker;->a(Ljava/lang/String;Ljava/lang/String;)V
 
     .line 292
     new-instance v0, Lcom/tsf/shell/plugin/widget/FloatingWidgetPicker$1;

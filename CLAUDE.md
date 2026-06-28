@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 TSF Launcher 3D Shell (`com.tsf.shell`) 的非官方维护版本，致力于修复其在现代 Android 系统（12-16）上的运行问题。该项目通过 apktool 反编译 APK 维护，没有 Java/Kotlin 源代码，所有应用逻辑都以 `.smali` (Dalvik 字节码) 形式存在。
 
-当前 APK 基线：基于 `TSF Launcher 3D Shell_3.9.4_APKPure.apk`，`apktool.yml` 中 `versionName: 3.9.4-r1`、`versionCode: 30904`、`minSdkVersion: 21`、`targetSdkVersion: 28`。详细适配清单见 `docs/modern-android-adaptation-analysis.md`；与 Codex 共享的工作约定见 `AGENTS.md`。
+当前 APK 基线：基于 `TSF Launcher 3D Shell_3.9.4_APKPure.apk`，`apktool.yml` 中 `versionName: 3.9.4-r1`、`versionCode: 30904`、`minSdkVersion: 21`、`targetSdkVersion: 28`。与 Codex 共享的工作约定见 `AGENTS.md`。
 
 ## Language
 
@@ -59,7 +59,9 @@ Conventional Commits (中文): `type(scope): <动词开头中文摘要>`
 - `AndroidManifest.xml` — 现代 Android 适配的关键文件。
 - `apktool.yml`、`tools/`。
 
-不应手工编辑：`build/`（apktool 产物）、`.local/`（签名/SDK 私有文件）、`lib/`（原 APK native `.so`，仅 `armeabi` 32 位）、`original/`（原签名快照）、`scratch/`（临时分析材料）。
+不应手工编辑：`build/`（apktool 产物）、`.local/`（签名/SDK 私有文件）、`lib/`（原 APK native `.so`，仅 `armeabi` 32 位）、`original/`（原签名快照）。
+
+不要提交批量下载的插件 APK、主题 APK、反编译目录或临时清单；临时分析放 `scratch/`，长期说明写入现有文档。
 
 `smali/` 关键包：
 
@@ -86,7 +88,7 @@ Conventional Commits (中文): `type(scope): <动词开头中文摘要>`
 
 ## Compatibility Approach
 
-修复目标为标准 Android API，不引入新依赖或新构建体系。按 target 阶段递进，详见 `docs/modern-android-adaptation-analysis.md`：
+修复目标为标准 Android API，不引入新依赖或新构建体系。按当前 `targetSdkVersion: 28` 继续补齐现代系统行为：
 
 - Android 8+：所有 service 启动统一通过 `component/a.smali` 兼容包装走 `startForegroundService`，并在时限内 `startForeground`；通知 channel。
 - Android 9+：`org.apache.http.legacy` `<uses-library>`，cleartext 策略。
@@ -96,66 +98,3 @@ Conventional Commits (中文): `type(scope): <动词开头中文摘要>`
 - Android 15/16：16KB page size、64-bit-only 设备的 native lib 验证（当前仅 `lib/armeabi`，64-bit ABI 缺失）。
 - 包可见性：launcher 枚举在 Manifest 增加 `<queries>`（至少 `ACTION_MAIN` + `CATEGORY_LAUNCHER`）。
 - 文件分享：`Uri.fromFile` 改为 `FileProvider.getUriForFile` + `FLAG_GRANT_READ_URI_PERMISSION`。
-
----
-
-## Karpathy 编码准则
-
-行为准则，用于减少常见的 LLM 编码错误。**权衡说明：** 这些准则偏向谨慎而非速度。对于简单任务，需要自行判断。
-
-### 1. 编码前先思考
-
-**不要假设，不要隐藏困惑，暴露权衡点。**
-
-实施前须做到：
-- 明确陈述你的假设，不确定时请提问
-- 存在多种解读时，应全部呈现，而非静默选择其一
-- 若有更简单的方案，要提出来，必要时反驳
-- 遇到不清楚的地方要停下来，指明困惑所在并提问
-
-### 2. 简单优先
-
-**用最少的代码解决问题，不做投机性开发。**
-
-具体要求：
-- 不添加超出需求的功能
-- 不为一次性代码创建抽象
-- 不提供未被要求的"灵活性"或"可配置性"
-- 不为不可能的场景添加错误处理
-- 若 200 行代码可以缩减为 50 行，就重写
-
-自问："资深工程师会觉得这过于复杂吗？"如果是，就简化。
-
-### 3. 精确改动
-
-**只触碰必须修改的部分，只清理自己造成的遗留。**
-
-编辑现有代码时：
-- 不要"改进"相邻的代码、注释或格式
-- 不要重构没有问题的部分
-- 即使你风格不同，也要匹配现有代码风格
-- 发现不相关的死代码时，提及但不删除
-
-当你的改动产生孤立代码时：
-- 移除因你的改动而变得未使用的导入、变量或函数
-- 除非被要求，否则不删除先前已存在的死代码
-
-检验标准：每一行改动都应直接追溯到用户的需求。
-
-### 4. 目标驱动执行
-
-**定义成功标准，反复循环直到验证通过。**
-
-将任务转化为可验证的目标：
-- "添加验证" → "为无效输入编写测试，然后使其通过"
-- "修复 bug" → "编写复现该 bug 的测试，然后使其通过"
-- "重构 X" → "确保重构前后测试均通过"
-
-对于多步骤任务，陈述简要计划：
-```
-1. [步骤] → 验证: [检查项]
-2. [步骤] → 验证: [检查项]
-3. [步骤] → 验证: [检查项]
-```
-
-强成功标准使你能独立循环推进，弱标准（如"让它工作"）则需要持续沟通。

@@ -22,4 +22,18 @@
         </item>
         <item />
     </type>
+    <type defaultDirection="horizontal_left" defaultOverturn="false" defaultSpeedRangeMax="1.2" defaultSpeedRangeMin="0.2" defaultWave="0" drawable="fish_ico">
+        <item drawable="fish1">
+            <animation direction="horizontal_left" overturn="true" speedRangeMax="3" speedRangeMin="0.5" wave="30" />
+        </item>
+        <item drawable="fish2" />
+        <item drawable="fish3">
+            <animation direction="horizontal_left" overturn="true" speedRangeMax="2" speedRangeMin="0.1" wave="50" />
+        </item>
+        <item drawable="fish4" />
+        <item drawable="fish5">
+            <animation direction="vertical_up" speedRangeMax="2" speedRangeMin="0.2" />
+            <TSFsequence image="fish5_image" totalFrame="60" unitCount="10" unitHeight="100" unitWidth="100" />
+        </item>
+    </type>
 </descript>

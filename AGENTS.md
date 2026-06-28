@@ -7,7 +7,7 @@
 - 项目：TSF Launcher 3D Shell Maintained，包名 `com.tsf.shell`。
 - 目标：通过反编译 APK 维护方式，修复 TSF Launcher 3D Shell 在现代 Android 系统上的兼容性问题。
 - 代码形态：没有 Java/Kotlin 源码，核心逻辑位于 `.smali` Dalvik 字节码文件中。
-- 当前 APK 基线：`TSF Launcher 3D Shell_3.9.4_APKPure.apk`，`apktool.yml` 中 `versionName: 3.9.4`、`versionCode: 30904`、`targetSdkVersion: 26`。
+- 当前 APK 基线：`TSF Launcher 3D Shell_3.9.4_APKPure.apk`，`apktool.yml` 中 `versionName: 3.9.4-r1`、`versionCode: 30904`、`minSdkVersion: 21`、`targetSdkVersion: 28`。
 
 ## 语言与沟通
 
@@ -26,6 +26,7 @@
 - `.local/`：本机私有文件，包含签名配置或本地 SDK，不应提交。
 - `build/`：构建产物，不应手工维护。
 - `scratch/`：临时分析材料，不作为发布输入。
+- `src-helpers/`：用于生成或对照 smali 的辅助源码，修改后必须同步生成结果。
 
 ## 常用命令
 
@@ -84,6 +85,7 @@ sh tools/build_release.sh
 - 构建脚本会清理 APK 源目录中的 `.DS_Store`，不要把 `.DS_Store` 视为功能性变更。
 - Release 构建会修改 `apktool.yml` 中版本字段；改版本时同步检查 `tools/release.conf`。
 - `build_and_install.sh` 默认安装到所有已连接设备；如需指定设备，设置 `ANDROID_SERIAL` 或 `ANDROID_SERIALS`。
+- 不把批量下载的插件 APK、主题 APK、反编译目录或临时清单放入仓库；临时分析放 `scratch/`，长期说明写入现有文档。
 
 ## 敏感文件与安全
 
@@ -105,4 +107,3 @@ sh tools/build_release.sh
 - 不回滚未确认来源的改动。
 - 提交格式：`<type>(scope): <中文动词开头摘要>`。
 - 常用类型：`fix`、`feat`、`refactor`、`docs`、`test`、`chore`。
-

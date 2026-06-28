@@ -45,7 +45,7 @@
 
     iget-object v1, p0, Lcom/tsf/shell/manager/r/c/c$1;->a:Ljava/lang/String;
 
-    invoke-static {v0, v1}, Lcom/tsf/shell/utils/k;->a(Landroid/app/Activity;Ljava/lang/String;)V
+    invoke-static {v0, v1}, Lcom/tsf/shell/utils/k;->d(Landroid/app/Activity;Ljava/lang/String;)V
 
     .line 104
     return-void

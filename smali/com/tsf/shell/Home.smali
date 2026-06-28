@@ -2483,7 +2483,7 @@
 .end method
 
 .method public onRequestPermissionsResult(I[Ljava/lang/String;[I)V
-    .locals 2
+    .locals 4
 
     .prologue
     .line 1388
@@ -2505,6 +2505,37 @@
 
     .line 1394
     :cond_0
+    const/16 v0, 0x3ea
+
+    if-ne p1, v0, :cond_1
+
+    new-instance v0, Landroid/app/AlertDialog$Builder;
+
+    invoke-direct {v0, p0}, Landroid/app/AlertDialog$Builder;-><init>(Landroid/content/Context;)V
+
+    const-string v1, "小部件权限说明"
+
+    invoke-virtual {v0, v1}, Landroid/app/AlertDialog$Builder;->setTitle(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
+
+    move-result-object v0
+
+    const-string v1, "短信、联系人、日历、通话记录等属于敏感权限，桌面不会自动申请。若要使用短信、日历、通知角标等小部件，请到系统设置 → 应用 → TSF Shell → 权限中手动开启；授权后请重启桌面或重新添加小部件。"
+
+    invoke-virtual {v0, v1}, Landroid/app/AlertDialog$Builder;->setMessage(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
+
+    move-result-object v0
+
+    const-string v1, "知道了"
+
+    const/4 v2, 0x0
+
+    invoke-virtual {v0, v1, v2}, Landroid/app/AlertDialog$Builder;->setPositiveButton(Ljava/lang/CharSequence;Landroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Landroid/app/AlertDialog$Builder;->show()Landroid/app/AlertDialog;
+
+    :cond_1
     return-void
 .end method
 
@@ -2826,6 +2857,62 @@
     invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
 
     :skip_coarse_loc
+
+    # Media permissions for gallery/photo/music widgets on Android 13+
+    sget v1, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 v2, 0x21
+
+    if-lt v1, v2, :skip_media_perms
+
+    const-string v1, "android.permission.READ_MEDIA_IMAGES"
+
+    invoke-virtual {p0, v1}, Lcom/tsf/shell/Home;->checkSelfPermission(Ljava/lang/String;)I
+
+    move-result v2
+
+    if-eqz v2, :skip_media_images
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    :skip_media_images
+
+    const-string v1, "android.permission.READ_MEDIA_VIDEO"
+
+    invoke-virtual {p0, v1}, Lcom/tsf/shell/Home;->checkSelfPermission(Ljava/lang/String;)I
+
+    move-result v2
+
+    if-eqz v2, :skip_media_video
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    :skip_media_video
+
+    const-string v1, "android.permission.READ_MEDIA_AUDIO"
+
+    invoke-virtual {p0, v1}, Lcom/tsf/shell/Home;->checkSelfPermission(Ljava/lang/String;)I
+
+    move-result v2
+
+    if-eqz v2, :skip_media_perms
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    :skip_media_perms
+
+    # Legacy storage for targetSdk 28 widget plugins
+    const-string v1, "android.permission.READ_EXTERNAL_STORAGE"
+
+    invoke-virtual {p0, v1}, Lcom/tsf/shell/Home;->checkSelfPermission(Ljava/lang/String;)I
+
+    move-result v2
+
+    if-eqz v2, :skip_storage
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    :skip_storage
 
     # Issue requestPermissions if any are missing
     invoke-virtual {v0}, Ljava/util/ArrayList;->isEmpty()Z
