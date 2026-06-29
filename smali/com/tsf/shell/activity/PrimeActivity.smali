@@ -87,7 +87,7 @@
 
     move v6, v1
 
-    invoke-virtual/range {v0 .. v6}, Lcom/censivn/C3DEngine/a/a;->setEGLConfigChooser(IIIIII)V
+    invoke-virtual/range {v0 .. v6}, Lcom/censivn/C3DEngine/a/a;->setCompatibleEGLConfigChooser(IIIIII)V
 
     .line 66
     iget-object v0, p0, Lcom/tsf/shell/activity/PrimeActivity;->b:Lcom/censivn/C3DEngine/a/a;

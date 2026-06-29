@@ -1194,22 +1194,6 @@
     .prologue
     const/4 v2, 0x2
 
-    .line 127
-    instance-of v0, p0, Landroid/graphics/drawable/BitmapDrawable;
-
-    if-eqz v0, :cond_0
-
-    .line 128
-    check-cast p0, Landroid/graphics/drawable/BitmapDrawable;
-
-    invoke-virtual {p0}, Landroid/graphics/drawable/BitmapDrawable;->getBitmap()Landroid/graphics/Bitmap;
-
-    move-result-object v0
-
-    .line 145
-    :goto_0
-    return-object v0
-
     .line 132
     :cond_0
     invoke-virtual {p0}, Landroid/graphics/drawable/Drawable;->getIntrinsicWidth()I
@@ -1282,6 +1266,10 @@
     const/4 v0, 0x0
 
     goto :goto_0
+
+    .line 145
+    :goto_0
+    return-object v0
 .end method
 
 .method private b(Landroid/graphics/Canvas;)V

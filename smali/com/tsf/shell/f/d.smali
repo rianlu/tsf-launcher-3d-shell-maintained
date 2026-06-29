@@ -127,7 +127,7 @@
 
     move v6, v1
 
-    invoke-virtual/range {v0 .. v6}, Lcom/censivn/C3DEngine/a/a;->setEGLConfigChooser(IIIIII)V
+    invoke-virtual/range {v0 .. v6}, Lcom/censivn/C3DEngine/a/a;->setCompatibleEGLConfigChooser(IIIIII)V
 
     .line 58
     iget-object v0, p0, Lcom/tsf/shell/f/d;->a:Lcom/censivn/C3DEngine/a/a;
@@ -167,7 +167,7 @@
 
     move v12, v1
 
-    invoke-virtual/range {v6 .. v12}, Lcom/censivn/C3DEngine/a/a;->setEGLConfigChooser(IIIIII)V
+    invoke-virtual/range {v6 .. v12}, Lcom/censivn/C3DEngine/a/a;->setCompatibleEGLConfigChooser(IIIIII)V
 
     .line 63
     iget-object v0, p0, Lcom/tsf/shell/f/d;->a:Lcom/censivn/C3DEngine/a/a;
