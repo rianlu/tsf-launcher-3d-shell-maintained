@@ -643,42 +643,52 @@
 
     if-ne v2, v3, :cond_1
 
-    .line 159
-    invoke-virtual {v0}, Landroid/app/Activity;->getRequestedOrientation()I
-
-    move-result v2
-
-    .line 163
-    const/4 v3, 0x0
-
     :try_start_0
-    invoke-virtual {v0, v3}, Landroid/app/Activity;->setRequestedOrientation(I)V
-
-    .line 164
     invoke-virtual {v0}, Landroid/app/Activity;->getWindowManager()Landroid/view/WindowManager;
 
-    move-result-object v3
+    move-result-object v2
 
-    invoke-interface {v3}, Landroid/view/WindowManager;->getDefaultDisplay()Landroid/view/Display;
+    invoke-interface {v2}, Landroid/view/WindowManager;->getDefaultDisplay()Landroid/view/Display;
 
-    move-result-object v3
+    move-result-object v2
 
-    invoke-virtual {v3}, Landroid/view/Display;->getOrientation()I
+    invoke-virtual {v2}, Landroid/view/Display;->getRotation()I
 
     move-result v3
 
-    .line 165
-    invoke-virtual {v0, v2}, Landroid/app/Activity;->setRequestedOrientation(I)V
+    invoke-virtual {v2}, Landroid/view/Display;->getWidth()I
 
-    .line 166
-    rsub-int/lit8 v0, v3, 0x4
+    move-result v4
 
-    rem-int/lit8 v0, v0, 0x4
+    invoke-virtual {v2}, Landroid/view/Display;->getHeight()I
 
+    move-result v5
+
+    const/4 v0, 0x0
+
+    if-eqz v3, :cond_2
+
+    const/4 v2, 0x2
+
+    if-ne v3, v2, :cond_3
+
+    :cond_2
+    if-le v5, v4, :cond_4
+
+    const/4 v0, 0x3
+
+    goto :goto_2
+
+    :cond_3
+    if-le v4, v5, :cond_4
+
+    const/4 v0, 0x3
+
+    goto :goto_2
+
+    :cond_4
+    :goto_2
     sput v0, Lcom/censivn/C3DEngine/b/b/a;->N:I
-
-    .line 167
-    sget v0, Lcom/censivn/C3DEngine/b/b/a;->N:I
 
     invoke-static {v0}, Lcom/tsf/shell/manager/b/e;->s(I)V
     :try_end_0

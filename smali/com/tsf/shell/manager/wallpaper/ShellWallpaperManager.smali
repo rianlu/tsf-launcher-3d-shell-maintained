@@ -328,25 +328,11 @@
 
     check-cast v0, Landroid/app/WallpaperManager;
 
-    .line 330
-    invoke-virtual {v0}, Landroid/app/WallpaperManager;->getWallpaperInfo()Landroid/app/WallpaperInfo;
+    invoke-static {v0}, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager;->a(Landroid/app/WallpaperManager;)Z
 
-    move-result-object v0
+    move-result v0
 
-    .line 331
-    if-eqz v0, :cond_0
-
-    .line 333
-    const/4 v0, 0x1
-
-    .line 337
-    :goto_0
     return v0
-
-    :cond_0
-    const/4 v0, 0x0
-
-    goto :goto_0
 .end method
 
 .method public static a(Landroid/app/WallpaperManager;)Z
@@ -399,7 +385,26 @@
     .line 364
     if-eqz v0, :cond_1
 
+    invoke-virtual {v0}, Landroid/app/WallpaperInfo;->getComponent()Landroid/content/ComponentName;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_3
+
+    invoke-virtual {v0}, Landroid/content/ComponentName;->getClassName()Ljava/lang/String;
+
+    move-result-object v0
+
+    const-string v2, "com.android.systemui.ImageWallpaper"
+
+    invoke-virtual {v2, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-nez v0, :cond_1
+
     .line 366
+    :cond_3
     const/4 v0, 0x1
 
     goto :goto_0
@@ -717,7 +722,7 @@
 .end method
 
 .method private static c(Landroid/app/WallpaperManager;)Landroid/graphics/drawable/BitmapDrawable;
-    .locals 3
+    .locals 7
 
     .prologue
     const/4 v1, 0x0
@@ -728,7 +733,7 @@
     move-result-object v0
 
     .line 378
-    if-eqz v0, :cond_0
+    goto :cond_0
 
     .line 379
     invoke-virtual {v0}, Landroid/app/WallpaperInfo;->getComponent()Landroid/content/ComponentName;
@@ -746,6 +751,26 @@
 
     move-result-object v0
 
+    if-nez v0, :cond_6
+
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_5
+
+    invoke-virtual {v0}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v0
+
+    sget v2, Lcom/tsf/shell/R$drawable;->default_wallpaper:I
+
+    invoke-virtual {v0, v2}, Landroid/content/res/Resources;->getDrawable(I)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v0
+
+    :cond_6
+
     .line 387
     instance-of v2, v0, Landroid/graphics/drawable/BitmapDrawable;
 
@@ -754,12 +779,81 @@
 
     .line 391
     check-cast v0, Landroid/graphics/drawable/BitmapDrawable;
+
+    goto :goto_0
+
+    :cond_1
+    if-eqz v0, :cond_5
+
+    invoke-virtual {v0}, Landroid/graphics/drawable/Drawable;->getIntrinsicWidth()I
+
+    move-result v2
+
+    if-gtz v2, :cond_2
+
+    sget v2, Lcom/censivn/C3DEngine/b/b/a;->L:I
+
+    if-gtz v2, :cond_2
+
+    const/4 v2, 0x1
+
+    :cond_2
+    invoke-virtual {v0}, Landroid/graphics/drawable/Drawable;->getIntrinsicHeight()I
+
+    move-result v3
+
+    if-gtz v3, :cond_3
+
+    sget v3, Lcom/censivn/C3DEngine/b/b/a;->M:I
+
+    if-gtz v3, :cond_3
+
+    const/4 v3, 0x1
+
+    :cond_3
+    sget-object v4, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
+
+    invoke-static {v2, v3, v4}, Landroid/graphics/Bitmap;->createBitmap(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;
+
+    move-result-object v4
+
+    new-instance v5, Landroid/graphics/Canvas;
+
+    invoke-direct {v5, v4}, Landroid/graphics/Canvas;-><init>(Landroid/graphics/Bitmap;)V
+
+    const/4 v6, 0x0
+
+    invoke-virtual {v0, v6, v6, v2, v3}, Landroid/graphics/drawable/Drawable;->setBounds(IIII)V
+
+    invoke-virtual {v0, v5}, Landroid/graphics/drawable/Drawable;->draw(Landroid/graphics/Canvas;)V
+
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v2
+
+    if-eqz v2, :cond_4
+
+    invoke-virtual {v2}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v2
+
+    goto :goto_1
+
+    :cond_4
+    invoke-static {}, Landroid/content/res/Resources;->getSystem()Landroid/content/res/Resources;
+
+    move-result-object v2
+
+    :goto_1
+    new-instance v0, Landroid/graphics/drawable/BitmapDrawable;
+
+    invoke-direct {v0, v2, v4}, Landroid/graphics/drawable/BitmapDrawable;-><init>(Landroid/content/res/Resources;Landroid/graphics/Bitmap;)V
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
     goto :goto_0
 
-    :cond_1
+    :cond_5
     move-object v0, v1
 
     .line 395
@@ -769,6 +863,27 @@
     :catch_0
     move-exception v0
 
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_7
+
+    invoke-virtual {v0}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v0
+
+    sget v2, Lcom/tsf/shell/R$drawable;->default_wallpaper:I
+
+    invoke-virtual {v0, v2}, Landroid/content/res/Resources;->getDrawable(I)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/graphics/drawable/BitmapDrawable;
+
+    goto :goto_0
+
+    :cond_7
     move-object v0, v1
 
     .line 399

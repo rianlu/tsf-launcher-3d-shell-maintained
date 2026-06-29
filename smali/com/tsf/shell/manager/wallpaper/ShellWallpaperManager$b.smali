@@ -606,11 +606,6 @@
     .line 711
     invoke-direct {p0}, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager$b;->e()V
 
-    .line 713
-    iget-object v0, p0, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager$b;->a:Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager;
-
-    iput-boolean v4, v0, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager;->c:Z
-
     .line 717
     :cond_0
     iget-object v0, p0, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager$b;->e:Landroid/graphics/Bitmap;
@@ -619,6 +614,10 @@
 
     .line 719
     invoke-direct {p0}, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager$b;->g()V
+
+    iget-object v0, p0, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager$b;->a:Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager;
+
+    iput-boolean v4, v0, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager;->c:Z
 
     .line 723
     :cond_1
