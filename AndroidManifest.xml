@@ -39,9 +39,6 @@
     <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
     <uses-permission android:name="android.permission.RECEIVE_MMS"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
     <uses-feature android:name="android.hardware.camera.flash" android:required="false"/>
     <uses-feature android:name="android.hardware.telephony" android:required="false"/>
     <uses-feature android:name="android.hardware.bluetooth" android:required="false"/>
@@ -64,7 +61,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.tsf.shell.plugin.themepicker.wallpaper.WallpaperAppActivity" android:process=":wallpaperSelector" android:theme="@style/HoloWallpaperTheme"/>
+        <activity android:name="com.tsf.shell.plugin.themepicker.wallpaper.WallpaperAppActivity" android:theme="@style/HoloWallpaperTheme"/>
         <activity android:name="com.tsf.shell.plugin.theme.ThemeElementPicker" android:process=":picker" android:theme="@style/HoloDialogTheme"/>
         <activity android:name="com.tsf.shell.plugin.widget.FloatingWidgetPicker" android:process=":picker" android:theme="@style/HoloDialogTheme"/>
         <activity android:name="com.tsf.shell.activity.PrimeActivity" android:process=":prime" android:theme="@style/HoloDialogTheme"/>
