@@ -632,7 +632,32 @@
 
     if-eqz v0, :cond_0
 
+    invoke-static {}, Lcom/tsf/shell/manager/b/e;->ai()Z
+
+    move-result v0
+
+    if-eqz v0, :cond_reload_wallpaper
+
+    invoke-virtual {p0}, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager$b;->textures()Lcom/censivn/C3DEngine/api/element/TextureList;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Lcom/censivn/C3DEngine/api/element/TextureList;->removeAll()V
+
+    invoke-virtual {p0, v4}, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager$b;->setAnimationObjectState(Z)V
+
+    const/4 v0, 0x0
+
+    iput-object v0, p0, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager$b;->e:Landroid/graphics/Bitmap;
+
+    iget-object v0, p0, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager$b;->a:Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager;
+
+    iput-boolean v4, v0, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager;->c:Z
+
+    goto :cond_0
+
     .line 711
+    :cond_reload_wallpaper
     invoke-direct {p0}, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager$b;->e()V
 
     .line 717

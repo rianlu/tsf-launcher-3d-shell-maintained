@@ -1811,6 +1811,12 @@
     if-eqz v0, :cond_0
 
     .line 551
+    invoke-virtual {p0}, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager;->e()Z
+
+    move-result v0
+
+    if-nez v0, :cond_0
+
     const/4 v0, 0x1
 
     iput-boolean v0, p0, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager;->c:Z
