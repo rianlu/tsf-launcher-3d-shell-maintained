@@ -480,7 +480,7 @@
 
     move-result-object v0
 
-    const/16 v1, 0x500
+    const/16 v1, 0x700
 
     invoke-virtual {v0, v1}, Landroid/view/View;->setSystemUiVisibility(I)V
 
@@ -918,6 +918,16 @@
     iget v0, p2, Landroid/content/res/Configuration;->orientation:I
 
     iput v0, p0, Lcom/censivn/C3DEngine/b/c/e;->c:I
+
+    sget-object v0, Lcom/tsf/shell/manager/a;->f:Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager;
+
+    if-eqz v0, :cond_wallpaper_refresh_done
+
+    const/4 v2, 0x1
+
+    iput-boolean v2, v0, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager;->c:Z
+
+    :cond_wallpaper_refresh_done
 
     .line 345
     invoke-virtual {p0}, Lcom/censivn/C3DEngine/b/c/e;->b()Z

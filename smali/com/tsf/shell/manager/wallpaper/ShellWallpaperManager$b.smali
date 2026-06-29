@@ -87,7 +87,7 @@
 .end method
 
 .method private e()V
-    .locals 4
+    .locals 6
 
     .prologue
     .line 779
@@ -172,9 +172,38 @@
     .line 815
     :cond_2
     :try_start_1
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v2
+
+    if-eqz v2, :cond_wallpaper_portrait
+
+    invoke-virtual {v2}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Landroid/content/res/Resources;->getConfiguration()Landroid/content/res/Configuration;
+
+    move-result-object v2
+
+    iget v2, v2, Landroid/content/res/Configuration;->orientation:I
+
+    const/4 v3, 0x2
+
+    if-ne v2, v3, :cond_wallpaper_portrait
+
+    sget v2, Lcom/censivn/C3DEngine/b/b/a;->M:I
+
+    sget v3, Lcom/censivn/C3DEngine/b/b/a;->L:I
+
+    goto :goto_wallpaper_size
+
+    :cond_wallpaper_portrait
     sget v2, Lcom/censivn/C3DEngine/b/b/a;->L:I
 
     sget v3, Lcom/censivn/C3DEngine/b/b/a;->M:I
+
+    :goto_wallpaper_size
 
     invoke-static {v0, v2, v3}, Lcom/tsf/shell/utils/q;->b(Landroid/graphics/Bitmap;II)Landroid/graphics/Bitmap;
 
