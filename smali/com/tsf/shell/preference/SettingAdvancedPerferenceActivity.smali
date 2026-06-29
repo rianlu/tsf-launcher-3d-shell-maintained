@@ -210,15 +210,6 @@
     .line 67
     invoke-virtual {v0, v1}, Landroid/preference/CheckBoxPreference;->setOnPreferenceChangeListener(Landroid/preference/Preference$OnPreferenceChangeListener;)V
 
-    .line 117
-    const-string v0, "home_key_patch"
-
-    invoke-virtual {p0, v0}, Lcom/tsf/shell/preference/SettingAdvancedPerferenceActivity;->findPreference(Ljava/lang/CharSequence;)Landroid/preference/Preference;
-
-    move-result-object v0
-
-    invoke-virtual {v0, p0}, Landroid/preference/Preference;->setOnPreferenceClickListener(Landroid/preference/Preference$OnPreferenceClickListener;)V
-
     .line 118
     const-string v0, "restart_shell"
 

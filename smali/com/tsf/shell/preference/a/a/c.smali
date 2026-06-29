@@ -143,11 +143,6 @@
 
     invoke-virtual {v1, v0}, Lcom/censivn/C3DEngine/b/e/a;->a(Lcom/censivn/C3DEngine/b/e/a$a;)V
 
-    .line 125
-    iget-object v0, p0, Lcom/tsf/shell/preference/a/a/c;->c:Lcom/censivn/C3DEngine/b/e/a;
-
-    invoke-virtual {p0, v0}, Lcom/tsf/shell/preference/a/a/c;->b(Lcom/censivn/C3DEngine/b/e/f;)V
-
     .line 129
     new-instance v0, Lcom/censivn/C3DEngine/b/e/a;
 
@@ -178,11 +173,6 @@
     iget-object v1, p0, Lcom/tsf/shell/preference/a/a/c;->d:Lcom/censivn/C3DEngine/b/e/a;
 
     invoke-virtual {v1, v0}, Lcom/censivn/C3DEngine/b/e/a;->a(Lcom/censivn/C3DEngine/b/e/a$a;)V
-
-    .line 146
-    iget-object v0, p0, Lcom/tsf/shell/preference/a/a/c;->d:Lcom/censivn/C3DEngine/b/e/a;
-
-    invoke-virtual {p0, v0}, Lcom/tsf/shell/preference/a/a/c;->b(Lcom/censivn/C3DEngine/b/e/f;)V
 
     .line 150
     new-instance v0, Lcom/censivn/C3DEngine/b/e/a;
