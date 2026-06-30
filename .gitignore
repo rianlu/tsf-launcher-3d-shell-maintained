@@ -2,3 +2,4 @@ build/
 .local/
 .DS_Store
 scratch/
+tsf-widgets/modified/*-apktool/

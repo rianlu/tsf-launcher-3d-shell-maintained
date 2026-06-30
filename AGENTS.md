@@ -72,6 +72,9 @@ sh tools/build_release.sh
 ## Manifest 与兼容性重点
 
 - `AndroidManifest.xml` 是现代 Android 适配的关键文件。
+- 当前主 APK 固定按 `minSdkVersion: 21`、`targetSdkVersion: 28` 评估兼容性；不要默认套用 target 33/34/35 的权限和后台行为规则。
+- 评估外置插件 APK 或插件内置方案时，先记录插件自身 `packageName`、`versionCode`、`minSdkVersion`、`targetSdkVersion`、权限、service、provider、receiver，再判断是否能在现代设备上继续使用。
+- 插件需要权限或系统能力时，按主 APK target 28 与插件自身 target 的实际组合分析；不要因为 Android 高版本新增权限名就直接改主工程权限。
 - 当前重点风险：
   - Android 12+ 组件 `android:exported` 约束。
   - Android 13+ 存储与通知权限变化。
