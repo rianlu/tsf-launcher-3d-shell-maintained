@@ -1,0 +1,58 @@
+name: Bug 反馈
+description: 报告崩溃, 显示异常, 兼容性问题或功能不可用
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈。这个项目会优先处理可复现的问题, 请尽量补充设备和系统信息。
+  - type: textarea
+    id: problem
+    attributes:
+      label: 问题现象
+      description: 简单说明你看到了什么异常。
+      placeholder: "例如: 第一次进入桌面壁纸显示黑色, 点击某个小部件后闪退。"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 写出从打开应用到出现问题的步骤。
+      placeholder: |
+        1. 打开 TSF Launcher
+        2. 进入应用抽屉
+        3. 长按某个图标
+        4. 出现异常
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: 设备型号
+      placeholder: "例如: Xiaomi Pad 6, moto XT2533-4, Android Emulator"
+    validations:
+      required: true
+  - type: input
+    id: android
+    attributes:
+      label: Android 版本
+      placeholder: "例如: Android 15 / API 35"
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期表现
+      description: 简单说明你认为正常应该是什么样。
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: 日志或截图
+      description: 如果有崩溃日志, logcat, 截图或录屏, 请贴在这里。
+      render: shell
+    validations:
+      required: false
