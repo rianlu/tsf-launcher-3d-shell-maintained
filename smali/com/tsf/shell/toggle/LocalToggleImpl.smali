@@ -541,7 +541,7 @@
 .end method
 
 .method public e()V
-    .locals 5
+    .locals 2
 
     const-string v0, "toggle e() lock"
 
@@ -549,62 +549,9 @@
 
     invoke-static {v1, v0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
-    iget-object v0, p0, Lcom/tsf/shell/toggle/LocalToggleImpl;->ctx:Landroid/content/Context;
-
-    const-string v2, "device_policy"
-
-    invoke-virtual {v0, v2}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
-
-    move-result-object v0
-
-    check-cast v0, Landroid/app/admin/DevicePolicyManager;
-
-    new-instance v2, Landroid/content/ComponentName;
-
-    iget-object v3, p0, Lcom/tsf/shell/toggle/LocalToggleImpl;->ctx:Landroid/content/Context;
-
-    const-class v4, Lcom/tsf/shell/toggle/LockReceiver;
-
-    invoke-direct {v2, v3, v4}, Landroid/content/ComponentName;-><init>(Landroid/content/Context;Ljava/lang/Class;)V
-
-    if-eqz v0, :cond_0
-
-    invoke-virtual {v0, v2}, Landroid/app/admin/DevicePolicyManager;->isAdminActive(Landroid/content/ComponentName;)Z
-
-    move-result v3
-
-    if-eqz v3, :cond_0
-
-    :try_start_0
-    invoke-virtual {v0}, Landroid/app/admin/DevicePolicyManager;->lockNow()V
-    :try_end_0
-    .catch Ljava/lang/SecurityException; {:try_start_0 .. :try_end_0} :catch_0
-
-    return-void
-
-    :catch_0
-    move-exception v0
-
-    const-string v3, "lockNow denied"
-
-    invoke-static {v1, v3, v0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
-
-    :cond_0
-    const-string v0, "toast_toggle_lock_request_admin"
+    const-string v0, "notic_function_unavailable"
 
     invoke-direct {p0, v0}, Lcom/tsf/shell/toggle/LocalToggleImpl;->toastRes(Ljava/lang/String;)V
-
-    new-instance v0, Landroid/content/Intent;
-
-    const-string v1, "android.app.action.ADD_DEVICE_ADMIN"
-
-    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
-
-    const-string v1, "android.app.extra.DEVICE_ADMIN"
-
-    invoke-virtual {v0, v1, v2}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Landroid/os/Parcelable;)Landroid/content/Intent;
-
-    invoke-direct {p0, v0}, Lcom/tsf/shell/toggle/LocalToggleImpl;->launch(Landroid/content/Intent;)V
 
     return-void
 .end method
@@ -807,7 +754,7 @@
 .end method
 
 .method public k()V
-    .locals 5
+    .locals 2
 
     const-string v0, "toggle k() sync"
 
@@ -815,55 +762,18 @@
 
     invoke-static {v1, v0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
-    :try_start_0
-    invoke-static {}, Landroid/content/ContentResolver;->getMasterSyncAutomatically()Z
-
-    move-result v0
-
-    const/4 v2, 0x1
-
-    const/4 v3, 0x0
-
-    if-nez v0, :cond_0
-
-    const/4 v0, 0x1
-
-    goto :goto_0
-
-    :cond_0
-    const/4 v0, 0x0
-
-    :goto_0
-    invoke-static {v0}, Landroid/content/ContentResolver;->setMasterSyncAutomatically(Z)V
-
-    const-string v4, "ON_SYNC_CHANGED"
-
-    if-eqz v0, :cond_1
-
-    goto :goto_1
-
-    :cond_1
-    const/4 v2, 0x0
-
-    :goto_1
-    invoke-direct {p0, v4, v2}, Lcom/tsf/shell/toggle/LocalToggleImpl;->notifyChanged(Ljava/lang/String;I)V
-    :try_end_0
-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
-
-    goto :goto_2
-
-    :catch_0
-    move-exception v0
-
-    const-string v2, "sync toggle failed"
-
-    invoke-static {v1, v2, v0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
-
-    const-string v0, "toast_toggle_failed"
+    const-string v0, "toast_toggle_redirect_settings"
 
     invoke-direct {p0, v0}, Lcom/tsf/shell/toggle/LocalToggleImpl;->toastRes(Ljava/lang/String;)V
 
-    :goto_2
+    new-instance v0, Landroid/content/Intent;
+
+    const-string v1, "android.settings.SYNC_SETTINGS"
+
+    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    invoke-direct {p0, v0}, Lcom/tsf/shell/toggle/LocalToggleImpl;->launch(Landroid/content/Intent;)V
+
     return-void
 .end method
 

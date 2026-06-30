@@ -315,7 +315,7 @@ Attention: You may receive standard privacy warnings. There's no need to worry, 
     <string name="notic_download_switch_widget">The full functions requires installed switch widget. Download now?</string>
     <string name="notic_drag_to_desktop">Long-press it and drag it to the desktop.</string>
     <string name="notic_folder_full">This folder is full.</string>
-    <string name="notic_function_unavailable">This function is not available in the current version.</string>
+    <string name="notic_function_unavailable">This feature is not supported.</string>
     <string name="notic_hide_app">Select the app icon to hide</string>
     <string name="notic_line_picker_notic">Draw a line to mutil-select the icons</string>
     <string name="notic_line_picker_overflow">Your circling has surpassed the circle limit.</string>

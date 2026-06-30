@@ -99,7 +99,7 @@
 .end method
 
 .method public c()V
-    .locals 2
+    .locals 3
 
     .prologue
     .line 30
@@ -107,50 +107,13 @@
 
     move-result-object v0
 
-    const-string v1, "wifi"
+    const-string v1, "android.settings.panel.action.INTERNET_CONNECTIVITY"
 
-    invoke-virtual {v0, v1}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+    const-string v2, "android.settings.WIFI_SETTINGS"
 
-    move-result-object v0
+    invoke-static {v0, v1, v2}, Lcom/tsf/shell/toggle/SystemToggleCompat;->openPanelOrSettings(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)V
 
-    check-cast v0, Landroid/net/wifi/WifiManager;
-
-    .line 32
-    invoke-virtual {v0}, Landroid/net/wifi/WifiManager;->getWifiState()I
-
-    move-result v1
-
-    packed-switch v1, :pswitch_data_0
-
-    .line 51
-    :goto_0
-    :pswitch_0
     return-void
-
-    .line 35
-    :pswitch_1
-    const/4 v1, 0x1
-
-    invoke-virtual {v0, v1}, Landroid/net/wifi/WifiManager;->setWifiEnabled(Z)Z
-
-    goto :goto_0
-
-    .line 41
-    :pswitch_2
-    const/4 v1, 0x0
-
-    invoke-virtual {v0, v1}, Landroid/net/wifi/WifiManager;->setWifiEnabled(Z)Z
-
-    goto :goto_0
-
-    .line 32
-    :pswitch_data_0
-    .packed-switch 0x0
-        :pswitch_0
-        :pswitch_1
-        :pswitch_0
-        :pswitch_2
-    .end packed-switch
 .end method
 
 .method public d()V

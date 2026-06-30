@@ -112,54 +112,32 @@
 .end method
 
 .method public c()V
-    .locals 1
+    .locals 2
 
     .prologue
     .line 43
     iget-object v0, p0, Lcom/tsf/shell/manager/action/toggle/a/a;->c:Landroid/bluetooth/BluetoothAdapter;
 
-    if-eqz v0, :cond_0
+    if-nez v0, :cond_0
 
-    .line 45
-    iget-object v0, p0, Lcom/tsf/shell/manager/action/toggle/a/a;->c:Landroid/bluetooth/BluetoothAdapter;
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
 
-    invoke-virtual {v0}, Landroid/bluetooth/BluetoothAdapter;->getState()I
+    move-result-object v0
 
-    move-result v0
+    invoke-static {v0}, Lcom/tsf/shell/toggle/SystemToggleCompat;->unavailable(Landroid/content/Context;)V
 
-    .line 47
-    packed-switch v0, :pswitch_data_0
-
-    .line 66
-    :cond_0
-    :goto_0
-    :pswitch_0
     return-void
 
-    .line 50
-    :pswitch_1
-    iget-object v0, p0, Lcom/tsf/shell/manager/action/toggle/a/a;->c:Landroid/bluetooth/BluetoothAdapter;
+    :cond_0
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
 
-    invoke-virtual {v0}, Landroid/bluetooth/BluetoothAdapter;->enable()Z
+    move-result-object v0
 
-    goto :goto_0
+    const-string v1, "android.settings.BLUETOOTH_SETTINGS"
 
-    .line 56
-    :pswitch_2
-    iget-object v0, p0, Lcom/tsf/shell/manager/action/toggle/a/a;->c:Landroid/bluetooth/BluetoothAdapter;
+    invoke-static {v0, v1}, Lcom/tsf/shell/toggle/SystemToggleCompat;->openSettings(Landroid/content/Context;Ljava/lang/String;)V
 
-    invoke-virtual {v0}, Landroid/bluetooth/BluetoothAdapter;->disable()Z
-
-    goto :goto_0
-
-    .line 47
-    :pswitch_data_0
-    .packed-switch 0xa
-        :pswitch_1
-        :pswitch_0
-        :pswitch_2
-        :pswitch_0
-    .end packed-switch
+    return-void
 .end method
 
 .method public d()V

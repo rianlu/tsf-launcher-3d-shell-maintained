@@ -313,7 +313,7 @@
     <string name="notic_download_switch_widget">全功能需要安裝的開關部件。立即下載?</string>
     <string name="notic_drag_to_desktop">長按它並將它拖到桌面。</string>
     <string name="notic_folder_full">資料夾已滿</string>
-    <string name="notic_function_unavailable">該功能暫時無法使用</string>
+    <string name="notic_function_unavailable">暫不支援此功能</string>
     <string name="notic_hide_app">選擇要隱藏的應用程式圖示</string>
     <string name="notic_line_picker_notic">畫一條線來多重選擇圖示</string>
     <string name="notic_line_picker_overflow">超出圈套範圍限制</string>
