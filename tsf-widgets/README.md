@@ -37,3 +37,12 @@
   - 底部计数继续由日历插件服务读取, 移除会被现代 Android 拦截的显式后台 `startService`。
   - 日历事件按时间交集查询, 支持当天内事件, 全天事件和跨天事件。
   - 辅助源码: `src-helpers/calendar-v2.0-vc14/`。
+
+- `modified/message-v2.4-vc19.apk`
+  - 原版: `original/message-v2.4-vc19.apk`。
+  - 将短信插件 `targetSdkVersion` 从 19 提升到 28。
+  - 补齐带 intent-filter 组件的 `android:exported` 声明。
+  - 由短信插件自身申请短信和联系人读取权限。
+  - 服务绑定前检查权限, 避免无权限时直接读取短信和联系人导致崩溃。
+  - 服务绑定改为显式组件, 避免现代 Android 对隐式服务绑定的兼容限制。
+  - 辅助源码: `src-helpers/message-v2.4-vc19/`。
