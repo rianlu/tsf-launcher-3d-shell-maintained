@@ -26,3 +26,14 @@
   - 将备忘录插件 `targetSdkVersion` 从 21 提升到 28, 避免 Android 14+ 拒绝安装。
   - 去掉编辑页和插件说明页的系统窗口转场动画, 保留便签自身 3D 展开动画。
   - 适配 Android 5.0+ 透明沉浸系统栏, 避免旧半透明状态栏和导航栏出现黑色遮罩。
+
+- `modified/calendar-v2.0-vc14.apk`
+  - 原版: `original/calendar-v2.0-vc14.apk`。
+  - 将日历插件 `targetSdkVersion` 从 21 提升到 28。
+  - 补齐带 intent-filter 组件的 `android:exported` 声明。
+  - 由日历插件自身申请日历, 联系人, 短信, 照片和通话记录读取权限。
+  - 服务启动前检查权限, 避免无权限时直接读取系统数据导致崩溃。
+  - 点击详情页照片时优先使用系统图片预览, 并通过媒体库 Uri 避免旧 `file://` 路径在现代 Android 被拦截。
+  - 底部计数继续由日历插件服务读取, 移除会被现代 Android 拦截的显式后台 `startService`。
+  - 日历事件按时间交集查询, 支持当天内事件, 全天事件和跨天事件。
+  - 辅助源码: `src-helpers/calendar-v2.0-vc14/`。
