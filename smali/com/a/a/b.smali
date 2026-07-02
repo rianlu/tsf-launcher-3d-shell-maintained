@@ -25,6 +25,15 @@
 
     .prologue
     .line 32
+    invoke-static {p0}, Lcom/a/a/OpenMeteoXml;->open(Ljava/lang/String;)Ljava/io/InputStream;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_open_meteo_fallback
+
+    return-object v0
+
+    :cond_open_meteo_fallback
     new-instance v0, Lorg/apache/http/params/BasicHttpParams;
 
     invoke-direct {v0}, Lorg/apache/http/params/BasicHttpParams;-><init>()V

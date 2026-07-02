@@ -227,6 +227,12 @@
     .line 246
     iget-object v0, p1, Lcom/tsf/shell/widget/alarm/d/a;->a:Ljava/lang/String;
 
+    iget-object v1, p1, Lcom/tsf/shell/widget/alarm/d/a;->b:Ljava/lang/String;
+
+    invoke-static {v0, v1}, Lcom/a/a/OpenMeteoXml;->displayLocation(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v0
+
     sput-object v0, Lcom/tsf/shell/widget/alarm/setting/e;->c:Ljava/lang/String;
 
     .line 248

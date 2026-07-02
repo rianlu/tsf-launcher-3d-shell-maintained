@@ -71,20 +71,6 @@
 
     move-result v0
 
-    if-eqz v0, :cond_0
-
-    .line 468
-    iget-object v0, p0, Lcom/tsf/shell/widget/alarm/setting/SettingActivity$a;->a:Lcom/tsf/shell/widget/alarm/setting/SettingActivity;
-
-    const/4 v1, 0x0
-
-    invoke-static {v0, v1}, Lcom/tsf/shell/widget/alarm/setting/SettingActivity;->a(Lcom/tsf/shell/widget/alarm/setting/SettingActivity;Lcom/tsf/shell/widget/alarm/d/a;)V
-
-    .line 469
-    iget-object v0, p0, Lcom/tsf/shell/widget/alarm/setting/SettingActivity$a;->a:Lcom/tsf/shell/widget/alarm/setting/SettingActivity;
-
-    invoke-virtual {v0, v5}, Lcom/tsf/shell/widget/alarm/setting/SettingActivity;->a(Z)V
-
     .line 482
     :cond_0
     :goto_0

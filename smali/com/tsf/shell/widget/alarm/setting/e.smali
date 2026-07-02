@@ -1159,6 +1159,12 @@
 
     invoke-virtual {v0, v1, v2}, Landroid/content/ContentValues;->put(Ljava/lang/String;Ljava/lang/Long;)V
 
+    sget-object v1, Lcom/tsf/shell/widget/alarm/provider/a;->c:Ljava/lang/String;
+
+    sget-object v2, Lcom/tsf/shell/widget/alarm/setting/e;->c:Ljava/lang/String;
+
+    invoke-virtual {v0, v1, v2}, Landroid/content/ContentValues;->put(Ljava/lang/String;Ljava/lang/String;)V
+
     .line 216
     iget-object v1, p0, Lcom/tsf/shell/widget/alarm/setting/e;->l:Landroid/content/Context;
 

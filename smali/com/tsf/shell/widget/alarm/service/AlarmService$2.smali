@@ -165,6 +165,15 @@
     if-nez v1, :cond_3
 
     .line 143
+    sget-boolean v1, Lcom/tsf/shell/widget/alarm/setting/e;->a:Z
+
+    if-eqz v1, :cond_update_location_done
+
+    iget-object v1, v0, Lcom/tsf/shell/widget/alarm/d/c;->b:Ljava/lang/String;
+
+    sput-object v1, Lcom/tsf/shell/widget/alarm/setting/e;->c:Ljava/lang/String;
+
+    :cond_update_location_done
     iget-object v1, p0, Lcom/tsf/shell/widget/alarm/service/AlarmService$2;->b:Lcom/tsf/shell/widget/alarm/service/AlarmService;
 
     invoke-static {v1}, Lcom/tsf/shell/widget/alarm/service/AlarmService;->b(Lcom/tsf/shell/widget/alarm/service/AlarmService;)Lcom/tsf/shell/widget/alarm/setting/e;

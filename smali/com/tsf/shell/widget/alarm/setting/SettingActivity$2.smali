@@ -56,7 +56,7 @@
     .locals 2
 
     .prologue
-    const/4 v1, 0x3
+    const/4 v1, 0x1
 
     .line 171
     invoke-interface {p1}, Ljava/lang/CharSequence;->length()I

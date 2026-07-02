@@ -161,6 +161,12 @@
 
     sput-boolean v0, Lcom/tsf/shell/widget/alarm/setting/e;->a:Z
 
+    const-string v0, ""
+
+    sput-object v0, Lcom/tsf/shell/widget/alarm/setting/e;->c:Ljava/lang/String;
+
+    sput-object v0, Lcom/tsf/shell/widget/alarm/setting/e;->d:Ljava/lang/String;
+
     .line 306
     :goto_0
     iget-object v0, p0, Lcom/tsf/shell/widget/alarm/setting/SettingActivity;->k:Lcom/tsf/shell/widget/alarm/setting/e;
@@ -221,6 +227,12 @@
 
     .line 298
     iget-object v0, p1, Lcom/tsf/shell/widget/alarm/d/a;->a:Ljava/lang/String;
+
+    iget-object v1, p1, Lcom/tsf/shell/widget/alarm/d/a;->b:Ljava/lang/String;
+
+    invoke-static {v0, v1}, Lcom/a/a/OpenMeteoXml;->displayLocation(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v0
 
     sput-object v0, Lcom/tsf/shell/widget/alarm/setting/e;->c:Ljava/lang/String;
 
@@ -495,6 +507,8 @@
 
     invoke-virtual {v1, v2}, Landroid/widget/ImageView;->setOnClickListener(Landroid/view/View$OnClickListener;)V
 
+    invoke-direct {p0}, Lcom/tsf/shell/widget/alarm/setting/SettingActivity;->e()V
+
     .line 203
     return-void
 .end method
@@ -563,6 +577,34 @@
     .line 42
     invoke-direct {p0}, Lcom/tsf/shell/widget/alarm/setting/SettingActivity;->d()V
 
+    return-void
+.end method
+
+.method private e()V
+    .locals 5
+
+    .prologue
+    sget-boolean v0, Lcom/tsf/shell/widget/alarm/setting/e;->a:Z
+
+    if-eqz v0, :cond_0
+
+    iget-object v0, p0, Lcom/tsf/shell/widget/alarm/setting/SettingActivity;->h:Lcom/tsf/shell/widget/alarm/setting/SettingActivity$a;
+
+    if-eqz v0, :cond_0
+
+    new-instance v1, Lcom/tsf/shell/widget/alarm/setting/SettingActivity$a$1;
+
+    invoke-direct {v1, v0}, Lcom/tsf/shell/widget/alarm/setting/SettingActivity$a$1;-><init>(Lcom/tsf/shell/widget/alarm/setting/SettingActivity$a;)V
+
+    const/4 v2, 0x1
+
+    const/4 v3, 0x2
+
+    sget-object v4, Lcom/tsf/shell/a/a/d;->e:[Ljava/lang/String;
+
+    invoke-virtual {p0, v1, v2, v3, v4}, Lcom/tsf/shell/widget/alarm/setting/SettingActivity;->a(Lcom/tsf/shell/a/a/d$b;ZI[Ljava/lang/String;)Z
+
+    :cond_0
     return-void
 .end method
 

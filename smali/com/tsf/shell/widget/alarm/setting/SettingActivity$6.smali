@@ -47,6 +47,15 @@
 
     move-result-object v0
 
+    invoke-virtual {v0}, Lcom/tsf/shell/widget/alarm/setting/e;->b()V
+
+    .line 498
+    iget-object v0, p0, Lcom/tsf/shell/widget/alarm/setting/SettingActivity$6;->a:Lcom/tsf/shell/widget/alarm/setting/SettingActivity;
+
+    invoke-static {v0}, Lcom/tsf/shell/widget/alarm/setting/SettingActivity;->e(Lcom/tsf/shell/widget/alarm/setting/SettingActivity;)Lcom/tsf/shell/widget/alarm/setting/e;
+
+    move-result-object v0
+
     invoke-virtual {v0}, Lcom/tsf/shell/widget/alarm/setting/e;->d()V
 
     .line 499
