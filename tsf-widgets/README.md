@@ -63,3 +63,10 @@
   - 播放通知适配 Android 8.0+ 通知渠道, 并添加上一首、暂停、下一首控制按钮, 避免前台服务通知创建失败。
   - 小部件销毁时容忍服务未绑定状态, 避免移除小部件导致桌面崩溃。
   - 辅助源码: `src-helpers/music-v2.2-vc20/`。
+
+- `modified/weather-v2.1-vc17.apk`
+  - 原版: `original/weather-v2.1-vc17.apk`。
+  - 将天气插件 `targetSdkVersion` 从 21 提升到 28。
+  - 补齐带 intent-filter 组件的 `android:exported` 声明。
+  - 支持桌面小部件列表识别并添加挂件天气。
+  - 暂不处理天气定位和在线天气数据源。
