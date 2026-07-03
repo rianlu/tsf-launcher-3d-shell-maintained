@@ -1,19 +1,14 @@
-<div align="center">
-  <h1>TSF Launcher 3D Shell Maintained</h1>
+# TSF Launcher 3D Shell Maintained
 
-  <p><strong>面向新版 Android 的 TSF Launcher 3D Shell 非官方维护版</strong></p>
-  <p>在保留原有极具特色的 3D 桌面交互体验的基础上，尝试修复新版 Android 系统上的启动、崩溃、权限以及兼容性问题。</p>
+> 面向新版 Android 的 TSF Launcher 3D Shell 非官方兼容性维护版.
+> 在尽量保留原有 3D 桌面交互体验的前提下, 重点修复其在现代 Android 系统上的启动, 权限, 组件, 壁纸和小部件兼容问题。
 
-  <p>
-    <a href="https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/latest">
-      <img alt="Release" src="https://img.shields.io/github/v/release/rianlu/tsf-launcher-3d-shell-maintained?display_name=tag&style=for-the-badge" />
-    </a>
-    <img alt="Android 14+" src="https://img.shields.io/badge/Android-14%2B%20Compatible-4CAF50?style=for-the-badge" />
-  </p>
-</div>
+[![Release](https://img.shields.io/github/v/release/rianlu/tsf-launcher-3d-shell-maintained?display_name=tag&style=for-the-badge)](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/latest)
+![Target SDK 28](https://img.shields.io/badge/targetSdk-28-4CAF50?style=for-the-badge)
+![Status Maintained](https://img.shields.io/badge/status-maintained-4CAF50?style=for-the-badge)
 
 > [!IMPORTANT]
-> 本仓库是 TSF Launcher 3D Shell 的非官方兼容性维护项目，与原厂无官方关联。仓库内容主要用于个人学习、兼容性分析和非商业研究。
+> 原始应用 **TSF Launcher 3D Shell** 由 **TSFUI** 开发, 原应用内关于页, 字符串资源和站点链接中保留了 `tsfui.com` 与 `service@tsfui.com` 等信息. 本仓库是独立的非官方兼容性维护项目, 与原作者无官方关联, 主要用于个人学习、兼容性分析和非商业研究。
 
 ## 项目愿景
 
@@ -23,14 +18,67 @@ TSF Launcher 是一代经典且极具创新的 3D 交互桌面应用。原始 AP
 ## 当前状态
 
 - [x] APK 成功反编译 (基于版本 3.9.4)
-- [x] 移植并适配了自动化的构建、打包、签名与部署脚本体系
-- [x] 同步版本到 `3.9.4-r1` / `targetSdkVersion: 28`
-- [x] 补齐 Android 12+ 组件 `android:exported` 基础声明
-- [x] 修复前台服务通知和通知权限申请链路
-- [x] 内置桌面开关，移除对开关插件 APK 的运行依赖
-- [x] 适配相册和备忘录外置小部件
+- [x] 已累计完成 36 次维护提交, 覆盖安装兼容, 系统集成, 抽屉图标, 壁纸天气, 闹钟和小部件适配
+- [x] 已建立构建, 打包, 签名, 安装检查和发布脚本体系
+- [x] 已同步版本到 `3.9.4-r1` / `targetSdkVersion: 28`
+- [x] 已补齐 Android 12+ 组件暴露面, 前台服务, 权限链路和 64 位安装兼容
+- [x] 已修复首启方向, 前台服务通知, 壁纸加载, 抽屉拖动闪退和应用图标归一化
+- [x] 已补全默认桌面入口, 内置桌面开关, 抽屉自动分类与清理能力
+- [x] 已适配相册, 备忘录, 日历, 短信, 音乐, 天气小部件及照片装饰品
 - [ ] 整理外部插件、主题和浮游物资源的归档策略
-- [ ] 继续验证核心 3D 交互、手势操作和组件在现代系统下的表现
+- [ ] 继续扩大不同 ROM、不同屏幕形态下的核心 3D 交互真机验证范围
+
+## 已完成适配梳理
+
+截至当前 `main` 分支, 除初始反编译导入外, 已累计完成 36 次维护提交. 为避免 README 直接堆叠 commit 标题, 这里按功能域归纳已经完成的适配工作。
+
+### 基础兼容与构建基线
+
+- 将工程基线稳定到 `3.9.4-r1` 和 `targetSdkVersion: 28`, 统一维护 `apktool.yml`、发布配置和版本脚本。
+- 建立 `build_and_install.sh`、`build_release.sh`、`check_install_compat.sh` 等工具链, 覆盖调试构建、签名、安装和发布流程。
+- 补齐 Android 12+ 对 `android:exported` 的要求, 修整运行时权限申请链路和前台服务声明。
+- 增补 `arm64-v8a` 运行库, 修复 64 位设备安装失败问题。
+- 修复模拟器启动问题, 打孔屏顶部布局偏移问题, 以及首启方向异常。
+
+### 桌面核心功能与系统集成
+
+- 修复前台服务通知空白, 通知权限申请混乱和相关启动链路问题。
+- 新增"设置默认桌面"入口, 让宿主桌面在现代系统上可以主动引导用户切换默认启动器。
+- 内置桌面快捷开关实现, 移除对旧开关插件 APK 的运行依赖, 并继续适配现代系统上的开关行为。
+- 移除失效的默认主题商店入口和过时设置入口, 减少用户进入无效页面。
+- 修复内置闹钟到点提醒, 避免旧广播和服务链路在现代系统上失效。
+
+### 抽屉、图标与交互体验
+
+- 修复应用抽屉图标加载兼容问题。
+- 修复抽屉长按图标拖动闪退问题。
+- 为桌面应用图标增加归一化尺寸适配, 降低不同第三方应用图标大小、圆角和遮罩不一致带来的观感割裂。
+- 补全应用抽屉"自动分类"与"清理"功能, 并补齐对应动画和本地分类实现。
+- 优化抽屉图标初始化链路, 降低首次打开抽屉时的加载压力。
+
+### 壁纸、天气与环境适配
+
+- 修复首启壁纸加载异常、横屏壁纸铺满问题和动态壁纸切换显示问题。
+- 修复图片壁纸选择权限, 兼容现代 Android 的存储访问和 Uri 限制。
+- 将失效的旧天气数据能力替换为 Open-Meteo 兼容实现, 同时修复内置天气设置页的定位和城市搜索。
+- 修复中文城市搜索、自动定位回填真实地址等旧天气逻辑问题。
+
+### 外置小部件与装饰品
+
+- 保留原版 APK 归档的同时, 提供已适配的相册、备忘录、日历、短信、音乐、天气小部件修改版 APK。
+- 相册小部件: 通过宿主权限和缓存预热修复大图库下的空白、卡顿、随机封面和闪退问题, 并优化系统图片预览体验。
+- 备忘录小部件: 适配现代系统栏和转场行为, 避免旧透明状态栏方案带来的黑色遮罩。
+- 日历小部件: 修复权限申请、服务读取、自动弹设置页和事件查询兼容问题。
+- 短信小部件: 修复短信/联系人权限和现代 Android 下的显式服务绑定问题。
+- 音乐小部件: 修复媒体权限、通知渠道、服务启动、封面读取和小部件销毁崩溃问题。
+- 天气小部件: 适配现代安装要求, 接入可用天气数据源, 修复定位和搜索。
+- 照片装饰品: 适配现代系统的组件导出和跨包图片选择/裁剪流程。
+- 桌面侧新增一次性提示, 明确告知用户若小部件不刷新, 需要允许桌面及相关小部件自启动。
+
+### 文档与协作支持
+
+- README、AGENTS、CLAUDE 等工程文档持续同步维护, 补充当前维护边界和开发约定。
+- 增加 GitHub Issue 模板, 方便收集设备型号、Android 版本、复现步骤和日志信息。
 
 ## 仓库结构
 
@@ -90,9 +138,8 @@ sh tools/build_release.sh
 - `smali/com/tsf/shell/services/ForegroundService.smali`：前台服务通知和后台启动限制。
 - `res/`：内置资源、浮游物配置和现代系统兼容配置。
 
-## 友情链接
+## 社区
 
-- 参考项目：[HandShaker Android Maintained](https://github.com/rianlu/handshaker-android-maintained)
 - [LINUX DO](https://linux.do/) - 社区文化：真诚、友善、团结、专业，共建你我引以为荣之社区。
 
 ## 版权与免责声明
