@@ -197,7 +197,7 @@
 
     move-result v0
 
-    if-nez v0, :cond_0
+    goto :cond_0
 
     .line 46
     const-string v0, "GDPR\u6ca1\u6709\u5f00\u542f\uff1a AlarmReceiver - \u4e0d\u80fd\u6267\u884c\u547d\u4ee4"
@@ -302,6 +302,72 @@
 
     .line 68
     :cond_3
+    const-string v0, "android.intent.action.BOOT_COMPLETED"
+
+    invoke-virtual {p2}, Landroid/content/Intent;->getAction()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-nez v0, :cond_reschedule_alarms
+
+    const-string v0, "android.intent.action.MY_PACKAGE_REPLACED"
+
+    invoke-virtual {p2}, Landroid/content/Intent;->getAction()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-nez v0, :cond_reschedule_alarms
+
+    const-string v0, "android.intent.action.TIME_SET"
+
+    invoke-virtual {p2}, Landroid/content/Intent;->getAction()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-nez v0, :cond_reschedule_alarms
+
+    const-string v0, "android.intent.action.TIMEZONE_CHANGED"
+
+    invoke-virtual {p2}, Landroid/content/Intent;->getAction()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-nez v0, :cond_reschedule_alarms
+
+    const-string v0, "android.intent.action.DATE_CHANGED"
+
+    invoke-virtual {p2}, Landroid/content/Intent;->getAction()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_parse_alarm
+
+    :cond_reschedule_alarms
+    invoke-static {p1}, Lcom/tsf/shell/widget/alarm/AlarmUtils/c;->d(Landroid/content/Context;)V
+
+    goto/16 :goto_0
+
+    :cond_parse_alarm
     const/4 v0, 0x0
 
     .line 73
@@ -537,6 +603,8 @@
 
     invoke-static {p1, v1, v0, v8}, Landroid/app/PendingIntent;->getActivity(Landroid/content/Context;ILandroid/content/Intent;I)Landroid/app/PendingIntent;
 
+    move-result-object v4
+
     .line 148
     invoke-virtual {v2, p1}, Lcom/tsf/shell/widget/alarm/AlarmUtils/Alarm;->a(Landroid/content/Context;)Ljava/lang/String;
 
@@ -563,6 +631,21 @@
     move-result-object v0
 
     invoke-virtual {v1, v0}, Landroid/app/Notification$Builder;->setContentInfo(Ljava/lang/CharSequence;)Landroid/app/Notification$Builder;
+
+    .line 161
+    invoke-virtual {v1, v4}, Landroid/app/Notification$Builder;->setContentIntent(Landroid/app/PendingIntent;)Landroid/app/Notification$Builder;
+
+    const/4 v0, 0x1
+
+    invoke-virtual {v1, v4, v0}, Landroid/app/Notification$Builder;->setFullScreenIntent(Landroid/app/PendingIntent;Z)Landroid/app/Notification$Builder;
+
+    const/4 v0, 0x2
+
+    invoke-virtual {v1, v0}, Landroid/app/Notification$Builder;->setPriority(I)Landroid/app/Notification$Builder;
+
+    const-string v0, "alarm"
+
+    invoke-virtual {v1, v0}, Landroid/app/Notification$Builder;->setCategory(Ljava/lang/String;)Landroid/app/Notification$Builder;
 
     .line 164
     new-instance v0, Landroid/content/Intent;
@@ -598,11 +681,11 @@
     .line 171
     new-instance v0, Landroid/app/NotificationChannel;
 
-    const-string v4, "1"
+    const-string v4, "alarm_alerts"
 
-    const-string v5, "notification"
+    const-string v5, "Alarm alerts"
 
-    const/4 v6, 0x2
+    const/4 v6, 0x4
 
     invoke-direct {v0, v4, v5, v6}, Landroid/app/NotificationChannel;-><init>(Ljava/lang/String;Ljava/lang/CharSequence;I)V
 
@@ -610,7 +693,7 @@
     if-eqz v1, :cond_6
 
     .line 173
-    const-string v4, "1"
+    const-string v4, "alarm_alerts"
 
     invoke-virtual {v1, v4}, Landroid/app/Notification$Builder;->setChannelId(Ljava/lang/String;)Landroid/app/Notification$Builder;
 

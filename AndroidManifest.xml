@@ -125,6 +125,11 @@
                 <action android:name="com.tsf.shell.widget.alarm.inshell.ALARM_ALERT"/>
                 <action android:name="com.tsf.shell.widget.alarm.inshell.alarm_killed"/>
                 <action android:name="com.tsf.shell.widget.alarm.inshell.cancel_snooze"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.TIME_SET"/>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
+                <action android:name="android.intent.action.DATE_CHANGED"/>
             </intent-filter>
         </receiver>
         <activity android:exported="true" android:label="@string/alarm_app_name" android:name="com.tsf.shell.widget.alarm.setting.SettingActivity" android:process=":alarm" android:theme="@style/TSFTheme.Material.NoTitleBar">
@@ -134,7 +139,7 @@
         </activity>
         <activity android:label="@string/alarm_app_name" android:name="com.tsf.shell.widget.alarm.AlarmUtils.AlarmAlertActivity" android:process=":alarm" android:theme="@android:style/Theme.Wallpaper.NoTitleBar.Fullscreen"/>
         <activity android:label="Fonts Picker" android:name="com.tsf.shell.plugin.fontspicker.FontsPickerActivity" android:process=":picker" android:theme="@style/AppTheme.NoActionBar"/>
-        <service android:exported="false" android:name="component.ForegroundService" android:process=":fore"/>
+        <service android:exported="false" android:name="com.tsf.shell.component.ForegroundService" android:process=":fore"/>
         <provider android:authorities="com.tsf.shell.plugin.icondesigner.provider" android:enabled="true" android:exported="false" android:name="com.tsf.shell.plugin.themepicker.icondesigner.ThemeIconDesignerProvider"/>
         <activity android:configChanges="keyboardHidden|orientation|screenSize" android:exported="true" android:launchMode="singleTask" android:name="com.tsf.extend.wallpaper.PersonalizationActivity" android:screenOrientation="portrait" android:theme="@style/PersonalizationThemeWithAnim">
             <intent-filter>

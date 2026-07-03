@@ -673,6 +673,14 @@
     .line 45
     invoke-super {p0, p1}, Landroid/app/Activity;->onCreate(Landroid/os/Bundle;)V
 
+    invoke-virtual {p0}, Lcom/tsf/shell/widget/alarm/AlarmUtils/AlarmAlertActivity;->getWindow()Landroid/view/Window;
+
+    move-result-object v0
+
+    const v1, 0x680080
+
+    invoke-virtual {v0, v1}, Landroid/view/Window;->addFlags(I)V
+
     .line 47
     sget v0, Lcom/tsf/shell/widget/alarm/m$d;->activity_alarm_alert_layout:I
 

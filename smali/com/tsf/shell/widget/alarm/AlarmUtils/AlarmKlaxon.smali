@@ -368,9 +368,7 @@
 
     .line 159
     :try_start_0
-    iget-object v1, p0, Lcom/tsf/shell/widget/alarm/AlarmUtils/AlarmKlaxon;->g:Landroid/telephony/TelephonyManager;
-
-    invoke-virtual {v1}, Landroid/telephony/TelephonyManager;->getCallState()I
+    invoke-direct {p0}, Lcom/tsf/shell/widget/alarm/AlarmUtils/AlarmKlaxon;->c()I
 
     move-result v1
 
@@ -551,6 +549,32 @@
     return-void
 .end method
 
+.method private c()I
+    .locals 2
+
+    .prologue
+    const/4 v1, 0x0
+
+    iget-object v0, p0, Lcom/tsf/shell/widget/alarm/AlarmUtils/AlarmKlaxon;->g:Landroid/telephony/TelephonyManager;
+
+    if-eqz v0, :cond_0
+
+    :try_start_0
+    invoke-virtual {v0}, Landroid/telephony/TelephonyManager;->getCallState()I
+
+    move-result v0
+    :try_end_0
+    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+
+    return v0
+
+    :catch_0
+    move-exception v0
+
+    :cond_0
+    return v1
+.end method
+
 
 # virtual methods
 .method public a()V
@@ -632,6 +656,17 @@
     iput-object v0, p0, Lcom/tsf/shell/widget/alarm/AlarmUtils/AlarmKlaxon;->c:Landroid/os/Vibrator;
 
     .line 67
+    const-string v0, "android.permission.READ_PHONE_STATE"
+
+    invoke-virtual {p0, v0}, Lcom/tsf/shell/widget/alarm/AlarmUtils/AlarmKlaxon;->checkCallingOrSelfPermission(Ljava/lang/String;)I
+
+    move-result v0
+
+    if-eqz v0, :cond_0
+
+    goto :goto_0
+
+    :cond_0
     const-string v0, "phone"
 
     invoke-virtual {p0, v0}, Lcom/tsf/shell/widget/alarm/AlarmUtils/AlarmKlaxon;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
@@ -652,6 +687,7 @@
     invoke-virtual {v0, v1, v2}, Landroid/telephony/TelephonyManager;->listen(Landroid/telephony/PhoneStateListener;I)V
 
     .line 69
+    :goto_0
     invoke-static {p0}, Lcom/tsf/shell/widget/alarm/AlarmUtils/a;->a(Landroid/content/Context;)V
 
     .line 70
@@ -668,6 +704,8 @@
     .line 76
     iget-object v0, p0, Lcom/tsf/shell/widget/alarm/AlarmUtils/AlarmKlaxon;->g:Landroid/telephony/TelephonyManager;
 
+    if-eqz v0, :cond_0
+
     iget-object v1, p0, Lcom/tsf/shell/widget/alarm/AlarmUtils/AlarmKlaxon;->j:Landroid/telephony/PhoneStateListener;
 
     const/4 v2, 0x0
@@ -675,6 +713,7 @@
     invoke-virtual {v0, v1, v2}, Landroid/telephony/TelephonyManager;->listen(Landroid/telephony/PhoneStateListener;I)V
 
     .line 77
+    :cond_0
     invoke-static {}, Lcom/tsf/shell/widget/alarm/AlarmUtils/a;->a()V
 
     .line 78
@@ -744,9 +783,7 @@
     iput-object v0, p0, Lcom/tsf/shell/widget/alarm/AlarmUtils/AlarmKlaxon;->e:Lcom/tsf/shell/widget/alarm/AlarmUtils/Alarm;
 
     .line 109
-    iget-object v0, p0, Lcom/tsf/shell/widget/alarm/AlarmUtils/AlarmKlaxon;->g:Landroid/telephony/TelephonyManager;
-
-    invoke-virtual {v0}, Landroid/telephony/TelephonyManager;->getCallState()I
+    invoke-direct {p0}, Lcom/tsf/shell/widget/alarm/AlarmUtils/AlarmKlaxon;->c()I
 
     move-result v0
 
