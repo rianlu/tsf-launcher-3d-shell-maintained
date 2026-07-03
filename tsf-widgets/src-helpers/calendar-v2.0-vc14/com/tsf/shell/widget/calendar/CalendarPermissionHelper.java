@@ -46,13 +46,6 @@ public final class CalendarPermissionHelper {
         return true;
     }
 
-    public static void launchPermissionActivity(Context context) {
-        Intent intent = new Intent();
-        intent.setClassName(PACKAGE_NAME, PACKAGE_NAME + ".CalendarActivity");
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-    }
-
     public static void startServiceIfPermitted(Context context) {
         if (!hasRequiredPermissions(context)) {
             return;
