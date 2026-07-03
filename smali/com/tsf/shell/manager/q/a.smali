@@ -283,70 +283,10 @@
 
 # virtual methods
 .method public a()V
-    .locals 6
+    .locals 0
 
     .prologue
-    .line 108
-    new-instance v0, Landroid/content/Intent;
-
-    invoke-direct {v0}, Landroid/content/Intent;-><init>()V
-
-    .line 109
-    new-instance v1, Landroid/content/ComponentName;
-
-    const-string v2, "com.tsf.shell.services.notifier"
-
-    const-string v3, "com.tsf.shell.services.notifier.MainActivity"
-
-    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
-
-    .line 110
-    invoke-virtual {v0, v1}, Landroid/content/Intent;->setComponent(Landroid/content/ComponentName;)Landroid/content/Intent;
-
-    .line 111
-    const-string v1, "android.intent.action.VIEW"
-
-    invoke-virtual {v0, v1}, Landroid/content/Intent;->setAction(Ljava/lang/String;)Landroid/content/Intent;
-
-    .line 113
-    :try_start_0
-    invoke-static {}, Lcom/tsf/shell/Home;->b()Lcom/tsf/shell/Home;
-
-    move-result-object v1
-
-    invoke-virtual {v1, v0}, Lcom/tsf/shell/Home;->startActivity(Landroid/content/Intent;)V
-    :try_end_0
-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
-
-    .line 129
-    :goto_0
     return-void
-
-    .line 114
-    :catch_0
-    move-exception v0
-
-    .line 116
-    new-instance v4, Lcom/tsf/shell/manager/q/a$5;
-
-    invoke-direct {v4, p0}, Lcom/tsf/shell/manager/q/a$5;-><init>(Lcom/tsf/shell/manager/q/a;)V
-
-    .line 126
-    invoke-static {}, Lcom/tsf/shell/Home;->b()Lcom/tsf/shell/Home;
-
-    move-result-object v0
-
-    sget v1, Lcom/tsf/b$i;->mn_unread_download_notic:I
-
-    sget v2, Lcom/tsf/b$i;->public_action_ok:I
-
-    sget v3, Lcom/tsf/b$i;->public_action_cancel:I
-
-    const/4 v5, 0x0
-
-    invoke-static/range {v0 .. v5}, Lcom/tsf/shell/e;->a(Landroid/content/Context;IIILjava/lang/Runnable;Ljava/lang/Runnable;)V
-
-    goto :goto_0
 .end method
 
 .method public a(I)V

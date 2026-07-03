@@ -397,17 +397,6 @@
     .line 137
     iget-object v0, p0, Lcom/tsf/shell/f/h/c;->g:Lcom/censivn/C3DEngine/b/h/e/a;
 
-    const/16 v1, 0x44c
-
-    invoke-virtual {p0, v1}, Lcom/tsf/shell/f/h/c;->a(I)Lcom/tsf/shell/f/i/b/e/b;
-
-    move-result-object v1
-
-    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/h/e/a;->addChild(Lcom/censivn/C3DEngine/b/f/i;)V
-
-    .line 139
-    iget-object v0, p0, Lcom/tsf/shell/f/h/c;->g:Lcom/censivn/C3DEngine/b/h/e/a;
-
     const/16 v1, 0x4b0
 
     invoke-virtual {p0, v1}, Lcom/tsf/shell/f/h/c;->a(I)Lcom/tsf/shell/f/i/b/e/b;
