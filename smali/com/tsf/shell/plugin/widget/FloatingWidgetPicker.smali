@@ -978,7 +978,7 @@
 .end method
 
 .method private b(I)V
-    .locals 3
+    .locals 4
 
     .prologue
     .line 520
@@ -1019,6 +1019,33 @@
 
     .line 530
     :cond_0
+    iget-object v2, v0, Lcom/tsf/shell/plugin/widget/FloatingItem;->a:Ljava/lang/String;
+
+    invoke-direct {p0, v2}, Lcom/tsf/shell/plugin/widget/FloatingWidgetPicker;->f(Ljava/lang/String;)Z
+
+    move-result v2
+
+    if-eqz v2, :cond_1
+
+    invoke-direct {p0}, Lcom/tsf/shell/plugin/widget/FloatingWidgetPicker;->d()Z
+
+    move-result v2
+
+    if-nez v2, :cond_1
+
+    const-string v2, "如果小部件重启后不刷新, 请到系统设置里允许对应小部件自启动."
+
+    const/4 v3, 0x1
+
+    invoke-static {p0, v2, v3}, Landroid/widget/Toast;->makeText(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Landroid/widget/Toast;->show()V
+
+    invoke-direct {p0}, Lcom/tsf/shell/plugin/widget/FloatingWidgetPicker;->e()V
+
+    :cond_1
     const-string v2, "result"
 
     invoke-virtual {v1, v2, v0}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Landroid/os/Parcelable;)Landroid/content/Intent;
@@ -1066,6 +1093,74 @@
     move-exception v0
 
     goto :goto_0
+.end method
+
+.method private d()Z
+    .locals 3
+
+    .prologue
+    const/4 v2, 0x0
+
+    const-string v0, "config"
+
+    invoke-virtual {p0, v0, v2}, Lcom/tsf/shell/plugin/widget/FloatingWidgetPicker;->getSharedPreferences(Ljava/lang/String;I)Landroid/content/SharedPreferences;
+
+    move-result-object v0
+
+    const-string v1, "WidgetAutoStartTipShowed"
+
+    invoke-interface {v0, v1, v2}, Landroid/content/SharedPreferences;->getBoolean(Ljava/lang/String;Z)Z
+
+    move-result v0
+
+    return v0
+.end method
+
+.method private e()V
+    .locals 3
+
+    .prologue
+    const-string v0, "config"
+
+    const/4 v1, 0x0
+
+    invoke-virtual {p0, v0, v1}, Lcom/tsf/shell/plugin/widget/FloatingWidgetPicker;->getSharedPreferences(Ljava/lang/String;I)Landroid/content/SharedPreferences;
+
+    move-result-object v0
+
+    invoke-interface {v0}, Landroid/content/SharedPreferences;->edit()Landroid/content/SharedPreferences$Editor;
+
+    move-result-object v0
+
+    const-string v1, "WidgetAutoStartTipShowed"
+
+    const/4 v2, 0x1
+
+    invoke-interface {v0, v1, v2}, Landroid/content/SharedPreferences$Editor;->putBoolean(Ljava/lang/String;Z)Landroid/content/SharedPreferences$Editor;
+
+    invoke-interface {v0}, Landroid/content/SharedPreferences$Editor;->commit()Z
+
+    return-void
+.end method
+
+.method private f(Ljava/lang/String;)Z
+    .locals 1
+
+    .prologue
+    if-nez p1, :cond_0
+
+    const/4 v0, 0x0
+
+    return v0
+
+    :cond_0
+    const-string v0, "com.tsf.shell.widget."
+
+    invoke-virtual {p1, v0}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
+
+    move-result v0
+
+    return v0
 .end method
 
 
