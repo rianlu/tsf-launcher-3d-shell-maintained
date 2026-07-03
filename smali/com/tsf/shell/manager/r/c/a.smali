@@ -38,6 +38,228 @@
     .end array-data
 .end method
 
+.method private static b(Landroid/graphics/Bitmap;)Landroid/graphics/Bitmap;
+    .locals 13
+
+    .prologue
+    .line 57
+    if-nez p0, :cond_0
+
+    .line 58
+    const/4 p0, 0x0
+
+    .line 119
+    :goto_0
+    return-object p0
+
+    .line 61
+    :cond_0
+    invoke-virtual {p0}, Landroid/graphics/Bitmap;->getWidth()I
+
+    move-result v0
+
+    .line 62
+    invoke-virtual {p0}, Landroid/graphics/Bitmap;->getHeight()I
+
+    move-result v1
+
+    .line 63
+    if-lez v0, :goto_0
+
+    if-gtz v1, :cond_1
+
+    goto :goto_0
+
+    .line 67
+    :cond_1
+    move v2, v0
+
+    .line 68
+    move v3, v1
+
+    .line 69
+    const/4 v4, -0x1
+
+    .line 70
+    const/4 v5, -0x1
+
+    .line 71
+    const/4 v6, 0x0
+
+    .line 73
+    :goto_1
+    if-ge v6, v1, :cond_7
+
+    .line 74
+    const/4 v7, 0x0
+
+    .line 76
+    :goto_2
+    if-ge v7, v0, :cond_6
+
+    .line 77
+    invoke-virtual {p0, v7, v6}, Landroid/graphics/Bitmap;->getPixel(II)I
+
+    move-result v8
+
+    .line 78
+    invoke-static {v8}, Landroid/graphics/Color;->alpha(I)I
+
+    move-result v8
+
+    .line 79
+    if-lez v8, :cond_5
+
+    .line 80
+    if-ge v7, v2, :cond_2
+
+    .line 81
+    move v2, v7
+
+    .line 84
+    :cond_2
+    if-ge v6, v3, :cond_3
+
+    .line 85
+    move v3, v6
+
+    .line 88
+    :cond_3
+    if-le v7, v4, :cond_4
+
+    .line 89
+    move v4, v7
+
+    .line 92
+    :cond_4
+    if-le v6, v5, :cond_5
+
+    .line 93
+    move v5, v6
+
+    .line 96
+    :cond_5
+    add-int/lit8 v7, v7, 0x1
+
+    goto :goto_2
+
+    .line 99
+    :cond_6
+    add-int/lit8 v6, v6, 0x1
+
+    goto :goto_1
+
+    .line 102
+    :cond_7
+    if-ltz v4, :goto_0
+
+    .line 106
+    sub-int v6, v4, v2
+
+    add-int/lit8 v6, v6, 0x1
+
+    .line 107
+    sub-int v7, v5, v3
+
+    add-int/lit8 v7, v7, 0x1
+
+    .line 108
+    if-lez v6, :goto_0
+
+    if-gtz v7, :cond_8
+
+    goto :goto_0
+
+    .line 112
+    :cond_8
+    invoke-static {v0, v1}, Ljava/lang/Math;->max(II)I
+
+    move-result v8
+
+    .line 113
+    move v9, v8
+
+    .line 116
+    const/4 v10, 0x0
+
+    .line 117
+    if-nez v2, :cond_9
+
+    if-nez v3, :cond_9
+
+    if-ne v6, v0, :cond_9
+
+    if-ne v7, v1, :cond_9
+
+    .line 118
+    move-object v10, p0
+
+    goto :goto_3
+
+    .line 120
+    :cond_9
+    invoke-static {p0, v2, v3, v6, v7}, Landroid/graphics/Bitmap;->createBitmap(Landroid/graphics/Bitmap;IIII)Landroid/graphics/Bitmap;
+
+    move-result-object v10
+
+    .line 121
+    invoke-virtual {p0}, Landroid/graphics/Bitmap;->recycle()V
+
+    .line 124
+    :goto_3
+    invoke-static {v10, v9, v9}, Lcom/tsf/shell/utils/q;->a(Landroid/graphics/Bitmap;II)Landroid/graphics/Bitmap;
+
+    move-result-object v10
+
+    .line 125
+    if-ne v9, v8, :cond_a
+
+    move-object p0, v10
+
+    .line 126
+    goto :goto_0
+
+    .line 129
+    :cond_a
+    sget-object v11, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
+
+    invoke-static {v8, v8, v11}, Landroid/graphics/Bitmap;->createBitmap(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;
+
+    move-result-object v11
+
+    .line 130
+    new-instance v12, Landroid/graphics/Canvas;
+
+    invoke-direct {v12, v11}, Landroid/graphics/Canvas;-><init>(Landroid/graphics/Bitmap;)V
+
+    .line 131
+    sub-int v0, v8, v9
+
+    div-int/lit8 v0, v0, 0x2
+
+    int-to-float v0, v0
+
+    .line 132
+    sub-int v1, v8, v9
+
+    div-int/lit8 v1, v1, 0x2
+
+    int-to-float v1, v1
+
+    .line 133
+    const/4 v2, 0x0
+
+    invoke-virtual {v12, v10, v0, v1, v2}, Landroid/graphics/Canvas;->drawBitmap(Landroid/graphics/Bitmap;FFLandroid/graphics/Paint;)V
+
+    .line 134
+    invoke-virtual {v10}, Landroid/graphics/Bitmap;->recycle()V
+
+    move-object p0, v11
+
+    .line 135
+    goto/16 :goto_0
+.end method
+
 .method public static a()Landroid/graphics/Bitmap;
     .locals 2
 
@@ -87,6 +309,10 @@
     move-result-object v1
 
     invoke-static {v1}, Lcom/tsf/extend/base/view/e;->b(Landroid/graphics/drawable/Drawable;)Landroid/graphics/Bitmap;
+    
+    move-result-object v1
+
+    invoke-static {v1}, Lcom/tsf/shell/manager/r/c/a;->b(Landroid/graphics/Bitmap;)Landroid/graphics/Bitmap;
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
@@ -239,6 +465,10 @@
     .line 360
     :try_start_1
     invoke-static {v1}, Landroid/graphics/BitmapFactory;->decodeStream(Ljava/io/InputStream;)Landroid/graphics/Bitmap;
+
+    move-result-object v0
+
+    invoke-static {v0}, Lcom/tsf/shell/manager/r/c/a;->b(Landroid/graphics/Bitmap;)Landroid/graphics/Bitmap;
     :try_end_1
     .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_0
 
