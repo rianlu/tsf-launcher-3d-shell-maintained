@@ -78,7 +78,7 @@
 
 # virtual methods
 .method protected varargs a([Ljava/lang/Void;)Lcom/tsf/shell/plugin/classification/d$a;
-    .locals 4
+    .locals 3
 
     .prologue
     const/4 v0, 0x0
@@ -92,7 +92,6 @@
 
     .line 641
     :cond_0
-    :goto_0
     return-object v0
 
     .line 603
@@ -101,99 +100,18 @@
 
     iget-object v2, p0, Lcom/tsf/shell/plugin/classification/d$c;->c:Ljava/util/ArrayList;
 
-    invoke-static {v1, v2}, Lcom/tsf/shell/plugin/classification/d;->a(Landroid/content/Context;Ljava/util/ArrayList;)Ljava/util/ArrayList;
+    invoke-static {v1, v2}, Lcom/tsf/shell/plugin/classification/LocalClassificationImpl;->a(Landroid/content/Context;Ljava/util/ArrayList;)Lcom/tsf/shell/plugin/classification/d$a;
 
-    move-result-object v1
-
-    .line 605
-    new-instance v2, Ljava/lang/StringBuilder;
-
-    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v3, "filterPackage:"
-
-    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v2
-
-    invoke-virtual {v1}, Ljava/util/ArrayList;->size()I
-
-    move-result v3
-
-    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
-
-    move-result-object v2
-
-    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v2
-
-    invoke-static {v2}, Lcom/tsf/shell/plugin/themepicker/e;->b(Ljava/lang/String;)V
+    move-result-object v0
 
     .line 607
-    invoke-virtual {p0}, Lcom/tsf/shell/plugin/classification/d$c;->isCancelled()Z
-
-    move-result v2
-
-    if-nez v2, :cond_0
-
-    .line 612
-    invoke-virtual {v1}, Ljava/util/ArrayList;->size()I
-
-    move-result v2
-
-    if-lez v2, :cond_4
-
-    .line 614
-    invoke-static {v1}, Lcom/tsf/shell/plugin/classification/d;->a(Ljava/util/ArrayList;)Ljava/lang/String;
-
-    move-result-object v1
-
-    .line 616
-    if-nez v1, :cond_3
-
-    .line 618
-    iget-object v1, p0, Lcom/tsf/shell/plugin/classification/d$c;->b:Lcom/tsf/shell/plugin/classification/d$d;
-
-    if-eqz v1, :cond_2
-
-    .line 620
-    iget-object v1, p0, Lcom/tsf/shell/plugin/classification/d$c;->b:Lcom/tsf/shell/plugin/classification/d$d;
-
-    invoke-interface {v1}, Lcom/tsf/shell/plugin/classification/d$d;->a()V
-
-    .line 624
-    :cond_2
-    const/4 v1, 0x1
-
-    invoke-virtual {p0, v1}, Lcom/tsf/shell/plugin/classification/d$c;->cancel(Z)Z
-
-    goto :goto_0
-
-    .line 630
-    :cond_3
-    iget-object v2, p0, Lcom/tsf/shell/plugin/classification/d$c;->a:Landroid/content/Context;
-
-    invoke-static {v2, v1}, Lcom/tsf/shell/plugin/classification/d;->a(Landroid/content/Context;Ljava/lang/String;)V
-
-    .line 634
-    :cond_4
     invoke-virtual {p0}, Lcom/tsf/shell/plugin/classification/d$c;->isCancelled()Z
 
     move-result v1
 
     if-nez v1, :cond_0
 
-    .line 639
-    iget-object v0, p0, Lcom/tsf/shell/plugin/classification/d$c;->a:Landroid/content/Context;
-
-    iget-object v1, p0, Lcom/tsf/shell/plugin/classification/d$c;->c:Ljava/util/ArrayList;
-
-    invoke-static {v0, v1}, Lcom/tsf/shell/plugin/classification/d;->b(Landroid/content/Context;Ljava/util/ArrayList;)Lcom/tsf/shell/plugin/classification/d$a;
-
-    move-result-object v0
-
-    goto :goto_0
+    return-object v0
 .end method
 
 .method protected a(Lcom/tsf/shell/plugin/classification/d$a;)V

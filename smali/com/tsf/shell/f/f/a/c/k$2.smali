@@ -34,14 +34,8 @@
 
 # virtual methods
 .method public a()V
-    .locals 1
+    .locals 0
 
     .prologue
-    .line 120
-    sget v0, Lcom/tsf/b$i;->mn_next_version_release:I
-
-    invoke-static {v0}, Lcom/tsf/shell/e;->a(I)V
-
-    .line 122
     return-void
 .end method

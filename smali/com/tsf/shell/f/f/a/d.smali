@@ -1285,3 +1285,96 @@
     .line 408
     return-void
 .end method
+
+.method public f()V
+    .locals 1
+
+    .prologue
+    const/4 v0, 0x0
+
+    .line 410
+    invoke-virtual {p0, v0}, Lcom/tsf/shell/f/f/a/d;->g(Lcom/tsf/shell/f/f/a/c/LocalDrawerCleanTask$Callback;)Landroid/os/AsyncTask;
+
+    .line 412
+    return-void
+.end method
+
+.method public g(Lcom/tsf/shell/f/f/a/c/LocalDrawerCleanTask$Callback;)Landroid/os/AsyncTask;
+    .locals 4
+
+    .prologue
+    .line 416
+    new-instance v2, Ljava/util/ArrayList;
+
+    invoke-direct {v2}, Ljava/util/ArrayList;-><init>()V
+
+    .line 418
+    sget-object v0, Lcom/tsf/shell/manager/a;->w:Lcom/tsf/shell/manager/a/e;
+
+    invoke-virtual {v0}, Lcom/tsf/shell/manager/a/e;->a()Lcom/tsf/shell/manager/a/c;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Lcom/tsf/shell/manager/a/c;->d()Ljava/util/ArrayList;
+
+    move-result-object v0
+
+    .line 420
+    invoke-virtual {v0}, Ljava/util/ArrayList;->iterator()Ljava/util/Iterator;
+
+    move-result-object v3
+
+    :cond_0
+    :goto_0
+    invoke-interface {v3}, Ljava/util/Iterator;->hasNext()Z
+
+    move-result v0
+
+    if-eqz v0, :cond_1
+
+    invoke-interface {v3}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Lcom/tsf/shell/f/i/b/e/g;
+
+    .line 422
+    invoke-virtual {v0}, Lcom/tsf/shell/f/i/b/e/g;->K()Lcom/censivn/C3DEngine/api/element/info/ItemInfo;
+
+    move-result-object v1
+
+    check-cast v1, Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcutAppInfo;
+
+    .line 424
+    iget-boolean v1, v1, Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcutAppInfo;->isHide:Z
+
+    if-nez v1, :cond_0
+
+    .line 426
+    invoke-virtual {v0}, Lcom/tsf/shell/f/i/b/e/g;->bd()Lcom/tsf/shell/manager/a/f;
+
+    move-result-object v0
+
+    iget-object v0, v0, Lcom/tsf/shell/manager/a/f;->b:Landroid/content/ComponentName;
+
+    invoke-virtual {v0}, Landroid/content/ComponentName;->getPackageName()Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-virtual {v2, v0}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    goto :goto_0
+
+    .line 432
+    :cond_1
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v0
+
+    invoke-static {v0, v2, p1}, Lcom/tsf/shell/f/f/a/c/LocalDrawerCleanTask;->a(Landroid/content/Context;Ljava/util/ArrayList;Lcom/tsf/shell/f/f/a/c/LocalDrawerCleanTask$Callback;)Landroid/os/AsyncTask;
+
+    move-result-object v0
+
+    .line 434
+    return-object v0
+.end method

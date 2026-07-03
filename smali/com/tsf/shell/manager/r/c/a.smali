@@ -39,7 +39,7 @@
 .end method
 
 .method private static b(Landroid/graphics/Bitmap;)Landroid/graphics/Bitmap;
-    .locals 13
+    .locals 15
 
     .prologue
     .line 57
@@ -84,105 +84,138 @@
     const/4 v5, -0x1
 
     .line 71
-    const/4 v6, 0x0
+    mul-int v6, v0, v1
+
+    .line 72
+    new-array v8, v6, [I
 
     .line 73
+    move-object v7, p0
+
+    .line 74
+    const/4 v9, 0x0
+
+    .line 75
+    move v10, v0
+
+    .line 76
+    const/4 v11, 0x0
+
+    .line 77
+    const/4 v12, 0x0
+
+    .line 78
+    move v13, v0
+
+    .line 79
+    move v14, v1
+
+    .line 80
+    invoke-virtual/range {v7 .. v14}, Landroid/graphics/Bitmap;->getPixels([IIIIIII)V
+
+    .line 82
+    const/4 v6, 0x0
+
+    .line 85
     :goto_1
     if-ge v6, v1, :cond_7
 
-    .line 74
-    const/4 v7, 0x0
+    .line 85
+    mul-int v7, v6, v0
 
-    .line 76
+    .line 86
+    const/4 v9, 0x0
+
+    .line 88
     :goto_2
-    if-ge v7, v0, :cond_6
+    if-ge v9, v0, :cond_6
 
-    .line 77
-    invoke-virtual {p0, v7, v6}, Landroid/graphics/Bitmap;->getPixel(II)I
+    .line 89
+    add-int v10, v7, v9
 
-    move-result v8
+    aget v10, v8, v10
 
-    .line 78
-    invoke-static {v8}, Landroid/graphics/Color;->alpha(I)I
+    .line 90
+    invoke-static {v10}, Landroid/graphics/Color;->alpha(I)I
 
-    move-result v8
+    move-result v10
 
-    .line 79
-    if-lez v8, :cond_5
+    .line 91
+    if-lez v10, :cond_5
 
-    .line 80
-    if-ge v7, v2, :cond_2
+    .line 92
+    if-ge v9, v2, :cond_2
 
-    .line 81
-    move v2, v7
+    .line 93
+    move v2, v9
 
-    .line 84
+    .line 96
     :cond_2
     if-ge v6, v3, :cond_3
 
-    .line 85
+    .line 97
     move v3, v6
 
-    .line 88
+    .line 100
     :cond_3
-    if-le v7, v4, :cond_4
+    if-le v9, v4, :cond_4
 
-    .line 89
-    move v4, v7
+    .line 101
+    move v4, v9
 
-    .line 92
+    .line 104
     :cond_4
     if-le v6, v5, :cond_5
 
-    .line 93
+    .line 105
     move v5, v6
 
-    .line 96
+    .line 108
     :cond_5
-    add-int/lit8 v7, v7, 0x1
+    add-int/lit8 v9, v9, 0x1
 
     goto :goto_2
 
-    .line 99
+    .line 111
     :cond_6
     add-int/lit8 v6, v6, 0x1
 
     goto :goto_1
 
-    .line 102
+    .line 114
     :cond_7
     if-ltz v4, :goto_0
 
-    .line 106
+    .line 118
     sub-int v6, v4, v2
 
     add-int/lit8 v6, v6, 0x1
 
-    .line 107
+    .line 119
     sub-int v7, v5, v3
 
     add-int/lit8 v7, v7, 0x1
 
-    .line 108
+    .line 120
     if-lez v6, :goto_0
 
     if-gtz v7, :cond_8
 
     goto :goto_0
 
-    .line 112
+    .line 124
     :cond_8
     invoke-static {v0, v1}, Ljava/lang/Math;->max(II)I
 
     move-result v8
 
-    .line 113
+    .line 125
     move v9, v8
 
-    .line 116
+    .line 128
     const/4 v10, 0x0
 
-    .line 117
+    .line 129
     if-nez v2, :cond_9
 
     if-nez v3, :cond_9
@@ -191,35 +224,35 @@
 
     if-ne v7, v1, :cond_9
 
-    .line 118
+    .line 130
     move-object v10, p0
 
     goto :goto_3
 
-    .line 120
+    .line 132
     :cond_9
     invoke-static {p0, v2, v3, v6, v7}, Landroid/graphics/Bitmap;->createBitmap(Landroid/graphics/Bitmap;IIII)Landroid/graphics/Bitmap;
 
     move-result-object v10
 
-    .line 121
+    .line 133
     invoke-virtual {p0}, Landroid/graphics/Bitmap;->recycle()V
 
-    .line 124
+    .line 136
     :goto_3
     invoke-static {v10, v9, v9}, Lcom/tsf/shell/utils/q;->a(Landroid/graphics/Bitmap;II)Landroid/graphics/Bitmap;
 
     move-result-object v10
 
-    .line 125
+    .line 137
     if-ne v9, v8, :cond_a
 
     move-object p0, v10
 
-    .line 126
+    .line 138
     goto :goto_0
 
-    .line 129
+    .line 141
     :cond_a
     sget-object v11, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
 
@@ -227,36 +260,36 @@
 
     move-result-object v11
 
-    .line 130
+    .line 142
     new-instance v12, Landroid/graphics/Canvas;
 
     invoke-direct {v12, v11}, Landroid/graphics/Canvas;-><init>(Landroid/graphics/Bitmap;)V
 
-    .line 131
+    .line 143
     sub-int v0, v8, v9
 
     div-int/lit8 v0, v0, 0x2
 
     int-to-float v0, v0
 
-    .line 132
+    .line 144
     sub-int v1, v8, v9
 
     div-int/lit8 v1, v1, 0x2
 
     int-to-float v1, v1
 
-    .line 133
+    .line 145
     const/4 v2, 0x0
 
     invoke-virtual {v12, v10, v0, v1, v2}, Landroid/graphics/Canvas;->drawBitmap(Landroid/graphics/Bitmap;FFLandroid/graphics/Paint;)V
 
-    .line 134
+    .line 146
     invoke-virtual {v10}, Landroid/graphics/Bitmap;->recycle()V
 
     move-object p0, v11
 
-    .line 135
+    .line 147
     goto/16 :goto_0
 .end method
 
