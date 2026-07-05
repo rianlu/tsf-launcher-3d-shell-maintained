@@ -562,13 +562,13 @@
 
     .line 211
     :cond_7
-    const-string v1, "zh_CN"
+    const-string v1, "zh"
 
     invoke-static {}, Ljava/util/Locale;->getDefault()Ljava/util/Locale;
 
     move-result-object v2
 
-    invoke-virtual {v2}, Ljava/util/Locale;->toString()Ljava/lang/String;
+    invoke-virtual {v2}, Ljava/util/Locale;->getLanguage()Ljava/lang/String;
 
     move-result-object v2
 
@@ -887,13 +887,13 @@
 
     .line 235
     :cond_0
-    const-string v0, "zh_CN"
+    const-string v0, "zh"
 
     invoke-static {}, Ljava/util/Locale;->getDefault()Ljava/util/Locale;
 
     move-result-object v1
 
-    invoke-virtual {v1}, Ljava/util/Locale;->toString()Ljava/lang/String;
+    invoke-virtual {v1}, Ljava/util/Locale;->getLanguage()Ljava/lang/String;
 
     move-result-object v1
 
