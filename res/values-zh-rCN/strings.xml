@@ -762,7 +762,7 @@
     <string name="apps_management_dialog_button_cancel">取消</string>
     <string name="font_scan">扫描字体</string>
     <string name="font_scan_package">正在扫描字体包</string>
-    <string name="font_scan_summary">如果你喜欢使用第三方字体，请把字体文件放到 /fonts 目录下</string>
+    <string name="font_scan_summary">将 .ttf 字体文件放到 Android/data/com.tsf.shell/files/fonts</string>
     <string name="font_scan_summary_tail">个</string>
     <string name="font_type">字体风格</string>
     <string name="theme_picker_theme_bottom_featured">精选</string>

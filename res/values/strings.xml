@@ -773,7 +773,7 @@ you have read and understood the"</string>
     <string name="apps_management_dialog_button_cancel">Cancel</string>
     <string name="font_scan">Scan font</string>
     <string name="font_scan_package">Scanning the font pack</string>
-    <string name="font_scan_summary">Put 3rd party font files into the dir of \"/fonts\" for more choices.</string>
+    <string name="font_scan_summary">Put .ttf font files into Android/data/com.tsf.shell/files/fonts.</string>
     <string name="font_scan_summary_tail">font packages have found</string>
     <string name="font_type">Select font</string>
     <string name="theme_picker_theme_bottom_featured">Featured</string>

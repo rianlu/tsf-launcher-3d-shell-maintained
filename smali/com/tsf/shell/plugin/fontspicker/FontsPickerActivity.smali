@@ -106,6 +106,24 @@
 
     move-result-object v0
 
+    if-eqz v0, :cond_0
+
+    new-instance v2, Ljava/io/File;
+
+    const-string v3, "fonts"
+
+    invoke-direct {v2, v0, v3}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
+
+    invoke-virtual {v2}, Ljava/io/File;->mkdirs()Z
+
+    new-instance v2, Ljava/io/File;
+
+    const-string v3, "GOLauncherEX/fonts"
+
+    invoke-direct {v2, v0, v3}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
+
+    invoke-virtual {v2}, Ljava/io/File;->mkdirs()Z
+
     .line 459
     :cond_0
     :goto_0
@@ -252,6 +270,8 @@
     invoke-virtual {p1, p2}, Landroid/content/res/AssetManager;->list(Ljava/lang/String;)[Ljava/lang/String;
 
     move-result-object v7
+
+    if-eqz v7, :cond_4
 
     .line 367
     array-length v8, v7
@@ -559,6 +579,15 @@
 
     move-result v0
 
+    if-nez v0, :cond_font_dir_checked
+
+    invoke-virtual {p1}, Ljava/io/File;->mkdirs()Z
+
+    :cond_font_dir_checked
+    invoke-virtual {p1}, Ljava/io/File;->exists()Z
+
+    move-result v0
+
     if-eqz v0, :cond_0
 
     invoke-virtual {p1}, Ljava/io/File;->isDirectory()Z
@@ -571,6 +600,8 @@
     invoke-virtual {p1}, Ljava/io/File;->listFiles()[Ljava/io/File;
 
     move-result-object v2
+
+    if-eqz v2, :cond_0
 
     .line 468
     array-length v3, v2
@@ -1532,6 +1563,11 @@
     sget v0, Lcom/tsf/shell/plugin/themepicker/f$h;->fonts_picker_activity:I
 
     invoke-virtual {p0, v0}, Lcom/tsf/shell/plugin/fontspicker/FontsPickerActivity;->setContentView(I)V
+
+    .line 63
+    invoke-static {p0}, Lcom/tsf/shell/plugin/fontspicker/FontsPickerActivity;->a(Landroid/content/Context;)Ljava/io/File;
+
+    move-result-object v0
 
     .line 64
     sget v0, Lcom/tsf/shell/plugin/themepicker/f$f;->listView1:I
