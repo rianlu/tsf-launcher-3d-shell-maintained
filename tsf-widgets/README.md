@@ -11,6 +11,13 @@
 - 原版与修改版使用相同文件名, 通过 `original/` 和 `modified/` 区分。
 - 不提交 apktool 反编译工程, 构建时临时生成。
 
+## 下载发布
+
+- GitHub Release tag: `tsf-widgets-v1`。
+- 下载 URL 规则: `https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/download/tsf-widgets-v1/{apk}`。
+- 桌面内触发未安装小部件时, 只对 `modified/` 中已适配 APK 使用 `DownloadManager` 下载。
+- 下载完成后, 拉起系统安装器安装小部件 APK。
+
 ## 当前修改版
 
 - `modified/gallery-v2.1-vc18.apk`

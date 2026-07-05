@@ -34,6 +34,15 @@
     .locals 3
 
     .prologue
+    invoke-static {p0, p1}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->b(Landroid/app/Activity;Ljava/lang/String;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_download_fallback
+
+    return-void
+
+    :cond_download_fallback
     .line 19
     const/4 v0, 0x0
 
@@ -224,6 +233,15 @@
     .locals 4
 
     .prologue
+    invoke-static {p0, p1}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->b(Landroid/app/Activity;Ljava/lang/String;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_download_fallback
+
+    return-void
+
+    :cond_download_fallback
     .line 80
     const-string v0, "com.tsf.shell.widget.message"
 

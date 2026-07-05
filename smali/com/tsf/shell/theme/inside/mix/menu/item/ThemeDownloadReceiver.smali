@@ -280,6 +280,41 @@
     return-object p2
 .end method
 
+.method public static b(Landroid/app/Activity;Ljava/lang/String;)Z
+    .locals 4
+
+    .prologue
+    invoke-static {p1}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->d(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v0
+
+    if-nez v0, :cond_0
+
+    const/4 v0, 0x0
+
+    return v0
+
+    :cond_0
+    invoke-static {p1}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->f(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v1
+
+    const-string v2, "TSF Plugin"
+
+    if-eqz v1, :cond_1
+
+    invoke-static {p0, v1, v2}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->a(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v2
+
+    :cond_1
+    invoke-static {p0, p1, v2}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->a(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;)V
+
+    const/4 v0, 0x1
+
+    return v0
+.end method
+
 .method public static a(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;)V
     .locals 3
 
@@ -309,6 +344,16 @@
 
     move-result-object v0
 
+    if-eqz v0, :cond_plugin_file
+
+    goto :goto_file_ready
+
+    :cond_plugin_file
+    invoke-static {p1}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->d(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v0
+
+    :goto_file_ready
     if-eqz v0, :cond_0
 
     :try_start_0
@@ -328,7 +373,9 @@
 
     invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
 
-    const-string v4, "https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/download/tsf-themes-v1/"
+    invoke-static {p1}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->e(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v4
 
     invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
@@ -400,7 +447,7 @@
 
     invoke-interface {v3}, Landroid/content/SharedPreferences$Editor;->apply()V
 
-    const-string v3, "Theme download started"
+    const-string v3, "Download started"
 
     invoke-static {v1, v3}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->b(Landroid/content/Context;Ljava/lang/String;)V
     :try_end_0
@@ -409,7 +456,7 @@
     return-void
 
     :cond_0
-    const-string v0, "Theme download is unavailable"
+    const-string v0, "Download unavailable"
 
     invoke-static {p0, v0}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->b(Landroid/content/Context;Ljava/lang/String;)V
 
@@ -418,7 +465,7 @@
     :catch_0
     move-exception v0
 
-    const-string v0, "Theme download failed"
+    const-string v0, "Download failed"
 
     invoke-static {p0, v0}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->b(Landroid/content/Context;Ljava/lang/String;)V
 
@@ -444,6 +491,253 @@
     invoke-virtual {v0, v1}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
 
     return-void
+.end method
+
+.method private static d(Ljava/lang/String;)Ljava/lang/String;
+    .locals 2
+
+    .prologue
+    const/4 v0, 0x0
+
+    if-nez p0, :cond_0
+
+    return-object v0
+
+    :cond_0
+    const-string v0, "com.tsf.shell.widget.calendar"
+
+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_1
+
+    const-string v0, "calendar-v2.0-vc14.apk"
+
+    return-object v0
+
+    :cond_1
+    const-string v0, "com.tsf.shell.widget.gallery"
+
+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_2
+
+    const-string v0, "gallery-v2.1-vc18.apk"
+
+    return-object v0
+
+    :cond_2
+    const-string v0, "com.tsf.shell.widget.memo"
+
+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_3
+
+    const-string v0, "memo-v1.6-vc10.apk"
+
+    return-object v0
+
+    :cond_3
+    const-string v0, "com.tsf.shell.widget.message"
+
+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_4
+
+    const-string v0, "message-v2.4-vc19.apk"
+
+    return-object v0
+
+    :cond_4
+    const-string v0, "com.tsf.shell.widget.music"
+
+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_5
+
+    const-string v0, "music-v2.2-vc20.apk"
+
+    return-object v0
+
+    :cond_5
+    const-string v0, "com.tsf.shell.widget.weather"
+
+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_6
+
+    const-string v0, "weather-v2.1-vc17.apk"
+
+    return-object v0
+
+    :cond_6
+    const-string v0, "com.tsf.shell.widget.adornment"
+
+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_7
+
+    const-string v0, "adornment-v1.7-vc9.apk"
+
+    return-object v0
+
+    :cond_7
+    const/4 v0, 0x0
+
+    return-object v0
+.end method
+
+.method private static e(Ljava/lang/String;)Ljava/lang/String;
+    .locals 2
+
+    .prologue
+    const-string v0, "com.tsf.shell.widget.adornment"
+
+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_0
+
+    const-string v0, "https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/download/tsf-adornments-v1/"
+
+    return-object v0
+
+    :cond_0
+    invoke-static {p0}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->d(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_1
+
+    const-string v0, "https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/download/tsf-widgets-v1/"
+
+    return-object v0
+
+    :cond_1
+    const-string v0, "https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/download/tsf-themes-v1/"
+
+    return-object v0
+.end method
+
+.method private static f(Ljava/lang/String;)Ljava/lang/String;
+    .locals 2
+
+    .prologue
+    const/4 v0, 0x0
+
+    if-nez p0, :cond_0
+
+    return-object v0
+
+    :cond_0
+    const-string v0, "com.tsf.shell.widget.calendar"
+
+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_1
+
+    const-string v0, "widget_calendar"
+
+    return-object v0
+
+    :cond_1
+    const-string v0, "com.tsf.shell.widget.gallery"
+
+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_2
+
+    const-string v0, "widget_gallery"
+
+    return-object v0
+
+    :cond_2
+    const-string v0, "com.tsf.shell.widget.memo"
+
+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_3
+
+    const-string v0, "widget_memo"
+
+    return-object v0
+
+    :cond_3
+    const-string v0, "com.tsf.shell.widget.message"
+
+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_4
+
+    const-string v0, "widget_message"
+
+    return-object v0
+
+    :cond_4
+    const-string v0, "com.tsf.shell.widget.music"
+
+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_5
+
+    const-string v0, "widget_music"
+
+    return-object v0
+
+    :cond_5
+    const-string v0, "com.tsf.shell.widget.weather"
+
+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_6
+
+    const-string v0, "widget_weather"
+
+    return-object v0
+
+    :cond_6
+    const-string v0, "com.tsf.shell.widget.adornment"
+
+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_7
+
+    const-string v0, "widget_photo"
+
+    return-object v0
+
+    :cond_7
+    const/4 v0, 0x0
+
+    return-object v0
 .end method
 
 
@@ -556,7 +850,7 @@
     return-void
 
     :cond_2
-    const-string v0, "Theme download failed"
+    const-string v0, "Download failed"
 
     invoke-static {p1, v0}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->b(Landroid/content/Context;Ljava/lang/String;)V
 
