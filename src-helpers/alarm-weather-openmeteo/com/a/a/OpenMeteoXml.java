@@ -27,6 +27,10 @@ public final class OpenMeteoXml {
             "https://d1.weather.com.cn/weather_index/";
     private static final String CHINA_WEATHER_CURRENT =
             "https://d1.weather.com.cn/sk_2d/";
+    private static final String CHINA_WEATHER_TODAY =
+            "https://d1.weather.com.cn/dingzhi/";
+    private static final String NMC_WEATHER =
+            "https://www.nmc.cn/rest/weather?stationid=";
 
     private OpenMeteoXml() {
     }
@@ -47,18 +51,11 @@ public final class OpenMeteoXml {
             String lat = queryParam(targetUrl, "slat");
             String lon = queryParam(targetUrl, "slon");
             if (lat != null && lon != null) {
-                double latitude = Double.parseDouble(lat);
-                double longitude = Double.parseDouble(lon);
-                City city = reverseCity(latitude, longitude);
-                if (city == null) {
-                    city = new City();
-                    city.latitude = latitude;
-                    city.longitude = longitude;
-                    city.timezone = "auto";
-                    city.name = "Current Location";
-                    city.country = "";
-                    city.admin = "";
-                }
+                City city = new City();
+                city.latitude = Double.parseDouble(lat);
+                city.longitude = Double.parseDouble(lon);
+                city.timezone = "auto";
+                applyLocationLabel(city, currentLocationName());
                 return toStream(buildWeatherXml(city));
             }
         }
@@ -76,19 +73,19 @@ public final class OpenMeteoXml {
         if (keyword == null || keyword.trim().length() == 0) {
             return "<locations/>";
         }
-        List<ChinaCityIndex.Entry> localMatches = ChinaCityIndex.search(keyword.trim(), 10);
+        List<NmcCityIndex.Entry> localMatches = NmcCityIndex.search(keyword.trim(), 10);
         if (!localMatches.isEmpty()) {
             return buildChinaCityXml(localMatches);
         }
         return buildInternationalCityXml(keyword.trim());
     }
 
-    private static String buildChinaCityXml(List<ChinaCityIndex.Entry> matches) {
+    private static String buildChinaCityXml(List<NmcCityIndex.Entry> matches) {
         StringBuilder xml = new StringBuilder();
         xml.append("<locations>");
         for (int i = 0; i < matches.size(); i++) {
-            ChinaCityIndex.Entry entry = matches.get(i);
-            City city = fromChinaEntry(entry);
+            NmcCityIndex.Entry entry = matches.get(i);
+            City city = fromNmcEntry(entry);
             xml.append("<location city=\"")
                     .append(escape(displayLocation(city.name, city.admin)))
                     .append("\" location=\"")
@@ -158,22 +155,25 @@ public final class OpenMeteoXml {
     }
 
     private static String buildChinaWeatherXml(City city) throws IOException {
-        String body = readChinaUrl(CHINA_WEATHER_INDEX + city.stationId + ".html");
-        JSONObject dataSk = tryExtractJsObject(body, "dataSK");
-        JSONObject forecastRoot = tryExtractJsObject(body, "fc");
-        if (dataSk == null) {
-            dataSk = extractJsObject(readChinaUrl(CHINA_WEATHER_CURRENT + city.stationId + ".html"), "dataSK");
+        JSONObject data = jsonObject(readNmcUrl(NMC_WEATHER
+                + URLEncoder.encode(city.stationId, "UTF-8"))).optJSONObject("data");
+        if (data == null) {
+            throw new IOException("Missing NMC weather data");
         }
-        JSONArray forecast = forecastRoot == null ? null : forecastRoot.optJSONArray("f");
+        JSONObject real = data.optJSONObject("real");
+        JSONObject realWeather = real == null ? null : real.optJSONObject("weather");
+        JSONObject predict = data.optJSONObject("predict");
+        JSONArray forecast = predict == null ? null : predict.optJSONArray("detail");
+        JSONArray tempChart = data.optJSONArray("tempchart");
 
-        String currentCode = dataSk == null ? "" : dataSk.optString("weathercode", "");
-        String currentWeather = dataSk == null ? "" : dataSk.optString("weather", "");
-        double currentTemp = parseDouble(dataSk == null ? null : dataSk.optString("temp", null));
+        String currentCode = nmcString(realWeather, "img");
+        String currentWeather = nmcString(realWeather, "info");
+        double currentTemp = nmcDouble(realWeather, "temperature");
 
         StringBuilder xml = new StringBuilder();
         xml.append("<weather>");
         tag(xml, "country", safe(city.country));
-        tag(xml, "city", displayLocation(displayLocation(city.name, city.admin), city.country));
+        tag(xml, "city", city.name);
         xml.append("<currentconditions daylight=\"")
                 .append(isDaylight(currentCode) ? "true" : "false")
                 .append("\">");
@@ -188,15 +188,25 @@ public final class OpenMeteoXml {
             if (day == null) {
                 continue;
             }
-            String dayCode = day.optString("fa", "");
-            String nightCode = day.optString("fb", "");
-            double high = parseDouble(day.optString("fc", null));
-            double low = parseDouble(day.optString("fd", null));
-            String label = firstNonEmpty(day.optString("fj", ""), day.optString("fi", ""), "");
+            JSONObject dayWeather = child(child(day, "day"), "weather");
+            JSONObject nightWeather = child(child(day, "night"), "weather");
+            JSONObject chart = tempChartForDate(tempChart, day.optString("date", ""));
+            String dayCode = nmcString(dayWeather, "img");
+            String nightCode = nmcString(nightWeather, "img");
+            String weather = firstNonEmpty(
+                    nmcString(dayWeather, "info"),
+                    nmcString(nightWeather, "info"),
+                    "");
+            double high = chart == null
+                    ? nmcDouble(dayWeather, "temperature")
+                    : nmcDouble(chart, "max_temp");
+            double low = chart == null
+                    ? nmcDouble(nightWeather, "temperature")
+                    : nmcDouble(chart, "min_temp");
             xml.append("<day>");
-            tag(xml, "daycode", label);
+            tag(xml, "daycode", dayLabel(day.optString("date", ""), city.timezone));
             tag(xml, "weathericon", String.valueOf(toChinaAccuIcon(
-                    dayCode.length() > 0 ? dayCode : nightCode, "")));
+                    dayCode.length() > 0 ? dayCode : nightCode, weather)));
             tag(xml, "hightemperature", toFahrenheitString(high));
             tag(xml, "lowtemperature", toFahrenheitString(low));
             xml.append("</day>");
@@ -245,7 +255,7 @@ public final class OpenMeteoXml {
         StringBuilder xml = new StringBuilder();
         xml.append("<weather>");
         tag(xml, "country", city.country);
-        tag(xml, "city", displayLocation(displayLocation(city.name, city.admin), city.country));
+        tag(xml, "city", city.name);
         xml.append("<currentconditions daylight=\"true\">");
         tag(xml, "temperature", toFahrenheitString(currentTemp));
         tag(xml, "weathericon", String.valueOf(toAccuIcon(currentCode)));
@@ -363,9 +373,24 @@ public final class OpenMeteoXml {
             return null;
         }
         if (city.stationId != null && city.stationId.length() > 0) {
-            ChinaCityIndex.Entry entry = ChinaCityIndex.findByStationId(city.stationId);
-            if (entry != null) {
-                applyEntry(city, entry);
+            NmcCityIndex.Entry nmcEntry = NmcCityIndex.findByStationId(city.stationId);
+            if (nmcEntry != null) {
+                applyNmcEntry(city, nmcEntry);
+                return city;
+            }
+            ChinaCityIndex.Entry chinaEntry = ChinaCityIndex.findByStationId(city.stationId);
+            if (chinaEntry != null) {
+                nmcEntry = NmcCityIndex.match(chinaEntry.name, chinaEntry.displayAdmin());
+                if (nmcEntry != null) {
+                    applyNmcEntry(city, nmcEntry);
+                } else {
+                    applyEntry(city, chinaEntry);
+                }
+                return city;
+            }
+            City local = resolveChinaCity(city.name, city.admin);
+            if (local != null) {
+                return local;
             }
             return city;
         }
@@ -387,11 +412,19 @@ public final class OpenMeteoXml {
     }
 
     private static City resolveChinaCity(String name, String admin) {
-        ChinaCityIndex.Entry entry = ChinaCityIndex.match(name, admin);
-        if (entry == null) {
-            return null;
+        NmcCityIndex.Entry nmcEntry = NmcCityIndex.match(name, admin);
+        if (nmcEntry != null) {
+            return fromNmcEntry(nmcEntry);
         }
-        return fromChinaEntry(entry);
+        ChinaCityIndex.Entry chinaEntry = ChinaCityIndex.match(name, admin);
+        if (chinaEntry != null) {
+            nmcEntry = NmcCityIndex.match(chinaEntry.name, chinaEntry.displayAdmin());
+            if (nmcEntry != null) {
+                return fromNmcEntry(nmcEntry);
+            }
+            return fromChinaEntry(chinaEntry);
+        }
+        return null;
     }
 
     private static City fromChinaEntry(ChinaCityIndex.Entry entry) {
@@ -408,12 +441,30 @@ public final class OpenMeteoXml {
         city.country = "中国";
     }
 
+    private static City fromNmcEntry(NmcCityIndex.Entry entry) {
+        City city = new City();
+        applyNmcEntry(city, entry);
+        city.timezone = "Asia/Shanghai";
+        return city;
+    }
+
+    private static void applyNmcEntry(City city, NmcCityIndex.Entry entry) {
+        city.stationId = entry.stationId;
+        city.name = entry.name;
+        city.admin = entry.displayAdmin();
+        city.country = "中国";
+    }
+
     private static String readUrl(String url) throws IOException {
         return readUrl(url, true, null);
     }
 
     private static String readChinaUrl(String url) throws IOException {
         return readUrl(url, false, "https://www.weather.com.cn/");
+    }
+
+    private static String readNmcUrl(String url) throws IOException {
+        return readUrl(url, true, "https://www.nmc.cn/");
     }
 
     private static String readUrl(String url, boolean json, String referer) throws IOException {
@@ -453,6 +504,37 @@ public final class OpenMeteoXml {
         } catch (JSONException e) {
             throw new IOException(e);
         }
+    }
+
+    private static JSONObject child(JSONObject object, String key) {
+        return object == null ? null : object.optJSONObject(key);
+    }
+
+    private static JSONObject tempChartForDate(JSONArray items, String date) {
+        if (items == null || date == null || date.length() == 0) {
+            return null;
+        }
+        String normalized = date.replace('-', '/');
+        for (int i = 0; i < items.length(); i++) {
+            JSONObject item = items.optJSONObject(i);
+            if (item != null && normalized.equals(item.optString("time", ""))) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    private static String nmcString(JSONObject object, String key) {
+        if (object == null) {
+            return "";
+        }
+        String value = object.optString(key, "");
+        return value == null || value.length() == 0 || "9999".equals(value) ? "" : value;
+    }
+
+    private static double nmcDouble(JSONObject object, String key) {
+        double value = parseDouble(nmcString(object, key));
+        return value == 9999.0d ? Double.NaN : value;
     }
 
     private static JSONObject tryExtractJsObject(String body, String name) {
@@ -544,6 +626,36 @@ public final class OpenMeteoXml {
         return third == null ? "" : third;
     }
 
+    private static String currentLocationName() {
+        try {
+            Class<?> locator = Class.forName("com.tsf.shell.widget.alarm.d.b.a");
+            Object value = locator.getField("c").get(null);
+            if (value instanceof String && ((String) value).length() > 0) {
+                return (String) value;
+            }
+        } catch (Exception ignored) {
+        }
+        return "Current Location";
+    }
+
+    private static void applyLocationLabel(City city, String label) {
+        if (city == null || label == null) {
+            return;
+        }
+        String[] parts = label.split("[,，]", -1);
+        if (parts.length > 0) {
+            city.name = safe(parts[0]);
+        } else {
+            city.name = safe(label);
+        }
+        if (parts.length > 1) {
+            city.admin = safe(parts[1]);
+        }
+        if (parts.length > 2) {
+            city.country = safe(parts[2]);
+        }
+    }
+
     private static void appendPart(StringBuilder builder, String value) {
         if (value == null || value.length() == 0) {
             return;
@@ -616,7 +728,13 @@ public final class OpenMeteoXml {
             return Double.NaN;
         }
         try {
-            return Double.parseDouble(value);
+            String normalized = value.trim()
+                    .replace("℃", "")
+                    .replace("°C", "")
+                    .replace("°", "")
+                    .replace("C", "")
+                    .replace("c", "");
+            return Double.parseDouble(normalized);
         } catch (NumberFormatException ignored) {
             return Double.NaN;
         }

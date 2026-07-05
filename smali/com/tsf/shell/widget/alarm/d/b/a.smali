@@ -123,24 +123,50 @@
 
     check-cast v0, Landroid/location/Address;
 
-    .line 279
-    new-instance v4, Ljava/lang/StringBuilder;
-
-    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
-
-    invoke-virtual {v4, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v2
-
     invoke-virtual {v0}, Landroid/location/Address;->getLocality()Ljava/lang/String;
 
+    move-result-object v4
+
+    if-eqz v4, :cond_locality_empty
+
+    invoke-virtual {v4}, Ljava/lang/String;->length()I
+
+    move-result v5
+
+    if-nez v5, :cond_locality_done
+
+    :cond_locality_empty
+    invoke-virtual {v0}, Landroid/location/Address;->getSubAdminArea()Ljava/lang/String;
+
+    move-result-object v4
+
+    if-eqz v4, :cond_sub_admin_empty
+
+    invoke-virtual {v4}, Ljava/lang/String;->length()I
+
+    move-result v5
+
+    if-nez v5, :cond_locality_done
+
+    :cond_sub_admin_empty
+    invoke-virtual {v0}, Landroid/location/Address;->getAdminArea()Ljava/lang/String;
+
+    move-result-object v4
+
+    :cond_locality_done
+    invoke-virtual {v0}, Landroid/location/Address;->getAdminArea()Ljava/lang/String;
+
+    move-result-object v5
+
+    invoke-static {v4, v5}, Lcom/a/a/OpenMeteoXml;->displayLocation(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v4
+
+    invoke-virtual {v0}, Landroid/location/Address;->getCountryName()Ljava/lang/String;
+
     move-result-object v0
 
-    invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v0
-
-    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    invoke-static {v4, v0}, Lcom/a/a/OpenMeteoXml;->displayLocation(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 
     move-result-object v2
 
@@ -218,27 +244,10 @@
 .end method
 
 .method public static a(Ljava/lang/String;)Ljava/lang/String;
-    .locals 1
+    .locals 0
 
     .prologue
     .line 299
-    sget-object v0, Lcom/tsf/shell/widget/alarm/d/b/a;->c:Ljava/lang/String;
-
-    if-eqz v0, :cond_0
-
-    sget-object v0, Lcom/tsf/shell/widget/alarm/d/b/a;->c:Ljava/lang/String;
-
-    invoke-virtual {v0}, Ljava/lang/String;->length()I
-
-    move-result v0
-
-    if-eqz v0, :cond_0
-
-    .line 301
-    sget-object p0, Lcom/tsf/shell/widget/alarm/d/b/a;->c:Ljava/lang/String;
-
-    .line 305
-    :cond_0
     return-object p0
 .end method
 
@@ -256,6 +265,10 @@
     check-cast v0, Landroid/location/LocationManager;
 
     sput-object v0, Lcom/tsf/shell/widget/alarm/d/b/a;->e:Landroid/location/LocationManager;
+
+    const/4 v0, 0x0
+
+    sput-object v0, Lcom/tsf/shell/widget/alarm/d/b/a;->c:Ljava/lang/String;
 
     .line 40
     :try_start_0
@@ -278,71 +291,49 @@
 .end method
 
 .method private static a(Landroid/content/Context;Ljava/lang/String;)Z
-    .locals 5
+    .locals 3
 
     .prologue
-    const/4 v0, 0x0
-
-    .line 179
-    :try_start_0
-    invoke-virtual {p0}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
-
-    move-result-object v1
-
-    invoke-virtual {p0}, Landroid/content/Context;->getPackageName()Ljava/lang/String;
-
-    move-result-object v2
-
-    const/16 v3, 0x1000
-
-    invoke-virtual {v1, v2, v3}, Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String;I)Landroid/content/pm/PackageInfo;
-
-    move-result-object v1
-
-    .line 181
-    iget-object v2, v1, Landroid/content/pm/PackageInfo;->requestedPermissions:[Ljava/lang/String;
-
-    .line 183
-    array-length v3, v2
-
-    move v1, v0
-
-    :goto_0
-    if-ge v1, v3, :cond_0
-
-    aget-object v4, v2, v1
-
-    .line 185
-    invoke-virtual {p1, v4}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-    :try_end_0
-    .catch Landroid/content/pm/PackageManager$NameNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
-
-    move-result v4
-
-    if-eqz v4, :cond_1
-
-    .line 187
     const/4 v0, 0x1
 
-    .line 198
+    .line 179
+    sget v1, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 v2, 0x17
+
+    if-ge v1, v2, :cond_0
+
+    return v0
+
+    .line 181
     :cond_0
-    :goto_1
+    const-string v1, "android.permission.ACCESS_FINE_LOCATION"
+
+    invoke-virtual {p0, v1}, Landroid/content/Context;->checkSelfPermission(Ljava/lang/String;)I
+
+    move-result v1
+
+    if-nez v1, :cond_1
+
     return v0
 
     .line 183
     :cond_1
-    add-int/lit8 v1, v1, 0x1
+    const-string v1, "android.permission.ACCESS_COARSE_LOCATION"
 
-    goto :goto_0
+    invoke-virtual {p0, v1}, Landroid/content/Context;->checkSelfPermission(Ljava/lang/String;)I
 
-    .line 192
-    :catch_0
-    move-exception v1
+    move-result v1
 
-    .line 194
-    invoke-virtual {v1}, Landroid/content/pm/PackageManager$NameNotFoundException;->printStackTrace()V
+    if-nez v1, :cond_2
 
-    goto :goto_1
+    return v0
+
+    .line 198
+    :cond_2
+    const/4 v0, 0x0
+
+    return v0
 .end method
 
 .method public static b()D
@@ -373,6 +364,10 @@
     if-nez v2, :cond_0
 
     .line 106
+    const/4 v1, 0x0
+
+    sput-object v1, Lcom/tsf/shell/widget/alarm/d/b/a;->d:Landroid/location/Location;
+
     const-string v1, "Permission miss, Skip Locate Weather"
 
     invoke-static {v1}, Lcom/tsf/shell/widget/alarm/i;->c(Ljava/lang/String;)V
@@ -383,6 +378,26 @@
 
     .line 112
     :cond_0
+    sget v2, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 v3, 0x17
+
+    if-ge v2, v3, :cond_check_fine_location
+
+    goto :cond_has_fine_location
+
+    :cond_check_fine_location
+    const-string v2, "android.permission.ACCESS_FINE_LOCATION"
+
+    invoke-virtual {p0, v2}, Landroid/content/Context;->checkSelfPermission(Ljava/lang/String;)I
+
+    move-result v2
+
+    if-eqz v2, :cond_has_fine_location
+
+    goto :cond_3
+
+    :cond_has_fine_location
     sget-object v2, Lcom/tsf/shell/widget/alarm/d/b/a;->e:Landroid/location/LocationManager;
 
     const-string v3, "gps"

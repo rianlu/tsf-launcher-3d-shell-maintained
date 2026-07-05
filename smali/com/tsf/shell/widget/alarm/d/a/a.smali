@@ -12,6 +12,16 @@
     :try_start_0
     invoke-static {p0}, Lcom/tsf/shell/widget/alarm/d/b/a;->a(Landroid/content/Context;)V
 
+    sget-object v0, Lcom/tsf/shell/widget/alarm/d/b/a;->d:Landroid/location/Location;
+
+    if-nez v0, :cond_location_ready
+
+    const/4 v0, 0x0
+
+    return-object v0
+
+    :cond_location_ready
+
     .line 46
     new-instance v0, Ljava/lang/StringBuilder;
 

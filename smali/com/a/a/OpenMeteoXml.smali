@@ -20,6 +20,10 @@
 
 .field private static final CHINA_WEATHER_INDEX:Ljava/lang/String; = "https://d1.weather.com.cn/weather_index/"
 
+.field private static final CHINA_WEATHER_TODAY:Ljava/lang/String; = "https://d1.weather.com.cn/dingzhi/"
+
+.field private static final NMC_WEATHER:Ljava/lang/String; = "https://www.nmc.cn/rest/weather?stationid="
+
 
 # direct methods
 .method private constructor <init>()V
@@ -97,13 +101,116 @@
     return-void
 .end method
 
+.method private static applyLocationLabel(Lcom/a/a/OpenMeteoXml$City;Ljava/lang/String;)V
+    .locals 2
+
+    if-eqz p0, :cond_4
+
+    if-nez p1, :cond_0
+
+    goto :goto_1
+
+    :cond_0
+    const-string v0, "[,\uff0c]"
+
+    const/4 v1, -0x1
+
+    invoke-virtual {p1, v0, v1}, Ljava/lang/String;->split(Ljava/lang/String;I)[Ljava/lang/String;
+
+    move-result-object v0
+
+    array-length v1, v0
+
+    if-lez v1, :cond_1
+
+    const/4 p1, 0x0
+
+    aget-object p1, v0, p1
+
+    invoke-static {p1}, Lcom/a/a/OpenMeteoXml;->safe(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object p1
+
+    iput-object p1, p0, Lcom/a/a/OpenMeteoXml$City;->name:Ljava/lang/String;
+
+    goto :goto_0
+
+    :cond_1
+    invoke-static {p1}, Lcom/a/a/OpenMeteoXml;->safe(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object p1
+
+    iput-object p1, p0, Lcom/a/a/OpenMeteoXml$City;->name:Ljava/lang/String;
+
+    :goto_0
+    array-length p1, v0
+
+    const/4 v1, 0x1
+
+    if-le p1, v1, :cond_2
+
+    aget-object p1, v0, v1
+
+    invoke-static {p1}, Lcom/a/a/OpenMeteoXml;->safe(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object p1
+
+    iput-object p1, p0, Lcom/a/a/OpenMeteoXml$City;->admin:Ljava/lang/String;
+
+    :cond_2
+    array-length p1, v0
+
+    const/4 v1, 0x2
+
+    if-le p1, v1, :cond_3
+
+    aget-object p1, v0, v1
+
+    invoke-static {p1}, Lcom/a/a/OpenMeteoXml;->safe(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object p1
+
+    iput-object p1, p0, Lcom/a/a/OpenMeteoXml$City;->country:Ljava/lang/String;
+
+    :cond_3
+    return-void
+
+    :cond_4
+    :goto_1
+    return-void
+.end method
+
+.method private static applyNmcEntry(Lcom/a/a/OpenMeteoXml$City;Lcom/a/a/NmcCityIndex$Entry;)V
+    .locals 1
+
+    iget-object v0, p1, Lcom/a/a/NmcCityIndex$Entry;->stationId:Ljava/lang/String;
+
+    iput-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->stationId:Ljava/lang/String;
+
+    iget-object v0, p1, Lcom/a/a/NmcCityIndex$Entry;->name:Ljava/lang/String;
+
+    iput-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->name:Ljava/lang/String;
+
+    invoke-virtual {p1}, Lcom/a/a/NmcCityIndex$Entry;->displayAdmin()Ljava/lang/String;
+
+    move-result-object p1
+
+    iput-object p1, p0, Lcom/a/a/OpenMeteoXml$City;->admin:Ljava/lang/String;
+
+    const-string p1, "\u4e2d\u56fd"
+
+    iput-object p1, p0, Lcom/a/a/OpenMeteoXml$City;->country:Ljava/lang/String;
+
+    return-void
+.end method
+
 .method private static buildChinaCityXml(Ljava/util/List;)Ljava/lang/String;
     .locals 6
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "(",
             "Ljava/util/List<",
-            "Lcom/a/a/ChinaCityIndex$Entry;",
+            "Lcom/a/a/NmcCityIndex$Entry;",
             ">;)",
             "Ljava/lang/String;"
         }
@@ -130,9 +237,9 @@
 
     move-result-object v2
 
-    check-cast v2, Lcom/a/a/ChinaCityIndex$Entry;
+    check-cast v2, Lcom/a/a/NmcCityIndex$Entry;
 
-    invoke-static {v2}, Lcom/a/a/OpenMeteoXml;->fromChinaEntry(Lcom/a/a/ChinaCityIndex$Entry;)Lcom/a/a/OpenMeteoXml$City;
+    invoke-static {v2}, Lcom/a/a/OpenMeteoXml;->fromNmcEntry(Lcom/a/a/NmcCityIndex$Entry;)Lcom/a/a/OpenMeteoXml$City;
 
     move-result-object v2
 
@@ -229,7 +336,7 @@
 .end method
 
 .method private static buildChinaWeatherXml(Lcom/a/a/OpenMeteoXml$City;)Ljava/lang/String;
-    .locals 16
+    .locals 23
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Ljava/io/IOException;
@@ -242,7 +349,7 @@
 
     invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
 
-    const-string v2, "https://d1.weather.com.cn/weather_index/"
+    const-string v2, "https://www.nmc.cn/rest/weather?stationid="
 
     invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
@@ -250,11 +357,11 @@
 
     iget-object v2, v0, Lcom/a/a/OpenMeteoXml$City;->stationId:Ljava/lang/String;
 
-    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    const-string v3, "UTF-8"
 
-    move-result-object v1
+    invoke-static {v2, v3}, Ljava/net/URLEncoder;->encode(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 
-    const-string v2, ".html"
+    move-result-object v2
 
     invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
@@ -264,366 +371,400 @@
 
     move-result-object v1
 
-    invoke-static {v1}, Lcom/a/a/OpenMeteoXml;->readChinaUrl(Ljava/lang/String;)Ljava/lang/String;
+    invoke-static {v1}, Lcom/a/a/OpenMeteoXml;->readNmcUrl(Ljava/lang/String;)Ljava/lang/String;
 
     move-result-object v1
 
-    const-string v3, "dataSK"
-
-    invoke-static {v1, v3}, Lcom/a/a/OpenMeteoXml;->tryExtractJsObject(Ljava/lang/String;Ljava/lang/String;)Lorg/json/JSONObject;
-
-    move-result-object v4
-
-    const-string v5, "fc"
-
-    invoke-static {v1, v5}, Lcom/a/a/OpenMeteoXml;->tryExtractJsObject(Ljava/lang/String;Ljava/lang/String;)Lorg/json/JSONObject;
+    invoke-static {v1}, Lcom/a/a/OpenMeteoXml;->jsonObject(Ljava/lang/String;)Lorg/json/JSONObject;
 
     move-result-object v1
 
-    if-nez v4, :cond_0
+    const-string v2, "data"
 
-    new-instance v4, Ljava/lang/StringBuilder;
+    invoke-virtual {v1, v2}, Lorg/json/JSONObject;->optJSONObject(Ljava/lang/String;)Lorg/json/JSONObject;
 
-    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
+    move-result-object v1
 
-    const-string v6, "https://d1.weather.com.cn/sk_2d/"
+    if-eqz v1, :cond_9
 
-    invoke-virtual {v4, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    const-string v2, "real"
 
-    move-result-object v4
-
-    iget-object v6, v0, Lcom/a/a/OpenMeteoXml$City;->stationId:Ljava/lang/String;
-
-    invoke-virtual {v4, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    invoke-virtual {v4, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {v1, v2}, Lorg/json/JSONObject;->optJSONObject(Ljava/lang/String;)Lorg/json/JSONObject;
 
     move-result-object v2
 
-    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    const/4 v3, 0x0
 
-    move-result-object v2
+    const-string v4, "weather"
 
-    invoke-static {v2}, Lcom/a/a/OpenMeteoXml;->readChinaUrl(Ljava/lang/String;)Ljava/lang/String;
+    if-nez v2, :cond_0
 
-    move-result-object v2
-
-    invoke-static {v2, v3}, Lcom/a/a/OpenMeteoXml;->extractJsObject(Ljava/lang/String;Ljava/lang/String;)Lorg/json/JSONObject;
-
-    move-result-object v4
-
-    :cond_0
-    const/4 v2, 0x0
-
-    if-nez v1, :cond_1
-
-    move-object v1, v2
+    move-object v2, v3
 
     goto :goto_0
 
-    :cond_1
-    const-string v3, "f"
+    :cond_0
+    invoke-virtual {v2, v4}, Lorg/json/JSONObject;->optJSONObject(Ljava/lang/String;)Lorg/json/JSONObject;
 
-    invoke-virtual {v1, v3}, Lorg/json/JSONObject;->optJSONArray(Ljava/lang/String;)Lorg/json/JSONArray;
-
-    move-result-object v1
+    move-result-object v2
 
     :goto_0
-    const-string v3, ""
+    const-string v5, "predict"
 
-    if-nez v4, :cond_2
+    invoke-virtual {v1, v5}, Lorg/json/JSONObject;->optJSONObject(Ljava/lang/String;)Lorg/json/JSONObject;
 
-    move-object v6, v3
+    move-result-object v5
+
+    if-nez v5, :cond_1
 
     goto :goto_1
 
-    :cond_2
-    const-string v6, "weathercode"
+    :cond_1
+    const-string v3, "detail"
 
-    invoke-virtual {v4, v6, v3}, Lorg/json/JSONObject;->optString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    invoke-virtual {v5, v3}, Lorg/json/JSONObject;->optJSONArray(Ljava/lang/String;)Lorg/json/JSONArray;
+
+    move-result-object v3
+
+    :goto_1
+    const-string v5, "tempchart"
+
+    invoke-virtual {v1, v5}, Lorg/json/JSONObject;->optJSONArray(Ljava/lang/String;)Lorg/json/JSONArray;
+
+    move-result-object v1
+
+    const-string v5, "img"
+
+    invoke-static {v2, v5}, Lcom/a/a/OpenMeteoXml;->nmcString(Lorg/json/JSONObject;Ljava/lang/String;)Ljava/lang/String;
 
     move-result-object v6
 
-    :goto_1
-    if-nez v4, :cond_3
+    const-string v7, "info"
 
-    move-object v7, v3
+    invoke-static {v2, v7}, Lcom/a/a/OpenMeteoXml;->nmcString(Lorg/json/JSONObject;Ljava/lang/String;)Ljava/lang/String;
 
-    goto :goto_2
+    move-result-object v8
 
-    :cond_3
-    const-string v7, "weather"
+    const-string v9, "temperature"
 
-    invoke-virtual {v4, v7, v3}, Lorg/json/JSONObject;->optString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    invoke-static {v2, v9}, Lcom/a/a/OpenMeteoXml;->nmcDouble(Lorg/json/JSONObject;Ljava/lang/String;)D
 
-    move-result-object v7
+    move-result-wide v10
 
-    :goto_2
-    if-nez v4, :cond_4
+    new-instance v2, Ljava/lang/StringBuilder;
 
-    move-object v4, v2
+    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
 
-    goto :goto_3
+    const-string v12, "<weather>"
 
-    :cond_4
-    const-string v8, "temp"
+    invoke-virtual {v2, v12}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    invoke-virtual {v4, v8, v2}, Lorg/json/JSONObject;->optString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    iget-object v12, v0, Lcom/a/a/OpenMeteoXml$City;->country:Ljava/lang/String;
 
-    move-result-object v4
+    invoke-static {v12}, Lcom/a/a/OpenMeteoXml;->safe(Ljava/lang/String;)Ljava/lang/String;
 
-    :goto_3
-    invoke-static {v4}, Lcom/a/a/OpenMeteoXml;->parseDouble(Ljava/lang/String;)D
+    move-result-object v12
 
-    move-result-wide v8
+    const-string v13, "country"
 
-    new-instance v4, Ljava/lang/StringBuilder;
+    invoke-static {v2, v13, v12}, Lcom/a/a/OpenMeteoXml;->tag(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
 
-    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
+    const-string v12, "city"
 
-    const-string v10, "<weather>"
+    iget-object v13, v0, Lcom/a/a/OpenMeteoXml$City;->name:Ljava/lang/String;
 
-    invoke-virtual {v4, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-static {v2, v12, v13}, Lcom/a/a/OpenMeteoXml;->tag(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
 
-    iget-object v10, v0, Lcom/a/a/OpenMeteoXml$City;->country:Ljava/lang/String;
+    const-string v12, "<currentconditions daylight=\""
 
-    invoke-static {v10}, Lcom/a/a/OpenMeteoXml;->safe(Ljava/lang/String;)Ljava/lang/String;
+    invoke-virtual {v2, v12}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    move-result-object v10
-
-    const-string v11, "country"
-
-    invoke-static {v4, v11, v10}, Lcom/a/a/OpenMeteoXml;->tag(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
-
-    iget-object v10, v0, Lcom/a/a/OpenMeteoXml$City;->name:Ljava/lang/String;
-
-    iget-object v11, v0, Lcom/a/a/OpenMeteoXml$City;->admin:Ljava/lang/String;
-
-    invoke-static {v10, v11}, Lcom/a/a/OpenMeteoXml;->displayLocation(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-
-    move-result-object v10
-
-    iget-object v0, v0, Lcom/a/a/OpenMeteoXml$City;->country:Ljava/lang/String;
-
-    invoke-static {v10, v0}, Lcom/a/a/OpenMeteoXml;->displayLocation(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-
-    move-result-object v0
-
-    const-string v10, "city"
-
-    invoke-static {v4, v10, v0}, Lcom/a/a/OpenMeteoXml;->tag(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
-
-    const-string v0, "<currentconditions daylight=\""
-
-    invoke-virtual {v4, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v0
+    move-result-object v12
 
     invoke-static {v6}, Lcom/a/a/OpenMeteoXml;->isDaylight(Ljava/lang/String;)Z
 
-    move-result v10
+    move-result v13
 
-    if-eqz v10, :cond_5
+    if-eqz v13, :cond_2
 
-    const-string v10, "true"
+    const-string v13, "true"
 
-    goto :goto_4
+    goto :goto_2
 
-    :cond_5
-    const-string v10, "false"
+    :cond_2
+    const-string v13, "false"
 
-    :goto_4
-    invoke-virtual {v0, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    :goto_2
+    invoke-virtual {v12, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    move-result-object v0
+    move-result-object v12
 
-    const-string v10, "\">"
+    const-string v13, "\">"
 
-    invoke-virtual {v0, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {v12, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    const-string v0, "temperature"
-
-    invoke-static {v8, v9}, Lcom/a/a/OpenMeteoXml;->toFahrenheitString(D)Ljava/lang/String;
-
-    move-result-object v8
-
-    invoke-static {v4, v0, v8}, Lcom/a/a/OpenMeteoXml;->tag(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
-
-    invoke-static {v6, v7}, Lcom/a/a/OpenMeteoXml;->toChinaAccuIcon(Ljava/lang/String;Ljava/lang/String;)I
-
-    move-result v0
-
-    invoke-static {v0}, Ljava/lang/String;->valueOf(I)Ljava/lang/String;
-
-    move-result-object v0
-
-    const-string v6, "weathericon"
-
-    invoke-static {v4, v6, v0}, Lcom/a/a/OpenMeteoXml;->tag(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
-
-    const-string v0, "</currentconditions>"
-
-    invoke-virtual {v4, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    const-string v0, "<forecast>"
-
-    invoke-virtual {v4, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    const/4 v0, 0x0
-
-    if-nez v1, :cond_6
-
-    const/4 v7, 0x0
-
-    goto :goto_5
-
-    :cond_6
-    const/4 v7, 0x4
-
-    invoke-virtual {v1}, Lorg/json/JSONArray;->length()I
-
-    move-result v8
-
-    invoke-static {v7, v8}, Ljava/lang/Math;->min(II)I
-
-    move-result v7
-
-    :goto_5
-    nop
-
-    :goto_6
-    if-ge v0, v7, :cond_9
-
-    invoke-virtual {v1, v0}, Lorg/json/JSONArray;->optJSONObject(I)Lorg/json/JSONObject;
-
-    move-result-object v8
-
-    if-nez v8, :cond_7
-
-    goto :goto_8
-
-    :cond_7
-    const-string v9, "fa"
-
-    invoke-virtual {v8, v9, v3}, Lorg/json/JSONObject;->optString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-
-    move-result-object v9
-
-    const-string v10, "fb"
-
-    invoke-virtual {v8, v10, v3}, Lorg/json/JSONObject;->optString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    invoke-static {v10, v11}, Lcom/a/a/OpenMeteoXml;->toFahrenheitString(D)Ljava/lang/String;
 
     move-result-object v10
 
-    invoke-virtual {v8, v5, v2}, Lorg/json/JSONObject;->optString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    invoke-static {v2, v9, v10}, Lcom/a/a/OpenMeteoXml;->tag(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-static {v6, v8}, Lcom/a/a/OpenMeteoXml;->toChinaAccuIcon(Ljava/lang/String;Ljava/lang/String;)I
+
+    move-result v6
+
+    invoke-static {v6}, Ljava/lang/String;->valueOf(I)Ljava/lang/String;
+
+    move-result-object v6
+
+    const-string v8, "weathericon"
+
+    invoke-static {v2, v8, v6}, Lcom/a/a/OpenMeteoXml;->tag(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
+
+    const-string v6, "</currentconditions>"
+
+    invoke-virtual {v2, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    const-string v6, "<forecast>"
+
+    invoke-virtual {v2, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    const/4 v6, 0x0
+
+    if-nez v3, :cond_3
+
+    const/4 v10, 0x0
+
+    goto :goto_3
+
+    :cond_3
+    const/4 v10, 0x4
+
+    invoke-virtual {v3}, Lorg/json/JSONArray;->length()I
+
+    move-result v11
+
+    invoke-static {v10, v11}, Ljava/lang/Math;->min(II)I
+
+    move-result v10
+
+    :goto_3
+    nop
+
+    :goto_4
+    if-ge v6, v10, :cond_8
+
+    invoke-virtual {v3, v6}, Lorg/json/JSONArray;->optJSONObject(I)Lorg/json/JSONObject;
 
     move-result-object v11
 
-    invoke-static {v11}, Lcom/a/a/OpenMeteoXml;->parseDouble(Ljava/lang/String;)D
+    if-nez v11, :cond_4
 
-    move-result-wide v11
+    move-object/from16 v19, v1
 
-    const-string v13, "fd"
+    move-object/from16 v16, v3
 
-    invoke-virtual {v8, v13, v2}, Lorg/json/JSONObject;->optString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    move-object/from16 v20, v4
+
+    goto/16 :goto_8
+
+    :cond_4
+    const-string v12, "day"
+
+    invoke-static {v11, v12}, Lcom/a/a/OpenMeteoXml;->child(Lorg/json/JSONObject;Ljava/lang/String;)Lorg/json/JSONObject;
+
+    move-result-object v12
+
+    invoke-static {v12, v4}, Lcom/a/a/OpenMeteoXml;->child(Lorg/json/JSONObject;Ljava/lang/String;)Lorg/json/JSONObject;
+
+    move-result-object v12
+
+    const-string v13, "night"
+
+    invoke-static {v11, v13}, Lcom/a/a/OpenMeteoXml;->child(Lorg/json/JSONObject;Ljava/lang/String;)Lorg/json/JSONObject;
 
     move-result-object v13
 
-    invoke-static {v13}, Lcom/a/a/OpenMeteoXml;->parseDouble(Ljava/lang/String;)D
+    invoke-static {v13, v4}, Lcom/a/a/OpenMeteoXml;->child(Lorg/json/JSONObject;Ljava/lang/String;)Lorg/json/JSONObject;
 
-    move-result-wide v13
+    move-result-object v13
 
-    const-string v15, "fj"
+    const-string v14, "date"
 
-    invoke-virtual {v8, v15, v3}, Lorg/json/JSONObject;->optString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    const-string v15, ""
 
-    move-result-object v15
+    move-object/from16 v16, v3
 
-    const-string v2, "fi"
+    invoke-virtual {v11, v14, v15}, Lorg/json/JSONObject;->optString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 
-    invoke-virtual {v8, v2, v3}, Lorg/json/JSONObject;->optString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    move-result-object v3
 
-    move-result-object v2
+    invoke-static {v1, v3}, Lcom/a/a/OpenMeteoXml;->tempChartForDate(Lorg/json/JSONArray;Ljava/lang/String;)Lorg/json/JSONObject;
 
-    invoke-static {v15, v2, v3}, Lcom/a/a/OpenMeteoXml;->firstNonEmpty(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    move-result-object v3
 
-    move-result-object v2
+    invoke-static {v12, v5}, Lcom/a/a/OpenMeteoXml;->nmcString(Lorg/json/JSONObject;Ljava/lang/String;)Ljava/lang/String;
 
-    const-string v8, "<day>"
+    move-result-object v17
 
-    invoke-virtual {v4, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-static {v13, v5}, Lcom/a/a/OpenMeteoXml;->nmcString(Lorg/json/JSONObject;Ljava/lang/String;)Ljava/lang/String;
 
-    const-string v8, "daycode"
-
-    invoke-static {v4, v8, v2}, Lcom/a/a/OpenMeteoXml;->tag(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
+    move-result-object v18
 
     nop
 
-    invoke-virtual {v9}, Ljava/lang/String;->length()I
+    move-object/from16 v19, v1
 
-    move-result v2
+    invoke-static {v12, v7}, Lcom/a/a/OpenMeteoXml;->nmcString(Lorg/json/JSONObject;Ljava/lang/String;)Ljava/lang/String;
 
-    if-lez v2, :cond_8
+    move-result-object v1
 
-    goto :goto_7
+    move-object/from16 v20, v4
 
-    :cond_8
-    move-object v9, v10
+    invoke-static {v13, v7}, Lcom/a/a/OpenMeteoXml;->nmcString(Lorg/json/JSONObject;Ljava/lang/String;)Ljava/lang/String;
 
-    :goto_7
-    invoke-static {v9, v3}, Lcom/a/a/OpenMeteoXml;->toChinaAccuIcon(Ljava/lang/String;Ljava/lang/String;)I
+    move-result-object v4
 
-    move-result v2
+    invoke-static {v1, v4, v15}, Lcom/a/a/OpenMeteoXml;->firstNonEmpty(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 
-    invoke-static {v2}, Ljava/lang/String;->valueOf(I)Ljava/lang/String;
+    move-result-object v1
 
-    move-result-object v2
+    if-nez v3, :cond_5
 
-    invoke-static {v4, v6, v2}, Lcom/a/a/OpenMeteoXml;->tag(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
+    invoke-static {v12, v9}, Lcom/a/a/OpenMeteoXml;->nmcDouble(Lorg/json/JSONObject;Ljava/lang/String;)D
 
-    const-string v2, "hightemperature"
+    move-result-wide v21
 
-    invoke-static {v11, v12}, Lcom/a/a/OpenMeteoXml;->toFahrenheitString(D)Ljava/lang/String;
+    goto :goto_5
 
-    move-result-object v8
+    :cond_5
+    const-string v4, "max_temp"
 
-    invoke-static {v4, v2, v8}, Lcom/a/a/OpenMeteoXml;->tag(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
+    invoke-static {v3, v4}, Lcom/a/a/OpenMeteoXml;->nmcDouble(Lorg/json/JSONObject;Ljava/lang/String;)D
 
-    const-string v2, "lowtemperature"
+    move-result-wide v21
 
-    invoke-static {v13, v14}, Lcom/a/a/OpenMeteoXml;->toFahrenheitString(D)Ljava/lang/String;
+    :goto_5
+    if-nez v3, :cond_6
 
-    move-result-object v8
+    invoke-static {v13, v9}, Lcom/a/a/OpenMeteoXml;->nmcDouble(Lorg/json/JSONObject;Ljava/lang/String;)D
 
-    invoke-static {v4, v2, v8}, Lcom/a/a/OpenMeteoXml;->tag(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
-
-    const-string v2, "</day>"
-
-    invoke-virtual {v4, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    :goto_8
-    add-int/lit8 v0, v0, 0x1
-
-    const/4 v2, 0x0
+    move-result-wide v3
 
     goto :goto_6
 
-    :cond_9
+    :cond_6
+    const-string v4, "min_temp"
+
+    invoke-static {v3, v4}, Lcom/a/a/OpenMeteoXml;->nmcDouble(Lorg/json/JSONObject;Ljava/lang/String;)D
+
+    move-result-wide v3
+
+    :goto_6
+    const-string v12, "<day>"
+
+    invoke-virtual {v2, v12}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v11, v14, v15}, Lorg/json/JSONObject;->optString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v11
+
+    iget-object v12, v0, Lcom/a/a/OpenMeteoXml$City;->timezone:Ljava/lang/String;
+
+    invoke-static {v11, v12}, Lcom/a/a/OpenMeteoXml;->dayLabel(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v11
+
+    const-string v12, "daycode"
+
+    invoke-static {v2, v12, v11}, Lcom/a/a/OpenMeteoXml;->tag(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
+
+    nop
+
+    invoke-virtual/range {v17 .. v17}, Ljava/lang/String;->length()I
+
+    move-result v11
+
+    if-lez v11, :cond_7
+
+    move-object/from16 v11, v17
+
+    goto :goto_7
+
+    :cond_7
+    move-object/from16 v11, v18
+
+    :goto_7
+    invoke-static {v11, v1}, Lcom/a/a/OpenMeteoXml;->toChinaAccuIcon(Ljava/lang/String;Ljava/lang/String;)I
+
+    move-result v1
+
+    invoke-static {v1}, Ljava/lang/String;->valueOf(I)Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-static {v2, v8, v1}, Lcom/a/a/OpenMeteoXml;->tag(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
+
+    const-string v1, "hightemperature"
+
+    invoke-static/range {v21 .. v22}, Lcom/a/a/OpenMeteoXml;->toFahrenheitString(D)Ljava/lang/String;
+
+    move-result-object v11
+
+    invoke-static {v2, v1, v11}, Lcom/a/a/OpenMeteoXml;->tag(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
+
+    const-string v1, "lowtemperature"
+
+    invoke-static {v3, v4}, Lcom/a/a/OpenMeteoXml;->toFahrenheitString(D)Ljava/lang/String;
+
+    move-result-object v3
+
+    invoke-static {v2, v1, v3}, Lcom/a/a/OpenMeteoXml;->tag(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
+
+    const-string v1, "</day>"
+
+    invoke-virtual {v2, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    :goto_8
+    add-int/lit8 v6, v6, 0x1
+
+    move-object/from16 v3, v16
+
+    move-object/from16 v1, v19
+
+    move-object/from16 v4, v20
+
+    goto/16 :goto_4
+
+    :cond_8
     const-string v0, "</forecast>"
 
-    invoke-virtual {v4, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     const-string v0, "</weather>"
 
-    invoke-virtual {v4, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 
     move-result-object v0
 
     return-object v0
+
+    :cond_9
+    new-instance v0, Ljava/io/IOException;
+
+    const-string v1, "Missing NMC weather data"
+
+    invoke-direct {v0, v1}, Ljava/io/IOException;-><init>(Ljava/lang/String;)V
+
+    goto :goto_a
+
+    :goto_9
+    throw v0
+
+    :goto_a
+    goto :goto_9
 .end method
 
 .method private static buildCityXml(Ljava/lang/String;)Ljava/lang/String;
@@ -655,7 +796,7 @@
 
     const/16 v1, 0xa
 
-    invoke-static {v0, v1}, Lcom/a/a/ChinaCityIndex;->search(Ljava/lang/String;I)Ljava/util/List;
+    invoke-static {v0, v1}, Lcom/a/a/NmcCityIndex;->search(Ljava/lang/String;I)Ljava/util/List;
 
     move-result-object v0
 
@@ -1236,21 +1377,9 @@
 
     invoke-static {v2, v13, v14}, Lcom/a/a/OpenMeteoXml;->tag(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
 
-    iget-object v13, v0, Lcom/a/a/OpenMeteoXml$City;->name:Ljava/lang/String;
-
-    iget-object v14, v0, Lcom/a/a/OpenMeteoXml$City;->admin:Ljava/lang/String;
-
-    invoke-static {v13, v14}, Lcom/a/a/OpenMeteoXml;->displayLocation(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-
-    move-result-object v13
-
-    iget-object v0, v0, Lcom/a/a/OpenMeteoXml$City;->country:Ljava/lang/String;
-
-    invoke-static {v13, v0}, Lcom/a/a/OpenMeteoXml;->displayLocation(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-
-    move-result-object v0
-
     const-string v13, "city"
+
+    iget-object v0, v0, Lcom/a/a/OpenMeteoXml$City;->name:Ljava/lang/String;
 
     invoke-static {v2, v13, v0}, Lcom/a/a/OpenMeteoXml;->tag(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
 
@@ -1489,6 +1618,78 @@
     move-result-object p0
 
     return-object p0
+.end method
+
+.method private static child(Lorg/json/JSONObject;Ljava/lang/String;)Lorg/json/JSONObject;
+    .locals 0
+
+    if-nez p0, :cond_0
+
+    const/4 p0, 0x0
+
+    goto :goto_0
+
+    :cond_0
+    invoke-virtual {p0, p1}, Lorg/json/JSONObject;->optJSONObject(Ljava/lang/String;)Lorg/json/JSONObject;
+
+    move-result-object p0
+
+    :goto_0
+    return-object p0
+.end method
+
+.method private static currentLocationName()Ljava/lang/String;
+    .locals 2
+
+    :try_start_0
+    const-string v0, "com.tsf.shell.widget.alarm.d.b.a"
+
+    invoke-static {v0}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
+
+    move-result-object v0
+
+    const-string v1, "c"
+
+    invoke-virtual {v0, v1}, Ljava/lang/Class;->getField(Ljava/lang/String;)Ljava/lang/reflect/Field;
+
+    move-result-object v0
+
+    const/4 v1, 0x0
+
+    invoke-virtual {v0, v1}, Ljava/lang/reflect/Field;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v0
+
+    instance-of v1, v0, Ljava/lang/String;
+
+    if-eqz v1, :cond_0
+
+    move-object v1, v0
+
+    check-cast v1, Ljava/lang/String;
+
+    invoke-virtual {v1}, Ljava/lang/String;->length()I
+
+    move-result v1
+
+    if-lez v1, :cond_0
+
+    check-cast v0, Ljava/lang/String;
+    :try_end_0
+    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+
+    return-object v0
+
+    :cond_0
+    goto :goto_0
+
+    :catch_0
+    move-exception v0
+
+    :goto_0
+    const-string v0, "Current Location"
+
+    return-object v0
 .end method
 
 .method private static dayLabel(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
@@ -1809,7 +2010,13 @@
 
     invoke-direct {p0, p1}, Ljava/io/IOException;-><init>(Ljava/lang/String;)V
 
+    goto :goto_3
+
+    :goto_2
     throw p0
+
+    :goto_3
+    goto :goto_2
 .end method
 
 .method private static firstNonEmpty(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
@@ -1855,6 +2062,24 @@
     invoke-direct {v0, v1}, Lcom/a/a/OpenMeteoXml$City;-><init>(Lcom/a/a/OpenMeteoXml$1;)V
 
     invoke-static {v0, p0}, Lcom/a/a/OpenMeteoXml;->applyEntry(Lcom/a/a/OpenMeteoXml$City;Lcom/a/a/ChinaCityIndex$Entry;)V
+
+    const-string p0, "Asia/Shanghai"
+
+    iput-object p0, v0, Lcom/a/a/OpenMeteoXml$City;->timezone:Ljava/lang/String;
+
+    return-object v0
+.end method
+
+.method private static fromNmcEntry(Lcom/a/a/NmcCityIndex$Entry;)Lcom/a/a/OpenMeteoXml$City;
+    .locals 2
+
+    new-instance v0, Lcom/a/a/OpenMeteoXml$City;
+
+    const/4 v1, 0x0
+
+    invoke-direct {v0, v1}, Lcom/a/a/OpenMeteoXml$City;-><init>(Lcom/a/a/OpenMeteoXml$1;)V
+
+    invoke-static {v0, p0}, Lcom/a/a/OpenMeteoXml;->applyNmcEntry(Lcom/a/a/OpenMeteoXml$City;Lcom/a/a/NmcCityIndex$Entry;)V
 
     const-string p0, "Asia/Shanghai"
 
@@ -2118,8 +2343,71 @@
     throw v0
 .end method
 
+.method private static nmcDouble(Lorg/json/JSONObject;Ljava/lang/String;)D
+    .locals 3
+
+    invoke-static {p0, p1}, Lcom/a/a/OpenMeteoXml;->nmcString(Lorg/json/JSONObject;Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object p0
+
+    invoke-static {p0}, Lcom/a/a/OpenMeteoXml;->parseDouble(Ljava/lang/String;)D
+
+    move-result-wide p0
+
+    const-wide v0, 0x40c3878000000000L    # 9999.0
+
+    cmpl-double v2, p0, v0
+
+    if-nez v2, :cond_0
+
+    const-wide/high16 p0, 0x7ff8000000000000L    # Double.NaN
+
+    :cond_0
+    return-wide p0
+.end method
+
+.method private static nmcString(Lorg/json/JSONObject;Ljava/lang/String;)Ljava/lang/String;
+    .locals 1
+
+    const-string v0, ""
+
+    if-nez p0, :cond_0
+
+    return-object v0
+
+    :cond_0
+    invoke-virtual {p0, p1, v0}, Lorg/json/JSONObject;->optString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object p0
+
+    if-eqz p0, :cond_2
+
+    invoke-virtual {p0}, Ljava/lang/String;->length()I
+
+    move-result p1
+
+    if-eqz p1, :cond_2
+
+    const-string p1, "9999"
+
+    invoke-virtual {p1, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result p1
+
+    if-eqz p1, :cond_1
+
+    goto :goto_0
+
+    :cond_1
+    move-object v0, p0
+
+    :cond_2
+    :goto_0
+    return-object v0
+.end method
+
 .method public static open(Ljava/lang/String;)Ljava/io/InputStream;
-    .locals 5
+    .locals 3
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Ljava/io/IOException;
@@ -2164,7 +2452,7 @@
 
     move-result v1
 
-    if-eqz v1, :cond_4
+    if-eqz v1, :cond_3
 
     invoke-static {p0, v2}, Lcom/a/a/OpenMeteoXml;->queryParam(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 
@@ -2205,48 +2493,37 @@
 
     move-result-object p0
 
-    if-eqz v1, :cond_4
+    if-eqz v1, :cond_3
 
-    if-eqz p0, :cond_4
+    if-eqz p0, :cond_3
+
+    new-instance v2, Lcom/a/a/OpenMeteoXml$City;
+
+    invoke-direct {v2, v0}, Lcom/a/a/OpenMeteoXml$City;-><init>(Lcom/a/a/OpenMeteoXml$1;)V
 
     invoke-static {v1}, Ljava/lang/Double;->parseDouble(Ljava/lang/String;)D
 
-    move-result-wide v1
+    move-result-wide v0
+
+    iput-wide v0, v2, Lcom/a/a/OpenMeteoXml$City;->latitude:D
 
     invoke-static {p0}, Ljava/lang/Double;->parseDouble(Ljava/lang/String;)D
 
-    move-result-wide v3
+    move-result-wide v0
 
-    invoke-static {v1, v2, v3, v4}, Lcom/a/a/OpenMeteoXml;->reverseCity(DD)Lcom/a/a/OpenMeteoXml$City;
+    iput-wide v0, v2, Lcom/a/a/OpenMeteoXml$City;->longitude:D
+
+    const-string p0, "auto"
+
+    iput-object p0, v2, Lcom/a/a/OpenMeteoXml$City;->timezone:Ljava/lang/String;
+
+    invoke-static {}, Lcom/a/a/OpenMeteoXml;->currentLocationName()Ljava/lang/String;
 
     move-result-object p0
 
-    if-nez p0, :cond_3
+    invoke-static {v2, p0}, Lcom/a/a/OpenMeteoXml;->applyLocationLabel(Lcom/a/a/OpenMeteoXml$City;Ljava/lang/String;)V
 
-    new-instance p0, Lcom/a/a/OpenMeteoXml$City;
-
-    invoke-direct {p0, v0}, Lcom/a/a/OpenMeteoXml$City;-><init>(Lcom/a/a/OpenMeteoXml$1;)V
-
-    iput-wide v1, p0, Lcom/a/a/OpenMeteoXml$City;->latitude:D
-
-    iput-wide v3, p0, Lcom/a/a/OpenMeteoXml$City;->longitude:D
-
-    const-string v0, "auto"
-
-    iput-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->timezone:Ljava/lang/String;
-
-    const-string v0, "Current Location"
-
-    iput-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->name:Ljava/lang/String;
-
-    const-string v0, ""
-
-    iput-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->country:Ljava/lang/String;
-
-    iput-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->admin:Ljava/lang/String;
-
-    :cond_3
-    invoke-static {p0}, Lcom/a/a/OpenMeteoXml;->buildWeatherXml(Lcom/a/a/OpenMeteoXml$City;)Ljava/lang/String;
+    invoke-static {v2}, Lcom/a/a/OpenMeteoXml;->buildWeatherXml(Lcom/a/a/OpenMeteoXml$City;)Ljava/lang/String;
 
     move-result-object p0
 
@@ -2256,27 +2533,63 @@
 
     return-object p0
 
-    :cond_4
+    :cond_3
     return-object v0
 .end method
 
 .method private static parseDouble(Ljava/lang/String;)D
-    .locals 3
+    .locals 4
 
-    const-wide/high16 v0, 0x7ff8000000000000L    # Double.NaN
+    const-string v0, ""
+
+    const-wide/high16 v1, 0x7ff8000000000000L    # Double.NaN
 
     if-eqz p0, :cond_1
 
     invoke-virtual {p0}, Ljava/lang/String;->length()I
 
-    move-result v2
+    move-result v3
 
-    if-nez v2, :cond_0
+    if-nez v3, :cond_0
 
     goto :goto_0
 
     :cond_0
     :try_start_0
+    invoke-virtual {p0}, Ljava/lang/String;->trim()Ljava/lang/String;
+
+    move-result-object p0
+
+    const-string v3, "\u2103"
+
+    invoke-virtual {p0, v3, v0}, Ljava/lang/String;->replace(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
+
+    move-result-object p0
+
+    const-string v3, "\u00b0C"
+
+    invoke-virtual {p0, v3, v0}, Ljava/lang/String;->replace(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
+
+    move-result-object p0
+
+    const-string v3, "\u00b0"
+
+    invoke-virtual {p0, v3, v0}, Ljava/lang/String;->replace(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
+
+    move-result-object p0
+
+    const-string v3, "C"
+
+    invoke-virtual {p0, v3, v0}, Ljava/lang/String;->replace(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
+
+    move-result-object p0
+
+    const-string v3, "c"
+
+    invoke-virtual {p0, v3, v0}, Ljava/lang/String;->replace(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
+
+    move-result-object p0
+
     invoke-static {p0}, Ljava/lang/Double;->parseDouble(Ljava/lang/String;)D
 
     move-result-wide v0
@@ -2288,11 +2601,11 @@
     :catch_0
     move-exception p0
 
-    return-wide v0
+    return-wide v1
 
     :cond_1
     :goto_0
-    return-wide v0
+    return-wide v1
 .end method
 
 .method private static parsePayload(Ljava/lang/String;)Lcom/a/a/OpenMeteoXml$City;
@@ -2604,6 +2917,25 @@
     return-object p0
 .end method
 
+.method private static readNmcUrl(Ljava/lang/String;)Ljava/lang/String;
+    .locals 2
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Ljava/io/IOException;
+        }
+    .end annotation
+
+    const/4 v0, 0x1
+
+    const-string v1, "https://www.nmc.cn/"
+
+    invoke-static {p0, v0, v1}, Lcom/a/a/OpenMeteoXml;->readUrl(Ljava/lang/String;ZLjava/lang/String;)Ljava/lang/String;
+
+    move-result-object p0
+
+    return-object p0
+.end method
+
 .method private static readUrl(Ljava/lang/String;)Ljava/lang/String;
     .locals 2
     .annotation system Ldalvik/annotation/Throws;
@@ -2750,7 +3082,13 @@
 
     invoke-direct {p0, p1}, Ljava/io/IOException;-><init>(Ljava/lang/String;)V
 
+    goto :goto_3
+
+    :goto_2
     throw p0
+
+    :goto_3
+    goto :goto_2
 .end method
 
 .method private static resolveChinaCity(Lcom/a/a/OpenMeteoXml$City;)Lcom/a/a/OpenMeteoXml$City;
@@ -2765,7 +3103,7 @@
     :cond_0
     iget-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->stationId:Ljava/lang/String;
 
-    if-eqz v0, :cond_2
+    if-eqz v0, :cond_5
 
     iget-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->stationId:Ljava/lang/String;
 
@@ -2773,22 +3111,52 @@
 
     move-result v0
 
-    if-lez v0, :cond_2
+    if-lez v0, :cond_5
 
+    iget-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->stationId:Ljava/lang/String;
+
+    invoke-static {v0}, Lcom/a/a/NmcCityIndex;->findByStationId(Ljava/lang/String;)Lcom/a/a/NmcCityIndex$Entry;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_1
+
+    invoke-static {p0, v0}, Lcom/a/a/OpenMeteoXml;->applyNmcEntry(Lcom/a/a/OpenMeteoXml$City;Lcom/a/a/NmcCityIndex$Entry;)V
+
+    return-object p0
+
+    :cond_1
     iget-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->stationId:Ljava/lang/String;
 
     invoke-static {v0}, Lcom/a/a/ChinaCityIndex;->findByStationId(Ljava/lang/String;)Lcom/a/a/ChinaCityIndex$Entry;
 
     move-result-object v0
 
-    if-eqz v0, :cond_1
+    if-eqz v0, :cond_3
 
-    invoke-static {p0, v0}, Lcom/a/a/OpenMeteoXml;->applyEntry(Lcom/a/a/OpenMeteoXml$City;Lcom/a/a/ChinaCityIndex$Entry;)V
+    iget-object v1, v0, Lcom/a/a/ChinaCityIndex$Entry;->name:Ljava/lang/String;
 
-    :cond_1
-    return-object p0
+    invoke-virtual {v0}, Lcom/a/a/ChinaCityIndex$Entry;->displayAdmin()Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-static {v1, v2}, Lcom/a/a/NmcCityIndex;->match(Ljava/lang/String;Ljava/lang/String;)Lcom/a/a/NmcCityIndex$Entry;
+
+    move-result-object v1
+
+    if-eqz v1, :cond_2
+
+    invoke-static {p0, v1}, Lcom/a/a/OpenMeteoXml;->applyNmcEntry(Lcom/a/a/OpenMeteoXml$City;Lcom/a/a/NmcCityIndex$Entry;)V
+
+    goto :goto_0
 
     :cond_2
+    invoke-static {p0, v0}, Lcom/a/a/OpenMeteoXml;->applyEntry(Lcom/a/a/OpenMeteoXml$City;Lcom/a/a/ChinaCityIndex$Entry;)V
+
+    :goto_0
+    return-object p0
+
+    :cond_3
     iget-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->name:Ljava/lang/String;
 
     iget-object v1, p0, Lcom/a/a/OpenMeteoXml$City;->admin:Ljava/lang/String;
@@ -2797,7 +3165,23 @@
 
     move-result-object v0
 
-    if-nez v0, :cond_3
+    if-eqz v0, :cond_4
+
+    return-object v0
+
+    :cond_4
+    return-object p0
+
+    :cond_5
+    iget-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->name:Ljava/lang/String;
+
+    iget-object v1, p0, Lcom/a/a/OpenMeteoXml$City;->admin:Ljava/lang/String;
+
+    invoke-static {v0, v1}, Lcom/a/a/OpenMeteoXml;->resolveChinaCity(Ljava/lang/String;Ljava/lang/String;)Lcom/a/a/OpenMeteoXml$City;
+
+    move-result-object v0
+
+    if-nez v0, :cond_6
 
     iget-object v1, p0, Lcom/a/a/OpenMeteoXml$City;->country:Ljava/lang/String;
 
@@ -2805,7 +3189,7 @@
 
     move-result v1
 
-    if-eqz v1, :cond_3
+    if-eqz v1, :cond_6
 
     iget-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->name:Ljava/lang/String;
 
@@ -2821,14 +3205,14 @@
 
     move-result-object v0
 
-    :cond_3
-    if-eqz v0, :cond_6
+    :cond_6
+    if-eqz v0, :cond_9
 
     invoke-virtual {p0}, Lcom/a/a/OpenMeteoXml$City;->hasCoordinates()Z
 
     move-result v1
 
-    if-eqz v1, :cond_4
+    if-eqz v1, :cond_7
 
     iget-wide v1, p0, Lcom/a/a/OpenMeteoXml$City;->latitude:D
 
@@ -2838,10 +3222,10 @@
 
     iput-wide v1, v0, Lcom/a/a/OpenMeteoXml$City;->longitude:D
 
-    :cond_4
+    :cond_7
     iget-object v1, p0, Lcom/a/a/OpenMeteoXml$City;->timezone:Ljava/lang/String;
 
-    if-eqz v1, :cond_5
+    if-eqz v1, :cond_8
 
     iget-object v1, p0, Lcom/a/a/OpenMeteoXml$City;->timezone:Ljava/lang/String;
 
@@ -2849,36 +3233,68 @@
 
     move-result v1
 
-    if-lez v1, :cond_5
+    if-lez v1, :cond_8
 
     iget-object p0, p0, Lcom/a/a/OpenMeteoXml$City;->timezone:Ljava/lang/String;
 
     iput-object p0, v0, Lcom/a/a/OpenMeteoXml$City;->timezone:Ljava/lang/String;
 
-    :cond_5
+    :cond_8
     return-object v0
 
-    :cond_6
+    :cond_9
     return-object p0
 .end method
 
 .method private static resolveChinaCity(Ljava/lang/String;Ljava/lang/String;)Lcom/a/a/OpenMeteoXml$City;
-    .locals 0
+    .locals 1
 
-    invoke-static {p0, p1}, Lcom/a/a/ChinaCityIndex;->match(Ljava/lang/String;Ljava/lang/String;)Lcom/a/a/ChinaCityIndex$Entry;
+    invoke-static {p0, p1}, Lcom/a/a/NmcCityIndex;->match(Ljava/lang/String;Ljava/lang/String;)Lcom/a/a/NmcCityIndex$Entry;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_0
+
+    invoke-static {v0}, Lcom/a/a/OpenMeteoXml;->fromNmcEntry(Lcom/a/a/NmcCityIndex$Entry;)Lcom/a/a/OpenMeteoXml$City;
 
     move-result-object p0
-
-    if-nez p0, :cond_0
-
-    const/4 p0, 0x0
 
     return-object p0
 
     :cond_0
+    invoke-static {p0, p1}, Lcom/a/a/ChinaCityIndex;->match(Ljava/lang/String;Ljava/lang/String;)Lcom/a/a/ChinaCityIndex$Entry;
+
+    move-result-object p0
+
+    if-eqz p0, :cond_2
+
+    iget-object p1, p0, Lcom/a/a/ChinaCityIndex$Entry;->name:Ljava/lang/String;
+
+    invoke-virtual {p0}, Lcom/a/a/ChinaCityIndex$Entry;->displayAdmin()Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-static {p1, v0}, Lcom/a/a/NmcCityIndex;->match(Ljava/lang/String;Ljava/lang/String;)Lcom/a/a/NmcCityIndex$Entry;
+
+    move-result-object p1
+
+    if-eqz p1, :cond_1
+
+    invoke-static {p1}, Lcom/a/a/OpenMeteoXml;->fromNmcEntry(Lcom/a/a/NmcCityIndex$Entry;)Lcom/a/a/OpenMeteoXml$City;
+
+    move-result-object p0
+
+    return-object p0
+
+    :cond_1
     invoke-static {p0}, Lcom/a/a/OpenMeteoXml;->fromChinaEntry(Lcom/a/a/ChinaCityIndex$Entry;)Lcom/a/a/OpenMeteoXml$City;
 
     move-result-object p0
+
+    return-object p0
+
+    :cond_2
+    const/4 p0, 0x0
 
     return-object p0
 .end method
@@ -3123,6 +3539,76 @@
     invoke-virtual {p0, v0}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
 
     return-void
+.end method
+
+.method private static tempChartForDate(Lorg/json/JSONArray;Ljava/lang/String;)Lorg/json/JSONObject;
+    .locals 5
+
+    const/4 v0, 0x0
+
+    if-eqz p0, :cond_3
+
+    if-eqz p1, :cond_3
+
+    invoke-virtual {p1}, Ljava/lang/String;->length()I
+
+    move-result v1
+
+    if-nez v1, :cond_0
+
+    goto :goto_1
+
+    :cond_0
+    const/16 v1, 0x2d
+
+    const/16 v2, 0x2f
+
+    invoke-virtual {p1, v1, v2}, Ljava/lang/String;->replace(CC)Ljava/lang/String;
+
+    move-result-object p1
+
+    const/4 v1, 0x0
+
+    :goto_0
+    invoke-virtual {p0}, Lorg/json/JSONArray;->length()I
+
+    move-result v2
+
+    if-ge v1, v2, :cond_2
+
+    invoke-virtual {p0, v1}, Lorg/json/JSONArray;->optJSONObject(I)Lorg/json/JSONObject;
+
+    move-result-object v2
+
+    if-eqz v2, :cond_1
+
+    const-string v3, "time"
+
+    const-string v4, ""
+
+    invoke-virtual {v2, v3, v4}, Lorg/json/JSONObject;->optString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v3
+
+    invoke-virtual {p1, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v3
+
+    if-eqz v3, :cond_1
+
+    return-object v2
+
+    :cond_1
+    add-int/lit8 v1, v1, 0x1
+
+    goto :goto_0
+
+    :cond_2
+    return-object v0
+
+    :cond_3
+    :goto_1
+    return-object v0
 .end method
 
 .method private static toAccuIcon(I)I

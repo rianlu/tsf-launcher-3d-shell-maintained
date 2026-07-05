@@ -592,6 +592,14 @@
 
     if-eqz v0, :cond_0
 
+    sget-object v1, Lcom/tsf/shell/a/a/d;->e:[Ljava/lang/String;
+
+    invoke-static {p0, v1}, Lcom/tsf/shell/a/a/d;->a(Landroid/content/Context;[Ljava/lang/String;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_location_ready
+
     new-instance v1, Lcom/tsf/shell/widget/alarm/setting/SettingActivity$a$1;
 
     invoke-direct {v1, v0}, Lcom/tsf/shell/widget/alarm/setting/SettingActivity$a$1;-><init>(Lcom/tsf/shell/widget/alarm/setting/SettingActivity$a;)V
@@ -603,6 +611,32 @@
     sget-object v4, Lcom/tsf/shell/a/a/d;->e:[Ljava/lang/String;
 
     invoke-virtual {p0, v1, v2, v3, v4}, Lcom/tsf/shell/widget/alarm/setting/SettingActivity;->a(Lcom/tsf/shell/a/a/d$b;ZI[Ljava/lang/String;)Z
+
+    goto :cond_0
+
+    :cond_location_ready
+    sget-object v1, Lcom/tsf/shell/widget/alarm/setting/e;->c:Ljava/lang/String;
+
+    if-eqz v1, :cond_refresh_weather
+
+    invoke-virtual {v1}, Ljava/lang/String;->length()I
+
+    move-result v1
+
+    if-lez v1, :cond_refresh_weather
+
+    sget-wide v1, Lcom/tsf/shell/widget/alarm/setting/e;->f:J
+
+    const-wide/16 v3, 0x0
+
+    cmp-long v1, v1, v3
+
+    if-lez v1, :cond_refresh_weather
+
+    goto :cond_0
+
+    :cond_refresh_weather
+    invoke-direct {p0}, Lcom/tsf/shell/widget/alarm/setting/SettingActivity;->c()V
 
     :cond_0
     return-void

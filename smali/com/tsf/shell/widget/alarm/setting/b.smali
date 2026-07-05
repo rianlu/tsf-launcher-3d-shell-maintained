@@ -707,7 +707,7 @@
     if-nez v1, :cond_0
 
     .line 474
-    const-string v1, "update..."
+    const-string v1, "-- --"
 
     invoke-virtual {v0, v1}, Landroid/widget/TextView;->setText(Ljava/lang/CharSequence;)V
 
