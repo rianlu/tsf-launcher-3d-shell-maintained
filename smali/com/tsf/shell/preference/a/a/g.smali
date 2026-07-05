@@ -76,26 +76,85 @@
     invoke-direct {v0}, Lcom/censivn/C3DEngine/b/e/j;-><init>()V
 
     .line 59
+    invoke-direct {p0}, Lcom/tsf/shell/preference/a/a/g;->j()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/j;->a(Ljava/lang/String;)V
+
+    .line 81
+    invoke-virtual {p0, v0}, Lcom/tsf/shell/preference/a/a/g;->b(Lcom/censivn/C3DEngine/b/e/f;)V
+
+    .line 82
+    new-instance v0, Lcom/censivn/C3DEngine/b/e/j;
+
+    invoke-direct {v0}, Lcom/censivn/C3DEngine/b/e/j;-><init>()V
+
+    .line 83
     invoke-direct {p0}, Lcom/tsf/shell/preference/a/a/g;->i()Ljava/lang/String;
 
     move-result-object v1
 
     invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/j;->a(Ljava/lang/String;)V
 
-    .line 60
+    .line 84
     sget v1, Lcom/tsf/b$i;->mn_version_summary:I
 
     invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/j;->i(I)V
 
-    .line 61
+    .line 85
     new-instance v1, Lcom/tsf/shell/preference/a/a/g$2;
 
     invoke-direct {v1, p0}, Lcom/tsf/shell/preference/a/a/g$2;-><init>(Lcom/tsf/shell/preference/a/a/g;)V
 
-    .line 80
+    .line 86
     invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/j;->a(Lcom/censivn/C3DEngine/b/e/j$a;)V
 
-    .line 81
+    .line 87
+    invoke-virtual {p0, v0}, Lcom/tsf/shell/preference/a/a/g;->b(Lcom/censivn/C3DEngine/b/e/f;)V
+
+    .line 86
+    new-instance v0, Lcom/censivn/C3DEngine/b/e/j;
+
+    invoke-direct {v0}, Lcom/censivn/C3DEngine/b/e/j;-><init>()V
+
+    .line 87
+    const-string v1, "项目地址"
+
+    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/j;->a(Ljava/lang/String;)V
+
+    .line 88
+    const-string v1, "rianlu/tsf-launcher-3d-shell-maintained"
+
+    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/j;->b(Ljava/lang/String;)V
+
+    .line 89
+    new-instance v1, Lcom/tsf/shell/preference/a/a/g$10;
+
+    invoke-direct {v1, p0}, Lcom/tsf/shell/preference/a/a/g$10;-><init>(Lcom/tsf/shell/preference/a/a/g;)V
+
+    .line 90
+    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/j;->a(Lcom/censivn/C3DEngine/b/e/j$a;)V
+
+    .line 91
+    invoke-virtual {p0, v0}, Lcom/tsf/shell/preference/a/a/g;->b(Lcom/censivn/C3DEngine/b/e/f;)V
+
+    .line 92
+    new-instance v0, Lcom/censivn/C3DEngine/b/e/j;
+
+    invoke-direct {v0}, Lcom/censivn/C3DEngine/b/e/j;-><init>()V
+
+    .line 93
+    const-string v1, "作者/维护者"
+
+    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/j;->a(Ljava/lang/String;)V
+
+    .line 94
+    const-string v1, "禄眠 (FaceBlack)"
+
+    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/j;->b(Ljava/lang/String;)V
+
+    .line 95
     invoke-virtual {p0, v0}, Lcom/tsf/shell/preference/a/a/g;->b(Lcom/censivn/C3DEngine/b/e/f;)V
 
     .line 85
@@ -278,15 +337,7 @@
 
     .prologue
     .line 303
-    invoke-static {}, Lcom/tsf/shell/Home;->b()Lcom/tsf/shell/Home;
-
-    move-result-object v0
-
-    sget v1, Lcom/tsf/b$i;->mn_version:I
-
-    invoke-virtual {v0, v1}, Lcom/tsf/shell/Home;->getString(I)Ljava/lang/String;
-
-    move-result-object v0
+    const-string v0, "维护版本"
 
     .line 306
     :try_start_0
@@ -350,6 +401,47 @@
     invoke-virtual {v1}, Landroid/content/pm/PackageManager$NameNotFoundException;->printStackTrace()V
 
     goto :goto_0
+.end method
+
+.method private j()Ljava/lang/String;
+    .locals 3
+
+    .prologue
+    invoke-static {}, Lcom/tsf/shell/Home;->b()Lcom/tsf/shell/Home;
+
+    move-result-object v0
+
+    sget v1, Lcom/tsf/b$i;->mn_version:I
+
+    invoke-virtual {v0, v1}, Lcom/tsf/shell/Home;->getString(I)Ljava/lang/String;
+
+    move-result-object v0
+
+    new-instance v1, Ljava/lang/StringBuilder;
+
+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
+
+    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    const-string v2, " "
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    const-string v2, "3.9.4"
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    return-object v0
 .end method
 
 
