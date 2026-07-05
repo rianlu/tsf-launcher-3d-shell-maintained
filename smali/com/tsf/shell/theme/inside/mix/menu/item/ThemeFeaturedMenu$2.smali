@@ -54,11 +54,28 @@
     check-cast v0, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeFeaturedMenu$ThemeOnlineItems;
 
     .line 113
+    iget-object v0, v0, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeFeaturedMenu$ThemeOnlineItems;->packageName:Ljava/lang/String;
+
+    iget-object v1, p0, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeFeaturedMenu$2;->a:Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeFeaturedMenu;
+
+    iget-object v1, v1, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeFeaturedMenu;->manager:Lcom/tsf/shell/theme/inside/mix/menu/ThemeSettingMenu;
+
+    iget-object v1, v1, Lcom/tsf/shell/theme/inside/mix/menu/ThemeSettingMenu;->localMenu:Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeInstalledMenu;
+
+    invoke-virtual {v1, v0}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeInstalledMenu;->showThemeDetail(Ljava/lang/String;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_0
+
+    .line 119
+    return-void
+
+    .line 117
+    :cond_0
     invoke-static {}, Lcom/tsf/shell/Home;->b()Lcom/tsf/shell/Home;
 
     move-result-object v1
-
-    iget-object v0, v0, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeFeaturedMenu$ThemeOnlineItems;->packageName:Ljava/lang/String;
 
     invoke-static {v1, v0}, Lcom/tsf/shell/utils/k;->a(Landroid/app/Activity;Ljava/lang/String;)V
 

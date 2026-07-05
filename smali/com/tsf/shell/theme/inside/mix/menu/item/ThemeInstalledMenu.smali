@@ -598,3 +598,70 @@
     .line 97
     return-void
 .end method
+
+.method public showThemeDetail(Ljava/lang/String;)Z
+    .locals 4
+
+    .prologue
+    const/4 v1, 0x0
+
+    if-nez p1, :cond_0
+
+    move v0, v1
+
+    :goto_0
+    return v0
+
+    :cond_0
+    invoke-direct {p0}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeInstalledMenu;->refreshThemeLists()V
+
+    iget-object v0, p0, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeInstalledMenu;->mThemeList:Ljava/util/ArrayList;
+
+    invoke-virtual {v0}, Ljava/util/ArrayList;->iterator()Ljava/util/Iterator;
+
+    move-result-object v2
+
+    :cond_1
+    invoke-interface {v2}, Ljava/util/Iterator;->hasNext()Z
+
+    move-result v0
+
+    if-eqz v0, :cond_2
+
+    invoke-interface {v2}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Lcom/tsf/shell/theme/inside/ThemeListsManager$ThemeInfo;
+
+    iget-object v3, v0, Lcom/tsf/shell/theme/inside/ThemeListsManager$ThemeInfo;->packagename:Ljava/lang/String;
+
+    invoke-virtual {p1, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v3
+
+    if-eqz v3, :cond_1
+
+    iget-object v1, p0, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeInstalledMenu;->mDetailMenu:Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeInstalledDetailMenu;
+
+    invoke-virtual {v1, v0}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeInstalledDetailMenu;->setTheme(Lcom/tsf/shell/theme/inside/ThemeListsManager$ThemeInfo;)V
+
+    iget-object v0, p0, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeInstalledMenu;->mDetailMenu:Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeInstalledDetailMenu;
+
+    invoke-virtual {v0, p0}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeInstalledDetailMenu;->setParentMenu(Lcom/tsf/shell/f/e/g/a/c;)V
+
+    iget-object v0, p0, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeInstalledMenu;->manager:Lcom/tsf/shell/theme/inside/mix/menu/ThemeSettingMenu;
+
+    iget-object v1, p0, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeInstalledMenu;->mDetailMenu:Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeInstalledDetailMenu;
+
+    invoke-virtual {v0, v1}, Lcom/tsf/shell/theme/inside/mix/menu/ThemeSettingMenu;->changeMenu(Lcom/tsf/shell/f/e/g/a/c;)V
+
+    const/4 v0, 0x1
+
+    goto :goto_0
+
+    :cond_2
+    move v0, v1
+
+    goto :goto_0
+.end method
