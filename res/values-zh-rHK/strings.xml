@@ -738,4 +738,6 @@
     <string name="toast_toggle_lock_request_admin">鎖屏需先啟用裝置管理員，如系統頁未彈出，請去 設定 → 裝置管理應用 中手動開啟</string>
     <string name="toast_toggle_request_write_settings">請喺彈出頁面中授予「修改系統設定」權限</string>
     <string name="toast_toggle_failed">切換失敗</string>
+    <string name="theme_download_confirm_title">下載主題</string>
+    <string name="theme_download_confirm_message">是否下載 %1$s 主題?</string>
 </resources>

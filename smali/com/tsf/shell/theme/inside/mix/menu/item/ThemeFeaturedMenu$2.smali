@@ -34,7 +34,7 @@
 
 # virtual methods
 .method public a(Lcom/censivn/C3DEngine/b/f/i;ILandroid/view/MotionEvent;)V
-    .locals 2
+    .locals 3
 
     .prologue
     .line 107
@@ -54,6 +54,8 @@
     check-cast v0, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeFeaturedMenu$ThemeOnlineItems;
 
     .line 113
+    iget-object v2, v0, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeFeaturedMenu$ThemeOnlineItems;->title:Ljava/lang/String;
+
     iget-object v0, v0, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeFeaturedMenu$ThemeOnlineItems;->packageName:Ljava/lang/String;
 
     iget-object v1, p0, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeFeaturedMenu$2;->a:Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeFeaturedMenu;
@@ -77,7 +79,7 @@
 
     move-result-object v1
 
-    invoke-static {v1, v0}, Lcom/tsf/shell/utils/k;->a(Landroid/app/Activity;Ljava/lang/String;)V
+    invoke-static {v1, v0, v2}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->a(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;)V
 
     .line 119
     return-void

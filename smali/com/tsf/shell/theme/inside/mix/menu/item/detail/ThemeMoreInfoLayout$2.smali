@@ -34,34 +34,8 @@
 
 # virtual methods
 .method public a(Landroid/view/MotionEvent;)V
-    .locals 2
+    .locals 0
 
     .prologue
-    .line 97
-    iget-object v0, p0, Lcom/tsf/shell/theme/inside/mix/menu/item/detail/ThemeMoreInfoLayout$2;->a:Lcom/tsf/shell/theme/inside/mix/menu/item/detail/ThemeMoreInfoLayout;
-
-    invoke-static {v0}, Lcom/tsf/shell/theme/inside/mix/menu/item/detail/ThemeMoreInfoLayout;->access$000(Lcom/tsf/shell/theme/inside/mix/menu/item/detail/ThemeMoreInfoLayout;)Lcom/tsf/shell/theme/inside/ThemeListsManager$ThemeInfo;
-
-    move-result-object v0
-
-    if-eqz v0, :cond_0
-
-    .line 99
-    invoke-static {}, Lcom/tsf/shell/Home;->b()Lcom/tsf/shell/Home;
-
-    move-result-object v0
-
-    iget-object v1, p0, Lcom/tsf/shell/theme/inside/mix/menu/item/detail/ThemeMoreInfoLayout$2;->a:Lcom/tsf/shell/theme/inside/mix/menu/item/detail/ThemeMoreInfoLayout;
-
-    invoke-static {v1}, Lcom/tsf/shell/theme/inside/mix/menu/item/detail/ThemeMoreInfoLayout;->access$000(Lcom/tsf/shell/theme/inside/mix/menu/item/detail/ThemeMoreInfoLayout;)Lcom/tsf/shell/theme/inside/ThemeListsManager$ThemeInfo;
-
-    move-result-object v1
-
-    iget-object v1, v1, Lcom/tsf/shell/theme/inside/ThemeListsManager$ThemeInfo;->packagename:Ljava/lang/String;
-
-    invoke-static {v0, v1}, Lcom/tsf/shell/utils/k;->a(Landroid/app/Activity;Ljava/lang/String;)V
-
-    .line 103
-    :cond_0
     return-void
 .end method

@@ -109,9 +109,13 @@
     .line 27
     new-instance v1, Landroid/content/Intent;
 
-    const-string v2, "android.intent.action.DELETE"
+    const-string v2, "android.intent.action.UNINSTALL_PACKAGE"
 
     invoke-direct {v1, v2, v0}, Landroid/content/Intent;-><init>(Ljava/lang/String;Landroid/net/Uri;)V
+
+    const/high16 v0, 0x10000000
+
+    invoke-virtual {v1, v0}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
 
     .line 28
     invoke-static {}, Lcom/tsf/shell/Home;->b()Lcom/tsf/shell/Home;

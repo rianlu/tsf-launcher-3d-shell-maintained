@@ -816,4 +816,6 @@
     <string name="toast_toggle_lock_request_admin">锁屏需先激活设备管理员，如系统页未弹出，请到 设置 → 设备管理应用 中手动开启</string>
     <string name="toast_toggle_request_write_settings">请在弹出页面中授予"修改系统设置"权限</string>
     <string name="toast_toggle_failed">切换失败</string>
+    <string name="theme_download_confirm_title">下载主题</string>
+    <string name="theme_download_confirm_message">是否下载 %1$s 主题?</string>
 </resources>

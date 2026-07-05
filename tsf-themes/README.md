@@ -11,6 +11,13 @@
 - 原版与修改版使用相同文件名, 通过 `original/` 和 `modified/` 区分。
 - 不提交 apktool 反编译工程, 构建时临时生成。
 
+## 下载发布
+
+- GitHub Release tag: `tsf-themes-v1`。
+- 下载 URL 规则: `https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/download/tsf-themes-v1/{apk}`。
+- 桌面推荐页点击未安装主题时, 使用 `DownloadManager` 下载对应 `modified/` APK。
+- 下载完成后, 拉起系统安装器安装主题 APK。
+
 ## 直接使用结论
 
 - 这些主题符合 TSF 外置主题协议: `ThemeActivity` 声明 `com.tsf.shell.themes` intent-filter。

@@ -859,4 +859,6 @@ you have read and understood the"</string>
     <string name="toast_toggle_lock_request_admin">Activate device admin to enable lock screen. If the system page does not appear, please go to Settings → Device admin apps and enable it manually.</string>
     <string name="toast_toggle_request_write_settings">Please grant the \"Modify system settings\" permission in the page that opens.</string>
     <string name="toast_toggle_failed">Toggle failed.</string>
+    <string name="theme_download_confirm_title">Download theme</string>
+    <string name="theme_download_confirm_message">Download %1$s theme?</string>
 </resources>

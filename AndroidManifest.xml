@@ -8,6 +8,7 @@
     <uses-permission android:name="com.android.vending.CHECK_LICENSE"/>
     <uses-permission android:name="android.permission.PERSISTENT_ACTIVITY"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
@@ -193,6 +194,11 @@
         <receiver android:exported="false" android:name="com.tsf.extend.theme.pull.PowerStateReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:exported="true" android:name="com.tsf.shell.theme.inside.mix.menu.item.ThemeDownloadReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
             </intent-filter>
         </receiver>
         <provider android:authorities="com.tsf.extend.wallpaper" android:name="com.tsf.extend.wallpaper.WallpaperContentProvider" android:process=":wallpaper"/>
