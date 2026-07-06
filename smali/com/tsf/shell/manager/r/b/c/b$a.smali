@@ -97,31 +97,26 @@
 
     iget-object v2, p0, Lcom/tsf/shell/manager/r/b/c/b$a;->e:Landroid/content/pm/ApplicationInfo;
 
-    invoke-virtual {v1, v2}, Landroid/content/pm/PackageManager;->getResourcesForApplication(Landroid/content/pm/ApplicationInfo;)Landroid/content/res/Resources;
-    :try_end_0
-    .catch Landroid/content/pm/PackageManager$NameNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
+    invoke-virtual {v1, v2}, Landroid/content/pm/PackageManager;->getApplicationIcon(Landroid/content/pm/ApplicationInfo;)Landroid/graphics/drawable/Drawable;
 
     move-result-object v1
 
-    .line 323
-    :goto_0
-    if-eqz v1, :cond_0
+    sget-object v2, Lcom/tsf/shell/manager/o/b;->c:Lcom/tsf/shell/manager/o/a;
 
-    .line 324
-    iget-object v2, p0, Lcom/tsf/shell/manager/r/b/c/b$a;->e:Landroid/content/pm/ApplicationInfo;
+    iget v2, v2, Lcom/tsf/shell/manager/o/a;->H:I
 
-    iget v2, v2, Landroid/content/pm/ApplicationInfo;->icon:I
+    sget-object v3, Lcom/tsf/shell/manager/o/b;->c:Lcom/tsf/shell/manager/o/a;
 
-    .line 325
-    if-eqz v2, :cond_0
+    iget v3, v3, Lcom/tsf/shell/manager/o/a;->I:I
 
-    .line 326
-    invoke-static {v1, v2}, Lcom/tsf/shell/manager/r/c/a;->a(Landroid/content/res/Resources;I)Landroid/graphics/Bitmap;
+    invoke-static {v1, v2, v3}, Lcom/tsf/shell/utils/x;->a(Landroid/graphics/drawable/Drawable;II)Landroid/graphics/Bitmap;
 
     move-result-object v0
+    :try_end_0
+    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
     .line 330
-    :cond_0
+    :goto_0
     if-nez v0, :cond_1
 
     .line 332
@@ -213,10 +208,8 @@
     :catch_0
     move-exception v1
 
-    move-object v1, v0
-
-    .line 321
     goto :goto_0
+
 .end method
 
 .method public a(Lcom/tsf/shell/manager/r/b/c/b$b;)V

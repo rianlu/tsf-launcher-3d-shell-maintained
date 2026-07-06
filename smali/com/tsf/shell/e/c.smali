@@ -226,6 +226,29 @@
     goto :goto_0
 .end method
 
+.method public updateAppWidget(Landroid/widget/RemoteViews;)V
+    .locals 1
+
+    .prologue
+    .line 93
+    invoke-super {p0, p1}, Landroid/appwidget/AppWidgetHostView;->updateAppWidget(Landroid/widget/RemoteViews;)V
+
+    .line 94
+    invoke-virtual {p0}, Lcom/tsf/shell/e/c;->getHostLayout()Lcom/tsf/shell/e/b;
+
+    move-result-object v0
+
+    .line 96
+    if-eqz v0, :cond_0
+
+    .line 97
+    invoke-virtual {v0}, Lcom/tsf/shell/e/b;->e()V
+
+    .line 100
+    :cond_0
+    return-void
+.end method
+
 .method public onInterceptTouchEvent(Landroid/view/MotionEvent;)Z
     .locals 2
 

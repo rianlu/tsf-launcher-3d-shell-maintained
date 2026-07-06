@@ -41,7 +41,7 @@
 .end method
 
 .method private p()V
-    .locals 5
+    .locals 6
 
     .prologue
     .line 381
@@ -49,7 +49,7 @@
 
     iget v0, v0, Lcom/censivn/C3DEngine/api/element/TextureElement;->id:I
 
-    if-nez v0, :cond_2
+    if-nez v0, :cond_3
 
     .line 383
     const/4 v0, 0x0
@@ -59,6 +59,10 @@
     invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
 
     move-result-object v1
+
+    invoke-virtual {v1}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
+
+    move-result-object v2
 
     iget-object v2, p0, Lcom/tsf/shell/manager/r/c/f$4;->a:Ljava/lang/String;
 
@@ -72,58 +76,98 @@
 
     move-result-object v1
 
-    .line 389
-    invoke-virtual {v1}, Landroid/content/Context;->getApplicationInfo()Landroid/content/pm/ApplicationInfo;
-
-    move-result-object v2
-
-    if-eqz v2, :cond_0
-
-    invoke-virtual {v1}, Landroid/content/Context;->getApplicationInfo()Landroid/content/pm/ApplicationInfo;
-
-    move-result-object v2
-
-    iget v2, v2, Landroid/content/pm/ApplicationInfo;->icon:I
-
-    if-eqz v2, :cond_0
-
-    .line 391
-    invoke-virtual {v1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+    invoke-virtual {v1}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
 
     move-result-object v2
 
     invoke-virtual {v1}, Landroid/content/Context;->getApplicationInfo()Landroid/content/pm/ApplicationInfo;
+
+    move-result-object v3
+
+    if-eqz v3, :cond_0
+
+    invoke-virtual {v1}, Landroid/content/Context;->getApplicationInfo()Landroid/content/pm/ApplicationInfo;
+
+    move-result-object v3
+
+    invoke-virtual {v3, v2}, Landroid/content/pm/ApplicationInfo;->loadIcon(Landroid/content/pm/PackageManager;)Landroid/graphics/drawable/Drawable;
 
     move-result-object v1
 
-    iget v1, v1, Landroid/content/pm/ApplicationInfo;->icon:I
+    if-eqz v1, :cond_0
+
+    .line 391
+    iget-object v2, p0, Lcom/tsf/shell/manager/r/c/f$4;->k:Lcom/censivn/C3DEngine/b/f/k;
+
+    invoke-virtual {v2}, Lcom/censivn/C3DEngine/b/f/k;->b()F
+
+    move-result v2
+
+    float-to-int v2, v2
 
     iget-object v3, p0, Lcom/tsf/shell/manager/r/c/f$4;->k:Lcom/censivn/C3DEngine/b/f/k;
 
-    invoke-virtual {v3}, Lcom/censivn/C3DEngine/b/f/k;->b()F
+    invoke-virtual {v3}, Lcom/censivn/C3DEngine/b/f/k;->c()F
 
     move-result v3
 
     float-to-int v3, v3
 
-    iget-object v4, p0, Lcom/tsf/shell/manager/r/c/f$4;->k:Lcom/censivn/C3DEngine/b/f/k;
-
-    invoke-virtual {v4}, Lcom/censivn/C3DEngine/b/f/k;->c()F
-
-    move-result v4
-
-    float-to-int v4, v4
-
-    invoke-static {v2, v1, v3, v4}, Lcom/tsf/shell/utils/x;->a(Landroid/content/res/Resources;III)Landroid/graphics/Bitmap;
-    :try_end_0
-    .catch Landroid/content/pm/PackageManager$NameNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
+    invoke-static {v1, v2, v3}, Lcom/tsf/shell/utils/x;->a(Landroid/graphics/drawable/Drawable;II)Landroid/graphics/Bitmap;
 
     move-result-object v0
+    :try_end_0
+    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
     .line 400
+    :catch_0
     :cond_0
-    :goto_0
     if-nez v0, :cond_1
+
+    .line 401
+    :try_start_1
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
+
+    move-result-object v1
+
+    iget-object v2, p0, Lcom/tsf/shell/manager/r/c/f$4;->a:Ljava/lang/String;
+
+    invoke-virtual {v1, v2}, Landroid/content/pm/PackageManager;->getApplicationIcon(Ljava/lang/String;)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v1
+
+    if-eqz v1, :cond_1
+
+    iget-object v2, p0, Lcom/tsf/shell/manager/r/c/f$4;->k:Lcom/censivn/C3DEngine/b/f/k;
+
+    invoke-virtual {v2}, Lcom/censivn/C3DEngine/b/f/k;->b()F
+
+    move-result v2
+
+    float-to-int v2, v2
+
+    iget-object v3, p0, Lcom/tsf/shell/manager/r/c/f$4;->k:Lcom/censivn/C3DEngine/b/f/k;
+
+    invoke-virtual {v3}, Lcom/censivn/C3DEngine/b/f/k;->c()F
+
+    move-result v3
+
+    float-to-int v3, v3
+
+    invoke-static {v1, v2, v3}, Lcom/tsf/shell/utils/x;->a(Landroid/graphics/drawable/Drawable;II)Landroid/graphics/Bitmap;
+
+    move-result-object v0
+    :try_end_1
+    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_1
+
+    .line 402
+    :catch_1
+    :cond_1
+    if-nez v0, :cond_2
 
     .line 402
     sget v0, Lcom/tsf/b$d;->sym_def_app_icon:I
@@ -149,7 +193,7 @@
     move-result-object v0
 
     .line 406
-    :cond_1
+    :cond_2
     invoke-static {}, Lcom/censivn/C3DEngine/a;->g()Lcom/censivn/C3DEngine/b/c/f;
 
     move-result-object v1
@@ -162,17 +206,8 @@
     invoke-virtual {v0}, Landroid/graphics/Bitmap;->recycle()V
 
     .line 411
-    :cond_2
+    :cond_3
     return-void
-
-    .line 395
-    :catch_0
-    move-exception v1
-
-    .line 397
-    invoke-virtual {v1}, Landroid/content/pm/PackageManager$NameNotFoundException;->printStackTrace()V
-
-    goto :goto_0
 .end method
 
 

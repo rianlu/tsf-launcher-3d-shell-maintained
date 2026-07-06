@@ -437,6 +437,64 @@
     return-void
 .end method
 
+.method public e()V
+    .locals 2
+
+    .prologue
+    const/4 v1, 0x0
+
+    .line 202
+    iput-boolean v1, p0, Lcom/tsf/shell/e/b;->d:Z
+
+    .line 203
+    invoke-virtual {p0, v1}, Lcom/tsf/shell/e/b;->setVisibility(I)V
+
+    .line 204
+    iget-object v0, p0, Lcom/tsf/shell/e/b;->e:Ljava/lang/Object;
+
+    monitor-enter v0
+
+    .line 205
+    :try_start_0
+    iget-object v1, p0, Lcom/tsf/shell/e/b;->f:Ljava/lang/ref/SoftReference;
+
+    if-eqz v1, :cond_0
+
+    .line 206
+    invoke-virtual {v1}, Ljava/lang/ref/SoftReference;->clear()V
+
+    .line 207
+    const/4 v1, 0x0
+
+    iput-object v1, p0, Lcom/tsf/shell/e/b;->f:Ljava/lang/ref/SoftReference;
+
+    .line 209
+    :cond_0
+    monitor-exit v0
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    .line 211
+    invoke-virtual {p0}, Lcom/tsf/shell/e/b;->requestLayout()V
+
+    .line 212
+    invoke-super {p0}, Landroid/widget/FrameLayout;->invalidate()V
+
+    .line 213
+    return-void
+
+    .line 209
+    :catchall_0
+    move-exception v1
+
+    :try_start_1
+    monitor-exit v0
+    :try_end_1
+    .catchall {:try_start_1 .. :try_end_1} :catchall_0
+
+    throw v1
+.end method
+
 .method public cancelLongPress()V
     .locals 3
 

@@ -61,10 +61,275 @@
     return-void
 .end method
 
+.method private static a(Landroid/graphics/drawable/Drawable;II)Landroid/graphics/Bitmap;
+    .locals 5
+
+    .prologue
+    const/4 v4, 0x0
+
+    .line 84
+    invoke-virtual {p0}, Landroid/graphics/drawable/Drawable;->getIntrinsicWidth()I
+
+    move-result v0
+
+    .line 85
+    if-gtz v0, :cond_0
+
+    move v0, p1
+
+    .line 88
+    :cond_0
+    invoke-virtual {p0}, Landroid/graphics/drawable/Drawable;->getIntrinsicHeight()I
+
+    move-result v1
+
+    .line 89
+    if-gtz v1, :cond_1
+
+    move v1, p2
+
+    .line 92
+    :cond_1
+    invoke-virtual {p0}, Landroid/graphics/drawable/Drawable;->getOpacity()I
+
+    move-result v2
+
+    const/4 v3, -0x1
+
+    if-eq v2, v3, :cond_2
+
+    sget-object v2, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
+
+    .line 93
+    :goto_0
+    invoke-static {v0, v1, v2}, Landroid/graphics/Bitmap;->createBitmap(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;
+
+    move-result-object v2
+
+    .line 94
+    new-instance v3, Landroid/graphics/Canvas;
+
+    invoke-direct {v3, v2}, Landroid/graphics/Canvas;-><init>(Landroid/graphics/Bitmap;)V
+
+    .line 95
+    invoke-virtual {p0, v4, v4, v0, v1}, Landroid/graphics/drawable/Drawable;->setBounds(IIII)V
+
+    .line 96
+    invoke-virtual {p0, v3}, Landroid/graphics/drawable/Drawable;->draw(Landroid/graphics/Canvas;)V
+
+    .line 98
+    return-object v2
+
+    .line 92
+    :cond_2
+    sget-object v2, Landroid/graphics/Bitmap$Config;->RGB_565:Landroid/graphics/Bitmap$Config;
+
+    goto :goto_0
+.end method
+
+.method private static b(Landroid/graphics/Bitmap;II)Landroid/graphics/Bitmap;
+    .locals 10
+
+    .prologue
+    const/4 v9, 0x1
+
+    .line 100
+    if-nez p0, :cond_0
+
+    const/4 v0, 0x0
+
+    .line 130
+    :goto_0
+    return-object v0
+
+    .line 102
+    :cond_0
+    if-lez p1, :cond_1
+
+    if-gtz p2, :cond_2
+
+    :cond_1
+    move-object v0, p0
+
+    goto :goto_0
+
+    .line 105
+    :cond_2
+    invoke-virtual {p0}, Landroid/graphics/Bitmap;->getWidth()I
+
+    move-result v0
+
+    .line 106
+    invoke-virtual {p0}, Landroid/graphics/Bitmap;->getHeight()I
+
+    move-result v1
+
+    .line 108
+    if-lez v0, :cond_3
+
+    if-gtz v1, :cond_4
+
+    :cond_3
+    move-object v0, p0
+
+    goto :goto_0
+
+    .line 112
+    :cond_4
+    const/high16 v2, 0x3f800000    # 1.0f
+
+    .line 113
+    const/16 v3, 0x82
+
+    if-gt v0, v3, :cond_5
+
+    if-gt v1, v3, :cond_5
+
+    .line 115
+    const/high16 v2, 0x40200000    # 2.5f
+
+    .line 116
+    const/16 v3, 0x50
+
+    if-gt v0, v3, :cond_5
+
+    if-gt v1, v3, :cond_5
+
+    .line 118
+    const/high16 v2, 0x40800000    # 4.0f
+
+    .line 109
+    :cond_5
+    const/high16 v3, 0x3f800000    # 1.0f
+
+    cmpl-float v3, v2, v3
+
+    if-eqz v3, :cond_b
+
+    goto :goto_3
+
+    :cond_b
+    const/16 v3, 0x14a
+
+    if-gt v0, v3, :goto_3
+
+    const/16 v3, 0x12c
+
+    if-gt v1, v3, :goto_3
+
+    .line 120
+    const v2, 0x3fcccccd    # 1.6f
+
+    .line 121
+    const/16 v3, 0x50
+
+    if-gt v1, v3, :goto_3
+
+    .line 122
+    const/high16 v2, 0x40000000    # 2.0f
+
+    .line 123
+    :goto_3
+    int-to-float v3, p1
+
+    int-to-float v4, v0
+
+    div-float/2addr v3, v4
+
+    .line 110
+    int-to-float v4, p2
+
+    int-to-float v5, v1
+
+    div-float/2addr v4, v5
+
+    .line 111
+    invoke-static {v3, v4}, Ljava/lang/Math;->min(FF)F
+
+    move-result v3
+
+    .line 113
+    invoke-static {v3, v2}, Ljava/lang/Math;->min(FF)F
+
+    move-result v2
+
+    .line 114
+    const/high16 v3, 0x3f800000    # 1.0f
+
+    cmpl-float v3, v2, v3
+
+    if-eqz v3, :cond_6
+
+    .line 116
+    int-to-float v3, v0
+
+    mul-float/2addr v3, v2
+
+    float-to-int v4, v3
+
+    .line 117
+    int-to-float v3, v1
+
+    mul-float/2addr v3, v2
+
+    float-to-int v5, v3
+
+    .line 116
+    if-lez v4, :cond_7
+
+    move v6, v4
+
+    .line 120
+    :goto_1
+    if-lez v5, :cond_8
+
+    move v7, v5
+
+    .line 124
+    :goto_2
+    if-ne v6, v0, :cond_9
+
+    if-ne v7, v1, :cond_9
+
+    .line 125
+    :cond_6
+    move-object v0, p0
+
+    goto :goto_0
+
+    .line 127
+    :cond_9
+    invoke-static {p0, v6, v7, v9}, Landroid/graphics/Bitmap;->createScaledBitmap(Landroid/graphics/Bitmap;IIZ)Landroid/graphics/Bitmap;
+
+    move-result-object v0
+
+    .line 126
+    if-eq v0, p0, :cond_a
+
+    .line 127
+    invoke-virtual {p0}, Landroid/graphics/Bitmap;->recycle()V
+
+    .line 130
+    :cond_a
+    goto :goto_0
+
+    .line 117
+    :cond_7
+    move v6, v9
+
+    goto :goto_1
+
+    .line 121
+    :cond_8
+    move v7, v9
+
+    goto :goto_2
+.end method
+
 
 # virtual methods
 .method public a(II)Landroid/graphics/Bitmap;
-    .locals 3
+    .locals 5
     .annotation build Landroid/annotation/SuppressLint;
         value = {
             "NewApi"
@@ -75,48 +340,106 @@
     .line 92
     const/4 v0, 0x0
 
-    .line 94
-    sget v1, Landroid/os/Build$VERSION;->SDK_INT:I
+    .line 93
+    :try_start_0
+    iget-object v1, p0, Lcom/tsf/shell/f/i/c/f;->g:Landroid/appwidget/AppWidgetProviderInfo;
 
-    const/16 v2, 0xb
+    iget v2, v1, Landroid/appwidget/AppWidgetProviderInfo;->previewImage:I
 
-    if-lt v1, v2, :cond_0
+    if-eqz v2, :cond_0
 
     iget-object v1, p0, Lcom/tsf/shell/f/i/c/f;->g:Landroid/appwidget/AppWidgetProviderInfo;
 
-    iget v1, v1, Landroid/appwidget/AppWidgetProviderInfo;->previewImage:I
+    iget-object v1, v1, Landroid/appwidget/AppWidgetProviderInfo;->provider:Landroid/content/ComponentName;
 
-    if-nez v1, :cond_3
+    invoke-virtual {v1}, Landroid/content/ComponentName;->getPackageName()Ljava/lang/String;
 
-    .line 96
+    move-result-object v1
+
+    invoke-static {v1, v2}, Lcom/tsf/shell/utils/x;->a(Ljava/lang/String;I)Landroid/graphics/Bitmap;
+
+    move-result-object v0
+
+    if-nez v0, :goto_0
+
+    iget-object v1, p0, Lcom/tsf/shell/f/i/c/f;->g:Landroid/appwidget/AppWidgetProviderInfo;
+
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v2
+
+    const/4 v3, 0x0
+
+    invoke-virtual {v1, v2, v3}, Landroid/appwidget/AppWidgetProviderInfo;->loadPreviewImage(Landroid/content/Context;I)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v1
+
+    if-eqz v1, :cond_0
+
+    invoke-static {v1, p1, p2}, Lcom/tsf/shell/f/i/c/f;->a(Landroid/graphics/drawable/Drawable;II)Landroid/graphics/Bitmap;
+
+    move-result-object v0
+    :try_end_0
+    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+
+    .line 98
+    :goto_0
     :cond_0
-    iget-object v1, p0, Lcom/tsf/shell/f/i/c/f;->g:Landroid/appwidget/AppWidgetProviderInfo;
+    if-nez v0, :cond_1
 
-    iget v1, v1, Landroid/appwidget/AppWidgetProviderInfo;->icon:I
+    :try_start_1
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
+
+    move-result-object v1
+
+    iget-object v2, p0, Lcom/tsf/shell/f/i/c/f;->f:Landroid/content/pm/ApplicationInfo;
+
+    invoke-virtual {v1, v2}, Landroid/content/pm/PackageManager;->getApplicationIcon(Landroid/content/pm/ApplicationInfo;)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v1
 
     if-eqz v1, :cond_1
 
-    .line 98
-    iget-object v0, p0, Lcom/tsf/shell/f/i/c/f;->g:Landroid/appwidget/AppWidgetProviderInfo;
-
-    iget-object v0, v0, Landroid/appwidget/AppWidgetProviderInfo;->provider:Landroid/content/ComponentName;
-
-    invoke-virtual {v0}, Landroid/content/ComponentName;->getPackageName()Ljava/lang/String;
+    invoke-static {v1, p1, p2}, Lcom/tsf/shell/f/i/c/f;->a(Landroid/graphics/drawable/Drawable;II)Landroid/graphics/Bitmap;
 
     move-result-object v0
+    :try_end_1
+    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_1
 
+    .line 104
+    :goto_1
+    :cond_1
+    if-nez v0, :cond_2
+
+    :try_start_2
     iget-object v1, p0, Lcom/tsf/shell/f/i/c/f;->g:Landroid/appwidget/AppWidgetProviderInfo;
 
-    iget v1, v1, Landroid/appwidget/AppWidgetProviderInfo;->icon:I
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
 
-    invoke-static {v0, v1}, Lcom/tsf/shell/utils/x;->a(Ljava/lang/String;I)Landroid/graphics/Bitmap;
+    move-result-object v2
+
+    const/4 v3, 0x0
+
+    invoke-virtual {v1, v2, v3}, Landroid/appwidget/AppWidgetProviderInfo;->loadIcon(Landroid/content/Context;I)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v1
+
+    if-eqz v1, :cond_2
+
+    invoke-static {v1, p1, p2}, Lcom/tsf/shell/f/i/c/f;->a(Landroid/graphics/drawable/Drawable;II)Landroid/graphics/Bitmap;
 
     move-result-object v0
+    :try_end_2
+    .catch Ljava/lang/Exception; {:try_start_2 .. :try_end_2} :catch_2
 
     .line 108
-    :cond_1
-    :goto_0
-    if-nez v0, :cond_2
+    :goto_2
+    :cond_2
+    if-nez v0, :cond_3
 
     .line 110
     sget v0, Lcom/tsf/b$d;->sym_def_app_icon:I
@@ -126,33 +449,28 @@
     move-result-object v0
 
     .line 114
-    :cond_2
-    invoke-static {v0, p1, p2}, Lcom/tsf/shell/utils/q;->c(Landroid/graphics/Bitmap;II)Landroid/graphics/Bitmap;
+    :cond_3
+    invoke-static {v0, p1, p2}, Lcom/tsf/shell/f/i/c/f;->b(Landroid/graphics/Bitmap;II)Landroid/graphics/Bitmap;
 
     move-result-object v0
 
     .line 116
     return-object v0
 
-    .line 104
-    :cond_3
-    iget-object v0, p0, Lcom/tsf/shell/f/i/c/f;->g:Landroid/appwidget/AppWidgetProviderInfo;
-
-    iget-object v0, v0, Landroid/appwidget/AppWidgetProviderInfo;->provider:Landroid/content/ComponentName;
-
-    invoke-virtual {v0}, Landroid/content/ComponentName;->getPackageName()Ljava/lang/String;
-
-    move-result-object v0
-
-    iget-object v1, p0, Lcom/tsf/shell/f/i/c/f;->g:Landroid/appwidget/AppWidgetProviderInfo;
-
-    iget v1, v1, Landroid/appwidget/AppWidgetProviderInfo;->previewImage:I
-
-    invoke-static {v0, v1}, Lcom/tsf/shell/utils/x;->a(Ljava/lang/String;I)Landroid/graphics/Bitmap;
-
-    move-result-object v0
+    :catch_0
+    move-exception v1
 
     goto :goto_0
+
+    :catch_1
+    move-exception v1
+
+    goto :goto_1
+
+    :catch_2
+    move-exception v1
+
+    goto :goto_2
 .end method
 
 .method public a(IIZ)Lcom/censivn/C3DEngine/b/f/i;
