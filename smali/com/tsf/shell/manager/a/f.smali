@@ -724,10 +724,25 @@
 .end method
 
 .method public h()I
-    .locals 1
+    .locals 2
 
     .prologue
     .line 336
+    iget-object v0, p0, Lcom/tsf/shell/manager/a/f;->b:Landroid/content/ComponentName;
+
+    if-eqz v0, :cond_0
+
+    invoke-virtual {v0}, Landroid/content/ComponentName;->getPackageName()Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-static {v0}, Lcom/tsf/shell/services/NotificationBadgeService;->a(Ljava/lang/String;)I
+
+    move-result v0
+
+    return v0
+
+    :cond_0
     iget v0, p0, Lcom/tsf/shell/manager/a/f;->i:I
 
     return v0

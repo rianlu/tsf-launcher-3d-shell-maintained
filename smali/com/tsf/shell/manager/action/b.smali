@@ -1628,13 +1628,6 @@
 
     .line 247
     :cond_2
-    const/16 v0, 0x44c
-
-    if-ne p1, v0, :cond_unread_disabled
-
-    return-void
-
-    :cond_unread_disabled
     sparse-switch p1, :sswitch_data_0
 
     goto :goto_0
@@ -2163,10 +2156,6 @@
     invoke-static {v0}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
 
     move-result v0
-
-    const/16 v1, 0x44c
-
-    if-eq v0, v1, :goto_0
 
     .line 199
     const/16 v1, 0x2710
