@@ -137,5 +137,18 @@
 
     .line 492
     :cond_2
+    iget-object v0, p0, Lcom/tsf/shell/plugin/themepicker/i$3;->d:Lcom/tsf/shell/plugin/themepicker/i;
+
+    invoke-static {v0}, Lcom/tsf/shell/plugin/themepicker/i;->h(Lcom/tsf/shell/plugin/themepicker/i;)Landroid/view/View;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_3
+
+    const/16 v1, 0x8
+
+    invoke-virtual {v0, v1}, Landroid/view/View;->setVisibility(I)V
+
+    :cond_3
     return-void
 .end method

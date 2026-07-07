@@ -173,6 +173,13 @@
 
     invoke-virtual {v0, v1}, Landroid/support/v4/view/ViewPager;->setAdapter(Landroid/support/v4/view/ac;)V
 
+    .line 78
+    iget-object v0, p0, Lcom/tsf/shell/plugin/themepicker/IconPickerActivity;->m:Landroid/support/v4/view/ViewPager;
+
+    const/4 v2, 0x4
+
+    invoke-virtual {v0, v2}, Landroid/support/v4/view/ViewPager;->setOffscreenPageLimit(I)V
+
     .line 81
     sget v0, Lcom/tsf/shell/plugin/themepicker/f$f;->menu_listview:I
 

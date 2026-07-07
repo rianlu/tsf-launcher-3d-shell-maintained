@@ -193,6 +193,15 @@
 
     invoke-virtual {v0, v2}, Landroid/view/View;->setVisibility(I)V
 
+    .line 154
+    sget v0, Lcom/tsf/shell/plugin/themepicker/f$f;->mainprogress:I
+
+    invoke-virtual {v1, v0}, Landroid/view/View;->findViewById(I)Landroid/view/View;
+
+    move-result-object v0
+
+    invoke-virtual {v0, v2}, Landroid/view/View;->setVisibility(I)V
+
     .line 155
     return-object v1
 .end method

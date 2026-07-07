@@ -210,6 +210,170 @@
     return v0
 .end method
 
+.method public static b(Ljava/lang/String;)Landroid/graphics/Bitmap;
+    .locals 9
+
+    .prologue
+    const/4 v0, 0x0
+
+    .line 424
+    invoke-static {p0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_0
+
+    .line 466
+    :goto_0
+    return-object v0
+
+    .line 428
+    :cond_0
+    :try_start_0
+    invoke-static {}, Lcom/tsf/extend/h;->b()Landroid/content/Context;
+
+    move-result-object v1
+
+    const/4 v2, 0x2
+
+    invoke-virtual {v1, p0, v2}, Landroid/content/Context;->createPackageContext(Ljava/lang/String;I)Landroid/content/Context;
+
+    move-result-object v2
+
+    invoke-static {v2}, Lcom/tsf/shell/plugin/themepicker/k;->c(Landroid/content/Context;)Ljava/util/ArrayList;
+
+    move-result-object v3
+
+    if-eqz v3, :cond_1
+
+    invoke-virtual {v3}, Ljava/util/ArrayList;->size()I
+
+    move-result v4
+
+    if-lez v4, :cond_1
+
+    const/4 v4, 0x0
+
+    invoke-virtual {v3, v4}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+
+    move-result-object v3
+
+    check-cast v3, Ljava/lang/Integer;
+
+    invoke-virtual {v3}, Ljava/lang/Integer;->intValue()I
+
+    move-result v3
+
+    invoke-virtual {v2}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v2
+
+    invoke-virtual {v2, v3}, Landroid/content/res/Resources;->getDrawable(I)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v1
+
+    goto :goto_1
+
+    .line 430
+    :cond_1
+    invoke-virtual {v1}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
+
+    move-result-object v2
+
+    invoke-virtual {v2, p0}, Landroid/content/pm/PackageManager;->getApplicationIcon(Ljava/lang/String;)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v1
+
+    .line 432
+    :goto_1
+    if-eqz v1, :cond_5
+
+    instance-of v2, v1, Landroid/graphics/drawable/BitmapDrawable;
+
+    if-eqz v2, :cond_2
+
+    check-cast v1, Landroid/graphics/drawable/BitmapDrawable;
+
+    invoke-virtual {v1}, Landroid/graphics/drawable/BitmapDrawable;->getBitmap()Landroid/graphics/Bitmap;
+
+    move-result-object v0
+
+    goto :goto_0
+
+    .line 436
+    :cond_2
+    invoke-virtual {v1}, Landroid/graphics/drawable/Drawable;->getIntrinsicWidth()I
+
+    move-result v2
+
+    if-lez v2, :cond_3
+
+    const/16 v3, 0x200
+
+    if-gt v2, v3, :cond_3
+
+    goto :goto_2
+
+    :cond_3
+    const/16 v2, 0x60
+
+    .line 440
+    :goto_2
+    invoke-virtual {v1}, Landroid/graphics/drawable/Drawable;->getIntrinsicHeight()I
+
+    move-result v3
+
+    if-lez v3, :cond_4
+
+    const/16 v4, 0x200
+
+    if-gt v3, v4, :cond_4
+
+    goto :goto_3
+
+    :cond_4
+    const/16 v3, 0x60
+
+    .line 444
+    :goto_3
+    sget-object v4, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
+
+    invoke-static {v2, v3, v4}, Landroid/graphics/Bitmap;->createBitmap(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;
+
+    move-result-object v4
+
+    .line 446
+    new-instance v5, Landroid/graphics/Canvas;
+
+    invoke-direct {v5, v4}, Landroid/graphics/Canvas;-><init>(Landroid/graphics/Bitmap;)V
+
+    .line 448
+    const/4 v6, 0x0
+
+    const/4 v7, 0x0
+
+    invoke-virtual {v1, v6, v7, v2, v3}, Landroid/graphics/drawable/Drawable;->setBounds(IIII)V
+
+    .line 450
+    invoke-virtual {v1, v5}, Landroid/graphics/drawable/Drawable;->draw(Landroid/graphics/Canvas;)V
+    :try_end_0
+    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+
+    move-object v0, v4
+
+    goto :goto_0
+
+    .line 454
+    :catch_0
+    move-exception v1
+
+    goto :goto_0
+
+    .line 466
+    :cond_5
+    goto :goto_0
+.end method
+
 .method private b(Lorg/json/JSONObject;)Lcom/tsf/extend/theme/b/a;
     .locals 6
 
@@ -722,6 +886,32 @@
 
     .line 373
     :cond_1
+    invoke-static {p1}, Lcom/tsf/extend/theme/diy/c;->b(Ljava/lang/String;)Landroid/graphics/Bitmap;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_2
+
+    iget-object v1, p0, Lcom/tsf/extend/theme/diy/c;->g:Landroid/support/v4/d/f;
+
+    new-instance v2, Ljava/lang/ref/SoftReference;
+
+    invoke-direct {v2, v0}, Ljava/lang/ref/SoftReference;-><init>(Ljava/lang/Object;)V
+
+    invoke-virtual {v1, p1, v2}, Landroid/support/v4/d/f;->a(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+
+    if-eqz p2, :cond_0
+
+    invoke-static {p1, v0}, Landroid/util/Pair;->create(Ljava/lang/Object;Ljava/lang/Object;)Landroid/util/Pair;
+
+    move-result-object v0
+
+    invoke-interface {p2, v0}, Lcom/tsf/extend/theme/diy/b$a;->a(Ljava/lang/Object;)V
+
+    goto :goto_0
+
+    .line 374
+    :cond_2
     new-instance v1, Ljava/lang/ref/WeakReference;
 
     invoke-direct {v1, p2}, Ljava/lang/ref/WeakReference;-><init>(Ljava/lang/Object;)V

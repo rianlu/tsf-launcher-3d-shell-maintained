@@ -36,6 +36,8 @@
 
 .field private i:Landroid/widget/TextView;
 
+.field private j:Landroid/view/View;
+
 
 # direct methods
 .method public constructor <init>()V
@@ -119,6 +121,16 @@
     return-object v0
 .end method
 
+.method static synthetic h(Lcom/tsf/shell/plugin/themepicker/i;)Landroid/view/View;
+    .locals 1
+
+    .prologue
+    .line 42
+    iget-object v0, p0, Lcom/tsf/shell/plugin/themepicker/i;->j:Landroid/view/View;
+
+    return-object v0
+.end method
+
 
 # virtual methods
 .method public a(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;
@@ -144,6 +156,15 @@
     check-cast v0, Landroid/widget/GridView;
 
     iput-object v0, p0, Lcom/tsf/shell/plugin/themepicker/i;->e:Landroid/widget/GridView;
+
+    .line 106
+    sget v0, Lcom/tsf/shell/plugin/themepicker/f$f;->mainprogress:I
+
+    invoke-virtual {v1, v0}, Landroid/view/View;->findViewById(I)Landroid/view/View;
+
+    move-result-object v0
+
+    iput-object v0, p0, Lcom/tsf/shell/plugin/themepicker/i;->j:Landroid/view/View;
 
     .line 107
     iget-object v0, p0, Lcom/tsf/shell/plugin/themepicker/i;->e:Landroid/widget/GridView;

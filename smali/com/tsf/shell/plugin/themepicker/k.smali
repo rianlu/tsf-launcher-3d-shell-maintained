@@ -1007,7 +1007,7 @@
 .end method
 
 .method public static c(Landroid/content/Context;)Ljava/util/ArrayList;
-    .locals 1
+    .locals 2
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "(",
@@ -1030,6 +1030,12 @@
     .line 444
     if-eqz v0, :cond_1
 
+    invoke-virtual {v0}, Ljava/util/ArrayList;->size()I
+
+    move-result v1
+
+    if-lez v1, :cond_1
+
     .line 458
     :cond_0
     :goto_0
@@ -1042,9 +1048,34 @@
     move-result-object v0
 
     .line 452
-    if-nez v0, :cond_0
+    if-eqz v0, :cond_2
+
+    invoke-virtual {v0}, Ljava/util/ArrayList;->size()I
+
+    move-result v1
+
+    if-lez v1, :cond_2
+
+    goto :goto_0
+
+    .line 456
+    :cond_2
+    invoke-static {p0}, Lcom/tsf/shell/plugin/themepicker/k;->k(Landroid/content/Context;)Ljava/util/ArrayList;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_3
+
+    invoke-virtual {v0}, Ljava/util/ArrayList;->size()I
+
+    move-result v1
+
+    if-lez v1, :cond_3
+
+    goto :goto_0
 
     .line 458
+    :cond_3
     const/4 v0, 0x0
 
     goto :goto_0
@@ -1990,6 +2021,131 @@
     move-result-object v0
 
     goto :goto_2
+.end method
+
+.method private static k(Landroid/content/Context;)Ljava/util/ArrayList;
+    .locals 5
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Landroid/content/Context;",
+            ")",
+            "Ljava/util/ArrayList",
+            "<",
+            "Ljava/lang/Integer;",
+            ">;"
+        }
+    .end annotation
+
+    .prologue
+    const/4 v0, 0x0
+
+    .line 694
+    :try_start_0
+    invoke-virtual {p0}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v1
+
+    const-string v2, "appfilter"
+
+    const-string v3, "xml"
+
+    invoke-virtual {p0}, Landroid/content/Context;->getPackageName()Ljava/lang/String;
+
+    move-result-object v4
+
+    invoke-virtual {v1, v2, v3, v4}, Landroid/content/res/Resources;->getIdentifier(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)I
+
+    move-result v2
+    :try_end_0
+    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+
+    if-eqz v2, :cond_4
+
+    .line 696
+    :try_start_1
+    invoke-virtual {v1, v2}, Landroid/content/res/Resources;->getXml(I)Landroid/content/res/XmlResourceParser;
+
+    move-result-object v1
+
+    new-instance v2, Ljava/util/ArrayList;
+
+    invoke-direct {v2}, Ljava/util/ArrayList;-><init>()V
+
+    .line 698
+    :goto_0
+    invoke-interface {v1}, Landroid/content/res/XmlResourceParser;->getEventType()I
+
+    move-result v3
+
+    const/4 v4, 0x1
+
+    if-eq v3, v4, :cond_3
+
+    .line 700
+    const/4 v4, 0x2
+
+    if-ne v3, v4, :cond_2
+
+    invoke-interface {v1}, Landroid/content/res/XmlResourceParser;->getName()Ljava/lang/String;
+
+    move-result-object v3
+
+    const-string v4, "item"
+
+    invoke-virtual {v3, v4}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v3
+
+    if-eqz v3, :cond_2
+
+    .line 702
+    const/4 v3, 0x0
+
+    const-string v4, "drawable"
+
+    invoke-interface {v1, v3, v4}, Landroid/content/res/XmlResourceParser;->getAttributeValue(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v3
+
+    if-eqz v3, :cond_2
+
+    .line 704
+    invoke-virtual {v2, v3}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    .line 706
+    :cond_2
+    invoke-interface {v1}, Landroid/content/res/XmlResourceParser;->next()I
+
+    goto :goto_0
+
+    .line 708
+    :cond_3
+    invoke-interface {v1}, Landroid/content/res/XmlResourceParser;->close()V
+
+    invoke-static {p0, v2}, Lcom/tsf/shell/plugin/themepicker/k;->a(Landroid/content/Context;Ljava/util/List;)Ljava/util/ArrayList;
+
+    move-result-object v0
+    :try_end_1
+    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_0
+
+    .line 718
+    :cond_4
+    :goto_1
+    return-object v0
+
+    .line 712
+    :catch_0
+    move-exception v1
+
+    .line 714
+    invoke-virtual {v1}, Ljava/lang/Exception;->getMessage()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-static {v1}, Lcom/tsf/shell/plugin/themepicker/e;->a(Ljava/lang/String;)V
+
+    goto :goto_1
 .end method
 
 .method private static j(Landroid/content/Context;)Z

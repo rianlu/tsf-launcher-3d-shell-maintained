@@ -32,6 +32,8 @@
 
 .field private f:Landroid/content/Context;
 
+.field private static g:Ljava/util/HashMap;
+
 
 # direct methods
 .method public constructor <init>(Landroid/content/Context;Ljava/lang/String;Lcom/tsf/shell/plugin/themepicker/k$h;)V
@@ -71,12 +73,58 @@
 .end method
 
 .method protected varargs a([Ljava/lang/Void;)Ljava/lang/Void;
-    .locals 5
+    .locals 8
 
     .prologue
     const/4 v4, 0x0
 
     .line 258
+    sget-object v0, Lcom/tsf/shell/plugin/themepicker/k$d;->g:Ljava/util/HashMap;
+
+    if-nez v0, :cond_1
+
+    new-instance v0, Ljava/util/HashMap;
+
+    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
+
+    sput-object v0, Lcom/tsf/shell/plugin/themepicker/k$d;->g:Ljava/util/HashMap;
+
+    :cond_1
+    iget-object v1, p0, Lcom/tsf/shell/plugin/themepicker/k$d;->a:Ljava/lang/String;
+
+    invoke-virtual {v0, v1}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v2
+
+    check-cast v2, [Ljava/lang/Object;
+
+    if-eqz v2, :cond_2
+
+    iget-object v3, p0, Lcom/tsf/shell/plugin/themepicker/k$d;->e:Lcom/tsf/shell/plugin/themepicker/k$h;
+
+    const/4 v0, 0x0
+
+    aget-object v0, v2, v0
+
+    check-cast v0, Ljava/util/List;
+
+    const/4 v1, 0x1
+
+    aget-object v1, v2, v1
+
+    check-cast v1, Ljava/lang/String;
+
+    const/4 v5, 0x2
+
+    aget-object v2, v2, v5
+
+    check-cast v2, Ljava/lang/String;
+
+    invoke-interface {v3, v0, v1, v2}, Lcom/tsf/shell/plugin/themepicker/k$h;->a(Ljava/util/List;Ljava/lang/String;Ljava/lang/String;)V
+
+    goto :goto_0
+
+    :cond_2
     iget-object v0, p0, Lcom/tsf/shell/plugin/themepicker/k$d;->f:Landroid/content/Context;
 
     iget-object v1, p0, Lcom/tsf/shell/plugin/themepicker/k$d;->a:Ljava/lang/String;
@@ -86,7 +134,7 @@
     move-result-object v0
 
     .line 260
-    if-nez v0, :cond_1
+    if-nez v0, :cond_3
 
     .line 304
     :cond_0
@@ -94,7 +142,7 @@
     return-object v4
 
     .line 266
-    :cond_1
+    :cond_3
     invoke-static {v0}, Lcom/tsf/shell/plugin/themepicker/k;->d(Landroid/content/Context;)Ljava/lang/String;
 
     move-result-object v1
@@ -110,9 +158,28 @@
     move-result-object v0
 
     .line 272
-    if-eqz v0, :cond_0
+    const/4 v5, 0x3
 
-    .line 274
+    new-array v5, v5, [Ljava/lang/Object;
+
+    const/4 v6, 0x0
+
+    aput-object v0, v5, v6
+
+    const/4 v6, 0x1
+
+    aput-object v1, v5, v6
+
+    const/4 v6, 0x2
+
+    aput-object v2, v5, v6
+
+    sget-object v6, Lcom/tsf/shell/plugin/themepicker/k$d;->g:Ljava/util/HashMap;
+
+    iget-object v7, p0, Lcom/tsf/shell/plugin/themepicker/k$d;->a:Ljava/lang/String;
+
+    invoke-virtual {v6, v7, v5}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+
     iget-object v3, p0, Lcom/tsf/shell/plugin/themepicker/k$d;->e:Lcom/tsf/shell/plugin/themepicker/k$h;
 
     invoke-interface {v3, v0, v1, v2}, Lcom/tsf/shell/plugin/themepicker/k$h;->a(Ljava/util/List;Ljava/lang/String;Ljava/lang/String;)V

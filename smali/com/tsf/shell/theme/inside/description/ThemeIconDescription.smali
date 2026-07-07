@@ -709,36 +709,109 @@
 .end method
 
 .method public getPackageIcon()Landroid/graphics/Bitmap;
-    .locals 2
+    .locals 6
 
     .prologue
     .line 229
+    const/4 v0, 0x0
+
+    :try_start_0
     iget-object v0, p0, Lcom/tsf/shell/theme/inside/description/ThemeIconDescription;->mContext:Landroid/content/Context;
 
-    iget-object v1, p0, Lcom/tsf/shell/theme/inside/description/ThemeIconDescription;->mContext:Landroid/content/Context;
-
-    invoke-virtual {v1}, Landroid/content/Context;->getApplicationInfo()Landroid/content/pm/ApplicationInfo;
+    invoke-virtual {v0}, Landroid/content/Context;->getApplicationInfo()Landroid/content/pm/ApplicationInfo;
 
     move-result-object v1
 
     iget v1, v1, Landroid/content/pm/ApplicationInfo;->icon:I
 
+    if-eqz v1, :cond_3
+
     invoke-static {v0, v1}, Lcom/tsf/shell/utils/x;->a(Landroid/content/Context;I)Landroid/graphics/Bitmap;
+
+    move-result-object v2
+
+    .line 231
+    if-eqz v2, :cond_0
+
+    move-object v0, v2
+
+    goto :goto_0
+
+    .line 232
+    :cond_0
+    invoke-virtual {v0}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v2
+
+    invoke-virtual {v2, v1}, Landroid/content/res/Resources;->getDrawable(I)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v1
+
+    if-eqz v1, :cond_3
+
+    invoke-virtual {v1}, Landroid/graphics/drawable/Drawable;->getIntrinsicWidth()I
+
+    move-result v2
+
+    if-lez v2, :cond_1
+
+    const/16 v3, 0x200
+
+    if-gt v2, v3, :cond_1
+
+    goto :goto_1
+
+    :cond_1
+    const/16 v2, 0x60
+
+    :goto_1
+    invoke-virtual {v1}, Landroid/graphics/drawable/Drawable;->getIntrinsicHeight()I
+
+    move-result v3
+
+    if-lez v3, :cond_2
+
+    const/16 v4, 0x200
+
+    if-gt v3, v4, :cond_2
+
+    goto :goto_2
+
+    :cond_2
+    const/16 v3, 0x60
+
+    :goto_2
+    invoke-static {v1, v2, v3}, Lcom/tsf/shell/utils/x;->a(Landroid/graphics/drawable/Drawable;II)Landroid/graphics/Bitmap;
 
     move-result-object v0
 
-    .line 231
-    if-nez v0, :cond_0
+    goto :goto_0
+
+    :cond_3
+    const/4 v0, 0x0
+    :try_end_0
+    .catch Ljava/lang/Throwable; {:try_start_0 .. :try_end_0} :catch_0
 
     .line 233
+    :goto_0
+    if-eqz v0, :cond_4
+
+    .line 237
+    return-object v0
+
+    .line 233
+    :catch_0
+    move-exception v1
+
+    const/4 v0, 0x0
+
+    :cond_4
     sget v0, Lcom/tsf/b$d;->default_icon:I
 
     invoke-static {v0}, Lcom/tsf/shell/utils/x;->a(I)Landroid/graphics/Bitmap;
 
     move-result-object v0
 
-    .line 237
-    :cond_0
     return-object v0
 .end method
 
