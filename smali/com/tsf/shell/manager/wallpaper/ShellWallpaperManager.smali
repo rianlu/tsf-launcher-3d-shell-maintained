@@ -336,7 +336,7 @@
 .end method
 
 .method public static a(Landroid/app/WallpaperManager;)Z
-    .locals 3
+    .locals 4
     .annotation build Landroid/annotation/SuppressLint;
         value = {
             "ServiceCast"
@@ -396,6 +396,14 @@
     move-result-object v0
 
     const-string v2, "com.android.systemui.ImageWallpaper"
+
+    invoke-virtual {v2, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v3
+
+    if-nez v3, :cond_1
+
+    const-string v2, "com.android.systemui.wallpapers.ImageWallpaper"
 
     invoke-virtual {v2, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 

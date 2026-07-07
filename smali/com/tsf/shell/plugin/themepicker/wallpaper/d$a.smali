@@ -140,6 +140,24 @@
 
     .line 390
     invoke-virtual {v0, v1}, Landroid/app/WallpaperManager;->setStream(Ljava/io/InputStream;)V
+
+    sget-object v0, Lcom/tsf/shell/manager/a;->f:Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager;
+
+    if-eqz v0, :cond_refresh_done
+
+    const/4 p1, 0x1
+
+    iput-boolean p1, v0, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager;->c:Z
+
+    invoke-virtual {v0}, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager;->g()Lcom/censivn/C3DEngine/b/f/j;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_refresh_done
+
+    invoke-virtual {v0}, Lcom/censivn/C3DEngine/b/f/j;->invalidate()V
+
+    :cond_refresh_done
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_1
 

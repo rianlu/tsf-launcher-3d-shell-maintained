@@ -57,7 +57,7 @@
         <activity android:label="@string/launcher_name_prime" android:name="com.tsf.shell.plugin.crop.CropImageActivity" android:process=":picker" android:theme="@style/AppCompat.NoTitle"/>
         <activity android:name="com.tsf.shell.plugin.themepicker.themepreview.ThemePreviewDetilActivity" android:process=":picker" android:theme="@style/HoloWallpaperTheme.IndocatprStyle"/>
         <activity android:name="com.tsf.shell.plugin.themepicker.themepreview.ThemePreviewActivity" android:process=":picker" android:theme="@style/HoloWallpaperTheme.IndocatprStyle"/>
-        <activity android:exported="true" android:name="com.tsf.shell.plugin.themepicker.wallpaper.WallpaperPickerActivity" android:process=":wallpaperSelector" android:theme="@style/HoloWallpaperTheme">
+        <activity android:exported="true" android:name="com.tsf.shell.plugin.themepicker.wallpaper.WallpaperPickerActivity" android:theme="@style/HoloWallpaperTheme">
             <intent-filter>
                 <action android:name="android.intent.action.SET_WALLPAPER"/>
                 <category android:name="android.intent.category.DEFAULT"/>
