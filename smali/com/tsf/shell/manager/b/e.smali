@@ -1847,7 +1847,7 @@
 
     const-string v1, "smart_menu_content_type"
 
-    const/4 v2, 0x0
+    const/4 v2, 0x1
 
     invoke-interface {v0, v1, v2}, Landroid/content/SharedPreferences;->getInt(Ljava/lang/String;I)I
 

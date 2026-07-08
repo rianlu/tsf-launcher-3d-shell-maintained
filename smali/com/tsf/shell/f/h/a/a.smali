@@ -1109,7 +1109,6 @@
     goto :goto_0
 .end method
 
-
 # virtual methods
 .method public a()I
     .locals 1
@@ -1797,6 +1796,23 @@
 
     invoke-virtual {v0, v1}, Lcom/tsf/shell/manager/f/d;->a(Lcom/censivn/C3DEngine/b/f/i;)V
 
+    iget-object v0, p0, Lcom/tsf/shell/f/h/a/a;->c:Lcom/censivn/C3DEngine/b/b/a/d;
+
+    invoke-virtual {v0}, Lcom/censivn/C3DEngine/b/b/a/d;->parent()Lcom/censivn/C3DEngine/b/f/f;
+
+    move-result-object v0
+
+    if-nez v0, :cond_attach_done
+
+    iget-object v0, p0, Lcom/tsf/shell/f/h/a/a;->a:Lcom/censivn/C3DEngine/b/f/j;
+
+    iget-object v1, p0, Lcom/tsf/shell/f/h/a/a;->c:Lcom/censivn/C3DEngine/b/b/a/d;
+
+    const/4 v2, 0x0
+
+    invoke-virtual {v0, v1, v2}, Lcom/censivn/C3DEngine/b/f/j;->addChildAt(Lcom/censivn/C3DEngine/b/f/i;I)V
+
+    :cond_attach_done
     .line 754
     invoke-direct {p0}, Lcom/tsf/shell/f/h/a/a;->G()V
 

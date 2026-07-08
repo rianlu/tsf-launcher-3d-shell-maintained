@@ -1649,6 +1649,10 @@
 
     invoke-virtual {v0}, Lcom/tsf/shell/f/h/a/c;->j()V
 
+    iget-object v0, p0, Lcom/tsf/shell/f/h/b;->s:Lcom/tsf/shell/f/h/a/c;
+
+    invoke-virtual {v0}, Lcom/tsf/shell/f/h/a/c;->m()V
+
     .line 564
     sget-object v0, Lcom/tsf/shell/manager/a;->n:Lcom/tsf/shell/manager/m/b;
 
