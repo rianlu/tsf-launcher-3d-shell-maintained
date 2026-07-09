@@ -174,6 +174,8 @@
     .line 272
     const-string v0, ""
 
+    if-eqz v1, :cond_2
+
     .line 274
     :goto_0
     invoke-interface {v1}, Landroid/database/Cursor;->moveToNext()Z
@@ -207,6 +209,7 @@
     invoke-interface {v1}, Landroid/database/Cursor;->close()V
 
     .line 288
+    :cond_2
     return-object v0
 .end method
 

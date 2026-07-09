@@ -58,6 +58,63 @@
 
 
 # direct methods
+.method public constructor <init>(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)V
+    .locals 2
+
+    .prologue
+    .line 36
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    .line 37
+    const-wide/16 v0, -0x1
+
+    iput-wide v0, p0, Lcom/tsf/shell/manager/c/a/a/a;->a:J
+
+    .line 38
+    iput-object p1, p0, Lcom/tsf/shell/manager/c/a/a/a;->b:Ljava/lang/String;
+
+    .line 39
+    iput-object p2, p0, Lcom/tsf/shell/manager/c/a/a/a;->c:Ljava/lang/String;
+
+    .line 40
+    iput-object p3, p0, Lcom/tsf/shell/manager/c/a/a/a;->d:Ljava/lang/String;
+
+    .line 41
+    iput p4, p0, Lcom/tsf/shell/manager/c/a/a/a;->e:I
+
+    .line 42
+    const-string v0, ""
+
+    iput-object v0, p0, Lcom/tsf/shell/manager/c/a/a/a;->j:Ljava/lang/String;
+
+    .line 43
+    const-string v0, ""
+
+    iput-object v0, p0, Lcom/tsf/shell/manager/c/a/a/a;->k:Ljava/lang/String;
+
+    .line 44
+    new-instance v0, Ljava/util/ArrayList;
+
+    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+
+    iput-object v0, p0, Lcom/tsf/shell/manager/c/a/a/a;->f:Ljava/util/ArrayList;
+
+    .line 45
+    new-instance v0, Ljava/util/ArrayList;
+
+    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+
+    iput-object v0, p0, Lcom/tsf/shell/manager/c/a/a/a;->g:Ljava/util/ArrayList;
+
+    .line 46
+    const/4 v0, 0x0
+
+    iput-boolean v0, p0, Lcom/tsf/shell/manager/c/a/a/a;->l:Z
+
+    .line 47
+    return-void
+.end method
+
 .method private a(Landroid/graphics/Bitmap;)Landroid/graphics/Bitmap;
     .locals 4
 
@@ -847,7 +904,7 @@
     .line 238
     new-instance v1, Landroid/content/Intent;
 
-    const-string v2, "android.intent.action.CALL"
+    const-string v2, "android.intent.action.DIAL"
 
     new-instance v3, Ljava/lang/StringBuilder;
 

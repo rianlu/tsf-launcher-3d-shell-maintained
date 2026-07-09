@@ -197,6 +197,17 @@
     return-object v0
 .end method
 
+.method public a(Lcom/tsf/shell/manager/c/a/a/a;)V
+    .locals 0
+
+    .prologue
+    .line 76
+    iput-object p1, p0, Lcom/tsf/shell/f/h/a/a/b;->c:Lcom/tsf/shell/manager/c/a/a/a;
+
+    .line 77
+    return-void
+.end method
+
 .method public b()Lcom/censivn/C3DEngine/b/f/k;
     .locals 1
 

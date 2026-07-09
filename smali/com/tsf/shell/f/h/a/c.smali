@@ -204,11 +204,74 @@
 
     .line 120
     :cond_0
+    invoke-direct {p0}, Lcom/tsf/shell/f/h/a/c;->y()V
+
     iget-object v0, p0, Lcom/tsf/shell/f/h/a/c;->c:Lcom/tsf/shell/f/h/a/a/d;
 
     invoke-direct {p0, v0, v2, v2}, Lcom/tsf/shell/f/h/a/c;->a(Lcom/tsf/shell/f/h/a/c$a;ZZ)V
 
     goto :goto_0
+.end method
+
+.method private y()V
+    .locals 5
+
+    .prologue
+    .line 125
+    sget v0, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 v1, 0x17
+
+    if-lt v0, v1, :cond_0
+
+    .line 126
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_0
+
+    .line 127
+    const-string v1, "android.permission.READ_CONTACTS"
+
+    invoke-virtual {v0, v1}, Landroid/content/Context;->checkSelfPermission(Ljava/lang/String;)I
+
+    move-result v2
+
+    if-eqz v2, :cond_0
+
+    .line 128
+    new-instance v2, Landroid/content/Intent;
+
+    const-class v3, Lcom/tsf/shell/toggle/PermissionRequestActivity;
+
+    invoke-direct {v2, v0, v3}, Landroid/content/Intent;-><init>(Landroid/content/Context;Ljava/lang/Class;)V
+
+    .line 129
+    const/high16 v3, 0x10000000
+
+    invoke-virtual {v2, v3}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
+
+    .line 130
+    const/4 v3, 0x1
+
+    new-array v3, v3, [Ljava/lang/String;
+
+    const/4 v4, 0x0
+
+    aput-object v1, v3, v4
+
+    .line 131
+    const-string v1, "permissions"
+
+    invoke-virtual {v2, v1, v3}, Landroid/content/Intent;->putExtra(Ljava/lang/String;[Ljava/lang/String;)Landroid/content/Intent;
+
+    .line 132
+    invoke-virtual {v0, v2}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
+
+    .line 134
+    :cond_0
+    return-void
 .end method
 
 

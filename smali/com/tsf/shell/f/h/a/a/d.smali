@@ -130,6 +130,20 @@
 
     iput-object v0, p0, Lcom/tsf/shell/f/h/a/a/d;->h:Lcom/tsf/shell/f/h/a/a/f;
 
+    .line 62
+    iget-object v0, p0, Lcom/tsf/shell/f/h/a/a/d;->e:Lcom/censivn/C3DEngine/b/b/a/b;
+
+    iget-object v1, p0, Lcom/tsf/shell/f/h/a/a/d;->g:Lcom/tsf/shell/f/h/a/a/a;
+
+    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/b/a/b;->addChild(Lcom/censivn/C3DEngine/b/f/i;)V
+
+    .line 63
+    iget-object v0, p0, Lcom/tsf/shell/f/h/a/a/d;->e:Lcom/censivn/C3DEngine/b/b/a/b;
+
+    iget-object v1, p0, Lcom/tsf/shell/f/h/a/a/d;->h:Lcom/tsf/shell/f/h/a/a/f;
+
+    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/b/a/b;->addChild(Lcom/censivn/C3DEngine/b/f/i;)V
+
     .line 64
     iget-object v0, p0, Lcom/tsf/shell/f/h/a/a/d;->e:Lcom/censivn/C3DEngine/b/b/a/b;
 
@@ -165,6 +179,149 @@
     iget-object v0, p0, Lcom/tsf/shell/f/h/a/a/d;->e:Lcom/censivn/C3DEngine/b/b/a/b;
 
     return-object v0
+.end method
+
+.method private m()V
+    .locals 3
+
+    .prologue
+    .line 67
+    :goto_0
+    iget-object v0, p0, Lcom/tsf/shell/f/h/a/a/d;->g:Lcom/tsf/shell/f/h/a/a/a;
+
+    invoke-virtual {v0}, Lcom/tsf/shell/f/h/a/a/a;->children()Ljava/util/ArrayList;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Ljava/util/ArrayList;->isEmpty()Z
+
+    move-result v0
+
+    if-nez v0, :cond_1
+
+    .line 68
+    iget-object v0, p0, Lcom/tsf/shell/f/h/a/a/d;->g:Lcom/tsf/shell/f/h/a/a/a;
+
+    const/4 v1, 0x0
+
+    invoke-virtual {v0, v1}, Lcom/tsf/shell/f/h/a/a/a;->removeChildAt(I)Lcom/censivn/C3DEngine/b/f/i;
+
+    move-result-object v0
+
+    .line 69
+    instance-of v1, v0, Lcom/tsf/shell/f/h/a/a/b;
+
+    if-eqz v1, :cond_0
+
+    .line 70
+    check-cast v0, Lcom/tsf/shell/f/h/a/a/b;
+
+    invoke-virtual {v0}, Lcom/tsf/shell/f/h/a/a/b;->h()V
+
+    .line 72
+    :cond_0
+    goto :goto_0
+
+    .line 73
+    :cond_1
+    return-void
+.end method
+
+.method private n()V
+    .locals 8
+
+    .prologue
+    .line 76
+    invoke-direct {p0}, Lcom/tsf/shell/f/h/a/a/d;->m()V
+
+    .line 78
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v0
+
+    const/16 v1, 0xa
+
+    invoke-static {v0, v1}, Lcom/tsf/shell/manager/c/c;->c(Landroid/content/Context;I)Ljava/util/ArrayList;
+
+    move-result-object v2
+
+    .line 80
+    const/4 v3, 0x0
+
+    .line 81
+    :goto_0
+    invoke-virtual {v2}, Ljava/util/ArrayList;->size()I
+
+    move-result v0
+
+    if-ge v3, v0, :cond_0
+
+    .line 82
+    invoke-virtual {v2, v3}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+
+    move-result-object v4
+
+    check-cast v4, Lcom/tsf/shell/manager/c/a/a/a;
+
+    .line 83
+    new-instance v5, Lcom/tsf/shell/f/h/a/a/b;
+
+    invoke-direct {v5}, Lcom/tsf/shell/f/h/a/a/b;-><init>()V
+
+    .line 84
+    invoke-virtual {v5, v4}, Lcom/tsf/shell/f/h/a/a/b;->a(Lcom/tsf/shell/manager/c/a/a/a;)V
+
+    .line 85
+    invoke-virtual {v5}, Lcom/tsf/shell/f/h/a/a/b;->e()V
+
+    .line 86
+    invoke-virtual {v5}, Lcom/tsf/shell/f/h/a/a/b;->f()V
+
+    .line 87
+    iget-object v6, p0, Lcom/tsf/shell/f/h/a/a/d;->g:Lcom/tsf/shell/f/h/a/a/a;
+
+    invoke-virtual {v6, v5}, Lcom/tsf/shell/f/h/a/a/a;->addChild(Lcom/censivn/C3DEngine/b/f/i;)V
+
+    .line 81
+    add-int/lit8 v3, v3, 0x1
+
+    goto :goto_0
+
+    .line 90
+    :cond_0
+    iget-object v6, p0, Lcom/tsf/shell/f/h/a/a/d;->g:Lcom/tsf/shell/f/h/a/a/a;
+
+    invoke-virtual {v6}, Lcom/tsf/shell/f/h/a/a/a;->numChildren()I
+
+    move-result v7
+
+    if-nez v7, :cond_1
+
+    new-instance v0, Lcom/censivn/C3DEngine/b/f/m;
+
+    invoke-direct {v0}, Lcom/censivn/C3DEngine/b/f/m;-><init>()V
+
+    const/16 v1, 0x20
+
+    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/f/m;->d(I)V
+
+    const-string v1, "给联系人加星标后显示在这里"
+
+    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/f/m;->a(Ljava/lang/String;)V
+
+    invoke-virtual {v0}, Lcom/censivn/C3DEngine/b/f/m;->b()V
+
+    invoke-virtual {v6, v0}, Lcom/tsf/shell/f/h/a/a/a;->addChild(Lcom/censivn/C3DEngine/b/f/i;)V
+
+    invoke-virtual {v6}, Lcom/tsf/shell/f/h/a/a/a;->numChildren()I
+
+    move-result v7
+
+    :cond_1
+    invoke-virtual {v6, v7}, Lcom/tsf/shell/f/h/a/a/a;->b(I)V
+
+    .line 91
+    return-void
 .end method
 
 
@@ -394,6 +551,8 @@
 
     move-result-object v0
 
+    if-eqz v0, :cond_0
+
     .line 127
     invoke-static {}, Lcom/censivn/C3DEngine/a;->g()Lcom/censivn/C3DEngine/b/c/f;
 
@@ -437,6 +596,8 @@
 
     move-result-object v0
 
+    if-eqz v0, :cond_2
+
     .line 141
     invoke-static {}, Lcom/censivn/C3DEngine/a;->g()Lcom/censivn/C3DEngine/b/c/f;
 
@@ -461,6 +622,8 @@
 
     .prologue
     .line 187
+    invoke-direct {p0}, Lcom/tsf/shell/f/h/a/a/d;->n()V
+
     return-void
 .end method
 
@@ -539,10 +702,14 @@
 .end method
 
 .method public i()V
-    .locals 0
+    .locals 1
 
     .prologue
     .line 238
+    iget-object v0, p0, Lcom/tsf/shell/f/h/a/a/d;->f:Lcom/tsf/shell/f/h/a/a/e;
+
+    invoke-virtual {v0}, Lcom/tsf/shell/f/h/a/a/e;->d()V
+
     return-void
 .end method
 
