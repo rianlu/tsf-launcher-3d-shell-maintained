@@ -36,7 +36,7 @@
 
     const/4 v1, 0x0
 
-    const/16 v2, 0x22
+    const/16 v2, 0x23
 
     invoke-direct {p0, p1, v0, v1, v2}, Landroid/database/sqlite/SQLiteOpenHelper;-><init>(Landroid/content/Context;Ljava/lang/String;Landroid/database/sqlite/SQLiteDatabase$CursorFactory;I)V
 
@@ -732,6 +732,16 @@
 
     .line 563
     :cond_2
+    const/16 v0, 0x23
+
+    if-ge p2, v0, :cond_3
+
+    const-string v0, "DELETE FROM favorites WHERE intent LIKE '%i.action=19;%' OR intent LIKE '%i.action=20;%' OR title='Panda Keyboard' OR title='Theme' OR title='主题'"
+
+    invoke-virtual {p1, v0}, Landroid/database/sqlite/SQLiteDatabase;->execSQL(Ljava/lang/String;)V
+
+    .line 563
+    :cond_3
     return-void
 
     .line 545
