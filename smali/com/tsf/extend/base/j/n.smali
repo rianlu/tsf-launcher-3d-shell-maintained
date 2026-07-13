@@ -904,46 +904,6 @@
     const/4 v3, 0x0
 
     .line 373
-    .line 375
-    sget v0, Landroid/os/Build$VERSION;->SDK_INT:I
-
-    const/16 v1, 0x15
-
-    if-lt v0, v1, :cond_0
-
-    .line 376
-    new-instance v0, Landroid/content/Intent;
-
-    const-string v1, "android.intent.action.OPEN_DOCUMENT"
-
-    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
-
-    .line 377
-    const-string v1, "android.intent.category.OPENABLE"
-
-    invoke-virtual {v0, v1}, Landroid/content/Intent;->addCategory(Ljava/lang/String;)Landroid/content/Intent;
-
-    .line 378
-    const-string v1, "image/*"
-
-    invoke-virtual {v0, v1}, Landroid/content/Intent;->setType(Ljava/lang/String;)Landroid/content/Intent;
-
-    .line 380
-    :try_start_0
-    invoke-virtual {p0, v0, p1}, Landroid/app/Activity;->startActivityForResult(Landroid/content/Intent;I)V
-    :try_end_0
-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
-
-    .line 401
-    :goto_0
-    return-void
-
-    .line 382
-    :catch_0
-    move-exception v0
-
-    .line 386
-    :cond_0
     new-instance v0, Landroid/content/Intent;
 
     const-string v1, "android.intent.action.PICK"
@@ -995,7 +955,9 @@
     :catch_2
     move-exception v0
 
-    goto :goto_0
+    :goto_0
+    return-void
+
 .end method
 
 .method private static b(Landroid/content/pm/PackageManager;Landroid/content/Intent;Ljava/util/List;Z)Landroid/content/pm/ResolveInfo;
