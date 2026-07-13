@@ -55,7 +55,7 @@
 .end method
 
 .method public static a(Lcom/tsf/shell/f/i/b;Lcom/tsf/shell/f/i/c/g;)V
-    .locals 2
+    .locals 3
 
     .prologue
     .line 88
@@ -78,6 +78,34 @@
     const/16 v1, 0x3e8
 
     invoke-static {v0, v1}, Lcom/tsf/shell/manager/p/c;->a(II)V
+
+    const/4 v0, 0x1
+
+    new-array v1, v0, [Ljava/lang/String;
+
+    sget v0, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 v2, 0x21
+
+    if-lt v0, v2, :cond_music_legacy_permission
+
+    const-string v0, "android.permission.READ_MEDIA_AUDIO"
+
+    goto :goto_music_permission
+
+    :cond_music_legacy_permission
+    const-string v0, "android.permission.READ_EXTERNAL_STORAGE"
+
+    :goto_music_permission
+    const/4 v2, 0x0
+
+    aput-object v0, v1, v2
+
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v0
+
+    invoke-static {v0, v1}, Lcom/tsf/shell/toggle/PermissionRequestActivity;->request(Landroid/content/Context;[Ljava/lang/String;)V
 
     .line 100
     :cond_0

@@ -1,6 +1,8 @@
 package com.tsf.shell.toggle;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -16,6 +18,18 @@ import android.os.Bundle;
 public final class PermissionRequestActivity extends Activity {
 
     private static final int REQ = 0xA17;
+
+    public static void request(Context context, String[] permissions) {
+        for (String permission : permissions) {
+            if (context.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(context, PermissionRequestActivity.class);
+                intent.putExtra("permissions", permissions);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+                return;
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

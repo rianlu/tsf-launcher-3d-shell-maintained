@@ -16,6 +16,51 @@
     return-void
 .end method
 
+.method public static request(Landroid/content/Context;[Ljava/lang/String;)V
+    .locals 4
+
+    array-length v0, p1
+
+    const/4 v1, 0x0
+
+    :goto_0
+    if-ge v1, v0, :cond_granted
+
+    aget-object v2, p1, v1
+
+    invoke-virtual {p0, v2}, Landroid/content/Context;->checkSelfPermission(Ljava/lang/String;)I
+
+    move-result v2
+
+    if-eqz v2, :cond_next
+
+    new-instance v0, Landroid/content/Intent;
+
+    const-class v1, Lcom/tsf/shell/toggle/PermissionRequestActivity;
+
+    invoke-direct {v0, p0, v1}, Landroid/content/Intent;-><init>(Landroid/content/Context;Ljava/lang/Class;)V
+
+    const-string v1, "permissions"
+
+    invoke-virtual {v0, v1, p1}, Landroid/content/Intent;->putExtra(Ljava/lang/String;[Ljava/lang/String;)Landroid/content/Intent;
+
+    const/high16 p1, 0x10000000
+
+    invoke-virtual {v0, p1}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
+
+    invoke-virtual {p0, v0}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
+
+    return-void
+
+    :cond_next
+    add-int/lit8 v1, v1, 0x1
+
+    goto :goto_0
+
+    :cond_granted
+    return-void
+.end method
+
 
 # virtual methods
 .method protected onCreate(Landroid/os/Bundle;)V
