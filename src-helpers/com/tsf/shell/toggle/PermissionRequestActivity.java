@@ -31,6 +31,16 @@ public final class PermissionRequestActivity extends Activity {
         }
     }
 
+    public static void launchExternal(Context context, String packageName, String className) {
+        try {
+            Intent intent = new Intent();
+            intent.setClassName(packageName, className);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } catch (Exception ignored) {
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

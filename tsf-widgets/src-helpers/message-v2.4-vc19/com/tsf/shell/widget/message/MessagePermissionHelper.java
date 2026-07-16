@@ -5,10 +5,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 
 public final class MessagePermissionHelper {
     private static final String PACKAGE_NAME = "com.tsf.shell.widget.message";
+    private static final Uri BOOTSTRAP_URI = Uri.parse("content://com.tsf.shell.widget.message.bootstrap");
     private static final int REQUEST_CODE = 19;
 
     private MessagePermissionHelper() {
@@ -47,6 +49,13 @@ public final class MessagePermissionHelper {
         intent.setClassName(PACKAGE_NAME, PACKAGE_NAME + ".MessagePermissionActivity");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    public static void ensureServiceProcess(Context context) {
+        try {
+            context.getContentResolver().call(BOOTSTRAP_URI, "start", null, null);
+        } catch (Exception ignored) {
+        }
     }
 
     public static void startServiceIfPermitted(Context context) {

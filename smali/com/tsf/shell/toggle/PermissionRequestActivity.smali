@@ -16,15 +16,42 @@
     return-void
 .end method
 
+.method public static launchExternal(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)V
+    .locals 1
+
+    :try_start_0
+    new-instance v0, Landroid/content/Intent;
+
+    invoke-direct {v0}, Landroid/content/Intent;-><init>()V
+
+    invoke-virtual {v0, p1, p2}, Landroid/content/Intent;->setClassName(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;
+
+    const/high16 p1, 0x10000000
+
+    invoke-virtual {v0, p1}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
+
+    invoke-virtual {p0, v0}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
+    :try_end_0
+    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+
+    goto :goto_0
+
+    :catch_0
+    move-exception p0
+
+    :goto_0
+    return-void
+.end method
+
 .method public static request(Landroid/content/Context;[Ljava/lang/String;)V
-    .locals 4
+    .locals 3
 
     array-length v0, p1
 
     const/4 v1, 0x0
 
     :goto_0
-    if-ge v1, v0, :cond_granted
+    if-ge v1, v0, :cond_1
 
     aget-object v2, p1, v1
 
@@ -32,7 +59,7 @@
 
     move-result v2
 
-    if-eqz v2, :cond_next
+    if-eqz v2, :cond_0
 
     new-instance v0, Landroid/content/Intent;
 
@@ -52,12 +79,12 @@
 
     return-void
 
-    :cond_next
+    :cond_0
     add-int/lit8 v1, v1, 0x1
 
     goto :goto_0
 
-    :cond_granted
+    :cond_1
     return-void
 .end method
 

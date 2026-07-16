@@ -1407,10 +1407,15 @@
 
     move-result v0
 
-    if-eqz v0, :cond_0
+    if-eqz v0, :cond_1
 
     .line 471
     invoke-virtual {p1}, Lcom/tsf/shell/f/i/b;->q_()V
+
+    goto :cond_0
+
+    :cond_1
+    invoke-virtual {p1}, Lcom/tsf/shell/f/i/b;->j()V
 
     .line 475
     :cond_0

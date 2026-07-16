@@ -70,7 +70,7 @@
 
     move-result v0
 
-    if-eqz v0, :cond_0
+    if-eqz v0, :cond_message_permission
 
     .line 92
     const/16 v0, 0xc
@@ -106,6 +106,62 @@
     move-result-object v0
 
     invoke-static {v0, v1}, Lcom/tsf/shell/toggle/PermissionRequestActivity;->request(Landroid/content/Context;[Ljava/lang/String;)V
+
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v0
+
+    const-string v1, "com.tsf.shell.widget.music"
+
+    const-string v2, "com.tsf.shell.widget.music.MusicPermissionActivity"
+
+    invoke-static {v0, v1, v2}, Lcom/tsf/shell/toggle/PermissionRequestActivity;->launchExternal(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)V
+
+    goto :cond_0
+
+    :cond_message_permission
+    iget-object v0, p1, Lcom/tsf/shell/f/i/c/g;->a:Ljava/lang/String;
+
+    const-string v1, "com.tsf.shell.widget.message"
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_calendar_permission
+
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v0
+
+    const-string v1, "com.tsf.shell.widget.message"
+
+    const-string v2, "com.tsf.shell.widget.message.MessagePermissionActivity"
+
+    invoke-static {v0, v1, v2}, Lcom/tsf/shell/toggle/PermissionRequestActivity;->launchExternal(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)V
+
+    goto :cond_0
+
+    :cond_calendar_permission
+    iget-object v0, p1, Lcom/tsf/shell/f/i/c/g;->a:Ljava/lang/String;
+
+    const-string v1, "com.tsf.shell.widget.calendar"
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_0
+
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v0
+
+    const-string v1, "com.tsf.shell.widget.calendar"
+
+    const-string v2, "com.tsf.shell.widget.calendar.CalendarPermissionActivity"
+
+    invoke-static {v0, v1, v2}, Lcom/tsf/shell/toggle/PermissionRequestActivity;->launchExternal(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)V
 
     .line 100
     :cond_0
