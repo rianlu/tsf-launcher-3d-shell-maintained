@@ -1,11 +1,19 @@
-# TSF Launcher 3D Shell Maintained
+<p align="center">
+  <img src="res/drawable-xxhdpi-v4/ic_launcher_tsf.png" width="120" alt="TSF Launcher 3D Shell logo">
+</p>
 
-> 面向新版 Android 的 TSF Launcher 3D Shell 非官方兼容性维护版.
-> 在尽量保留原有 3D 桌面交互体验的前提下, 重点修复其在现代 Android 系统上的启动, 权限, 组件, 壁纸和小部件兼容问题。
+<h1 align="center">TSF Launcher 3D Shell Maintained</h1>
 
-[![Release](https://img.shields.io/github/v/release/rianlu/tsf-launcher-3d-shell-maintained?display_name=tag&style=for-the-badge)](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/latest)
-![Target SDK 28](https://img.shields.io/badge/targetSdk-28-4CAF50?style=for-the-badge)
-![Status Maintained](https://img.shields.io/badge/status-maintained-4CAF50?style=for-the-badge)
+<p align="center">
+  面向新版 Android 的 TSF Launcher 3D Shell 非官方兼容性维护版.<br>
+  在尽量保留原有 3D 桌面交互体验的前提下, 重点修复其在现代 Android 系统上的启动, 权限, 组件, 壁纸和小部件兼容问题.
+</p>
+
+<p align="center">
+  <a href="https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/tag/v3.9.4-r1"><img src="https://img.shields.io/badge/Release-v3.9.4--r1-1976D2?style=for-the-badge" alt="Release v3.9.4-r1"></a>
+  <img src="https://img.shields.io/badge/Target%20SDK-28-4CAF50?style=for-the-badge" alt="Target SDK 28">
+  <img src="https://img.shields.io/badge/Status-Maintained-4CAF50?style=for-the-badge" alt="Status Maintained">
+</p>
 
 > [!IMPORTANT]
 > 原始应用 **TSF Launcher 3D Shell** 由 **TSFUI** 开发, 原应用内关于页, 字符串资源和站点链接中保留了 `tsfui.com` 与 `service@tsfui.com` 等信息. 本仓库是独立的非官方兼容性维护项目, 与原作者无官方关联, 主要用于个人学习、兼容性分析和非商业研究。
