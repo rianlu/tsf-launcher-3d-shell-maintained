@@ -1359,66 +1359,35 @@
 .end method
 
 .method public a(Landroid/app/Activity;)Z
-    .locals 3
+    .locals 2
     .annotation build Landroid/annotation/SuppressLint;
         value = {
             "NewApi"
         }
     .end annotation
 
-    .prologue
-    const/4 v1, 0x0
-
-    .line 227
-    sget v0, Landroid/os/Build$VERSION;->SDK_INT:I
-
-    const/16 v2, 0xd
-
-    if-lt v0, v2, :cond_1
-
-    invoke-virtual {p1}, Landroid/app/Activity;->getResources()Landroid/content/res/Resources;
+    invoke-virtual {p1}, Landroid/app/Activity;->getWindow()Landroid/view/Window;
 
     move-result-object v0
 
-    invoke-virtual {v0}, Landroid/content/res/Resources;->getConfiguration()Landroid/content/res/Configuration;
+    invoke-virtual {v0}, Landroid/view/Window;->getAttributes()Landroid/view/WindowManager$LayoutParams;
 
     move-result-object v0
 
-    iget v0, v0, Landroid/content/res/Configuration;->screenHeightDp:I
+    iget v0, v0, Landroid/view/WindowManager$LayoutParams;->flags:I
 
-    int-to-float v0, v0
+    and-int/lit16 v0, v0, 0x400
 
-    invoke-static {p1, v0}, Lcom/tsf/shell/utils/r;->a(Landroid/content/Context;F)I
+    if-eqz v0, :cond_0
 
-    move-result v0
+    const/4 v0, 0x1
 
-    .line 240
-    :goto_0
-    invoke-virtual {p1}, Landroid/app/Activity;->getWindowManager()Landroid/view/WindowManager;
-
-    move-result-object v2
-
-    invoke-interface {v2}, Landroid/view/WindowManager;->getDefaultDisplay()Landroid/view/Display;
-
-    move-result-object v2
-
-    .line 249
-    invoke-virtual {v2}, Landroid/view/Display;->getHeight()I
-
-    move-result v2
-
-    if-ne v0, v2, :cond_0
-
-    const/4 v1, 0x1
+    return v0
 
     :cond_0
-    return v1
+    const/4 v0, 0x0
 
-    :cond_1
-    move v0, v1
-
-    .line 227
-    goto :goto_0
+    return v0
 .end method
 
 .method public b(Landroid/app/Activity;)V
