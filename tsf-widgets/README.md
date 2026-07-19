@@ -2,7 +2,16 @@
 
 保留 TSF 外置小部件 APK。
 
-## 目录规则
+## 来源与署名
+
+| 信息 | 内容 |
+|---|---|
+| 原始开发者和发布者 | TSFUI |
+| 原始主页 | [TSFAPP Facebook](https://www.facebook.com/TSFAPP/) |
+
+`modified/` 仅包含现代 Android 兼容性修改和维护版重新签名, 不代表原始小部件的著作权或其他权利发生转移. 上述信息来自原始 APK 元数据和原始签名证书. 权利人如需补充署名或要求移除相关资源, 请通过 [GitHub Issues](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/issues) 联系.
+
+## 目录结构
 
 - `original/`: 保留官方原版 APK, 不直接修改。
 - `modified/`: 保留已适配 APK。
@@ -11,14 +20,31 @@
 - 原版与修改版使用相同文件名, 通过 `original/` 和 `modified/` 区分。
 - 不提交 apktool 反编译工程, 构建时临时生成。
 
-## 下载发布
+## 下载与安装
 
 - GitHub Release tag: `tsf-widgets-v1`。
+- Gitee Release tag: `tsf-widgets-v1`。
 - 下载 URL 规则: `https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/download/tsf-widgets-v1/{apk}`。
+- 国内镜像 URL 规则: `https://gitee.com/rainlu/tsf-launcher-3d-shell-maintained-releases/releases/download/tsf-widgets-v1/{apk}`。
 - 桌面内触发未安装小部件时, 只对 `modified/` 中已适配 APK 使用 `DownloadManager` 下载。
+- 桌面优先使用 Gitee, 下载失败后自动切换 GitHub。
 - 下载完成后, 拉起系统安装器安装小部件 APK。
+- 安装前校验小部件 APK 与桌面使用同一签名证书。
 
-## 当前修改版
+## 资源清单
+
+| 小部件名称 | 包名 | 原始作者 | GitHub Release 文件 |
+|---|---|---|---|
+| Calendar | `com.tsf.shell.widget.calendar` | TSFUI | [calendar-v2.0-vc14.apk](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/download/tsf-widgets-v1/calendar-v2.0-vc14.apk) |
+| Album | `com.tsf.shell.widget.gallery` | TSFUI | [gallery-v2.1-vc18.apk](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/download/tsf-widgets-v1/gallery-v2.1-vc18.apk) |
+| Memo | `com.tsf.shell.widget.memo` | TSFUI | [memo-v1.6-vc10.apk](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/download/tsf-widgets-v1/memo-v1.6-vc10.apk) |
+| Message | `com.tsf.shell.widget.message` | TSFUI | [message-v2.4-vc19.apk](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/download/tsf-widgets-v1/message-v2.4-vc19.apk) |
+| Music | `com.tsf.shell.widget.music` | TSFUI | [music-v2.2-vc20.apk](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/download/tsf-widgets-v1/music-v2.2-vc20.apk) |
+| Weather | `com.tsf.shell.widget.weather` | TSFUI | [weather-v2.1-vc17.apk](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/download/tsf-widgets-v1/weather-v2.1-vc17.apk) |
+
+Gitee 镜像使用相同标签 `tsf-widgets-v1` 和相同文件名.
+
+## 适配说明
 
 - `modified/gallery-v2.1-vc18.apk`
   - 原版: `original/gallery-v2.1-vc18.apk`。

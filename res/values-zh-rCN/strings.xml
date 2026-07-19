@@ -818,4 +818,15 @@
     <string name="toast_toggle_failed">切换失败</string>
     <string name="theme_download_confirm_title">下载</string>
     <string name="theme_download_confirm_message">是否下载 %1$s?</string>
+    <string name="update_checking">正在检查更新...</string>
+    <string name="update_check_failed">检查更新失败</string>
+    <string name="update_latest">当前已是最新版本</string>
+    <string name="update_available_title">发现新版本</string>
+    <string name="update_available_message">版本 %1$s\n\n%2$s</string>
+    <string name="update_download_started">已开始下载</string>
+    <string name="update_downloading">正在下载更新</string>
+    <string name="update_download_retry">正在切换下载源...</string>
+    <string name="update_download_failed">下载失败</string>
+    <string name="update_verification_failed">安装包校验失败</string>
+    <string name="update_ready">下载完成, 请确认安装</string>
 </resources>

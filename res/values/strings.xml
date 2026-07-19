@@ -861,4 +861,15 @@ you have read and understood the"</string>
     <string name="toast_toggle_failed">Toggle failed.</string>
     <string name="theme_download_confirm_title">Download</string>
     <string name="theme_download_confirm_message">Download %1$s?</string>
+    <string name="update_checking">Checking for updates...</string>
+    <string name="update_check_failed">Unable to check for updates</string>
+    <string name="update_latest">The latest version is installed</string>
+    <string name="update_available_title">Update available</string>
+    <string name="update_available_message">Version %1$s\n\n%2$s</string>
+    <string name="update_download_started">Download started</string>
+    <string name="update_downloading">Downloading update</string>
+    <string name="update_download_retry">Switching download source...</string>
+    <string name="update_download_failed">Download failed</string>
+    <string name="update_verification_failed">Package verification failed</string>
+    <string name="update_ready">Download complete, confirm installation</string>
 </resources>

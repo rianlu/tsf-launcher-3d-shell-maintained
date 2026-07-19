@@ -10,6 +10,25 @@
 > [!IMPORTANT]
 > 原始应用 **TSF Launcher 3D Shell** 由 **TSFUI** 开发, 原应用内关于页, 字符串资源和站点链接中保留了 `tsfui.com` 与 `service@tsfui.com` 等信息. 本仓库是独立的非官方兼容性维护项目, 与原作者无官方关联, 主要用于个人学习、兼容性分析和非商业研究。
 
+## 原始项目与资源署名
+
+| 项目 | 原始开发者/作者 | 原始主页 |
+|---|---|---|
+| TSF Launcher 3D Shell | TSFUI | [TSFAPP Facebook](https://www.facebook.com/TSFAPP/) |
+| TSF 官方推荐主题 | TSFUI / TSF-C3DTeam | [TSFAPP Facebook](https://www.facebook.com/TSFAPP/) |
+| TSF 小部件 | TSFUI | [TSFAPP Facebook](https://www.facebook.com/TSFAPP/) |
+| TSF 装饰品 | TSFUI | [TSFAPP Facebook](https://www.facebook.com/TSFAPP/) |
+
+### 配套资源索引
+
+| 类别 | 数量 | 资源清单 | GitHub Release | Gitee Release |
+|---|---:|---|---|---|
+| 主题 | 17 | [主题名称与文件对应表](tsf-themes/README.md#资源清单) | [tsf-themes-v1](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/tag/tsf-themes-v1) | [tsf-themes-v1](https://gitee.com/rainlu/tsf-launcher-3d-shell-maintained-releases/releases/tag/tsf-themes-v1) |
+| 小部件 | 6 | [小部件名称与文件对应表](tsf-widgets/README.md#资源清单) | [tsf-widgets-v1](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/tag/tsf-widgets-v1) | [tsf-widgets-v1](https://gitee.com/rainlu/tsf-launcher-3d-shell-maintained-releases/releases/tag/tsf-widgets-v1) |
+| 装饰品 | 1 | [装饰品名称与文件对应表](tsf-adornments/README.md#资源清单) | [tsf-adornments-v1](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/tag/tsf-adornments-v1) | [tsf-adornments-v1](https://gitee.com/rainlu/tsf-launcher-3d-shell-maintained-releases/releases/tag/tsf-adornments-v1) |
+
+本仓库仅进行现代 Android 兼容性修改, 重新构建和维护版签名, 不主张拥有原始名称, 图标, 主题或其他资源的权利. 上述作者和主页信息来自原始 APK 元数据, 历史链接可能已经失效. 权利人如需补充署名或要求移除相关资源, 请通过 [GitHub Issues](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/issues) 联系.
+
 ## 项目愿景
 
 TSF Launcher 是一代经典且极具创新的 3D 交互桌面应用。原始 APK 停留在 Android 8 时代，当前维护分支已基于反编译工程提升到 `targetSdkVersion: 28`，继续修复其在现代 Android 系统（特别是 Android 12-16）上的兼容性问题。
@@ -17,16 +36,11 @@ TSF Launcher 是一代经典且极具创新的 3D 交互桌面应用。原始 AP
 
 ## 当前状态
 
-- [x] APK 成功反编译 (基于版本 3.9.4)
-- [x] 已累计完成 36 次维护提交, 覆盖安装兼容, 系统集成, 抽屉图标, 壁纸天气, 闹钟和小部件适配
-- [x] 已建立构建, 打包, 签名, 安装检查和发布脚本体系
-- [x] 已同步版本到 `3.9.4-r1` / `targetSdkVersion: 28`
-- [x] 已补齐 Android 12+ 组件暴露面, 前台服务, 权限链路和 64 位安装兼容
-- [x] 已修复首启方向, 前台服务通知, 壁纸加载, 抽屉拖动闪退和应用图标归一化
-- [x] 已补全默认桌面入口, 内置桌面开关, 抽屉自动分类与清理能力
-- [x] 已适配相册, 备忘录, 日历, 短信, 音乐, 天气小部件及照片装饰品
-- [ ] 整理外部插件、主题和浮游物资源的归档策略
-- [ ] 继续扩大不同 ROM、不同屏幕形态下的核心 3D 交互真机验证范围
+- [x] 维护基线为 TSF Launcher `3.9.4-r1`, `targetSdkVersion: 28`.
+- [x] 已建立检查, 构建, 正式签名, 安装和 Release 发布流程.
+- [x] 桌面及已归档配套资源可在 Android 12-16 环境安装和运行.
+- [x] 主题, 小部件和装饰品已接入 GitHub 与 Gitee 双源下载.
+- [ ] 继续扩大不同 ROM, 芯片架构和屏幕形态下的真机验证范围.
 
 ## 已完成适配梳理
 
@@ -130,13 +144,23 @@ sh tools/build_release.sh
 
 > **注意：** 需要在 `.local/signing/release.env` 中配置正确的 keystore 证书信息才能进行 Release 构建。
 
-### 修复与适配重点
+### 发布与更新
 
-为了在新版 Android 上顺利运行，后续逆向修改优先处理：
-- `AndroidManifest.xml`：权限、组件暴露面、包可见性、前台服务类型。
-- `smali/com/tsf/shell/Home.smali`：启动入口、运行时权限、桌面初始化。
-- `smali/com/tsf/shell/services/ForegroundService.smali`：前台服务通知和后台启动限制。
-- `res/`：内置资源、浮游物配置和现代系统兼容配置。
+- GitHub 作为源码和正式 Release 的唯一主记录。
+- Gitee 仓库 `rainlu/tsf-launcher-3d-shell-maintained-releases` 只保存国内发布镜像和 `update.json`。
+- 桌面检查更新时优先读取 Gitee, Gitee 无更新或不可用时核对 GitHub。
+- 主题、小部件和装饰品优先从 Gitee 下载, 失败后自动切换 GitHub。
+- 下载完成后校验 APK 签名, 桌面更新额外校验 SHA-256。
+- 具体发布顺序见 `release/README.md`。
+
+### 关键代码入口
+
+- `AndroidManifest.xml`: 权限, 组件导出状态和服务声明.
+- `smali/com/tsf/shell/Home.smali`: 桌面启动, 权限和初始化流程.
+- `smali/com/tsf/shell/services/ForegroundService.smali`: 前台服务与通知.
+- `smali/com/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver.smali`: 配套资源下载入口.
+- `smali/com/tsf/shell/update/`: 维护版更新和双源下载逻辑.
+- `res/`: 布局, 字符串和系统兼容配置.
 
 ## 社区
 

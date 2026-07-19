@@ -337,7 +337,7 @@
 .end method
 
 .method static c(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;)V
-    .locals 10
+    .locals 1
 
     .prologue
     invoke-static {p1}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->a(Ljava/lang/String;)Ljava/lang/String;
@@ -346,126 +346,21 @@
 
     if-eqz v0, :cond_plugin_file
 
-    goto :goto_file_ready
+    goto :file_ready
 
     :cond_plugin_file
     invoke-static {p1}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->d(Ljava/lang/String;)Ljava/lang/String;
 
     move-result-object v0
 
-    :goto_file_ready
-    if-eqz v0, :cond_0
+    :file_ready
+    if-eqz v0, :download_unavailable
 
-    :try_start_0
-    invoke-virtual {p0}, Landroid/app/Activity;->getApplicationContext()Landroid/content/Context;
-
-    move-result-object v1
-
-    const-string v2, "download"
-
-    invoke-virtual {v1, v2}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
-
-    move-result-object v2
-
-    check-cast v2, Landroid/app/DownloadManager;
-
-    new-instance v3, Ljava/lang/StringBuilder;
-
-    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
-
-    invoke-static {p1}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->e(Ljava/lang/String;)Ljava/lang/String;
-
-    move-result-object v4
-
-    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v3
-
-    invoke-virtual {v3, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v3
-
-    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v3
-
-    invoke-static {v3}, Landroid/net/Uri;->parse(Ljava/lang/String;)Landroid/net/Uri;
-
-    move-result-object v3
-
-    new-instance v4, Landroid/app/DownloadManager$Request;
-
-    invoke-direct {v4, v3}, Landroid/app/DownloadManager$Request;-><init>(Landroid/net/Uri;)V
-
-    if-nez p2, :cond_title
-
-    const-string p2, "TSF Theme"
-
-    :cond_title
-
-    invoke-virtual {v4, p2}, Landroid/app/DownloadManager$Request;->setTitle(Ljava/lang/CharSequence;)Landroid/app/DownloadManager$Request;
-
-    const-string v3, "Downloading theme"
-
-    invoke-virtual {v4, v3}, Landroid/app/DownloadManager$Request;->setDescription(Ljava/lang/CharSequence;)Landroid/app/DownloadManager$Request;
-
-    const-string v3, "application/vnd.android.package-archive"
-
-    invoke-virtual {v4, v3}, Landroid/app/DownloadManager$Request;->setMimeType(Ljava/lang/String;)Landroid/app/DownloadManager$Request;
-
-    const/4 v3, 0x1
-
-    invoke-virtual {v4, v3}, Landroid/app/DownloadManager$Request;->setNotificationVisibility(I)Landroid/app/DownloadManager$Request;
-
-    sget-object v3, Landroid/os/Environment;->DIRECTORY_DOWNLOADS:Ljava/lang/String;
-
-    invoke-virtual {v4, v1, v3, v0}, Landroid/app/DownloadManager$Request;->setDestinationInExternalFilesDir(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)Landroid/app/DownloadManager$Request;
-
-    invoke-virtual {v2, v4}, Landroid/app/DownloadManager;->enqueue(Landroid/app/DownloadManager$Request;)J
-
-    move-result-wide v5
-
-    const-string v3, "tsf_theme_downloads"
-
-    const/4 v4, 0x0
-
-    invoke-virtual {v1, v3, v4}, Landroid/content/Context;->getSharedPreferences(Ljava/lang/String;I)Landroid/content/SharedPreferences;
-
-    move-result-object v3
-
-    invoke-interface {v3}, Landroid/content/SharedPreferences;->edit()Landroid/content/SharedPreferences$Editor;
-
-    move-result-object v3
-
-    invoke-static {v5, v6}, Ljava/lang/String;->valueOf(J)Ljava/lang/String;
-
-    move-result-object v4
-
-    invoke-interface {v3, v4, p1}, Landroid/content/SharedPreferences$Editor;->putString(Ljava/lang/String;Ljava/lang/String;)Landroid/content/SharedPreferences$Editor;
-
-    move-result-object v3
-
-    invoke-interface {v3}, Landroid/content/SharedPreferences$Editor;->apply()V
-
-    const-string v3, "Download started"
-
-    invoke-static {v1, v3}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->b(Landroid/content/Context;Ljava/lang/String;)V
-    :try_end_0
-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
-
+    invoke-static {p0, p1, p2, v0}, Lcom/tsf/shell/update/MaintainedReleaseManager;->downloadAddon(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
     return-void
 
-    :cond_0
+    :download_unavailable
     const-string v0, "Download unavailable"
-
-    invoke-static {p0, v0}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->b(Landroid/content/Context;Ljava/lang/String;)V
-
-    return-void
-
-    :catch_0
-    move-exception v0
-
-    const-string v0, "Download failed"
 
     invoke-static {p0, v0}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->b(Landroid/content/Context;Ljava/lang/String;)V
 
@@ -600,39 +495,6 @@
     return-object v0
 .end method
 
-.method private static e(Ljava/lang/String;)Ljava/lang/String;
-    .locals 2
-
-    .prologue
-    const-string v0, "com.tsf.shell.widget.adornment"
-
-    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-
-    move-result v1
-
-    if-eqz v1, :cond_0
-
-    const-string v0, "https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/download/tsf-adornments-v1/"
-
-    return-object v0
-
-    :cond_0
-    invoke-static {p0}, Lcom/tsf/shell/theme/inside/mix/menu/item/ThemeDownloadReceiver;->d(Ljava/lang/String;)Ljava/lang/String;
-
-    move-result-object v0
-
-    if-eqz v0, :cond_1
-
-    const-string v0, "https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/download/tsf-widgets-v1/"
-
-    return-object v0
-
-    :cond_1
-    const-string v0, "https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/download/tsf-themes-v1/"
-
-    return-object v0
-.end method
-
 .method private static f(Ljava/lang/String;)Ljava/lang/String;
     .locals 2
 
@@ -746,6 +608,15 @@
     .locals 11
 
     .prologue
+    invoke-static {p1, p2}, Lcom/tsf/shell/update/MaintainedReleaseManager;->handleDownloadComplete(Landroid/content/Context;Landroid/content/Intent;)Z
+
+    move-result v0
+
+    if-eqz v0, :maintained_download_unhandled
+
+    return-void
+
+    :maintained_download_unhandled
     const-string v0, "android.intent.action.DOWNLOAD_COMPLETE"
 
     invoke-virtual {p2}, Landroid/content/Intent;->getAction()Ljava/lang/String;

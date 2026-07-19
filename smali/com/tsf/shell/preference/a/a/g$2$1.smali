@@ -45,11 +45,7 @@
 
     move-result-object v0
 
-    invoke-static {}, Lcom/censivn/C3DEngine/a;->b()Ljava/lang/String;
-
-    move-result-object v1
-
-    invoke-static {v0, v1}, Lcom/tsf/shell/utils/k;->a(Landroid/app/Activity;Ljava/lang/String;)V
+    invoke-static {v0}, Lcom/tsf/shell/update/MaintainedReleaseManager;->checkForUpdates(Landroid/app/Activity;)V
 
     .line 71
     return-void

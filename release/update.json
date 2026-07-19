@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "versionCode": 30904,
+  "versionName": "3.9.4-r1",
+  "tag": "v3.9.4-r1",
+  "fileName": "tsf-launcher-maintained-3.9.4-r1.apk",
+  "sha256": "857ac1561d582cd60f10a853ebcb518de833f5987cd2e50670a42645a35c716e",
+  "changelog": "Initial maintained release.",
+  "changelogZh": "维护版首次正式发布."
+}
