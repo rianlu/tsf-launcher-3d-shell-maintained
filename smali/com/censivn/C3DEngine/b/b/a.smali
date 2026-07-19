@@ -365,29 +365,9 @@
 
     .line 144
     :cond_0
-    sget v0, Lcom/censivn/C3DEngine/b/b/a;->M:I
+    invoke-static {p0}, Lcom/censivn/C3DEngine/b/b/a;->d(Landroid/app/Activity;)I
 
-    sget v1, Lcom/censivn/C3DEngine/b/b/a;->J:I
-
-    sub-int/2addr v0, v1
-
-    invoke-virtual {p0}, Landroid/app/Activity;->getResources()Landroid/content/res/Resources;
-
-    move-result-object v1
-
-    invoke-virtual {v1}, Landroid/content/res/Resources;->getConfiguration()Landroid/content/res/Configuration;
-
-    move-result-object v1
-
-    iget v1, v1, Landroid/content/res/Configuration;->screenHeightDp:I
-
-    int-to-float v1, v1
-
-    invoke-static {p0, v1}, Lcom/tsf/shell/utils/r;->a(Landroid/content/Context;F)I
-
-    move-result v1
-
-    sub-int/2addr v0, v1
+    move-result v0
 
     sput v0, Lcom/censivn/C3DEngine/b/b/a;->K:I
 
@@ -517,29 +497,9 @@
 
     .line 169
     :cond_3
-    sget v1, Lcom/censivn/C3DEngine/b/b/a;->M:I
+    invoke-static {p0}, Lcom/censivn/C3DEngine/b/b/a;->d(Landroid/app/Activity;)I
 
-    sget v2, Lcom/censivn/C3DEngine/b/b/a;->J:I
-
-    sub-int/2addr v1, v2
-
-    invoke-virtual {p0}, Landroid/app/Activity;->getResources()Landroid/content/res/Resources;
-
-    move-result-object v2
-
-    invoke-virtual {v2}, Landroid/content/res/Resources;->getConfiguration()Landroid/content/res/Configuration;
-
-    move-result-object v2
-
-    iget v2, v2, Landroid/content/res/Configuration;->screenHeightDp:I
-
-    int-to-float v2, v2
-
-    invoke-static {p0, v2}, Lcom/tsf/shell/utils/r;->a(Landroid/content/Context;F)I
-
-    move-result v2
-
-    sub-int/2addr v1, v2
+    move-result v1
 
     sput v1, Lcom/censivn/C3DEngine/b/b/a;->K:I
 
@@ -550,6 +510,37 @@
     sput v3, Lcom/censivn/C3DEngine/b/b/a;->K:I
 
     goto :goto_1
+.end method
+
+.method private static d(Landroid/app/Activity;)I
+    .locals 4
+
+    invoke-virtual {p0}, Landroid/app/Activity;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v0
+
+    const-string v1, "navigation_bar_height"
+
+    const-string v2, "dimen"
+
+    const-string v3, "android"
+
+    invoke-virtual {v0, v1, v2, v3}, Landroid/content/res/Resources;->getIdentifier(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)I
+
+    move-result v1
+
+    if-lez v1, :cond_0
+
+    invoke-virtual {v0, v1}, Landroid/content/res/Resources;->getDimensionPixelSize(I)I
+
+    move-result v0
+
+    return v0
+
+    :cond_0
+    const/4 v0, 0x0
+
+    return v0
 .end method
 
 .method public static b(F)I
