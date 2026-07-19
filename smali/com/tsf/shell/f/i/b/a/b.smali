@@ -179,30 +179,28 @@
 .end method
 
 .method public a(Landroid/graphics/Bitmap;)V
-    .locals 2
+    .locals 3
 
     .prologue
+    sget-object v0, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
+
+    const/4 v1, 0x0
+
+    invoke-virtual {p1, v0, v1}, Landroid/graphics/Bitmap;->copy(Landroid/graphics/Bitmap$Config;Z)Landroid/graphics/Bitmap;
+
+    move-result-object v2
+
     .line 180
     invoke-virtual {p0}, Lcom/tsf/shell/f/i/b/a/b;->K()Lcom/censivn/C3DEngine/api/element/info/ItemInfo;
 
     move-result-object v0
-
-    const/4 v1, 0x0
 
     invoke-virtual {v0, p1, v1}, Lcom/censivn/C3DEngine/api/element/info/ItemInfo;->onUpdatePhoto(Landroid/graphics/Bitmap;Ljava/lang/Runnable;)V
 
     .line 182
     iget-object v0, p0, Lcom/tsf/shell/f/i/b/a/b;->g:Lcom/tsf/shell/f/i/b/a/a;
 
-    invoke-virtual {p0}, Lcom/tsf/shell/f/i/b/a/b;->K()Lcom/censivn/C3DEngine/api/element/info/ItemInfo;
-
-    move-result-object v1
-
-    invoke-virtual {v1}, Lcom/censivn/C3DEngine/api/element/info/ItemInfo;->getPhoto()Landroid/graphics/Bitmap;
-
-    move-result-object v1
-
-    invoke-virtual {v0, v1}, Lcom/tsf/shell/f/i/b/a/a;->a(Landroid/graphics/Bitmap;)V
+    invoke-virtual {v0, v2}, Lcom/tsf/shell/f/i/b/a/a;->a(Landroid/graphics/Bitmap;)V
 
     .line 184
     return-void
