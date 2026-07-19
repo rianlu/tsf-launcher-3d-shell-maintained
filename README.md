@@ -17,7 +17,7 @@
 | TSF Launcher 3D Shell | TSFUI | [TSFAPP Facebook](https://www.facebook.com/TSFAPP/) |
 | TSF 官方推荐主题 | TSFUI / TSF-C3DTeam | [TSFAPP Facebook](https://www.facebook.com/TSFAPP/) |
 | TSF 小部件 | TSFUI | [TSFAPP Facebook](https://www.facebook.com/TSFAPP/) |
-| TSF 装饰品 | TSFUI | [TSFAPP Facebook](https://www.facebook.com/TSFAPP/) |
+| TSF 装饰品与漂浮物 | TSFUI 及第三方作者 | [详细署名](tsf-adornments/README.md#来源与署名) |
 
 ### 配套资源索引
 
@@ -25,7 +25,7 @@
 |---|---:|---|---|---|
 | 主题 | 17 | [主题名称与文件对应表](tsf-themes/README.md#资源清单) | [tsf-themes-v1](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/tag/tsf-themes-v1) | [tsf-themes-v1](https://gitee.com/rainlu/tsf-launcher-3d-shell-maintained-releases/releases/tag/tsf-themes-v1) |
 | 小部件 | 6 | [小部件名称与文件对应表](tsf-widgets/README.md#资源清单) | [tsf-widgets-v1](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/tag/tsf-widgets-v1) | [tsf-widgets-v1](https://gitee.com/rainlu/tsf-launcher-3d-shell-maintained-releases/releases/tag/tsf-widgets-v1) |
-| 装饰品 | 1 | [装饰品名称与文件对应表](tsf-adornments/README.md#资源清单) | [tsf-adornments-v1](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/tag/tsf-adornments-v1) | [tsf-adornments-v1](https://gitee.com/rainlu/tsf-launcher-3d-shell-maintained-releases/releases/tag/tsf-adornments-v1) |
+| 装饰品 | 18 | [装饰品名称与文件对应表](tsf-adornments/README.md#资源清单) | [tsf-adornments-v1](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/tag/tsf-adornments-v1) | [tsf-adornments-v1](https://gitee.com/rainlu/tsf-launcher-3d-shell-maintained-releases/releases/tag/tsf-adornments-v1) |
 
 本仓库仅进行现代 Android 兼容性修改, 重新构建和维护版签名, 不主张拥有原始名称, 图标, 主题或其他资源的权利. 上述作者和主页信息来自原始 APK 元数据, 历史链接可能已经失效. 权利人如需补充署名或要求移除相关资源, 请通过 [GitHub Issues](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/issues) 联系.
 
