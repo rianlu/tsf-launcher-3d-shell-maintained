@@ -4,7 +4,7 @@
   "versionName": "3.9.4-r1",
   "tag": "v3.9.4-r1",
   "fileName": "tsf-launcher-maintained-3.9.4-r1.apk",
-  "sha256": "857ac1561d582cd60f10a853ebcb518de833f5987cd2e50670a42645a35c716e",
-  "changelog": "Initial maintained release.",
-  "changelogZh": "维护版首次正式发布."
+  "sha256": "f81d98ac90291050cf861cb2d3ff3553c60fc802c9b3e68022b9bacd42cdd8a1",
+  "changelog": "Fixes first-use photo selection for the built-in Airship widget.",
+  "changelogZh": "修复内置飞艇首次选择照片后不显示的问题."
 }
