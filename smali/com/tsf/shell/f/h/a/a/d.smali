@@ -305,7 +305,15 @@
 
     invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/f/m;->d(I)V
 
-    const-string v1, "给联系人加星标后显示在这里"
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v1
+
+    sget v2, Lcom/tsf/b$i;->smart_menu_favorites_empty:I
+
+    invoke-virtual {v1, v2}, Landroid/content/Context;->getString(I)Ljava/lang/String;
+
+    move-result-object v1
 
     invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/f/m;->a(Ljava/lang/String;)V
 

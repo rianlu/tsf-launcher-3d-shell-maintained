@@ -1691,6 +1691,16 @@
 
 .field public static final widget_dots_clock_shownumber:I = 0x7f080353
 
+.field public static final maintained_project_address:I = 0x7f080367
+
+.field public static final maintained_author:I = 0x7f080368
+
+.field public static final maintained_version_label:I = 0x7f080369
+
+.field public static final smart_menu_favorites_empty:I = 0x7f08036a
+
+.field public static final widget_autostart_hint:I = 0x7f08036b
+
 .field public static final widget_duration_title:I = 0x7f08032f
 
 .field public static final widget_flotage:I = 0x7f0802ec

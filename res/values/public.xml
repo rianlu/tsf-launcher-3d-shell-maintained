@@ -2303,6 +2303,11 @@
     <public type="string" name="widget_dots_clock_color" id="0x7f080351" />
     <public type="string" name="widget_dots_clock_setting" id="0x7f080352" />
     <public type="string" name="widget_dots_clock_shownumber" id="0x7f080353" />
+    <public type="string" name="maintained_project_address" id="0x7f080367" />
+    <public type="string" name="maintained_author" id="0x7f080368" />
+    <public type="string" name="maintained_version_label" id="0x7f080369" />
+    <public type="string" name="smart_menu_favorites_empty" id="0x7f08036a" />
+    <public type="string" name="widget_autostart_hint" id="0x7f08036b" />
     <public type="plurals" name="permission_denied_guide_desc" id="0x7f090000" />
     <public type="bool" name="abc_allow_stacked_button_bar" id="0x7f0a0000" />
     <public type="bool" name="abc_action_bar_embed_tabs_pre_jb" id="0x7f0a0001" />

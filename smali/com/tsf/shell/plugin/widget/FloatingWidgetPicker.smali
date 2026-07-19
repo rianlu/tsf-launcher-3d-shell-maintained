@@ -1033,7 +1033,11 @@
 
     if-nez v2, :cond_1
 
-    const-string v2, "如果小部件重启后不刷新, 请到系统设置里允许对应小部件自启动."
+    sget v2, Lcom/tsf/b$i;->widget_autostart_hint:I
+
+    invoke-virtual {p0, v2}, Lcom/tsf/shell/plugin/widget/FloatingWidgetPicker;->getString(I)Ljava/lang/String;
+
+    move-result-object v2
 
     const/4 v3, 0x1
 

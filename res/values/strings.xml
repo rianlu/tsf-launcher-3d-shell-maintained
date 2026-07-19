@@ -872,4 +872,9 @@ you have read and understood the"</string>
     <string name="update_download_failed">Download failed</string>
     <string name="update_verification_failed">Package verification failed</string>
     <string name="update_ready">Download complete, confirm installation</string>
+    <string name="maintained_project_address">Project address</string>
+    <string name="maintained_author">Author / Maintainer</string>
+    <string name="maintained_version_label">Maintained version</string>
+    <string name="smart_menu_favorites_empty">Star contacts to show them here</string>
+    <string name="widget_autostart_hint">If this widget does not refresh after restart, allow it to start automatically in system settings.</string>
 </resources>

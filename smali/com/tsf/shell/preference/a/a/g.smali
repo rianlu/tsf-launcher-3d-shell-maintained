@@ -119,9 +119,9 @@
     invoke-direct {v0}, Lcom/censivn/C3DEngine/b/e/j;-><init>()V
 
     .line 87
-    const-string v1, "项目地址"
+    sget v1, Lcom/tsf/b$i;->maintained_project_address:I
 
-    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/j;->a(Ljava/lang/String;)V
+    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/j;->h(I)V
 
     .line 88
     const-string v1, "rianlu/tsf-launcher-3d-shell-maintained"
@@ -145,9 +145,9 @@
     invoke-direct {v0}, Lcom/censivn/C3DEngine/b/e/j;-><init>()V
 
     .line 93
-    const-string v1, "作者/维护者"
+    sget v1, Lcom/tsf/b$i;->maintained_author:I
 
-    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/j;->a(Ljava/lang/String;)V
+    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/j;->h(I)V
 
     .line 94
     const-string v1, "禄眠 (FaceBlack)"
@@ -337,7 +337,15 @@
 
     .prologue
     .line 303
-    const-string v0, "维护版本"
+    sget v0, Lcom/tsf/b$i;->maintained_version_label:I
+
+    invoke-static {}, Lcom/tsf/shell/Home;->b()Lcom/tsf/shell/Home;
+
+    move-result-object v1
+
+    invoke-virtual {v1, v0}, Lcom/tsf/shell/Home;->getString(I)Ljava/lang/String;
+
+    move-result-object v0
 
     .line 306
     :try_start_0
