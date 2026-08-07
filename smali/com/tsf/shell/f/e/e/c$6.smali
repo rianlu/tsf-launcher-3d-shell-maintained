@@ -79,7 +79,7 @@
 
     move-result-object v1
 
-    const-wide/16 v2, 0xfa
+    const-wide/16 v2, 0x0
 
     invoke-virtual {v1, v0, v2, v3}, Lcom/censivn/C3DEngine/b/c/c;->a(Ljava/lang/Runnable;J)V
 

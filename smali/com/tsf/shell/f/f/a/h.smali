@@ -5262,6 +5262,9 @@
     :cond_2
     invoke-virtual {p1}, Lcom/tsf/shell/f/i/b/e/g;->bg()V
 
+    .line 2255
+    const/4 v0, 0x1
+
     goto :goto_0
 
     .line 2257
