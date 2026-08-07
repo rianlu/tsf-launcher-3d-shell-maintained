@@ -34,7 +34,7 @@
 
 # virtual methods
 .method public a(Landroid/view/MotionEvent;)V
-    .locals 1
+    .locals 2
 
     .prologue
     .line 54
@@ -57,6 +57,12 @@
 
     .line 60
     :cond_0
+    iget-object v0, p0, Lcom/tsf/shell/f/f/a/a/a$1;->a:Lcom/tsf/shell/f/f/a/a/a;
+
+    const/4 v1, 0x0
+
+    invoke-static {v0, v1}, Lcom/tsf/shell/f/f/a/a/a;->a(Lcom/tsf/shell/f/f/a/a/a;Lcom/tsf/shell/f/i/b/e/g;)Lcom/tsf/shell/f/i/b/e/g;
+
     return-void
 .end method
 
@@ -65,11 +71,18 @@
 
     .prologue
     .line 38
+    iget-object v1, p0, Lcom/tsf/shell/f/f/a/a/a$1;->a:Lcom/tsf/shell/f/f/a/a/a;
+
+    const/4 v2, 0x0
+
+    invoke-static {v1, v2}, Lcom/tsf/shell/f/f/a/a/a;->a(Lcom/tsf/shell/f/f/a/a/a;Lcom/tsf/shell/f/i/b/e/g;)Lcom/tsf/shell/f/i/b/e/g;
+
+    .line 39
     invoke-static {p1}, Lcom/tsf/shell/utils/x;->a(Landroid/view/MotionEvent;)[F
 
     move-result-object v0
 
-    .line 40
+    .line 41
     iget-object v1, p0, Lcom/tsf/shell/f/f/a/a/a$1;->a:Lcom/tsf/shell/f/f/a/a/a;
 
     const/4 v2, 0x0
@@ -84,21 +97,21 @@
 
     move-result-object v0
 
-    .line 42
+    .line 43
     if-eqz v0, :cond_0
 
     instance-of v1, v0, Lcom/tsf/shell/f/i/b/e/g;
 
     if-eqz v1, :cond_0
 
-    .line 44
+    .line 45
     iget-object v1, p0, Lcom/tsf/shell/f/f/a/a/a$1;->a:Lcom/tsf/shell/f/f/a/a/a;
 
     check-cast v0, Lcom/tsf/shell/f/i/b/e/g;
 
     invoke-static {v1, v0}, Lcom/tsf/shell/f/f/a/a/a;->a(Lcom/tsf/shell/f/f/a/a/a;Lcom/tsf/shell/f/i/b/e/g;)Lcom/tsf/shell/f/i/b/e/g;
 
-    .line 46
+    .line 47
     iget-object v0, p0, Lcom/tsf/shell/f/f/a/a/a$1;->a:Lcom/tsf/shell/f/f/a/a/a;
 
     invoke-static {v0}, Lcom/tsf/shell/f/f/a/a/a;->a(Lcom/tsf/shell/f/f/a/a/a;)Lcom/tsf/shell/f/i/b/e/g;
@@ -107,7 +120,7 @@
 
     invoke-virtual {v0}, Lcom/tsf/shell/f/i/b/e/g;->aP()V
 
-    .line 50
+    .line 51
     :cond_0
     return-void
 .end method
