@@ -62,6 +62,7 @@ Gitee 镜像使用相同标签 `tsf-widgets-v1` 和相同文件名.
   - 原版: `original/memo-v1.6-vc10.apk`。
   - 将备忘录插件 `targetSdkVersion` 从 21 提升到 28, 避免 Android 14+ 拒绝安装。
   - 去掉编辑页和插件说明页的系统窗口转场动画, 保留便签自身 3D 展开动画。
+  - 修复便签编辑页关闭时从上往下的系统退出动画, 改为无动画直接关闭。
   - 适配 Android 5.0+ 透明沉浸系统栏, 避免旧半透明状态栏和导航栏出现黑色遮罩。
 
 - `modified/calendar-v2.0-vc14.apk`
