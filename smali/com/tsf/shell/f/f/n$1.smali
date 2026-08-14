@@ -83,6 +83,8 @@
 
     check-cast p2, Lcom/tsf/shell/f/i/b;
 
+    invoke-virtual {v0, p2}, Lcom/tsf/shell/f/f/n;->a(Lcom/tsf/shell/f/i/b;)V
+
     invoke-virtual {v0, p2}, Lcom/tsf/shell/f/f/n;->b(Lcom/tsf/shell/f/i/b;)V
 
     .line 184
