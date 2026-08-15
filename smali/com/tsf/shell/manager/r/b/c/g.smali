@@ -462,3 +462,17 @@
     .line 174
     return-void
 .end method
+
+.method public reloadProviders()V
+    .locals 1
+
+    .prologue
+    iget-object v0, p0, Lcom/tsf/shell/manager/r/b/c/g;->c:Lcom/tsf/shell/manager/r/b/c/e;
+
+    if-eqz v0, :cond_0
+
+    invoke-virtual {v0}, Lcom/tsf/shell/manager/r/b/c/e;->g()V
+
+    :cond_0
+    return-void
+.end method

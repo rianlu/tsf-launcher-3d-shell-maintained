@@ -20,6 +20,271 @@
     return-void
 .end method
 
+.method public static applyDynamicColors(Landroid/appwidget/AppWidgetHostView;Landroid/content/Context;)Z
+    .locals 66
+
+    move-object/from16 v0, p0
+
+    const/4 v1, 0x0
+
+    if-eqz v0, :cond_2
+
+    if-eqz p1, :cond_2
+
+    sget v2, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 v3, 0x1f
+
+    if-ge v2, v3, :cond_0
+
+    goto/16 :goto_1
+
+    :cond_0
+    :try_start_0
+    invoke-virtual/range {p1 .. p1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v2
+
+    new-instance v3, Landroid/util/SparseIntArray;
+
+    invoke-direct {v3}, Landroid/util/SparseIntArray;-><init>()V
+
+    const/16 v4, 0x3c
+
+    new-array v5, v4, [I
+
+    fill-array-data v5, :array_0
+
+    const-string v6, "system_accent1_0"
+
+    const-string v7, "system_accent1_10"
+
+    const-string v8, "system_accent1_100"
+
+    const-string v9, "system_accent1_200"
+
+    const-string v10, "system_accent1_300"
+
+    const-string v11, "system_accent1_400"
+
+    const-string v12, "system_accent1_500"
+
+    const-string v13, "system_accent1_600"
+
+    const-string v14, "system_accent1_700"
+
+    const-string v15, "system_accent1_800"
+
+    const-string v16, "system_accent1_900"
+
+    const-string v17, "system_accent1_1000"
+
+    const-string v18, "system_accent2_0"
+
+    const-string v19, "system_accent2_10"
+
+    const-string v20, "system_accent2_100"
+
+    const-string v21, "system_accent2_200"
+
+    const-string v22, "system_accent2_300"
+
+    const-string v23, "system_accent2_400"
+
+    const-string v24, "system_accent2_500"
+
+    const-string v25, "system_accent2_600"
+
+    const-string v26, "system_accent2_700"
+
+    const-string v27, "system_accent2_800"
+
+    const-string v28, "system_accent2_900"
+
+    const-string v29, "system_accent2_1000"
+
+    const-string v30, "system_accent3_0"
+
+    const-string v31, "system_accent3_10"
+
+    const-string v32, "system_accent3_100"
+
+    const-string v33, "system_accent3_200"
+
+    const-string v34, "system_accent3_300"
+
+    const-string v35, "system_accent3_400"
+
+    const-string v36, "system_accent3_500"
+
+    const-string v37, "system_accent3_600"
+
+    const-string v38, "system_accent3_700"
+
+    const-string v39, "system_accent3_800"
+
+    const-string v40, "system_accent3_900"
+
+    const-string v41, "system_accent3_1000"
+
+    const-string v42, "system_neutral1_0"
+
+    const-string v43, "system_neutral1_10"
+
+    const-string v44, "system_neutral1_100"
+
+    const-string v45, "system_neutral1_200"
+
+    const-string v46, "system_neutral1_300"
+
+    const-string v47, "system_neutral1_400"
+
+    const-string v48, "system_neutral1_500"
+
+    const-string v49, "system_neutral1_600"
+
+    const-string v50, "system_neutral1_700"
+
+    const-string v51, "system_neutral1_800"
+
+    const-string v52, "system_neutral1_900"
+
+    const-string v53, "system_neutral1_1000"
+
+    const-string v54, "system_neutral2_0"
+
+    const-string v55, "system_neutral2_10"
+
+    const-string v56, "system_neutral2_100"
+
+    const-string v57, "system_neutral2_200"
+
+    const-string v58, "system_neutral2_300"
+
+    const-string v59, "system_neutral2_400"
+
+    const-string v60, "system_neutral2_500"
+
+    const-string v61, "system_neutral2_600"
+
+    const-string v62, "system_neutral2_700"
+
+    const-string v63, "system_neutral2_800"
+
+    const-string v64, "system_neutral2_900"
+
+    const-string v65, "system_neutral2_1000"
+
+    filled-new-array/range {v6 .. v65}, [Ljava/lang/String;
+
+    const/4 v6, 0x0
+
+    :goto_0
+    if-ge v6, v4, :cond_1
+
+    aget v7, v5, v6
+
+    aget v8, v5, v6
+
+    invoke-virtual {v2, v8}, Landroid/content/res/Resources;->getColor(I)I
+
+    move-result v8
+
+    invoke-virtual {v3, v7, v8}, Landroid/util/SparseIntArray;->put(II)V
+
+    add-int/lit8 v6, v6, 0x1
+
+    goto :goto_0
+
+    :cond_1
+    invoke-virtual {v0, v3}, Landroid/appwidget/AppWidgetHostView;->setColorResources(Landroid/util/SparseIntArray;)V
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    const/4 v0, 0x1
+
+    return v0
+
+    :catchall_0
+    move-exception v0
+
+    const-string v2, "TSFWidgetCompat"
+
+    const-string v3, "dynamic color apply failed"
+
+    invoke-static {v2, v3, v0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    return v1
+
+    :cond_2
+    :goto_1
+    return v1
+
+    :array_0
+    .array-data 4
+        0x1060037
+        0x1060038
+        0x106003a
+        0x106003b
+        0x106003c
+        0x106003d
+        0x106003e
+        0x106003f
+        0x1060040
+        0x1060041
+        0x1060042
+        0x1060043
+        0x1060044
+        0x1060045
+        0x1060047
+        0x1060048
+        0x1060049
+        0x106004a
+        0x106004b
+        0x106004c
+        0x106004d
+        0x106004e
+        0x106004f
+        0x1060050
+        0x1060051
+        0x1060052
+        0x1060054
+        0x1060055
+        0x1060056
+        0x1060057
+        0x1060058
+        0x1060059
+        0x106005a
+        0x106005b
+        0x106005c
+        0x106005d
+        0x106001d
+        0x106001e
+        0x1060020
+        0x1060021
+        0x1060022
+        0x1060023
+        0x1060024
+        0x1060025
+        0x1060026
+        0x1060027
+        0x1060028
+        0x1060029
+        0x106002a
+        0x106002b
+        0x106002d
+        0x106002e
+        0x106002f
+        0x1060030
+        0x1060031
+        0x1060032
+        0x1060033
+        0x1060034
+        0x1060035
+        0x1060036
+    .end array-data
+.end method
+
 .method public static isConfigurationOptional(Landroid/appwidget/AppWidgetProviderInfo;)Z
     .locals 3
 

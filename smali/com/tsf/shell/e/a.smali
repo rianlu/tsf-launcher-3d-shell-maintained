@@ -28,3 +28,25 @@
 
     return-object v0
 .end method
+
+.method protected onProvidersChanged()V
+    .locals 1
+
+    .prologue
+    sget-object v0, Lcom/tsf/shell/manager/a;->i:Lcom/tsf/shell/manager/r/c/e;
+
+    if-eqz v0, :cond_0
+
+    iget-object v0, v0, Lcom/tsf/shell/manager/r/c/e;->a:Lcom/tsf/shell/manager/r/b/a;
+
+    if-eqz v0, :cond_0
+
+    iget-object v0, v0, Lcom/tsf/shell/manager/r/b/a;->b:Lcom/tsf/shell/manager/r/b/c/g;
+
+    if-eqz v0, :cond_0
+
+    invoke-virtual {v0}, Lcom/tsf/shell/manager/r/b/c/g;->reloadProviders()V
+
+    :cond_0
+    return-void
+.end method

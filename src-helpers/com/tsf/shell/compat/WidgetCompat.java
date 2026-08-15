@@ -6,16 +6,18 @@ import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
-import android.net.Uri;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SizeF;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -302,6 +304,96 @@ public final class WidgetCompat {
         } catch (Throwable t) {
             Log.w(TAG, "previewLayout render failed: " + info.provider, t);
             return null;
+        }
+    }
+
+    /**
+     * API 31+: hand the launcher's dynamic system colors to the widget so providers using
+     * {@code @android:color/system_accent*_nnn} or {@code @android:color/system_neutral*_nnn}
+     * can match the host's tonal palette. The framework caches the ColorResources per view,
+     * so this is only needed once per widget view.
+     *
+     * @return true when colors were applied (or already matched), false when unsupported.
+     */
+    public static boolean applyDynamicColors(AppWidgetHostView view, Context context) {
+        if (view == null || context == null || Build.VERSION.SDK_INT < 31) {
+            return false;
+        }
+        try {
+            Resources r = context.getResources();
+            SparseIntArray colorMapping = new SparseIntArray();
+            int[] colorIds = {
+                android.R.color.system_accent1_0, android.R.color.system_accent1_10,
+                android.R.color.system_accent1_100, android.R.color.system_accent1_200,
+                android.R.color.system_accent1_300, android.R.color.system_accent1_400,
+                android.R.color.system_accent1_500, android.R.color.system_accent1_600,
+                android.R.color.system_accent1_700, android.R.color.system_accent1_800,
+                android.R.color.system_accent1_900, android.R.color.system_accent1_1000,
+                android.R.color.system_accent2_0, android.R.color.system_accent2_10,
+                android.R.color.system_accent2_100, android.R.color.system_accent2_200,
+                android.R.color.system_accent2_300, android.R.color.system_accent2_400,
+                android.R.color.system_accent2_500, android.R.color.system_accent2_600,
+                android.R.color.system_accent2_700, android.R.color.system_accent2_800,
+                android.R.color.system_accent2_900, android.R.color.system_accent2_1000,
+                android.R.color.system_accent3_0, android.R.color.system_accent3_10,
+                android.R.color.system_accent3_100, android.R.color.system_accent3_200,
+                android.R.color.system_accent3_300, android.R.color.system_accent3_400,
+                android.R.color.system_accent3_500, android.R.color.system_accent3_600,
+                android.R.color.system_accent3_700, android.R.color.system_accent3_800,
+                android.R.color.system_accent3_900, android.R.color.system_accent3_1000,
+                android.R.color.system_neutral1_0, android.R.color.system_neutral1_10,
+                android.R.color.system_neutral1_100, android.R.color.system_neutral1_200,
+                android.R.color.system_neutral1_300, android.R.color.system_neutral1_400,
+                android.R.color.system_neutral1_500, android.R.color.system_neutral1_600,
+                android.R.color.system_neutral1_700, android.R.color.system_neutral1_800,
+                android.R.color.system_neutral1_900, android.R.color.system_neutral1_1000,
+                android.R.color.system_neutral2_0, android.R.color.system_neutral2_10,
+                android.R.color.system_neutral2_100, android.R.color.system_neutral2_200,
+                android.R.color.system_neutral2_300, android.R.color.system_neutral2_400,
+                android.R.color.system_neutral2_500, android.R.color.system_neutral2_600,
+                android.R.color.system_neutral2_700, android.R.color.system_neutral2_800,
+                android.R.color.system_neutral2_900, android.R.color.system_neutral2_1000,
+            };
+            String[] colorNames = {
+                "system_accent1_0", "system_accent1_10",
+                "system_accent1_100", "system_accent1_200",
+                "system_accent1_300", "system_accent1_400",
+                "system_accent1_500", "system_accent1_600",
+                "system_accent1_700", "system_accent1_800",
+                "system_accent1_900", "system_accent1_1000",
+                "system_accent2_0", "system_accent2_10",
+                "system_accent2_100", "system_accent2_200",
+                "system_accent2_300", "system_accent2_400",
+                "system_accent2_500", "system_accent2_600",
+                "system_accent2_700", "system_accent2_800",
+                "system_accent2_900", "system_accent2_1000",
+                "system_accent3_0", "system_accent3_10",
+                "system_accent3_100", "system_accent3_200",
+                "system_accent3_300", "system_accent3_400",
+                "system_accent3_500", "system_accent3_600",
+                "system_accent3_700", "system_accent3_800",
+                "system_accent3_900", "system_accent3_1000",
+                "system_neutral1_0", "system_neutral1_10",
+                "system_neutral1_100", "system_neutral1_200",
+                "system_neutral1_300", "system_neutral1_400",
+                "system_neutral1_500", "system_neutral1_600",
+                "system_neutral1_700", "system_neutral1_800",
+                "system_neutral1_900", "system_neutral1_1000",
+                "system_neutral2_0", "system_neutral2_10",
+                "system_neutral2_100", "system_neutral2_200",
+                "system_neutral2_300", "system_neutral2_400",
+                "system_neutral2_500", "system_neutral2_600",
+                "system_neutral2_700", "system_neutral2_800",
+                "system_neutral2_900", "system_neutral2_1000",
+            };
+            for (int i = 0; i < colorIds.length; i++) {
+                colorMapping.put(colorIds[i], r.getColor(colorIds[i]));
+            }
+            view.setColorResources(colorMapping);
+            return true;
+        } catch (Throwable t) {
+            Log.w(TAG, "dynamic color apply failed", t);
+            return false;
         }
     }
 }

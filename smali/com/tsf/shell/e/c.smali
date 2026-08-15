@@ -50,6 +50,20 @@
     return-void
 .end method
 
+.method public setAppWidget(ILandroid/appwidget/AppWidgetProviderInfo;)V
+    .locals 1
+
+    invoke-super {p0, p1, p2}, Landroid/appwidget/AppWidgetHostView;->setAppWidget(ILandroid/appwidget/AppWidgetProviderInfo;)V
+
+    invoke-virtual {p0}, Lcom/tsf/shell/e/c;->getContext()Landroid/content/Context;
+
+    move-result-object v0
+
+    invoke-static {p0, v0}, Lcom/tsf/shell/compat/WidgetCompat;->applyDynamicColors(Landroid/appwidget/AppWidgetHostView;Landroid/content/Context;)Z
+
+    return-void
+.end method
+
 .method static synthetic a(Lcom/tsf/shell/e/c;)I
     .locals 1
 
