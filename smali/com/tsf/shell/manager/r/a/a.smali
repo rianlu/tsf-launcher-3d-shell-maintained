@@ -41,6 +41,8 @@
 
 .field private l:Lcom/tsf/shell/f/e/t$b;
 
+.field private m:I
+
 
 # direct methods
 .method static constructor <clinit>()V
@@ -276,7 +278,7 @@
 .end method
 
 .method public a(III)V
-    .locals 3
+    .locals 4
 
     .prologue
     .line 254
@@ -299,7 +301,47 @@
 
     if-eqz v1, :cond_0
 
+    invoke-static {v0}, Lcom/tsf/shell/compat/WidgetCompat;->isConfigurationOptional(Landroid/appwidget/AppWidgetProviderInfo;)Z
+
+    move-result v1
+
+    if-nez v1, :cond_0
+
+    sget v1, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 v2, 0x1a
+
+    if-lt v1, v2, :cond_1
+
+    .line 261
+    iput p1, p0, Lcom/tsf/shell/manager/r/a/a;->m:I
+
+    invoke-static {}, Lcom/tsf/shell/Home;->b()Lcom/tsf/shell/Home;
+
+    move-result-object v1
+
+    invoke-virtual {v1, p0}, Lcom/tsf/shell/Home;->a(Lcom/censivn/C3DEngine/b/c/a$a;)I
+
+    move-result v2
+
+    iput v2, p0, Lcom/tsf/shell/manager/r/a/a;->b:I
+
+    iget-object v3, p0, Lcom/tsf/shell/manager/r/a/a;->e:Lcom/tsf/shell/e/a;
+
+    invoke-static {v1, v3, p1, v2}, Lcom/tsf/shell/compat/WidgetCompat;->startConfigure(Landroid/app/Activity;Landroid/appwidget/AppWidgetHost;II)Z
+
+    move-result v1
+
+    if-nez v1, :goto_0
+
+    iget-object v1, p0, Lcom/tsf/shell/manager/r/a/a;->e:Lcom/tsf/shell/e/a;
+
+    invoke-virtual {v1, p1}, Lcom/tsf/shell/e/a;->deleteAppWidgetId(I)V
+
+    goto :goto_0
+
     .line 262
+    :cond_1
     new-instance v1, Landroid/content/Intent;
 
     const-string v2, "android.appwidget.action.APPWIDGET_CONFIGURE"
@@ -1250,6 +1292,35 @@
     .locals 3
 
     .prologue
+    const/4 v2, -0x1
+
+    iget v0, p0, Lcom/tsf/shell/manager/r/a/a;->b:I
+
+    if-ne p1, v0, :cond_6
+
+    if-ne p2, v2, :cond_6
+
+    iget v0, p0, Lcom/tsf/shell/manager/r/a/a;->m:I
+
+    invoke-static {p3, v0}, Lcom/tsf/shell/compat/WidgetCompat;->resolveConfiguredWidgetId(Landroid/content/Intent;I)I
+
+    move-result v0
+
+    if-eq v0, v2, :cond_6
+
+    const/4 v1, 0x0
+
+    iput v1, p0, Lcom/tsf/shell/manager/r/a/a;->m:I
+
+    iget v1, p0, Lcom/tsf/shell/manager/r/a/a;->h:I
+
+    iget v2, p0, Lcom/tsf/shell/manager/r/a/a;->i:I
+
+    invoke-virtual {p0, v0, v1, v2}, Lcom/tsf/shell/manager/r/a/a;->b(III)V
+
+    return-void
+
+    :cond_6
     const/4 v2, -0x1
 
     .line 504

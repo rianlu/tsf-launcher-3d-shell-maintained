@@ -365,6 +365,40 @@
 
 
 # virtual methods
+.method public a(Lcom/censivn/C3DEngine/b/c/a$a;)I
+    .locals 3
+
+    .prologue
+    .line 825
+    iget v0, p0, Lcom/tsf/shell/Home;->u:I
+
+    .line 827
+    const/4 v1, 0x1
+
+    iput-boolean v1, p0, Lcom/tsf/shell/Home;->k:Z
+
+    .line 828
+    iget-object v1, p0, Lcom/tsf/shell/Home;->q:Ljava/util/HashMap;
+
+    iget v2, p0, Lcom/tsf/shell/Home;->u:I
+
+    invoke-static {v2}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+
+    move-result-object v2
+
+    invoke-virtual {v1, v2, p1}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+
+    .line 833
+    iget v1, p0, Lcom/tsf/shell/Home;->u:I
+
+    add-int/lit8 v1, v1, 0x1
+
+    iput v1, p0, Lcom/tsf/shell/Home;->u:I
+
+    .line 834
+    return v0
+.end method
+
 .method public a(Landroid/content/Intent;Lcom/censivn/C3DEngine/b/c/a$a;)I
     .locals 3
 

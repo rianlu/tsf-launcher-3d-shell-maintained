@@ -387,6 +387,25 @@
     :cond_0
     if-nez v0, :cond_1
 
+    iget-object v1, p0, Lcom/tsf/shell/f/i/c/f;->g:Landroid/appwidget/AppWidgetProviderInfo;
+
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v2
+
+    invoke-static {v2, v1, p1, p2}, Lcom/tsf/shell/compat/WidgetCompat;->renderPreviewDrawable(Landroid/content/Context;Landroid/appwidget/AppWidgetProviderInfo;II)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v1
+
+    if-eqz v1, :cond_7
+
+    invoke-static {v1, p1, p2}, Lcom/tsf/shell/f/i/c/f;->a(Landroid/graphics/drawable/Drawable;II)Landroid/graphics/Bitmap;
+
+    move-result-object v0
+
+    :cond_7
+    if-nez v0, :cond_1
+
     :try_start_1
     invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
 
