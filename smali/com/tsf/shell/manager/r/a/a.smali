@@ -277,6 +277,23 @@
     return-void
 .end method
 
+.method public d()V
+    .locals 4
+
+    .prologue
+    iget-object v0, p0, Lcom/tsf/shell/manager/r/a/a;->k:Landroid/content/Context;
+
+    iget-object v1, p0, Lcom/tsf/shell/manager/r/a/a;->e:Lcom/tsf/shell/e/a;
+
+    sget-object v2, Lcom/tsf/shell/g$e;->a:Landroid/net/Uri;
+
+    const-string v3, "appWidgetId"
+
+    invoke-static {v0, v1, v2, v3}, Lcom/tsf/shell/compat/WidgetCompat;->reconcileWidgetIds(Landroid/content/Context;Landroid/appwidget/AppWidgetHost;Landroid/net/Uri;Ljava/lang/String;)V
+
+    return-void
+.end method
+
 .method public a(III)V
     .locals 4
 
@@ -1012,6 +1029,10 @@
 
     move-result-object v0
 
+    invoke-static {v2, v0}, Lcom/tsf/shell/compat/WidgetCompat;->resolveCellSpan(Landroid/appwidget/AppWidgetProviderInfo;[I)[I
+
+    move-result-object v0
+
     .line 320
     new-instance v6, Lcom/censivn/C3DEngine/api/element/info/LauncherAppWidgetInfo;
 
@@ -1188,11 +1209,7 @@
 
     iget-object v0, v0, Lcom/tsf/shell/e/b;->a:Lcom/tsf/shell/e/c;
 
-    move v4, v2
-
-    move v5, v3
-
-    invoke-virtual/range {v0 .. v5}, Lcom/tsf/shell/e/c;->updateAppWidgetSize(Landroid/os/Bundle;IIII)V
+    invoke-static {v0, v2, v3}, Lcom/tsf/shell/compat/WidgetCompat;->updateWidgetSize(Landroid/appwidget/AppWidgetHostView;II)V
 
     .line 363
     :cond_3

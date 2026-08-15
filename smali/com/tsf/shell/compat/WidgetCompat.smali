@@ -100,6 +100,324 @@
     return v0
 .end method
 
+.method public static reconcileWidgetIds(Landroid/content/Context;Landroid/appwidget/AppWidgetHost;Landroid/net/Uri;Ljava/lang/String;)V
+    .locals 11
+
+    const-string v1, "TSFWidgetCompat"
+
+    if-eqz p0, :cond_e
+
+    if-eqz p1, :cond_e
+
+    if-eqz p2, :cond_e
+
+    if-nez p3, :cond_0
+
+    goto/16 :goto_a
+
+    :cond_0
+    :try_start_0
+    invoke-virtual {p1}, Landroid/appwidget/AppWidgetHost;->getAppWidgetIds()[I
+
+    move-result-object v2
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_7
+
+    nop
+
+    if-eqz v2, :cond_d
+
+    array-length v0, v2
+
+    if-nez v0, :cond_1
+
+    goto/16 :goto_9
+
+    :cond_1
+    new-instance v3, Ljava/util/HashSet;
+
+    invoke-direct {v3}, Ljava/util/HashSet;-><init>()V
+
+    nop
+
+    const/4 v4, 0x0
+
+    :try_start_1
+    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+
+    move-result-object v5
+
+    filled-new-array {p3}, [Ljava/lang/String;
+
+    move-result-object v7
+
+    const/4 v9, 0x0
+
+    const/4 v10, 0x0
+
+    const/4 v8, 0x0
+
+    move-object v6, p2
+
+    invoke-virtual/range {v5 .. v10}, Landroid/content/ContentResolver;->query(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;
+
+    move-result-object v4
+
+    if-eqz v4, :cond_9
+
+    invoke-interface {v4}, Landroid/database/Cursor;->getCount()I
+
+    move-result p0
+
+    if-gtz p0, :cond_2
+
+    goto/16 :goto_5
+
+    :cond_2
+    :goto_0
+    invoke-interface {v4}, Landroid/database/Cursor;->moveToNext()Z
+
+    move-result p0
+
+    const/4 p2, 0x0
+
+    if-eqz p0, :cond_4
+
+    invoke-interface {v4, p2}, Landroid/database/Cursor;->getInt(I)I
+
+    move-result p0
+
+    if-lez p0, :cond_3
+
+    invoke-static {p0}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+
+    move-result-object p0
+
+    invoke-virtual {v3, p0}, Ljava/util/HashSet;->add(Ljava/lang/Object;)Z
+    :try_end_1
+    .catchall {:try_start_1 .. :try_end_1} :catchall_3
+
+    :cond_3
+    goto :goto_0
+
+    :cond_4
+    if-eqz v4, :cond_5
+
+    :try_start_2
+    invoke-interface {v4}, Landroid/database/Cursor;->close()V
+    :try_end_2
+    .catchall {:try_start_2 .. :try_end_2} :catchall_0
+
+    :goto_1
+    goto :goto_2
+
+    :catchall_0
+    move-exception v0
+
+    goto :goto_1
+
+    :cond_5
+    :goto_2
+    nop
+
+    const/4 p0, 0x0
+
+    :goto_3
+    array-length p3, v2
+
+    if-ge p2, p3, :cond_7
+
+    aget p3, v2, p2
+
+    if-lez p3, :cond_6
+
+    invoke-static {p3}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+
+    move-result-object v0
+
+    invoke-virtual {v3, v0}, Ljava/util/HashSet;->contains(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-nez v0, :cond_6
+
+    :try_start_3
+    invoke-virtual {p1, p3}, Landroid/appwidget/AppWidgetHost;->deleteAppWidgetId(I)V
+    :try_end_3
+    .catchall {:try_start_3 .. :try_end_3} :catchall_1
+
+    add-int/lit8 p0, p0, 0x1
+
+    goto :goto_4
+
+    :catchall_1
+    move-exception v0
+
+    new-instance v4, Ljava/lang/StringBuilder;
+
+    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v5, "cannot release widget id "
+
+    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v4
+
+    invoke-virtual {v4, p3}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    move-result-object p3
+
+    invoke-virtual {p3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object p3
+
+    invoke-static {v1, p3, v0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    :cond_6
+    :goto_4
+    add-int/lit8 p2, p2, 0x1
+
+    goto :goto_3
+
+    :cond_7
+    if-lez p0, :cond_8
+
+    new-instance p1, Ljava/lang/StringBuilder;
+
+    invoke-direct {p1}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string p2, "released "
+
+    invoke-virtual {p1, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object p1
+
+    invoke-virtual {p1, p0}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    move-result-object p0
+
+    const-string p1, " orphan widget id(s), host="
+
+    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object p0
+
+    array-length p1, v2
+
+    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    move-result-object p0
+
+    const-string p1, " db="
+
+    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object p0
+
+    invoke-virtual {v3}, Ljava/util/HashSet;->size()I
+
+    move-result p1
+
+    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    move-result-object p0
+
+    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object p0
+
+    invoke-static {v1, p0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+
+    :cond_8
+    return-void
+
+    :cond_9
+    :goto_5
+    if-eqz v4, :cond_a
+
+    :try_start_4
+    invoke-interface {v4}, Landroid/database/Cursor;->close()V
+    :try_end_4
+    .catchall {:try_start_4 .. :try_end_4} :catchall_2
+
+    goto :goto_6
+
+    :catchall_2
+    move-exception v0
+
+    :cond_a
+    :goto_6
+    return-void
+
+    :catchall_3
+    move-exception v0
+
+    move-object p0, v0
+
+    :try_start_5
+    const-string p1, "widget id reconcile query failed"
+
+    invoke-static {v1, p1, p0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+    :try_end_5
+    .catchall {:try_start_5 .. :try_end_5} :catchall_5
+
+    if-eqz v4, :cond_b
+
+    :try_start_6
+    invoke-interface {v4}, Landroid/database/Cursor;->close()V
+    :try_end_6
+    .catchall {:try_start_6 .. :try_end_6} :catchall_4
+
+    goto :goto_7
+
+    :catchall_4
+    move-exception v0
+
+    :cond_b
+    :goto_7
+    return-void
+
+    :catchall_5
+    move-exception v0
+
+    move-object p0, v0
+
+    if-eqz v4, :cond_c
+
+    :try_start_7
+    invoke-interface {v4}, Landroid/database/Cursor;->close()V
+    :try_end_7
+    .catchall {:try_start_7 .. :try_end_7} :catchall_6
+
+    goto :goto_8
+
+    :catchall_6
+    move-exception v0
+
+    :cond_c
+    :goto_8
+    throw p0
+
+    :cond_d
+    :goto_9
+    return-void
+
+    :catchall_7
+    move-exception v0
+
+    move-object p0, v0
+
+    const-string p1, "cannot enumerate host widget ids"
+
+    invoke-static {v1, p1, p0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    return-void
+
+    :cond_e
+    :goto_a
+    return-void
+.end method
+
 .method public static renderPreviewDrawable(Landroid/content/Context;Landroid/appwidget/AppWidgetProviderInfo;II)Landroid/graphics/drawable/Drawable;
     .locals 7
 
@@ -340,6 +658,79 @@
     return-object v0
 .end method
 
+.method public static resolveCellSpan(Landroid/appwidget/AppWidgetProviderInfo;[I)[I
+    .locals 3
+
+    if-eqz p1, :cond_2
+
+    array-length v0, p1
+
+    const/4 v1, 0x2
+
+    if-lt v0, v1, :cond_2
+
+    if-eqz p0, :cond_2
+
+    sget v0, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 v1, 0x1f
+
+    if-ge v0, v1, :cond_0
+
+    goto :goto_1
+
+    :cond_0
+    :try_start_0
+    iget v0, p0, Landroid/appwidget/AppWidgetProviderInfo;->targetCellWidth:I
+
+    iget p0, p0, Landroid/appwidget/AppWidgetProviderInfo;->targetCellHeight:I
+
+    if-lez v0, :cond_1
+
+    if-lez p0, :cond_1
+
+    const/4 v1, 0x0
+
+    aget v2, p1, v1
+
+    invoke-static {v2, v0}, Ljava/lang/Math;->max(II)I
+
+    move-result v0
+
+    aput v0, p1, v1
+
+    const/4 v0, 0x1
+
+    aget v1, p1, v0
+
+    invoke-static {v1, p0}, Ljava/lang/Math;->max(II)I
+
+    move-result p0
+
+    aput p0, p1, v0
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    :cond_1
+    goto :goto_0
+
+    :catchall_0
+    move-exception p0
+
+    const-string v0, "TSFWidgetCompat"
+
+    const-string v1, "targetCell resolve failed"
+
+    invoke-static {v0, v1, p0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    :goto_0
+    return-object p1
+
+    :cond_2
+    :goto_1
+    return-object p1
+.end method
+
 .method public static resolveConfiguredWidgetId(Landroid/content/Intent;I)I
     .locals 2
 
@@ -440,4 +831,95 @@
     :cond_1
     :goto_0
     return v1
+.end method
+
+.method public static updateWidgetSize(Landroid/appwidget/AppWidgetHostView;II)V
+    .locals 9
+
+    if-eqz p0, :cond_2
+
+    if-lez p1, :cond_2
+
+    if-gtz p2, :cond_0
+
+    goto :goto_1
+
+    :cond_0
+    sget v0, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 v1, 0x1f
+
+    const-string v2, "TSFWidgetCompat"
+
+    if-lt v0, v1, :cond_1
+
+    :try_start_0
+    new-instance v0, Ljava/util/ArrayList;
+
+    const/4 v1, 0x1
+
+    invoke-direct {v0, v1}, Ljava/util/ArrayList;-><init>(I)V
+
+    new-instance v1, Landroid/util/SizeF;
+
+    int-to-float v3, p1
+
+    int-to-float v4, p2
+
+    invoke-direct {v1, v3, v4}, Landroid/util/SizeF;-><init>(FF)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    new-instance v1, Landroid/os/Bundle;
+
+    invoke-direct {v1}, Landroid/os/Bundle;-><init>()V
+
+    invoke-virtual {p0, v1, v0}, Landroid/appwidget/AppWidgetHostView;->updateAppWidgetSize(Landroid/os/Bundle;Ljava/util/List;)V
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    return-void
+
+    :catchall_0
+    move-exception v0
+
+    const-string v1, "sized update failed, falling back to the legacy call"
+
+    invoke-static {v2, v1, v0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    :cond_1
+    const/4 v4, 0x0
+
+    move v7, p1
+
+    move v8, p2
+
+    move-object v3, p0
+
+    move v5, p1
+
+    move v6, p2
+
+    :try_start_1
+    invoke-virtual/range {v3 .. v8}, Landroid/appwidget/AppWidgetHostView;->updateAppWidgetSize(Landroid/os/Bundle;IIII)V
+    :try_end_1
+    .catchall {:try_start_1 .. :try_end_1} :catchall_1
+
+    goto :goto_0
+
+    :catchall_1
+    move-exception v0
+
+    move-object p0, v0
+
+    const-string p1, "legacy sized update failed"
+
+    invoke-static {v2, p1, p0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    :goto_0
+    return-void
+
+    :cond_2
+    :goto_1
+    return-void
 .end method

@@ -2520,7 +2520,18 @@
 
     invoke-virtual {v0}, Lcom/tsf/shell/Home;->i()V
 
+    sget-object v0, Lcom/tsf/shell/manager/a;->l:Lcom/tsf/shell/manager/r/a/b;
+
+    if-eqz v0, :cond_1
+
+    iget-object v0, v0, Lcom/tsf/shell/manager/r/a/b;->a:Lcom/tsf/shell/manager/r/a/a;
+
+    if-eqz v0, :cond_1
+
+    invoke-virtual {v0}, Lcom/tsf/shell/manager/r/a/a;->d()V
+
     .line 653
+    :cond_1
     return-void
 
     .line 598

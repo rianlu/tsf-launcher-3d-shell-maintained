@@ -272,22 +272,14 @@
 
     const/4 v1, 0x0
 
-    move v4, v2
-
-    move v5, v3
-
-    invoke-virtual/range {v0 .. v5}, Lcom/tsf/shell/e/c;->updateAppWidgetSize(Landroid/os/Bundle;IIII)V
+    invoke-static {v0, v2, v3}, Lcom/tsf/shell/compat/WidgetCompat;->updateWidgetSize(Landroid/appwidget/AppWidgetHostView;II)V
 
     .line 141
     iget-object v0, p0, Lcom/tsf/shell/e/b;->a:Lcom/tsf/shell/e/c;
 
     const/4 v1, 0x0
 
-    move v4, v2
-
-    move v5, v3
-
-    invoke-virtual/range {v0 .. v5}, Lcom/tsf/shell/e/c;->updateAppWidgetSize(Landroid/os/Bundle;IIII)V
+    invoke-static {v0, v2, v3}, Lcom/tsf/shell/compat/WidgetCompat;->updateWidgetSize(Landroid/appwidget/AppWidgetHostView;II)V
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
