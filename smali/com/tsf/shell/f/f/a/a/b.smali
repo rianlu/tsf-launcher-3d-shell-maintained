@@ -383,7 +383,7 @@
 .end method
 
 .method public static a(Ljava/lang/String;)C
-    .locals 5
+    .locals 6
 
     .prologue
     .line 182
@@ -396,6 +396,21 @@
     if-lez v0, :cond_8
 
     .line 183
+    const/4 v5, 0x0
+
+    invoke-virtual {p0, v5}, Ljava/lang/String;->charAt(I)C
+
+    move-result v5
+
+    invoke-static {v5}, Lcom/tsf/shell/compat/AppIndexCompat;->hanToLatinLetter(C)C
+
+    move-result v5
+
+    if-eqz v5, :cond_9
+
+    return v5
+
+    :cond_9
     invoke-static {p0}, Lcom/tsf/shell/f/f/a/a/b;->b(Ljava/lang/String;)C
 
     move-result v1
