@@ -363,6 +363,12 @@
 
     move-result-object v6
 
+    # 应用已卸载: 跳过该 shortcut 的场景元素创建, 条目由删除链路异步清理
+    if-nez v6, :cond_1a
+
+    goto :goto_0
+
+    :cond_1a
     .line 138
     new-instance v3, Lcom/tsf/shell/f/i/b/e/g;
 
@@ -453,6 +459,12 @@
 
     move-result-object v7
 
+    # 应用已卸载: 跳过该 shortcut 的场景元素创建, 条目由删除链路异步清理
+    if-nez v7, :cond_3a
+
+    goto :goto_2
+
+    :cond_3a
     .line 172
     new-instance v8, Lcom/tsf/shell/f/i/b/e/g;
 

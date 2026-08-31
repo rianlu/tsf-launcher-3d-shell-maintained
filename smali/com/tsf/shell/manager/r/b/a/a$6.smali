@@ -91,6 +91,12 @@
 
     move-result-object v0
 
+    # 应用已卸载: 元素创建返回 null, 直接结束
+    if-nez v0, :cond_item_ok
+
+    goto :goto_0
+
+    :cond_item_ok
     .line 240
     iget-object v1, p0, Lcom/tsf/shell/manager/r/b/a/a$6;->a:Lcom/tsf/shell/manager/r/b/a;
 

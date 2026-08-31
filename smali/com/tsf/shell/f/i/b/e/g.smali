@@ -275,18 +275,34 @@
 
     .line 310
     :cond_2
-    new-instance v0, Lcom/tsf/shell/manager/a/f;
+    # 应用已卸载(内存缓存与PackageManager均无此条目): 不再构造残缺条目,
+    # 改为复用 PACKAGE_REMOVED 的 ShellModel$c(type=3) 处理链路,
+    # 清理内存列表并异步持久化删除场景条目, 返回 null 由调用方跳过该 shortcut.
+    invoke-virtual {v3}, Landroid/content/ComponentName;->getPackageName()Ljava/lang/String;
 
-    iget-object v1, p0, Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcut3DInfo;->title:Ljava/lang/String;
+    move-result-object v4
 
-    invoke-direct {v0, v3, v1}, Lcom/tsf/shell/manager/a/f;-><init>(Landroid/content/ComponentName;Ljava/lang/String;)V
+    const/4 v5, 0x1
 
-    .line 311
-    invoke-static {}, Lcom/tsf/shell/manager/bind/a;->c()Lcom/tsf/shell/manager/a/a;
+    new-array v5, v5, [Ljava/lang/String;
 
-    move-result-object v1
+    const/4 v6, 0x0
 
-    invoke-virtual {v1, v0}, Lcom/tsf/shell/manager/a/a;->a(Lcom/tsf/shell/manager/a/f;)V
+    aput-object v4, v5, v6
+
+    invoke-static {}, Lcom/tsf/shell/manager/bind/a;->b()Lcom/tsf/shell/manager/bind/ShellModel;
+
+    move-result-object v6
+
+    new-instance v7, Lcom/tsf/shell/manager/bind/ShellModel$c;
+
+    const/4 v8, 0x3
+
+    invoke-direct {v7, v6, v8, v5}, Lcom/tsf/shell/manager/bind/ShellModel$c;-><init>(Lcom/tsf/shell/manager/bind/ShellModel;I[Ljava/lang/String;)V
+
+    invoke-static {v7}, Lcom/tsf/shell/manager/bind/ShellModel;->a(Ljava/lang/Runnable;)V
+
+    const/4 v0, 0x0
 
     goto :goto_4
 

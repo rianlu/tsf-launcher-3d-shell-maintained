@@ -256,17 +256,21 @@
 
     .line 203
     :sswitch_0
-    new-instance v1, Lcom/tsf/shell/f/i/b/e/g;
-
-    move-object v0, p0
-
-    check-cast v0, Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcutAppInfo;
-
     check-cast p0, Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcutAppInfo;
 
     invoke-static {p0}, Lcom/tsf/shell/f/i/b/e/g;->a(Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcut3DInfo;)Lcom/tsf/shell/manager/a/f;
 
     move-result-object v2
+
+    # 应用已卸载: 返回 null, 由调用方跳过该条目的元素创建
+    if-nez v2, :cond_app_ok
+
+    goto :goto_0
+
+    :cond_app_ok
+    new-instance v1, Lcom/tsf/shell/f/i/b/e/g;
+
+    move-object v0, p0
 
     invoke-direct {v1, v0, p1, v2, p2}, Lcom/tsf/shell/f/i/b/e/g;-><init>(Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcutAppInfo;Lcom/tsf/shell/manager/o/a;Lcom/tsf/shell/manager/a/f;Z)V
 
@@ -364,6 +368,12 @@
 
     move-result-object v0
 
+    # 应用已卸载: 元素创建返回 null, 直接返回
+    if-nez v0, :cond_item_ok
+
+    goto :goto_0
+
+    :cond_item_ok
     .line 326
     invoke-virtual {p8, v0}, Lcom/tsf/shell/manager/l/a$a;->a(Lcom/tsf/shell/f/i/b/e/b;)V
 

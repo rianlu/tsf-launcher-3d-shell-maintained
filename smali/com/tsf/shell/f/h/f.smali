@@ -480,6 +480,12 @@
 
     move-result-object v0
 
+    # 应用已卸载: 元素创建返回 null, 跳过挂载
+    if-nez v0, :cond_item_ok
+
+    goto :goto_0
+
+    :cond_item_ok
     .line 308
     invoke-direct {p0, v0}, Lcom/tsf/shell/f/h/f;->a(Lcom/tsf/shell/f/i/b/e/b;)V
 
