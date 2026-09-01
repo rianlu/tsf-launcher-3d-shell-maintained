@@ -5,6 +5,10 @@
 <h1 align="center">TSF Launcher 3D Shell Maintained</h1>
 
 <p align="center">
+  中文 | [English](README.en.md)
+</p>
+
+<p align="center">
   面向新版 Android 的 TSF Launcher 3D Shell 非官方兼容性维护版.<br>
   在尽量保留原有 3D 桌面交互体验的前提下, 重点修复其在现代 Android 系统上的启动, 权限, 组件, 壁纸和小部件兼容问题.
 </p>
