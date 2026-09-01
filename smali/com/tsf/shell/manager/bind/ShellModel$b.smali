@@ -2172,12 +2172,18 @@
 .end method
 
 .method private c()V
-    .locals 10
+    .locals 11
 
     .prologue
     const/4 v9, 0x0
 
     const/4 v2, 0x0
+
+    # 同包入口去重: 应用内换图标机制 (activity-alias) 会为同一包注册多个
+    # MAIN/LAUNCHER 入口, 首个入口之后的重复条目跳过, 只保留主入口
+    new-instance v10, Ljava/util/HashSet;
+
+    invoke-direct {v10}, Ljava/util/HashSet;-><init>()V
 
     .line 1194
     iget-object v0, p0, Lcom/tsf/shell/manager/bind/ShellModel$b;->b:Landroid/content/Context;
@@ -2252,6 +2258,17 @@
     .line 1209
     if-nez v5, :cond_0
 
+    # 同包入口去重: 该包已有入口条目时跳过 (如闲鱼 AppIcon_* 副入口)
+    invoke-virtual {v6}, Landroid/content/ComponentName;->getPackageName()Ljava/lang/String;
+
+    move-result-object v7
+
+    invoke-virtual {v10, v7}, Ljava/util/HashSet;->add(Ljava/lang/Object;)Z
+
+    move-result v7
+
+    if-eqz v7, :goto_1
+
     .line 1211
     iget-object v5, p0, Lcom/tsf/shell/manager/bind/ShellModel$b;->a:Lcom/tsf/shell/manager/bind/ShellModel;
 
@@ -2273,6 +2290,13 @@
 
     .line 1215
     :cond_0
+    # 同包入口去重: 已存在条目同样登记包名, 避免后续同包新入口被误判为新包
+    invoke-virtual {v6}, Landroid/content/ComponentName;->getPackageName()Ljava/lang/String;
+
+    move-result-object v7
+
+    invoke-virtual {v10, v7}, Ljava/util/HashSet;->add(Ljava/lang/Object;)Z
+
     iget-object v0, p0, Lcom/tsf/shell/manager/bind/ShellModel$b;->a:Lcom/tsf/shell/manager/bind/ShellModel;
 
     iget-object v0, v0, Lcom/tsf/shell/manager/bind/ShellModel;->a:Lcom/tsf/shell/manager/a/a;
