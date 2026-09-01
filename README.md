@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/tag/v3.9.4-r1"><img src="https://img.shields.io/badge/Release-v3.9.4--r1-1976D2?style=for-the-badge" alt="Release v3.9.4-r1"></a>
+  <a href="https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/tag/v3.9.4-r2"><img src="https://img.shields.io/badge/Release-v3.9.4--r2-1976D2?style=for-the-badge" alt="Release v3.9.4-r2"></a>
   <img src="https://img.shields.io/badge/Target%20SDK-28-4CAF50?style=for-the-badge" alt="Target SDK 28">
   <img src="https://img.shields.io/badge/Status-Maintained-4CAF50?style=for-the-badge" alt="Status Maintained">
 </p>
@@ -44,7 +44,7 @@ TSF Launcher 是一代经典且极具创新的 3D 交互桌面应用。原始 AP
 
 ## 当前状态
 
-- [x] 维护基线为 TSF Launcher `3.9.4-r1`, `targetSdkVersion: 28`.
+- [x] 维护基线为 TSF Launcher `3.9.4-r2`, `targetSdkVersion: 28`.
 - [x] 已建立检查, 构建, 正式签名, 安装和 Release 发布流程.
 - [x] 桌面及已归档配套资源可在 Android 12-16 环境安装和运行.
 - [x] 主题, 小部件和装饰品已接入 GitHub 与 Gitee 双源下载.
@@ -56,7 +56,7 @@ TSF Launcher 是一代经典且极具创新的 3D 交互桌面应用。原始 AP
 
 ### 基础兼容与构建基线
 
-- 将工程基线稳定到 `3.9.4-r1` 和 `targetSdkVersion: 28`, 统一维护 `apktool.yml`、发布配置和版本脚本。
+- 将工程基线稳定到 `3.9.4-r2` 和 `targetSdkVersion: 28`, 统一维护 `apktool.yml`、发布配置和版本脚本。
 - 建立 `build_and_install.sh`、`build_release.sh`、`check_install_compat.sh` 等工具链, 覆盖调试构建、签名、安装和发布流程。
 - 补齐 Android 12+ 对 `android:exported` 的要求, 修整运行时权限申请链路和前台服务声明。
 - 增补 `arm64-v8a` 运行库, 修复 64 位设备安装失败问题。
