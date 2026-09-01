@@ -5,7 +5,7 @@
 <h1 align="center">TSF Launcher 3D Shell Maintained</h1>
 
 <p align="center">
-  [中文](README.md) | English
+  <a href="README.md">中文</a> | English
 </p>
 
 <p align="center">
