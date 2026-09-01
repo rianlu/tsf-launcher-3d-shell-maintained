@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "versionCode": 30904,
-  "versionName": "3.9.4-r1",
-  "tag": "v3.9.4-r1",
-  "fileName": "tsf-launcher-maintained-3.9.4-r1.apk",
-  "sha256": "f81d98ac90291050cf861cb2d3ff3553c60fc802c9b3e68022b9bacd42cdd8a1",
-  "changelog": "Fixes first-use photo selection for the built-in Airship widget.",
-  "changelogZh": "修复内置飞艇首次选择照片后不显示的问题."
+  "versionCode": 30905,
+  "versionName": "3.9.4-r2",
+  "tag": "v3.9.4-r2",
+  "fileName": "tsf-launcher-maintained-3.9.4-r2.apk",
+  "sha256": "ddfece6be1d0856c015ce666df7c4b5261ea2d393d6846a8fc613f4a5041896a",
+  "changelog": "Fixes system widgets with configure pages failing to add, missing modern widget previews, Material You dynamic colors and responsive widget sizing; fixes uninstalled app ghost icons, duplicate icons from in-app icon switching apps and CJK secondary-character drawer indexing; fixes music widget playlist on Android 13+ and memo widget transitions on Android 16.",
+  "changelogZh": "修复三星等系统自带小部件添加后无法显示内容与预览缺失; 接入 Material You 动态取色与响应式小部件尺寸下发; 修复已卸载应用残留灰色图标与应用内换图标应用的重复图标; 修正二级汉字应用名索引分组; 修复音乐小部件 Android 13+ 播放列表与便签小部件 Android 16 转场动画; 修复小米平板动态壁纸显示异常."
 }
