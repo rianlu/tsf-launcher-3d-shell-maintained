@@ -16,42 +16,78 @@ App 不会读取 Release 正文, 也不会在每次发布时修改 App 代码;
 
 ## Release 正文模板
 
+两类模板: 桌面版本用完整双语镜像模板, 配套资源用简洁中英混排模板.
+
+### 模板 A: 桌面版本 (v3.9.4-rX)
+
+标题只写版本号 (如 `3.9.4-r2`), 正文不重复写版本号标题. 中英文严格镜像 (同样的分组、同样的条目数、同样的版本信息表与校验值).
+
 ```markdown
-中文导语 (本次重点一句话).
+自 [v前一版](链接) 以来的更新。导语 (本次重点).
 
-### 修复 - 小部件 (桌面宿主)
-- 修复... (#编号)
+### 版本信息
 
-### 修复 - 小部件 (外置 APK)
-- 修复... (#编号)
+| 项目 | 内容 |
+|---|---|
+| 应用版本 | `3.9.4-rX` |
+| Version Code | `309XX` |
+| 应用包名 | `com.tsf.shell` |
+| Target SDK | `28` |
+| 最低 Android 版本 | Android 5.0, API 21 |
+| 主要验证范围 | Android 12-16 真机与模拟器 |
+| 安装文件 | `tsf-launcher-maintained-3.9.4-rX.apk` |
 
-### 修复 - 应用抽屉
-- 修复... (#编号)
+### (按域分组, 标题直接用领域名不加"修复 -"前缀)
+- 修复... (#编号, 每条带 issue 溯源链接)
 
-### 修复 - 桌面与壁纸
-- 修复... (#编号)
+### 升级提示 (如有)
+- 外置小部件同步更新指引, 拆成"方式一/方式二"列表
 
-### 升级提示
-- 外置小部件同步更新指引 (如有)
+### 文件校验
+
+\`\`\`text
+SHA-256: <apm 的 sha256>
+\`\`\`
 
 ---
 
 ## English
 
-Highlights since v...: 一句话导语.
+Since [v前一版](链接): 导语.
 
-### Fixed - Widgets (launcher host)
-- Fixed... (#编号)
+### Version info
 
-(镜像上述全部分组)
+(镜像中文版本信息表, Item/Value 列名)
 
-### Upgrade notes
-- ...
+(镜像全部分组与条目)
 
-**Full Changelog**: https://github.com/rianlu/tsf-launcher-3d-shell-maintained/compare/v前一版本...v本版本
+### File checksum
+
+\`\`\`text
+SHA-256: <同上>
+\`\`\`
+
+**Full Changelog**: https://github.com/rianlu/tsf-launcher-3d-shell-maintained/compare/v前一版...v本版
 ```
 
-注意: 正文不要重复写 `## 版本号` 标题 (Release 页面已显示标题), 无修复的新增/变更分组可按需扩展 `### 新增` / `### 变更`.
+### 模板 B: 配套资源 (tsf-widgets/themes/adornments-vX)
+
+简洁中英混排 (同一列表内中英文条目成对出现), 不需要双语分区. 标题格式 `TSF Widgets v1` / `TSF Themes v1` / `TSF Adornments v1`.
+
+```markdown
+TSF Launcher 3D Shell Maintained 配套XX APK. Adapted TSF ... APKs for the maintained launcher.
+
+- 包含 N 个已适配XX.
+- (中文要点...)
+- Includes N adapted ...(英文要点, 与中文成对)
+- (署名/移除说明: 中英各一句)
+
+下载方式 Download: ...
+
+资源清单与文件对应表见 [tsf-XX/README.md](链接).
+```
+
+注意: 正文不要重复写版本号标题; 分组标题直接用领域名; 有新增/变更时扩展 `### 新增` / `### 变更` 分组.
 
 ## 桌面版本
 
