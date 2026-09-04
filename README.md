@@ -22,6 +22,14 @@
 > [!IMPORTANT]
 > 原始应用 **TSF Launcher 3D Shell** 由 **TSFUI** 开发, 原应用内关于页, 字符串资源和站点链接中保留了 `tsfui.com` 与 `service@tsfui.com` 等信息. 本仓库是独立的非官方兼容性维护项目, 与原作者无官方关联, 主要用于个人学习、兼容性分析和非商业研究。
 
+## 下载
+
+| 渠道 | 说明 |
+|---|---|
+| [GitHub Release](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/latest) | 官方主源 |
+| [Gitee Release](https://gitee.com/rainlu/tsf-launcher-3d-shell-maintained-releases/releases) | 国内镜像 |
+| [蒲公英](https://www.pgyer.com/tsflauncherprime) | 国内高速下载, 支持手机扫码直装 |
+
 ## 原始项目与资源署名
 
 | 项目 | 原始开发者/作者 | 原始主页 |

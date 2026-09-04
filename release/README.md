@@ -25,6 +25,14 @@ App 不会读取 Release 正文, 也不会在每次发布时修改 App 代码;
 ```markdown
 自 [v前一版](链接) 以来的更新。导语 (本次重点).
 
+### 下载
+
+| 渠道 | 说明 |
+|---|---|
+| 本页面附件 | GitHub 原始发布 |
+| [Gitee Release](https://gitee.com/rainlu/tsf-launcher-3d-shell-maintained-releases/releases/tag/v版本) | 国内镜像 |
+| [蒲公英](https://www.pgyer.com/tsflauncherprime) | 国内高速下载, 支持手机扫码直装 |
+
 ### 版本信息
 
 | 项目 | 内容 |
@@ -55,7 +63,16 @@ SHA-256: <apm 的 sha256>
 
 Since [v前一版](链接): 导语.
 
+### Download
+
+| Channel | Notes |
+|---|---|
+| This page (Assets) | GitHub original |
+| [Gitee Release](https://gitee.com/rainlu/tsf-launcher-3d-shell-maintained-releases/releases/tag/v版本) | Mainland China mirror |
+| [Pgyer](https://www.pgyer.com/tsflauncherprime) | Fast download in Mainland China, scan-to-install |
+
 ### Version info
+
 
 (镜像中文版本信息表, Item/Value 列名)
 
@@ -99,6 +116,7 @@ TSF Launcher 3D Shell Maintained 配套XX APK. Adapted TSF ... APKs for the main
 - [ ] 使用同一个 APK 创建 GitHub 和 Gitee Release, 正文使用双语模板 (见上方).
 - [ ] 使用相同 tag, 例如 `v3.9.4-r1`. Gitee 侧 API: 先建 tag (`refs` 用完整 commit sha), 再建 release (`target_commitish` 必填), 资产通过 `/releases/{id}/attach_files` 上传, 替换旧资产需先按资产 id 删除.
 - [ ] 将 `release/update.json` 同步到 Gitee 镜像仓库根目录.
+- [ ] 将 APK 上传到蒲公英 `https://www.pgyer.com/tsflauncherprime` (作为国内高速下载渠道).
 - [ ] 最后推送两个仓库的更新清单.
 
 ## 配套 APK

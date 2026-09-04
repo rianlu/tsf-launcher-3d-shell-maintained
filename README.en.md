@@ -22,6 +22,14 @@
 > [!IMPORTANT]
 > The original app **TSF Launcher 3D Shell** was developed by **TSFUI**. The original about page, string resources and site links retain `tsfui.com` and `service@tsfui.com`. This repository is an independent, unofficial compatibility project with no affiliation with the original author, intended for personal study, compatibility analysis and non-commercial research.
 
+## Download
+
+| Channel | Notes |
+|---|---|
+| [GitHub Release](https://github.com/rianlu/tsf-launcher-3d-shell-maintained/releases/latest) | Official primary source |
+| [Gitee Release](https://gitee.com/rainlu/tsf-launcher-3d-shell-maintained-releases/releases) | Mainland China mirror |
+| [Pgyer](https://www.pgyer.com/tsflauncherprime) | Fast download in Mainland China, scan-to-install via phone |
+
 ## Original Project & Attribution
 
 | Project | Original developer | Original homepage |
