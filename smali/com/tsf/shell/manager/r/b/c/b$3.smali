@@ -69,6 +69,29 @@
 
     check-cast v0, Landroid/appwidget/AppWidgetProviderInfo;
 
+    # r2-fix(#14): follow system launcher provider filtering
+    # 1) only home-screen widgets (skip Wear 8192 / cover 2050 / keyguard 2)
+    iget v2, v0, Landroid/appwidget/AppWidgetProviderInfo;->widgetCategory:I
+
+    and-int/lit8 v2, v2, 0x1
+
+    if-eqz v2, :goto_0
+
+    # 2) respect HIDE_FROM_PICKER (0x2) on API 31+
+    sget v2, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 v3, 0x1f
+
+    if-lt v2, v3, :cond_check_done
+
+    iget v2, v0, Landroid/appwidget/AppWidgetProviderInfo;->widgetFeatures:I
+
+    and-int/lit8 v2, v2, 0x2
+
+    if-nez v2, :goto_0
+
+    :cond_check_done
+
     .line 193
     :try_start_0
     iget-object v2, p0, Lcom/tsf/shell/manager/r/b/c/b$3;->a:Lcom/tsf/shell/manager/r/b/c/b;
