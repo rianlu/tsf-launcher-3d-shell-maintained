@@ -318,12 +318,6 @@
 
     if-eqz v1, :cond_0
 
-    invoke-static {v0}, Lcom/tsf/shell/compat/WidgetCompat;->isConfigurationOptional(Landroid/appwidget/AppWidgetProviderInfo;)Z
-
-    move-result v1
-
-    if-nez v1, :cond_0
-
     sget v1, Landroid/os/Build$VERSION;->SDK_INT:I
 
     const/16 v2, 0x1a
@@ -1021,13 +1015,45 @@
 
     iget-object v0, v0, Lcom/tsf/shell/f/f/n;->d:Lcom/tsf/shell/f/f/c/a;
 
-    iget v3, v2, Landroid/appwidget/AppWidgetProviderInfo;->minWidth:I
+    # r2-fix(#14): provider minWidth/minHeight are in dp, while cell math in
+    # f/f/c/a$a works in pixels. Convert dp -> px before resolving cell span,
+    # otherwise spans collapse to 1x1 and widgets are placed too small.
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
 
-    iget v4, v2, Landroid/appwidget/AppWidgetProviderInfo;->minHeight:I
+    move-result-object v3
 
-    invoke-virtual {v0, v3, v4}, Lcom/tsf/shell/f/f/c/a;->a(II)[I
+    invoke-virtual {v3}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
+
+    move-result-object v3
+
+    iget v3, v3, Landroid/util/DisplayMetrics;->density:F
+
+    iget v4, v2, Landroid/appwidget/AppWidgetProviderInfo;->minWidth:I
+
+    int-to-float v4, v4
+
+    mul-float/2addr v4, v3
+
+    float-to-int v4, v4
+
+    iget v5, v2, Landroid/appwidget/AppWidgetProviderInfo;->minHeight:I
+
+    int-to-float v5, v5
+
+    mul-float/2addr v5, v3
+
+    float-to-int v5, v5
+
+    invoke-virtual {v0, v4, v5}, Lcom/tsf/shell/f/f/c/a;->a(II)[I
 
     move-result-object v0
+
+    # restore v5 = 0 (array index used below)
+    const/4 v5, 0x0
 
     invoke-static {v2, v0}, Lcom/tsf/shell/compat/WidgetCompat;->resolveCellSpan(Landroid/appwidget/AppWidgetProviderInfo;[I)[I
 
@@ -1315,8 +1341,16 @@
 
     if-ne p1, v0, :cond_6
 
-    if-ne p2, v2, :cond_6
+    # r2-fix(#14): some configure activities (e.g. Samsung Weather) finish
+    # without setResult(RESULT_OK). Fall back to the pending widget id (m)
+    # so the widget is still placed on the workspace after configure.
+    if-eq p2, v2, :cond_ok
 
+    iget v0, p0, Lcom/tsf/shell/manager/r/a/a;->m:I
+
+    if-lez v0, :cond_6
+
+    :cond_ok
     iget v0, p0, Lcom/tsf/shell/manager/r/a/a;->m:I
 
     invoke-static {p3, v0}, Lcom/tsf/shell/compat/WidgetCompat;->resolveConfiguredWidgetId(Landroid/content/Intent;I)I
