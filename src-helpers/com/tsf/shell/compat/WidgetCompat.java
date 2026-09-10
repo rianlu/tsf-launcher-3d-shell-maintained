@@ -10,6 +10,9 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Path;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -20,6 +23,8 @@ import android.util.SizeF;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.RemoteViews;
 
 import java.util.ArrayList;
@@ -39,6 +44,8 @@ public final class WidgetCompat {
     private static final String TAG = "TSFWidgetCompat";
     private static final String EXTRA_APPWIDGET_ID = "appWidgetId";
     private static final int MAX_PREVIEW_PX = 2048;
+    /** Launcher3 res/values/dimens.xml: enforced_rounded_corner_max_radius. */
+    private static final float ENFORCED_CORNER_MAX_RADIUS_DP = 16f;
 
     private WidgetCompat() {
     }
@@ -374,15 +381,23 @@ public final class WidgetCompat {
                 if (view != null) {
                     int renderWidth = Math.min(naturalWidth, MAX_PREVIEW_PX);
                     int renderHeight = Math.min(naturalHeight, MAX_PREVIEW_PX);
-                    view.measure(
+                    // Wrap the layout in a host container like AppWidgetHostView does, so the
+                    // rounded-corner enforcement sees the same tree it sees on the workspace.
+                    FrameLayout host = new FrameLayout(context);
+                    host.addView(view, new FrameLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT));
+                    host.measure(
                             View.MeasureSpec.makeMeasureSpec(renderWidth,
                                     View.MeasureSpec.EXACTLY),
                             View.MeasureSpec.makeMeasureSpec(renderHeight,
                                     View.MeasureSpec.EXACTLY));
-                    view.layout(0, 0, renderWidth, renderHeight);
+                    host.layout(0, 0, renderWidth, renderHeight);
                     Bitmap bitmap = Bitmap.createBitmap(renderWidth, renderHeight,
                             Bitmap.Config.ARGB_8888);
-                    view.draw(new Canvas(bitmap));
+                    Canvas canvas = new Canvas(bitmap);
+                    clipEnforcedCorners(canvas, host);
+                    host.draw(canvas);
                     if (renderWidth != targetWidth || renderHeight != targetHeight) {
                         Bitmap scaled = Bitmap.createScaledBitmap(bitmap, targetWidth,
                                 targetHeight, true);
@@ -398,6 +413,121 @@ public final class WidgetCompat {
             }
         }
         return null;
+    }
+
+    /**
+     * API 31+: clip the canvas to the rounded rectangle a modern host enforces on a widget.
+     *
+     * Launcher3 (BaseLauncherAppWidgetHostView + RoundedCornerEnforcement) clips every widget to
+     * the system radius {@code android.R.dimen.system_app_widget_background_radius} around the
+     * widget's background view: the single view with id {@code @android:id/background}, else
+     * the first drawing descendant, else the whole widget. A widget opts out by setting
+     * clipToOutline on its {@code @android:id/background} view. Launcher3 does it with an
+     * outline provider, which only works under hardware rendering; this launcher rasterizes the
+     * host view into a software canvas, so the equivalent is a canvas clip before drawing.
+     *
+     * @param canvas     the canvas the widget view is about to be drawn into, at (0, 0).
+     * @param widgetView the host view (or any container) whose subtree is the widget.
+     */
+    public static void clipEnforcedCorners(Canvas canvas, View widgetView) {
+        if (canvas == null || widgetView == null || Build.VERSION.SDK_INT < 31) {
+            return;
+        }
+        try {
+            Resources res = widgetView.getContext().getResources();
+            float radius = res.getDimension(android.R.dimen.system_app_widget_background_radius);
+            // Launcher3 caps the enforced radius at enforced_rounded_corner_max_radius (16dp)
+            // unless its useSystemRadiusForAppWidgets flag is on, which shipping builds leave
+            // off; match that so widgets look the same as on the stock launcher.
+            float maxRadius = ENFORCED_CORNER_MAX_RADIUS_DP * res.getDisplayMetrics().density;
+            radius = Math.min(radius, maxRadius);
+            if (radius <= 0f) {
+                return;
+            }
+            View background = findBackground(widgetView);
+            if (background == null || hasOptedOut(background)) {
+                return;
+            }
+            Rect rect = new Rect(0, 0, background.getWidth(), background.getHeight());
+            View cursor = background;
+            while (cursor != null && cursor != widgetView) {
+                rect.offset(cursor.getLeft(), cursor.getTop());
+                Object parent = cursor.getParent();
+                cursor = parent instanceof View ? (View) parent : null;
+            }
+            if (rect.isEmpty()) {
+                return;
+            }
+            radius = Math.min(radius, Math.min(rect.width(), rect.height()) / 2f);
+            Path path = new Path();
+            path.addRoundRect(new RectF(rect), radius, radius, Path.Direction.CW);
+            canvas.clipPath(path);
+        } catch (Throwable t) {
+            Log.w(TAG, "rounded corner clip failed", t);
+        }
+    }
+
+    private static boolean hasOptedOut(View background) {
+        return background.getId() == android.R.id.background && background.getClipToOutline();
+    }
+
+    private static View findBackground(View widgetView) {
+        ArrayList<View> backgrounds = new ArrayList<View>();
+        accumulateViewsWithId(widgetView, android.R.id.background, backgrounds);
+        if (backgrounds.size() == 1) {
+            return backgrounds.get(0);
+        }
+        if (widgetView instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) widgetView;
+            if (group.getChildCount() > 0) {
+                return findUndefinedBackground(group.getChildAt(0));
+            }
+        }
+        return widgetView;
+    }
+
+    private static void accumulateViewsWithId(View view, int viewId, ArrayList<View> output) {
+        if (view.getId() == viewId) {
+            output.add(view);
+            return;
+        }
+        if (view instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) view;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                accumulateViewsWithId(group.getChildAt(i), viewId, output);
+            }
+        }
+    }
+
+    private static boolean isViewVisible(View view) {
+        if (view.getVisibility() != View.VISIBLE) {
+            return false;
+        }
+        return !view.willNotDraw() || view.getForeground() != null
+                || view.getBackground() != null;
+    }
+
+    private static View findUndefinedBackground(View current) {
+        if (current.getVisibility() != View.VISIBLE) {
+            return null;
+        }
+        if (isViewVisible(current)) {
+            return current;
+        }
+        View lastVisible = null;
+        if (current instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) current;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                View visible = findUndefinedBackground(group.getChildAt(i));
+                if (visible != null) {
+                    if (lastVisible != null) {
+                        return current; // at least two visible children
+                    }
+                    lastVisible = visible;
+                }
+            }
+        }
+        return lastVisible;
     }
 
     /** Draw the drawable scaled to fit inside the target box, keeping its aspect ratio. */

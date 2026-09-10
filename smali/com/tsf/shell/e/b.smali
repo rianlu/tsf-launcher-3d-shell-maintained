@@ -669,6 +669,11 @@
 
     iget-object v2, p0, Lcom/tsf/shell/e/b;->c:Landroid/graphics/Canvas;
 
+    # r3-fix: Android 12+ hosts clip widgets to the system corner radius (Launcher3
+    # RoundedCornerEnforcement). The host view is rasterized into a software canvas here,
+    # so apply the equivalent canvas clip before drawing. setBitmap() below resets it.
+    invoke-static {v2, v0}, Lcom/tsf/shell/compat/WidgetCompat;->clipEnforcedCorners(Landroid/graphics/Canvas;Landroid/view/View;)V
+
     invoke-virtual {v0, v2}, Lcom/tsf/shell/e/c;->draw(Landroid/graphics/Canvas;)V
 
     .line 271
