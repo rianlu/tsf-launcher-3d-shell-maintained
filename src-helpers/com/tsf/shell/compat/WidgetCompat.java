@@ -240,11 +240,9 @@ public final class WidgetCompat {
         if (info == null) {
             return span;
         }
-        if (cellWidthPx <= 0f || cellHeightPx <= 0f) {
-            float density = Resources.getSystem().getDisplayMetrics().density;
-            cellWidthPx = 80f * density;
-            cellHeightPx = 100f * density;
-        }
+        float cell = squareCell(cellWidthPx, cellHeightPx);
+        cellWidthPx = cell;
+        cellHeightPx = cell;
         int maxCols = areaWidthPx > 0
                 ? Math.max(1, Math.round(areaWidthPx / cellWidthPx)) : Integer.MAX_VALUE;
         int maxRows = areaHeightPx > 0
@@ -294,19 +292,35 @@ public final class WidgetCompat {
     }
 
     /**
+     * Widgets are sized on a square reference cell, the way modern launchers (Launcher3 on
+     * current phones) present them: a 2x2 widget is a square. TSF's own icon cell is 80x100
+     * engine-dp (taller than wide) and the workspace stretches rows further, which made every
+     * targetCell widget a tall rectangle. The workspace is free-form (px positions, half-cell
+     * drag snapping, no occupancy check), so a widget height that is not a whole row count is
+     * safe. The side is the smaller of the two cell dimensions, i.e. the column width on phones.
+     */
+    private static float squareCell(float cellWidthPx, float cellHeightPx) {
+        if (cellWidthPx <= 0f || cellHeightPx <= 0f) {
+            float density = Resources.getSystem().getDisplayMetrics().density;
+            if (cellWidthPx <= 0f) {
+                cellWidthPx = 80f * density;
+            }
+            if (cellHeightPx <= 0f) {
+                cellHeightPx = 100f * density;
+            }
+        }
+        return Math.min(cellWidthPx, cellHeightPx);
+    }
+
+    /**
      * Same as {@link #resolveSpanCells} but returns the span converted back to px
      * ({@code span * cell}), which is the unit the launcher's workspace model works in.
      */
     public static int[] resolveSpanPx(AppWidgetProviderInfo info, float cellWidthPx,
             float cellHeightPx, int areaWidthPx, int areaHeightPx) {
-        if (cellWidthPx <= 0f || cellHeightPx <= 0f) {
-            float density = Resources.getSystem().getDisplayMetrics().density;
-            cellWidthPx = 80f * density;
-            cellHeightPx = 100f * density;
-        }
-        int[] cells = resolveSpanCells(info, cellWidthPx, cellHeightPx, areaWidthPx,
-                areaHeightPx);
-        return new int[] {(int) (cells[0] * cellWidthPx), (int) (cells[1] * cellHeightPx)};
+        float cell = squareCell(cellWidthPx, cellHeightPx);
+        int[] cells = resolveSpanCells(info, cell, cell, areaWidthPx, areaHeightPx);
+        return new int[] {(int) (cells[0] * cell), (int) (cells[1] * cell)};
     }
 
     /**
@@ -324,11 +338,9 @@ public final class WidgetCompat {
         if (context == null || info == null || boxWidth <= 0 || boxHeight <= 0) {
             return null;
         }
-        if (cellWidthPx <= 0f || cellHeightPx <= 0f) {
-            float density = context.getResources().getDisplayMetrics().density;
-            cellWidthPx = 80f * density;
-            cellHeightPx = 100f * density;
-        }
+        float cell = squareCell(cellWidthPx, cellHeightPx);
+        cellWidthPx = cell;
+        cellHeightPx = cell;
         int[] cells = resolveSpanCells(info, cellWidthPx, cellHeightPx, areaWidthPx,
                 areaHeightPx);
         int naturalWidth = Math.max(1, Math.round(cells[0] * cellWidthPx));

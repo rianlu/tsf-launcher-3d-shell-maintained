@@ -286,118 +286,90 @@
 .end method
 
 .method public static buildPreviewBitmap(Landroid/content/Context;Landroid/appwidget/AppWidgetProviderInfo;FFIIII)Landroid/graphics/Bitmap;
-    .locals 6
+    .locals 5
 
     const-string v0, "TSFWidgetCompat"
 
     const/4 v1, 0x0
 
-    if-eqz p0, :cond_a
+    if-eqz p0, :cond_8
 
-    if-eqz p1, :cond_a
+    if-eqz p1, :cond_8
 
-    if-lez p6, :cond_a
+    if-lez p6, :cond_8
 
     if-gtz p7, :cond_0
 
     goto/16 :goto_3
 
     :cond_0
-    const/4 v2, 0x0
-
-    cmpg-float v3, p2, v2
-
-    if-lez v3, :cond_1
-
-    cmpg-float v2, p3, v2
-
-    if-gtz v2, :cond_2
-
-    :cond_1
-    invoke-virtual {p0}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
-
-    move-result-object p2
-
-    invoke-virtual {p2}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
-
-    move-result-object p2
-
-    iget p2, p2, Landroid/util/DisplayMetrics;->density:F
-
-    const/high16 p3, 0x42a00000    # 80.0f
-
-    mul-float p3, p3, p2
-
-    const/high16 v2, 0x42c80000    # 100.0f
-
-    mul-float p2, p2, v2
-
-    move v5, p3
-
-    move p3, p2
-
-    move p2, v5
-
-    :cond_2
-    invoke-static {p1, p2, p3, p4, p5}, Lcom/tsf/shell/compat/WidgetCompat;->resolveSpanCells(Landroid/appwidget/AppWidgetProviderInfo;FFII)[I
-
-    move-result-object p4
-
-    const/4 p5, 0x0
-
-    aget v2, p4, p5
-
-    int-to-float v2, v2
-
-    mul-float v2, v2, p2
-
-    invoke-static {v2}, Ljava/lang/Math;->round(F)I
+    invoke-static {p2, p3}, Lcom/tsf/shell/compat/WidgetCompat;->squareCell(FF)F
 
     move-result p2
 
+    nop
+
+    nop
+
+    invoke-static {p1, p2, p2, p4, p5}, Lcom/tsf/shell/compat/WidgetCompat;->resolveSpanCells(Landroid/appwidget/AppWidgetProviderInfo;FFII)[I
+
+    move-result-object p3
+
+    const/4 p4, 0x0
+
+    aget p5, p3, p4
+
+    int-to-float p5, p5
+
+    mul-float p5, p5, p2
+
+    invoke-static {p5}, Ljava/lang/Math;->round(F)I
+
+    move-result p5
+
     const/4 v2, 0x1
+
+    invoke-static {v2, p5}, Ljava/lang/Math;->max(II)I
+
+    move-result p5
+
+    aget p3, p3, v2
+
+    int-to-float p3, p3
+
+    mul-float p3, p3, p2
+
+    invoke-static {p3}, Ljava/lang/Math;->round(F)I
+
+    move-result p2
 
     invoke-static {v2, p2}, Ljava/lang/Math;->max(II)I
 
     move-result p2
 
-    aget p4, p4, v2
+    int-to-float p3, p6
 
-    int-to-float p4, p4
+    int-to-float p6, p5
 
-    mul-float p4, p4, p3
-
-    invoke-static {p4}, Ljava/lang/Math;->round(F)I
-
-    move-result p3
-
-    invoke-static {v2, p3}, Ljava/lang/Math;->max(II)I
-
-    move-result p3
-
-    int-to-float p4, p6
-
-    int-to-float p6, p2
-
-    div-float/2addr p4, p6
+    div-float/2addr p3, p6
 
     int-to-float p7, p7
 
-    int-to-float v3, p3
+    int-to-float v3, p2
 
     div-float/2addr p7, v3
 
-    invoke-static {p4, p7}, Ljava/lang/Math;->min(FF)F
+    invoke-static {p3, p7}, Ljava/lang/Math;->min(FF)F
 
-    move-result p4
+    move-result p3
 
     const/high16 p7, 0x3f800000    # 1.0f
 
-    invoke-static {p7, p4}, Ljava/lang/Math;->min(FF)F
+    invoke-static {p7, p3}, Ljava/lang/Math;->min(FF)F
 
-    move-result p4
+    move-result p3
 
-    mul-float p6, p6, p4
+    mul-float p6, p6, p3
 
     invoke-static {p6}, Ljava/lang/Math;->round(F)I
 
@@ -407,24 +379,24 @@
 
     move-result p6
 
-    mul-float v3, v3, p4
+    mul-float v3, v3, p3
 
     invoke-static {v3}, Ljava/lang/Math;->round(F)I
 
-    move-result p4
+    move-result p3
 
-    invoke-static {v2, p4}, Ljava/lang/Math;->max(II)I
+    invoke-static {v2, p3}, Ljava/lang/Math;->max(II)I
 
-    move-result p4
+    move-result p3
 
     nop
 
     :try_start_0
     iget p7, p1, Landroid/appwidget/AppWidgetProviderInfo;->previewImage:I
 
-    if-eqz p7, :cond_3
+    if-eqz p7, :cond_1
 
-    invoke-virtual {p1, p0, p5}, Landroid/appwidget/AppWidgetProviderInfo;->loadPreviewImage(Landroid/content/Context;I)Landroid/graphics/drawable/Drawable;
+    invoke-virtual {p1, p0, p4}, Landroid/appwidget/AppWidgetProviderInfo;->loadPreviewImage(Landroid/content/Context;I)Landroid/graphics/drawable/Drawable;
 
     move-result-object p7
     :try_end_0
@@ -432,7 +404,7 @@
 
     goto :goto_0
 
-    :cond_3
+    :cond_1
     move-object p7, v1
 
     :goto_0
@@ -466,22 +438,22 @@
     move-object p7, v1
 
     :goto_1
-    if-eqz p7, :cond_4
+    if-eqz p7, :cond_2
 
     invoke-virtual {p7}, Landroid/graphics/drawable/Drawable;->getIntrinsicWidth()I
 
     move-result v3
 
-    if-lez v3, :cond_4
+    if-lez v3, :cond_2
 
     invoke-virtual {p7}, Landroid/graphics/drawable/Drawable;->getIntrinsicHeight()I
 
     move-result v3
 
-    if-lez v3, :cond_4
+    if-lez v3, :cond_2
 
     :try_start_1
-    invoke-static {p7, p6, p4}, Lcom/tsf/shell/compat/WidgetCompat;->drawFitted(Landroid/graphics/drawable/Drawable;II)Landroid/graphics/Bitmap;
+    invoke-static {p7, p6, p3}, Lcom/tsf/shell/compat/WidgetCompat;->drawFitted(Landroid/graphics/drawable/Drawable;II)Landroid/graphics/Bitmap;
 
     move-result-object p0
     :try_end_1
@@ -514,80 +486,80 @@
 
     invoke-static {v0, v3, p7}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
 
-    :cond_4
+    :cond_2
     sget p7, Landroid/os/Build$VERSION;->SDK_INT:I
 
     const/16 v3, 0x1f
 
-    if-lt p7, v3, :cond_9
+    if-lt p7, v3, :cond_7
 
     :try_start_2
     invoke-static {p0, p1}, Lcom/tsf/shell/compat/WidgetCompat;->inflatePreviewLayout(Landroid/content/Context;Landroid/appwidget/AppWidgetProviderInfo;)Landroid/view/View;
 
     move-result-object p0
 
-    if-eqz p0, :cond_8
+    if-eqz p0, :cond_6
 
     const/16 p7, 0x800
+
+    invoke-static {p5, p7}, Ljava/lang/Math;->min(II)I
+
+    move-result p5
 
     invoke-static {p2, p7}, Ljava/lang/Math;->min(II)I
 
     move-result p2
 
-    invoke-static {p3, p7}, Ljava/lang/Math;->min(II)I
-
-    move-result p3
-
     nop
 
     const/high16 p7, 0x40000000    # 2.0f
 
-    invoke-static {p2, p7}, Landroid/view/View$MeasureSpec;->makeMeasureSpec(II)I
+    invoke-static {p5, p7}, Landroid/view/View$MeasureSpec;->makeMeasureSpec(II)I
 
     move-result v3
 
-    invoke-static {p3, p7}, Landroid/view/View$MeasureSpec;->makeMeasureSpec(II)I
+    invoke-static {p2, p7}, Landroid/view/View$MeasureSpec;->makeMeasureSpec(II)I
 
     move-result p7
 
     invoke-virtual {p0, v3, p7}, Landroid/view/View;->measure(II)V
 
-    invoke-virtual {p0, p5, p5, p2, p3}, Landroid/view/View;->layout(IIII)V
+    invoke-virtual {p0, p4, p4, p5, p2}, Landroid/view/View;->layout(IIII)V
 
-    sget-object p5, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
+    sget-object p4, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
 
-    invoke-static {p2, p3, p5}, Landroid/graphics/Bitmap;->createBitmap(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;
+    invoke-static {p5, p2, p4}, Landroid/graphics/Bitmap;->createBitmap(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;
 
-    move-result-object p5
+    move-result-object p4
 
     new-instance p7, Landroid/graphics/Canvas;
 
-    invoke-direct {p7, p5}, Landroid/graphics/Canvas;-><init>(Landroid/graphics/Bitmap;)V
+    invoke-direct {p7, p4}, Landroid/graphics/Canvas;-><init>(Landroid/graphics/Bitmap;)V
 
     invoke-virtual {p0, p7}, Landroid/view/View;->draw(Landroid/graphics/Canvas;)V
 
-    if-ne p2, p6, :cond_5
+    if-ne p5, p6, :cond_3
 
-    if-eq p3, p4, :cond_7
+    if-eq p2, p3, :cond_5
 
-    :cond_5
-    invoke-static {p5, p6, p4, v2}, Landroid/graphics/Bitmap;->createScaledBitmap(Landroid/graphics/Bitmap;IIZ)Landroid/graphics/Bitmap;
+    :cond_3
+    invoke-static {p4, p6, p3, v2}, Landroid/graphics/Bitmap;->createScaledBitmap(Landroid/graphics/Bitmap;IIZ)Landroid/graphics/Bitmap;
 
     move-result-object p0
 
-    if-eq p0, p5, :cond_6
+    if-eq p0, p4, :cond_4
 
-    invoke-virtual {p5}, Landroid/graphics/Bitmap;->recycle()V
+    invoke-virtual {p4}, Landroid/graphics/Bitmap;->recycle()V
     :try_end_2
     .catchall {:try_start_2 .. :try_end_2} :catchall_2
 
+    :cond_4
+    move-object p4, p0
+
+    :cond_5
+    return-object p4
+
     :cond_6
-    move-object p5, p0
-
-    :cond_7
-    return-object p5
-
-    :cond_8
     goto :goto_2
 
     :catchall_2
@@ -615,11 +587,11 @@
 
     invoke-static {v0, p1, p0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
 
-    :cond_9
+    :cond_7
     :goto_2
     return-object v1
 
-    :cond_a
+    :cond_8
     :goto_3
     return-object v1
 .end method
@@ -1562,7 +1534,7 @@
 .end method
 
 .method public static resolveSpanCells(Landroid/appwidget/AppWidgetProviderInfo;FFII)[I
-    .locals 11
+    .locals 10
 
     const/4 v0, 0x2
 
@@ -1581,45 +1553,17 @@
     return-object v0
 
     :cond_0
-    const/4 v3, 0x0
+    invoke-static {p1, p2}, Lcom/tsf/shell/compat/WidgetCompat;->squareCell(FF)F
 
-    cmpg-float v4, p1, v3
+    move-result p1
 
-    if-lez v4, :cond_1
+    nop
 
-    cmpg-float v3, p2, v3
+    nop
 
-    if-gtz v3, :cond_2
+    const p2, 0x7fffffff
 
-    :cond_1
-    invoke-static {}, Landroid/content/res/Resources;->getSystem()Landroid/content/res/Resources;
-
-    move-result-object p1
-
-    invoke-virtual {p1}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
-
-    move-result-object p1
-
-    iget p1, p1, Landroid/util/DisplayMetrics;->density:F
-
-    const/high16 p2, 0x42a00000    # 80.0f
-
-    mul-float p2, p2, p1
-
-    const/high16 v3, 0x42c80000    # 100.0f
-
-    mul-float p1, p1, v3
-
-    move v10, p2
-
-    move p2, p1
-
-    move p1, v10
-
-    :cond_2
-    const v3, 0x7fffffff
-
-    if-lez p3, :cond_3
+    if-lez p3, :cond_1
 
     int-to-float p3, p3
 
@@ -1635,27 +1579,27 @@
 
     goto :goto_0
 
-    :cond_3
+    :cond_1
     const p3, 0x7fffffff
 
     :goto_0
-    if-lez p4, :cond_4
+    if-lez p4, :cond_2
 
-    int-to-float p4, p4
+    int-to-float p2, p4
 
-    div-float/2addr p4, p2
+    div-float/2addr p2, p1
 
-    invoke-static {p4}, Ljava/lang/Math;->round(F)I
+    invoke-static {p2}, Ljava/lang/Math;->round(F)I
 
-    move-result p4
+    move-result p2
 
-    invoke-static {v2, p4}, Ljava/lang/Math;->max(II)I
+    invoke-static {v2, p2}, Ljava/lang/Math;->max(II)I
 
-    move-result v3
+    move-result p2
 
     goto :goto_1
 
-    :cond_4
+    :cond_2
     nop
 
     :goto_1
@@ -1665,108 +1609,108 @@
 
     move-result p4
 
-    iget v4, p0, Landroid/appwidget/AppWidgetProviderInfo;->minHeight:I
+    iget v3, p0, Landroid/appwidget/AppWidgetProviderInfo;->minHeight:I
 
-    invoke-static {v4, p2}, Lcom/tsf/shell/compat/WidgetCompat;->spanFor(IF)I
+    invoke-static {v3, p1}, Lcom/tsf/shell/compat/WidgetCompat;->spanFor(IF)I
 
-    move-result v4
+    move-result v3
 
-    sget v5, Landroid/os/Build$VERSION;->SDK_INT:I
+    sget v4, Landroid/os/Build$VERSION;->SDK_INT:I
 
-    const/16 v6, 0x1f
+    const/16 v5, 0x1f
 
-    if-lt v5, v6, :cond_8
+    if-lt v4, v5, :cond_6
 
     :try_start_0
-    iget v5, p0, Landroid/appwidget/AppWidgetProviderInfo;->targetCellWidth:I
+    iget v4, p0, Landroid/appwidget/AppWidgetProviderInfo;->targetCellWidth:I
 
-    iget v6, p0, Landroid/appwidget/AppWidgetProviderInfo;->targetCellHeight:I
+    iget v5, p0, Landroid/appwidget/AppWidgetProviderInfo;->targetCellHeight:I
 
-    if-lez v5, :cond_7
+    if-lez v4, :cond_5
 
-    if-lez v6, :cond_7
+    if-lez v5, :cond_5
 
-    iget v7, p0, Landroid/appwidget/AppWidgetProviderInfo;->minResizeWidth:I
+    iget v6, p0, Landroid/appwidget/AppWidgetProviderInfo;->minResizeWidth:I
+
+    invoke-static {v6, p1}, Lcom/tsf/shell/compat/WidgetCompat;->spanFor(IF)I
+
+    move-result v6
+
+    iget v7, p0, Landroid/appwidget/AppWidgetProviderInfo;->minResizeHeight:I
 
     invoke-static {v7, p1}, Lcom/tsf/shell/compat/WidgetCompat;->spanFor(IF)I
 
     move-result v7
 
-    iget v8, p0, Landroid/appwidget/AppWidgetProviderInfo;->minResizeHeight:I
+    nop
 
-    invoke-static {v8, p2}, Lcom/tsf/shell/compat/WidgetCompat;->spanFor(IF)I
+    nop
+
+    iget v8, p0, Landroid/appwidget/AppWidgetProviderInfo;->maxResizeWidth:I
+
+    if-lez v8, :cond_3
+
+    iget v8, p0, Landroid/appwidget/AppWidgetProviderInfo;->maxResizeWidth:I
+
+    invoke-static {v8, p1}, Lcom/tsf/shell/compat/WidgetCompat;->spanFor(IF)I
 
     move-result v8
 
-    nop
+    invoke-static {p3, v8}, Ljava/lang/Math;->min(II)I
 
-    nop
-
-    iget v9, p0, Landroid/appwidget/AppWidgetProviderInfo;->maxResizeWidth:I
-
-    if-lez v9, :cond_5
-
-    iget v9, p0, Landroid/appwidget/AppWidgetProviderInfo;->maxResizeWidth:I
-
-    invoke-static {v9, p1}, Lcom/tsf/shell/compat/WidgetCompat;->spanFor(IF)I
-
-    move-result p1
-
-    invoke-static {p3, p1}, Ljava/lang/Math;->min(II)I
-
-    move-result p1
+    move-result v8
 
     goto :goto_2
 
-    :cond_5
-    move p1, p3
+    :cond_3
+    move v8, p3
 
     :goto_2
     iget v9, p0, Landroid/appwidget/AppWidgetProviderInfo;->maxResizeHeight:I
 
-    if-lez v9, :cond_6
+    if-lez v9, :cond_4
 
     iget p0, p0, Landroid/appwidget/AppWidgetProviderInfo;->maxResizeHeight:I
 
-    invoke-static {p0, p2}, Lcom/tsf/shell/compat/WidgetCompat;->spanFor(IF)I
+    invoke-static {p0, p1}, Lcom/tsf/shell/compat/WidgetCompat;->spanFor(IF)I
 
     move-result p0
 
-    invoke-static {v3, p0}, Ljava/lang/Math;->min(II)I
+    invoke-static {p2, p0}, Ljava/lang/Math;->min(II)I
 
     move-result p0
 
     goto :goto_3
 
-    :cond_6
-    move p0, v3
+    :cond_4
+    move p0, p2
 
     :goto_3
-    invoke-static {p1, v7}, Ljava/lang/Math;->max(II)I
+    invoke-static {v8, v6}, Ljava/lang/Math;->max(II)I
 
     move-result p1
 
-    invoke-static {p0, v8}, Ljava/lang/Math;->max(II)I
+    invoke-static {p0, v7}, Ljava/lang/Math;->max(II)I
 
     move-result p0
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
-    if-lt v5, v7, :cond_7
+    if-lt v4, v6, :cond_5
 
-    if-gt v5, p1, :cond_7
+    if-gt v4, p1, :cond_5
 
-    if-lt v6, v8, :cond_7
+    if-lt v5, v7, :cond_5
 
-    if-gt v6, p0, :cond_7
+    if-gt v5, p0, :cond_5
 
     nop
 
-    move p4, v5
+    move p4, v4
 
-    move v4, v6
+    move v3, v5
 
-    :cond_7
+    :cond_5
     goto :goto_4
 
     :catchall_0
@@ -1774,11 +1718,11 @@
 
     const-string p1, "TSFWidgetCompat"
 
-    const-string p2, "targetCell resolve failed"
+    const-string v4, "targetCell resolve failed"
 
-    invoke-static {p1, p2, p0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+    invoke-static {p1, v4, p0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
 
-    :cond_8
+    :cond_6
     :goto_4
     invoke-static {p4, p3}, Ljava/lang/Math;->min(II)I
 
@@ -1786,7 +1730,7 @@
 
     aput p0, v0, v1
 
-    invoke-static {v4, v3}, Ljava/lang/Math;->min(II)I
+    invoke-static {v3, p2}, Ljava/lang/Math;->min(II)I
 
     move-result p0
 
@@ -1796,57 +1740,25 @@
 .end method
 
 .method public static resolveSpanPx(Landroid/appwidget/AppWidgetProviderInfo;FFII)[I
-    .locals 3
+    .locals 0
 
-    const/4 v0, 0x0
+    invoke-static {p1, p2}, Lcom/tsf/shell/compat/WidgetCompat;->squareCell(FF)F
 
-    cmpg-float v1, p1, v0
+    move-result p1
 
-    if-lez v1, :cond_0
-
-    cmpg-float v0, p2, v0
-
-    if-gtz v0, :cond_1
-
-    :cond_0
-    invoke-static {}, Landroid/content/res/Resources;->getSystem()Landroid/content/res/Resources;
-
-    move-result-object p1
-
-    invoke-virtual {p1}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
-
-    move-result-object p1
-
-    iget p1, p1, Landroid/util/DisplayMetrics;->density:F
-
-    const/high16 p2, 0x42a00000    # 80.0f
-
-    mul-float p2, p2, p1
-
-    const/high16 v0, 0x42c80000    # 100.0f
-
-    mul-float p1, p1, v0
-
-    move v2, p2
-
-    move p2, p1
-
-    move p1, v2
-
-    :cond_1
-    invoke-static {p0, p1, p2, p3, p4}, Lcom/tsf/shell/compat/WidgetCompat;->resolveSpanCells(Landroid/appwidget/AppWidgetProviderInfo;FFII)[I
+    invoke-static {p0, p1, p1, p3, p4}, Lcom/tsf/shell/compat/WidgetCompat;->resolveSpanCells(Landroid/appwidget/AppWidgetProviderInfo;FFII)[I
 
     move-result-object p0
 
-    const/4 p3, 0x0
+    const/4 p2, 0x0
 
-    aget p3, p0, p3
+    aget p2, p0, p2
 
-    int-to-float p3, p3
+    int-to-float p2, p2
 
-    mul-float p3, p3, p1
+    mul-float p2, p2, p1
 
-    float-to-int p1, p3
+    float-to-int p2, p2
 
     const/4 p3, 0x1
 
@@ -1854,11 +1766,11 @@
 
     int-to-float p0, p0
 
-    mul-float p0, p0, p2
+    mul-float p0, p0, p1
 
     float-to-int p0, p0
 
-    filled-new-array {p1, p0}, [I
+    filled-new-array {p2, p0}, [I
 
     move-result-object p0
 
@@ -1902,6 +1814,53 @@
     :cond_1
     :goto_0
     return v0
+.end method
+
+.method private static squareCell(FF)F
+    .locals 3
+
+    const/4 v0, 0x0
+
+    cmpg-float v1, p0, v0
+
+    if-lez v1, :cond_0
+
+    cmpg-float v2, p1, v0
+
+    if-gtz v2, :cond_2
+
+    :cond_0
+    invoke-static {}, Landroid/content/res/Resources;->getSystem()Landroid/content/res/Resources;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
+
+    move-result-object v2
+
+    iget v2, v2, Landroid/util/DisplayMetrics;->density:F
+
+    if-gtz v1, :cond_1
+
+    const/high16 p0, 0x42a00000    # 80.0f
+
+    mul-float p0, p0, v2
+
+    :cond_1
+    cmpg-float v0, p1, v0
+
+    if-gtz v0, :cond_2
+
+    const/high16 p1, 0x42c80000    # 100.0f
+
+    mul-float p1, p1, v2
+
+    :cond_2
+    invoke-static {p0, p1}, Ljava/lang/Math;->min(FF)F
+
+    move-result p0
+
+    return p0
 .end method
 
 .method public static startConfigure(Landroid/app/Activity;Landroid/appwidget/AppWidgetHost;II)Z
