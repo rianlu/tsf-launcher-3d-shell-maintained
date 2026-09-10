@@ -112,8 +112,9 @@ java -cp "$apktool_jar:$build_dir/baksmali-run" BaksmaliRun \
   "$seed_apk"
 
 mkdir -p "$out_smali_dir"
-find "$out_smali_dir" -mindepth 1 -name '*.smali' -delete
-cp "$build_dir"/smali/com/tsf/shell/compat/*.smali "$out_smali_dir/"
+# Only replace WidgetCompat's own classes; the directory is shared with AppIndexCompat.
+find "$out_smali_dir" -mindepth 1 -name 'WidgetCompat*.smali' -delete
+cp "$build_dir"/smali/com/tsf/shell/compat/WidgetCompat*.smali "$out_smali_dir/"
 
 echo
 echo "smali files written to: $out_smali_dir"

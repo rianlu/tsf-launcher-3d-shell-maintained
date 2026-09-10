@@ -285,6 +285,542 @@
     .end array-data
 .end method
 
+.method public static buildPreviewBitmap(Landroid/content/Context;Landroid/appwidget/AppWidgetProviderInfo;FFIIII)Landroid/graphics/Bitmap;
+    .locals 6
+
+    const-string v0, "TSFWidgetCompat"
+
+    const/4 v1, 0x0
+
+    if-eqz p0, :cond_a
+
+    if-eqz p1, :cond_a
+
+    if-lez p6, :cond_a
+
+    if-gtz p7, :cond_0
+
+    goto/16 :goto_3
+
+    :cond_0
+    const/4 v2, 0x0
+
+    cmpg-float v3, p2, v2
+
+    if-lez v3, :cond_1
+
+    cmpg-float v2, p3, v2
+
+    if-gtz v2, :cond_2
+
+    :cond_1
+    invoke-virtual {p0}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object p2
+
+    invoke-virtual {p2}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
+
+    move-result-object p2
+
+    iget p2, p2, Landroid/util/DisplayMetrics;->density:F
+
+    const/high16 p3, 0x42a00000    # 80.0f
+
+    mul-float p3, p3, p2
+
+    const/high16 v2, 0x42c80000    # 100.0f
+
+    mul-float p2, p2, v2
+
+    move v5, p3
+
+    move p3, p2
+
+    move p2, v5
+
+    :cond_2
+    invoke-static {p1, p2, p3, p4, p5}, Lcom/tsf/shell/compat/WidgetCompat;->resolveSpanCells(Landroid/appwidget/AppWidgetProviderInfo;FFII)[I
+
+    move-result-object p4
+
+    const/4 p5, 0x0
+
+    aget v2, p4, p5
+
+    int-to-float v2, v2
+
+    mul-float v2, v2, p2
+
+    invoke-static {v2}, Ljava/lang/Math;->round(F)I
+
+    move-result p2
+
+    const/4 v2, 0x1
+
+    invoke-static {v2, p2}, Ljava/lang/Math;->max(II)I
+
+    move-result p2
+
+    aget p4, p4, v2
+
+    int-to-float p4, p4
+
+    mul-float p4, p4, p3
+
+    invoke-static {p4}, Ljava/lang/Math;->round(F)I
+
+    move-result p3
+
+    invoke-static {v2, p3}, Ljava/lang/Math;->max(II)I
+
+    move-result p3
+
+    int-to-float p4, p6
+
+    int-to-float p6, p2
+
+    div-float/2addr p4, p6
+
+    int-to-float p7, p7
+
+    int-to-float v3, p3
+
+    div-float/2addr p7, v3
+
+    invoke-static {p4, p7}, Ljava/lang/Math;->min(FF)F
+
+    move-result p4
+
+    const/high16 p7, 0x3f800000    # 1.0f
+
+    invoke-static {p7, p4}, Ljava/lang/Math;->min(FF)F
+
+    move-result p4
+
+    mul-float p6, p6, p4
+
+    invoke-static {p6}, Ljava/lang/Math;->round(F)I
+
+    move-result p6
+
+    invoke-static {v2, p6}, Ljava/lang/Math;->max(II)I
+
+    move-result p6
+
+    mul-float v3, v3, p4
+
+    invoke-static {v3}, Ljava/lang/Math;->round(F)I
+
+    move-result p4
+
+    invoke-static {v2, p4}, Ljava/lang/Math;->max(II)I
+
+    move-result p4
+
+    nop
+
+    :try_start_0
+    iget p7, p1, Landroid/appwidget/AppWidgetProviderInfo;->previewImage:I
+
+    if-eqz p7, :cond_3
+
+    invoke-virtual {p1, p0, p5}, Landroid/appwidget/AppWidgetProviderInfo;->loadPreviewImage(Landroid/content/Context;I)Landroid/graphics/drawable/Drawable;
+
+    move-result-object p7
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    goto :goto_0
+
+    :cond_3
+    move-object p7, v1
+
+    :goto_0
+    goto :goto_1
+
+    :catchall_0
+    move-exception p7
+
+    new-instance v3, Ljava/lang/StringBuilder;
+
+    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v4, "previewImage load failed: "
+
+    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    iget-object v4, p1, Landroid/appwidget/AppWidgetProviderInfo;->provider:Landroid/content/ComponentName;
+
+    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v3
+
+    invoke-static {v0, v3, p7}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    move-object p7, v1
+
+    :goto_1
+    if-eqz p7, :cond_4
+
+    invoke-virtual {p7}, Landroid/graphics/drawable/Drawable;->getIntrinsicWidth()I
+
+    move-result v3
+
+    if-lez v3, :cond_4
+
+    invoke-virtual {p7}, Landroid/graphics/drawable/Drawable;->getIntrinsicHeight()I
+
+    move-result v3
+
+    if-lez v3, :cond_4
+
+    :try_start_1
+    invoke-static {p7, p6, p4}, Lcom/tsf/shell/compat/WidgetCompat;->drawFitted(Landroid/graphics/drawable/Drawable;II)Landroid/graphics/Bitmap;
+
+    move-result-object p0
+    :try_end_1
+    .catchall {:try_start_1 .. :try_end_1} :catchall_1
+
+    return-object p0
+
+    :catchall_1
+    move-exception p7
+
+    new-instance v3, Ljava/lang/StringBuilder;
+
+    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v4, "previewImage draw failed: "
+
+    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    iget-object v4, p1, Landroid/appwidget/AppWidgetProviderInfo;->provider:Landroid/content/ComponentName;
+
+    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v3
+
+    invoke-static {v0, v3, p7}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    :cond_4
+    sget p7, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 v3, 0x1f
+
+    if-lt p7, v3, :cond_9
+
+    :try_start_2
+    invoke-static {p0, p1}, Lcom/tsf/shell/compat/WidgetCompat;->inflatePreviewLayout(Landroid/content/Context;Landroid/appwidget/AppWidgetProviderInfo;)Landroid/view/View;
+
+    move-result-object p0
+
+    if-eqz p0, :cond_8
+
+    const/16 p7, 0x800
+
+    invoke-static {p2, p7}, Ljava/lang/Math;->min(II)I
+
+    move-result p2
+
+    invoke-static {p3, p7}, Ljava/lang/Math;->min(II)I
+
+    move-result p3
+
+    nop
+
+    const/high16 p7, 0x40000000    # 2.0f
+
+    invoke-static {p2, p7}, Landroid/view/View$MeasureSpec;->makeMeasureSpec(II)I
+
+    move-result v3
+
+    invoke-static {p3, p7}, Landroid/view/View$MeasureSpec;->makeMeasureSpec(II)I
+
+    move-result p7
+
+    invoke-virtual {p0, v3, p7}, Landroid/view/View;->measure(II)V
+
+    invoke-virtual {p0, p5, p5, p2, p3}, Landroid/view/View;->layout(IIII)V
+
+    sget-object p5, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
+
+    invoke-static {p2, p3, p5}, Landroid/graphics/Bitmap;->createBitmap(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;
+
+    move-result-object p5
+
+    new-instance p7, Landroid/graphics/Canvas;
+
+    invoke-direct {p7, p5}, Landroid/graphics/Canvas;-><init>(Landroid/graphics/Bitmap;)V
+
+    invoke-virtual {p0, p7}, Landroid/view/View;->draw(Landroid/graphics/Canvas;)V
+
+    if-ne p2, p6, :cond_5
+
+    if-eq p3, p4, :cond_7
+
+    :cond_5
+    invoke-static {p5, p6, p4, v2}, Landroid/graphics/Bitmap;->createScaledBitmap(Landroid/graphics/Bitmap;IIZ)Landroid/graphics/Bitmap;
+
+    move-result-object p0
+
+    if-eq p0, p5, :cond_6
+
+    invoke-virtual {p5}, Landroid/graphics/Bitmap;->recycle()V
+    :try_end_2
+    .catchall {:try_start_2 .. :try_end_2} :catchall_2
+
+    :cond_6
+    move-object p5, p0
+
+    :cond_7
+    return-object p5
+
+    :cond_8
+    goto :goto_2
+
+    :catchall_2
+    move-exception p0
+
+    new-instance p2, Ljava/lang/StringBuilder;
+
+    invoke-direct {p2}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string p3, "previewLayout render failed: "
+
+    invoke-virtual {p2, p3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object p2
+
+    iget-object p1, p1, Landroid/appwidget/AppWidgetProviderInfo;->provider:Landroid/content/ComponentName;
+
+    invoke-virtual {p2, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+
+    move-result-object p1
+
+    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object p1
+
+    invoke-static {v0, p1, p0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    :cond_9
+    :goto_2
+    return-object v1
+
+    :cond_a
+    :goto_3
+    return-object v1
+.end method
+
+.method private static drawFitted(Landroid/graphics/drawable/Drawable;II)Landroid/graphics/Bitmap;
+    .locals 2
+
+    invoke-virtual {p0}, Landroid/graphics/drawable/Drawable;->getIntrinsicWidth()I
+
+    move-result v0
+
+    invoke-virtual {p0}, Landroid/graphics/drawable/Drawable;->getIntrinsicHeight()I
+
+    move-result v1
+
+    int-to-float p1, p1
+
+    int-to-float v0, v0
+
+    div-float/2addr p1, v0
+
+    int-to-float p2, p2
+
+    int-to-float v1, v1
+
+    div-float/2addr p2, v1
+
+    invoke-static {p1, p2}, Ljava/lang/Math;->min(FF)F
+
+    move-result p1
+
+    mul-float v0, v0, p1
+
+    invoke-static {v0}, Ljava/lang/Math;->round(F)I
+
+    move-result p2
+
+    const/4 v0, 0x1
+
+    invoke-static {v0, p2}, Ljava/lang/Math;->max(II)I
+
+    move-result p2
+
+    mul-float v1, v1, p1
+
+    invoke-static {v1}, Ljava/lang/Math;->round(F)I
+
+    move-result p1
+
+    invoke-static {v0, p1}, Ljava/lang/Math;->max(II)I
+
+    move-result p1
+
+    sget-object v0, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
+
+    invoke-static {p2, p1, v0}, Landroid/graphics/Bitmap;->createBitmap(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;
+
+    move-result-object v0
+
+    const/4 v1, 0x0
+
+    invoke-virtual {p0, v1, v1, p2, p1}, Landroid/graphics/drawable/Drawable;->setBounds(IIII)V
+
+    new-instance p1, Landroid/graphics/Canvas;
+
+    invoke-direct {p1, v0}, Landroid/graphics/Canvas;-><init>(Landroid/graphics/Bitmap;)V
+
+    invoke-virtual {p0, p1}, Landroid/graphics/drawable/Drawable;->draw(Landroid/graphics/Canvas;)V
+
+    return-object v0
+.end method
+
+.method private static inflatePreviewLayout(Landroid/content/Context;Landroid/appwidget/AppWidgetProviderInfo;)Landroid/view/View;
+    .locals 6
+
+    const/4 v0, 0x0
+
+    :try_start_0
+    iget v1, p1, Landroid/appwidget/AppWidgetProviderInfo;->previewLayout:I
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_2
+
+    nop
+
+    if-eqz v1, :cond_1
+
+    iget-object v2, p1, Landroid/appwidget/AppWidgetProviderInfo;->provider:Landroid/content/ComponentName;
+
+    if-nez v2, :cond_0
+
+    goto :goto_0
+
+    :cond_0
+    iget-object v2, p1, Landroid/appwidget/AppWidgetProviderInfo;->provider:Landroid/content/ComponentName;
+
+    invoke-virtual {v2}, Landroid/content/ComponentName;->getPackageName()Ljava/lang/String;
+
+    move-result-object v2
+
+    :try_start_1
+    new-instance v3, Landroid/widget/RemoteViews;
+
+    invoke-direct {v3, v2, v1}, Landroid/widget/RemoteViews;-><init>(Ljava/lang/String;I)V
+
+    invoke-virtual {v3, p0, v0}, Landroid/widget/RemoteViews;->apply(Landroid/content/Context;Landroid/view/ViewGroup;)Landroid/view/View;
+
+    move-result-object p0
+    :try_end_1
+    .catchall {:try_start_1 .. :try_end_1} :catchall_0
+
+    return-object p0
+
+    :catchall_0
+    move-exception v3
+
+    new-instance v4, Ljava/lang/StringBuilder;
+
+    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v5, "previewLayout RemoteViews apply failed, falling back: "
+
+    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v4
+
+    iget-object v5, p1, Landroid/appwidget/AppWidgetProviderInfo;->provider:Landroid/content/ComponentName;
+
+    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+
+    move-result-object v4
+
+    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v4
+
+    const-string v5, "TSFWidgetCompat"
+
+    invoke-static {v5, v4, v3}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    const/4 v3, 0x4
+
+    :try_start_2
+    invoke-virtual {p0, v2, v3}, Landroid/content/Context;->createPackageContext(Ljava/lang/String;I)Landroid/content/Context;
+
+    move-result-object v2
+
+    invoke-static {p0}, Landroid/view/LayoutInflater;->from(Landroid/content/Context;)Landroid/view/LayoutInflater;
+
+    move-result-object p0
+
+    invoke-virtual {p0, v2}, Landroid/view/LayoutInflater;->cloneInContext(Landroid/content/Context;)Landroid/view/LayoutInflater;
+
+    move-result-object p0
+
+    const/4 v2, 0x0
+
+    invoke-virtual {p0, v1, v0, v2}, Landroid/view/LayoutInflater;->inflate(ILandroid/view/ViewGroup;Z)Landroid/view/View;
+
+    move-result-object p0
+    :try_end_2
+    .catchall {:try_start_2 .. :try_end_2} :catchall_1
+
+    return-object p0
+
+    :catchall_1
+    move-exception p0
+
+    new-instance v1, Ljava/lang/StringBuilder;
+
+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v2, "previewLayout inflate failed: "
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    iget-object p1, p1, Landroid/appwidget/AppWidgetProviderInfo;->provider:Landroid/content/ComponentName;
+
+    invoke-virtual {v1, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+
+    move-result-object p1
+
+    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object p1
+
+    invoke-static {v5, p1, p0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    return-object v0
+
+    :cond_1
+    :goto_0
+    return-object v0
+
+    :catchall_2
+    move-exception p0
+
+    return-object v0
+.end method
+
 .method public static isConfigurationOptional(Landroid/appwidget/AppWidgetProviderInfo;)Z
     .locals 3
 
@@ -1023,6 +1559,349 @@
 
     :goto_0
     return p1
+.end method
+
+.method public static resolveSpanCells(Landroid/appwidget/AppWidgetProviderInfo;FFII)[I
+    .locals 11
+
+    const/4 v0, 0x2
+
+    new-array v0, v0, [I
+
+    const/4 v1, 0x0
+
+    const/4 v2, 0x1
+
+    aput v2, v0, v1
+
+    aput v2, v0, v2
+
+    if-nez p0, :cond_0
+
+    return-object v0
+
+    :cond_0
+    const/4 v3, 0x0
+
+    cmpg-float v4, p1, v3
+
+    if-lez v4, :cond_1
+
+    cmpg-float v3, p2, v3
+
+    if-gtz v3, :cond_2
+
+    :cond_1
+    invoke-static {}, Landroid/content/res/Resources;->getSystem()Landroid/content/res/Resources;
+
+    move-result-object p1
+
+    invoke-virtual {p1}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
+
+    move-result-object p1
+
+    iget p1, p1, Landroid/util/DisplayMetrics;->density:F
+
+    const/high16 p2, 0x42a00000    # 80.0f
+
+    mul-float p2, p2, p1
+
+    const/high16 v3, 0x42c80000    # 100.0f
+
+    mul-float p1, p1, v3
+
+    move v10, p2
+
+    move p2, p1
+
+    move p1, v10
+
+    :cond_2
+    const v3, 0x7fffffff
+
+    if-lez p3, :cond_3
+
+    int-to-float p3, p3
+
+    div-float/2addr p3, p1
+
+    invoke-static {p3}, Ljava/lang/Math;->round(F)I
+
+    move-result p3
+
+    invoke-static {v2, p3}, Ljava/lang/Math;->max(II)I
+
+    move-result p3
+
+    goto :goto_0
+
+    :cond_3
+    const p3, 0x7fffffff
+
+    :goto_0
+    if-lez p4, :cond_4
+
+    int-to-float p4, p4
+
+    div-float/2addr p4, p2
+
+    invoke-static {p4}, Ljava/lang/Math;->round(F)I
+
+    move-result p4
+
+    invoke-static {v2, p4}, Ljava/lang/Math;->max(II)I
+
+    move-result v3
+
+    goto :goto_1
+
+    :cond_4
+    nop
+
+    :goto_1
+    iget p4, p0, Landroid/appwidget/AppWidgetProviderInfo;->minWidth:I
+
+    invoke-static {p4, p1}, Lcom/tsf/shell/compat/WidgetCompat;->spanFor(IF)I
+
+    move-result p4
+
+    iget v4, p0, Landroid/appwidget/AppWidgetProviderInfo;->minHeight:I
+
+    invoke-static {v4, p2}, Lcom/tsf/shell/compat/WidgetCompat;->spanFor(IF)I
+
+    move-result v4
+
+    sget v5, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 v6, 0x1f
+
+    if-lt v5, v6, :cond_8
+
+    :try_start_0
+    iget v5, p0, Landroid/appwidget/AppWidgetProviderInfo;->targetCellWidth:I
+
+    iget v6, p0, Landroid/appwidget/AppWidgetProviderInfo;->targetCellHeight:I
+
+    if-lez v5, :cond_7
+
+    if-lez v6, :cond_7
+
+    iget v7, p0, Landroid/appwidget/AppWidgetProviderInfo;->minResizeWidth:I
+
+    invoke-static {v7, p1}, Lcom/tsf/shell/compat/WidgetCompat;->spanFor(IF)I
+
+    move-result v7
+
+    iget v8, p0, Landroid/appwidget/AppWidgetProviderInfo;->minResizeHeight:I
+
+    invoke-static {v8, p2}, Lcom/tsf/shell/compat/WidgetCompat;->spanFor(IF)I
+
+    move-result v8
+
+    nop
+
+    nop
+
+    iget v9, p0, Landroid/appwidget/AppWidgetProviderInfo;->maxResizeWidth:I
+
+    if-lez v9, :cond_5
+
+    iget v9, p0, Landroid/appwidget/AppWidgetProviderInfo;->maxResizeWidth:I
+
+    invoke-static {v9, p1}, Lcom/tsf/shell/compat/WidgetCompat;->spanFor(IF)I
+
+    move-result p1
+
+    invoke-static {p3, p1}, Ljava/lang/Math;->min(II)I
+
+    move-result p1
+
+    goto :goto_2
+
+    :cond_5
+    move p1, p3
+
+    :goto_2
+    iget v9, p0, Landroid/appwidget/AppWidgetProviderInfo;->maxResizeHeight:I
+
+    if-lez v9, :cond_6
+
+    iget p0, p0, Landroid/appwidget/AppWidgetProviderInfo;->maxResizeHeight:I
+
+    invoke-static {p0, p2}, Lcom/tsf/shell/compat/WidgetCompat;->spanFor(IF)I
+
+    move-result p0
+
+    invoke-static {v3, p0}, Ljava/lang/Math;->min(II)I
+
+    move-result p0
+
+    goto :goto_3
+
+    :cond_6
+    move p0, v3
+
+    :goto_3
+    invoke-static {p1, v7}, Ljava/lang/Math;->max(II)I
+
+    move-result p1
+
+    invoke-static {p0, v8}, Ljava/lang/Math;->max(II)I
+
+    move-result p0
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    if-lt v5, v7, :cond_7
+
+    if-gt v5, p1, :cond_7
+
+    if-lt v6, v8, :cond_7
+
+    if-gt v6, p0, :cond_7
+
+    nop
+
+    move p4, v5
+
+    move v4, v6
+
+    :cond_7
+    goto :goto_4
+
+    :catchall_0
+    move-exception p0
+
+    const-string p1, "TSFWidgetCompat"
+
+    const-string p2, "targetCell resolve failed"
+
+    invoke-static {p1, p2, p0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    :cond_8
+    :goto_4
+    invoke-static {p4, p3}, Ljava/lang/Math;->min(II)I
+
+    move-result p0
+
+    aput p0, v0, v1
+
+    invoke-static {v4, v3}, Ljava/lang/Math;->min(II)I
+
+    move-result p0
+
+    aput p0, v0, v2
+
+    return-object v0
+.end method
+
+.method public static resolveSpanPx(Landroid/appwidget/AppWidgetProviderInfo;FFII)[I
+    .locals 3
+
+    const/4 v0, 0x0
+
+    cmpg-float v1, p1, v0
+
+    if-lez v1, :cond_0
+
+    cmpg-float v0, p2, v0
+
+    if-gtz v0, :cond_1
+
+    :cond_0
+    invoke-static {}, Landroid/content/res/Resources;->getSystem()Landroid/content/res/Resources;
+
+    move-result-object p1
+
+    invoke-virtual {p1}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
+
+    move-result-object p1
+
+    iget p1, p1, Landroid/util/DisplayMetrics;->density:F
+
+    const/high16 p2, 0x42a00000    # 80.0f
+
+    mul-float p2, p2, p1
+
+    const/high16 v0, 0x42c80000    # 100.0f
+
+    mul-float p1, p1, v0
+
+    move v2, p2
+
+    move p2, p1
+
+    move p1, v2
+
+    :cond_1
+    invoke-static {p0, p1, p2, p3, p4}, Lcom/tsf/shell/compat/WidgetCompat;->resolveSpanCells(Landroid/appwidget/AppWidgetProviderInfo;FFII)[I
+
+    move-result-object p0
+
+    const/4 p3, 0x0
+
+    aget p3, p0, p3
+
+    int-to-float p3, p3
+
+    mul-float p3, p3, p1
+
+    float-to-int p1, p3
+
+    const/4 p3, 0x1
+
+    aget p0, p0, p3
+
+    int-to-float p0, p0
+
+    mul-float p0, p0, p2
+
+    float-to-int p0, p0
+
+    filled-new-array {p1, p0}, [I
+
+    move-result-object p0
+
+    return-object p0
+.end method
+
+.method private static spanFor(IF)I
+    .locals 2
+
+    const/4 v0, 0x1
+
+    if-lez p0, :cond_1
+
+    const/4 v1, 0x0
+
+    cmpg-float v1, p1, v1
+
+    if-gtz v1, :cond_0
+
+    goto :goto_0
+
+    :cond_0
+    int-to-float p0, p0
+
+    div-float/2addr p0, p1
+
+    float-to-double p0, p0
+
+    invoke-static {p0, p1}, Ljava/lang/Math;->ceil(D)D
+
+    move-result-wide p0
+
+    double-to-int p0, p0
+
+    invoke-static {v0, p0}, Ljava/lang/Math;->max(II)I
+
+    move-result p0
+
+    return p0
+
+    :cond_1
+    :goto_0
+    return v0
 .end method
 
 .method public static startConfigure(Landroid/app/Activity;Landroid/appwidget/AppWidgetHost;II)Z

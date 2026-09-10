@@ -20,6 +20,7 @@ import android.util.SizeF;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.RemoteViews;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -215,6 +216,226 @@ public final class WidgetCompat {
             Log.w(TAG, "targetCell resolve failed", t);
         }
         return fallbackSpan;
+    }
+
+    /**
+     * Derive the grid span the way Launcher3 does, in cells.
+     *
+     * AppWidgetProviderInfo#minWidth/minHeight (and the resize bounds) are already in px on the
+     * client side: the framework converts the dp values from the provider XML with
+     * updateDimensions(). Span = ceil(px / cellPx), at least 1. On API 31+ providers that ship
+     * targetCellWidth/Height (many of them omit minWidth entirely) get that span as long as it
+     * sits inside the bounds implied by the minResize and maxResize fields. The result is
+     * clamped to the grid.
+     *
+     * @param cellWidthPx   workspace cell width in px, {@code <= 0} falls back to 80dp.
+     * @param cellHeightPx  workspace cell height in px, {@code <= 0} falls back to 100dp.
+     * @param areaWidthPx   workspace width in px, {@code <= 0} for no clamp.
+     * @param areaHeightPx  workspace height in px, {@code <= 0} for no clamp.
+     * @return {columns, rows}
+     */
+    public static int[] resolveSpanCells(AppWidgetProviderInfo info, float cellWidthPx,
+            float cellHeightPx, int areaWidthPx, int areaHeightPx) {
+        int[] span = new int[] {1, 1};
+        if (info == null) {
+            return span;
+        }
+        if (cellWidthPx <= 0f || cellHeightPx <= 0f) {
+            float density = Resources.getSystem().getDisplayMetrics().density;
+            cellWidthPx = 80f * density;
+            cellHeightPx = 100f * density;
+        }
+        int maxCols = areaWidthPx > 0
+                ? Math.max(1, Math.round(areaWidthPx / cellWidthPx)) : Integer.MAX_VALUE;
+        int maxRows = areaHeightPx > 0
+                ? Math.max(1, Math.round(areaHeightPx / cellHeightPx)) : Integer.MAX_VALUE;
+
+        int spanX = spanFor(info.minWidth, cellWidthPx);
+        int spanY = spanFor(info.minHeight, cellHeightPx);
+
+        if (Build.VERSION.SDK_INT >= 31) {
+            try {
+                int targetX = info.targetCellWidth;
+                int targetY = info.targetCellHeight;
+                if (targetX > 0 && targetY > 0) {
+                    int minSpanX = spanFor(info.minResizeWidth, cellWidthPx);
+                    int minSpanY = spanFor(info.minResizeHeight, cellHeightPx);
+                    int maxSpanX = maxCols;
+                    int maxSpanY = maxRows;
+                    if (info.maxResizeWidth > 0) {
+                        maxSpanX = Math.min(maxSpanX, spanFor(info.maxResizeWidth, cellWidthPx));
+                    }
+                    if (info.maxResizeHeight > 0) {
+                        maxSpanY = Math.min(maxSpanY,
+                                spanFor(info.maxResizeHeight, cellHeightPx));
+                    }
+                    maxSpanX = Math.max(maxSpanX, minSpanX);
+                    maxSpanY = Math.max(maxSpanY, minSpanY);
+                    if (targetX >= minSpanX && targetX <= maxSpanX
+                            && targetY >= minSpanY && targetY <= maxSpanY) {
+                        spanX = targetX;
+                        spanY = targetY;
+                    }
+                }
+            } catch (Throwable t) {
+                Log.w(TAG, "targetCell resolve failed", t);
+            }
+        }
+        span[0] = Math.min(spanX, maxCols);
+        span[1] = Math.min(spanY, maxRows);
+        return span;
+    }
+
+    private static int spanFor(int sizePx, float cellPx) {
+        if (sizePx <= 0 || cellPx <= 0f) {
+            return 1;
+        }
+        return Math.max(1, (int) Math.ceil(sizePx / cellPx));
+    }
+
+    /**
+     * Same as {@link #resolveSpanCells} but returns the span converted back to px
+     * ({@code span * cell}), which is the unit the launcher's workspace model works in.
+     */
+    public static int[] resolveSpanPx(AppWidgetProviderInfo info, float cellWidthPx,
+            float cellHeightPx, int areaWidthPx, int areaHeightPx) {
+        if (cellWidthPx <= 0f || cellHeightPx <= 0f) {
+            float density = Resources.getSystem().getDisplayMetrics().density;
+            cellWidthPx = 80f * density;
+            cellHeightPx = 100f * density;
+        }
+        int[] cells = resolveSpanCells(info, cellWidthPx, cellHeightPx, areaWidthPx,
+                areaHeightPx);
+        return new int[] {(int) (cells[0] * cellWidthPx), (int) (cells[1] * cellHeightPx)};
+    }
+
+    /**
+     * Build the picker preview at the size the widget will occupy on the workspace
+     * (span * cell px), then fit it into the picker box without upscaling, so previews stay
+     * proportional to their grid footprint the way Launcher3 renders them.
+     *
+     * Order: previewImage (density-aware Drawable) → previewLayout (API 31+, applied as
+     * RemoteViews with the LayoutInflater path as fallback) → null so the caller can keep its
+     * icon fallbacks.
+     */
+    public static Bitmap buildPreviewBitmap(Context context, AppWidgetProviderInfo info,
+            float cellWidthPx, float cellHeightPx, int areaWidthPx, int areaHeightPx,
+            int boxWidth, int boxHeight) {
+        if (context == null || info == null || boxWidth <= 0 || boxHeight <= 0) {
+            return null;
+        }
+        if (cellWidthPx <= 0f || cellHeightPx <= 0f) {
+            float density = context.getResources().getDisplayMetrics().density;
+            cellWidthPx = 80f * density;
+            cellHeightPx = 100f * density;
+        }
+        int[] cells = resolveSpanCells(info, cellWidthPx, cellHeightPx, areaWidthPx,
+                areaHeightPx);
+        int naturalWidth = Math.max(1, Math.round(cells[0] * cellWidthPx));
+        int naturalHeight = Math.max(1, Math.round(cells[1] * cellHeightPx));
+
+        float fit = Math.min(1f, Math.min(boxWidth / (float) naturalWidth,
+                boxHeight / (float) naturalHeight));
+        int targetWidth = Math.max(1, Math.round(naturalWidth * fit));
+        int targetHeight = Math.max(1, Math.round(naturalHeight * fit));
+
+        Drawable preview = null;
+        try {
+            if (info.previewImage != 0) {
+                preview = info.loadPreviewImage(context, 0);
+            }
+        } catch (Throwable t) {
+            Log.w(TAG, "previewImage load failed: " + info.provider, t);
+        }
+        if (preview != null && preview.getIntrinsicWidth() > 0
+                && preview.getIntrinsicHeight() > 0) {
+            try {
+                return drawFitted(preview, targetWidth, targetHeight);
+            } catch (Throwable t) {
+                Log.w(TAG, "previewImage draw failed: " + info.provider, t);
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= 31) {
+            try {
+                View view = inflatePreviewLayout(context, info);
+                if (view != null) {
+                    int renderWidth = Math.min(naturalWidth, MAX_PREVIEW_PX);
+                    int renderHeight = Math.min(naturalHeight, MAX_PREVIEW_PX);
+                    view.measure(
+                            View.MeasureSpec.makeMeasureSpec(renderWidth,
+                                    View.MeasureSpec.EXACTLY),
+                            View.MeasureSpec.makeMeasureSpec(renderHeight,
+                                    View.MeasureSpec.EXACTLY));
+                    view.layout(0, 0, renderWidth, renderHeight);
+                    Bitmap bitmap = Bitmap.createBitmap(renderWidth, renderHeight,
+                            Bitmap.Config.ARGB_8888);
+                    view.draw(new Canvas(bitmap));
+                    if (renderWidth != targetWidth || renderHeight != targetHeight) {
+                        Bitmap scaled = Bitmap.createScaledBitmap(bitmap, targetWidth,
+                                targetHeight, true);
+                        if (scaled != bitmap) {
+                            bitmap.recycle();
+                        }
+                        bitmap = scaled;
+                    }
+                    return bitmap;
+                }
+            } catch (Throwable t) {
+                Log.w(TAG, "previewLayout render failed: " + info.provider, t);
+            }
+        }
+        return null;
+    }
+
+    /** Draw the drawable scaled to fit inside the target box, keeping its aspect ratio. */
+    private static Bitmap drawFitted(Drawable drawable, int targetWidth, int targetHeight) {
+        int w = drawable.getIntrinsicWidth();
+        int h = drawable.getIntrinsicHeight();
+        float scale = Math.min(targetWidth / (float) w, targetHeight / (float) h);
+        int outWidth = Math.max(1, Math.round(w * scale));
+        int outHeight = Math.max(1, Math.round(h * scale));
+        Bitmap bitmap = Bitmap.createBitmap(outWidth, outHeight, Bitmap.Config.ARGB_8888);
+        drawable.setBounds(0, 0, outWidth, outHeight);
+        drawable.draw(new Canvas(bitmap));
+        return bitmap;
+    }
+
+    /**
+     * API 31+: inflate the provider's previewLayout. RemoteViews#apply is the path the system
+     * launcher uses and resolves the provider's own resources and RemoteViews attributes; fall
+     * back to a plain LayoutInflater on a restricted package context if that fails.
+     */
+    private static View inflatePreviewLayout(Context context, AppWidgetProviderInfo info) {
+        int layoutId;
+        try {
+            layoutId = info.previewLayout;
+        } catch (Throwable t) {
+            return null;
+        }
+        if (layoutId == 0 || info.provider == null) {
+            return null;
+        }
+        String packageName = info.provider.getPackageName();
+        try {
+            RemoteViews remoteViews = new RemoteViews(packageName, layoutId);
+            // No parent: some preview layouts (e.g. Samsung Weather) omit layout_width/height on
+            // the root, and a FrameLayout parent would reject them while generating LayoutParams.
+            // The caller measures the view with exact specs anyway.
+            return remoteViews.apply(context, null);
+        } catch (Throwable t) {
+            Log.w(TAG, "previewLayout RemoteViews apply failed, falling back: " + info.provider,
+                    t);
+        }
+        try {
+            Context providerContext = context.createPackageContext(packageName,
+                    Context.CONTEXT_RESTRICTED);
+            LayoutInflater inflater = LayoutInflater.from(context).cloneInContext(providerContext);
+            return inflater.inflate(layoutId, null, false);
+        } catch (Throwable t) {
+            Log.w(TAG, "previewLayout inflate failed: " + info.provider, t);
+            return null;
+        }
     }
 
     /**

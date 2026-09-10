@@ -1015,49 +1015,25 @@
 
     iget-object v0, v0, Lcom/tsf/shell/f/f/n;->d:Lcom/tsf/shell/f/f/c/a;
 
-    # r2-fix(#14): provider minWidth/minHeight are in dp, while cell math in
-    # f/f/c/a$a works in pixels. Convert dp -> px before resolving cell span,
-    # otherwise spans collapse to 1x1 and widgets are placed too small.
-    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+    # r3-fix: AppWidgetProviderInfo.minWidth/minHeight are already px on the client
+    # (framework updateDimensions). Derive the span Launcher3-style from px minWidth or
+    # API 31+ targetCell, clamped to the grid, and get it back as px for the workspace model.
+    iget-object v3, v0, Lcom/tsf/shell/f/f/c/a;->a:Lcom/tsf/shell/f/f/c/a$a;
 
-    move-result-object v3
+    iget v4, v3, Lcom/tsf/shell/f/f/c/a$a;->b:F
 
-    invoke-virtual {v3}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+    iget v3, v3, Lcom/tsf/shell/f/f/c/a$a;->c:F
 
-    move-result-object v3
+    sget v5, Lcom/censivn/C3DEngine/b/b/a;->p:I
 
-    invoke-virtual {v3}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
+    sget v0, Lcom/censivn/C3DEngine/b/b/a;->q:I
 
-    move-result-object v3
-
-    iget v3, v3, Landroid/util/DisplayMetrics;->density:F
-
-    iget v4, v2, Landroid/appwidget/AppWidgetProviderInfo;->minWidth:I
-
-    int-to-float v4, v4
-
-    mul-float/2addr v4, v3
-
-    float-to-int v4, v4
-
-    iget v5, v2, Landroid/appwidget/AppWidgetProviderInfo;->minHeight:I
-
-    int-to-float v5, v5
-
-    mul-float/2addr v5, v3
-
-    float-to-int v5, v5
-
-    invoke-virtual {v0, v4, v5}, Lcom/tsf/shell/f/f/c/a;->a(II)[I
+    invoke-static {v2, v4, v3, v5, v0}, Lcom/tsf/shell/compat/WidgetCompat;->resolveSpanPx(Landroid/appwidget/AppWidgetProviderInfo;FFII)[I
 
     move-result-object v0
 
     # restore v5 = 0 (array index used below)
     const/4 v5, 0x0
-
-    invoke-static {v2, v0}, Lcom/tsf/shell/compat/WidgetCompat;->resolveCellSpan(Landroid/appwidget/AppWidgetProviderInfo;[I)[I
-
-    move-result-object v0
 
     .line 320
     new-instance v6, Lcom/censivn/C3DEngine/api/element/info/LauncherAppWidgetInfo;

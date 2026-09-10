@@ -329,7 +329,7 @@
 
 # virtual methods
 .method public a(II)Landroid/graphics/Bitmap;
-    .locals 5
+    .locals 9
     .annotation build Landroid/annotation/SuppressLint;
         value = {
             "NewApi"
@@ -338,6 +338,50 @@
 
     .prologue
     .line 92
+    const/4 v0, 0x0
+
+    # r3-fix: build the preview at the widget's grid footprint (span x cell px) and fit it
+    # into the picker box, for both previewImage and previewLayout providers. Falls through
+    # to the original icon chain when nothing could be rendered.
+    sget-object v3, Lcom/tsf/shell/manager/a;->h:Lcom/tsf/shell/f/f/n;
+
+    if-eqz v3, :cond_r3
+
+    iget-object v3, v3, Lcom/tsf/shell/f/f/n;->d:Lcom/tsf/shell/f/f/c/a;
+
+    if-eqz v3, :cond_r3
+
+    iget-object v3, v3, Lcom/tsf/shell/f/f/c/a;->a:Lcom/tsf/shell/f/f/c/a$a;
+
+    if-eqz v3, :cond_r3
+
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v1
+
+    iget-object v2, p0, Lcom/tsf/shell/f/i/c/f;->g:Landroid/appwidget/AppWidgetProviderInfo;
+
+    iget v4, v3, Lcom/tsf/shell/f/f/c/a$a;->c:F
+
+    iget v3, v3, Lcom/tsf/shell/f/f/c/a$a;->b:F
+
+    sget v5, Lcom/censivn/C3DEngine/b/b/a;->p:I
+
+    sget v6, Lcom/censivn/C3DEngine/b/b/a;->q:I
+
+    move v7, p1
+
+    move v8, p2
+
+    invoke-static/range {v1 .. v8}, Lcom/tsf/shell/compat/WidgetCompat;->buildPreviewBitmap(Landroid/content/Context;Landroid/appwidget/AppWidgetProviderInfo;FFIIII)Landroid/graphics/Bitmap;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_r3
+
+    return-object v0
+
+    :cond_r3
     const/4 v0, 0x0
 
     .line 93
