@@ -909,6 +909,27 @@
     .locals 2
 
     .prologue
+    # r3-fix: NEXT_ALARM_FORMATTED is protected by WRITE_SETTINGS, which since API 23 is an
+    # app-op the user must grant on the "modify system settings" screen. Writing it without
+    # the grant throws SecurityException inside AlarmReceiver.onReceive and kills the launcher
+    # on BOOT_COMPLETED (re-sent on Android 15+ whenever the app leaves the stopped state),
+    # MY_PACKAGE_REPLACED, TIME_SET, TIMEZONE_CHANGED and DATE_CHANGED. The setting has been
+    # deprecated since API 21 (AlarmManager.getNextAlarmClock replaces it), so skip the write
+    # when it is not permitted and never let it take the process down.
+    :try_start_0
+    sget v0, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 v1, 0x17
+
+    if-lt v0, v1, :cond_write
+
+    invoke-static {p0}, Landroid/provider/Settings$System;->canWrite(Landroid/content/Context;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_skip
+
+    :cond_write
     .line 497
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
@@ -917,8 +938,16 @@
     const-string v1, "next_alarm_formatted"
 
     invoke-static {v0, v1, p1}, Landroid/provider/Settings$System;->putString(Landroid/content/ContentResolver;Ljava/lang/String;Ljava/lang/String;)Z
+    :try_end_0
+    .catch Ljava/lang/Throwable; {:try_start_0 .. :try_end_0} :catch_0
 
     .line 498
+    :cond_skip
+    return-void
+
+    :catch_0
+    move-exception v0
+
     return-void
 .end method
 
