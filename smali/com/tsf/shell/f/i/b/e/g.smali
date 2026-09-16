@@ -275,12 +275,25 @@
 
     .line 310
     :cond_2
-    # 应用已卸载(内存缓存与PackageManager均无此条目): 不再构造残缺条目,
-    # 改为复用 PACKAGE_REMOVED 的 ShellModel$c(type=3) 处理链路,
-    # 清理内存列表并异步持久化删除场景条目, 返回 null 由调用方跳过该 shortcut.
+    # 旧入口解析失败不代表整包卸载. 包仍安装时只跳过此 shortcut,
+    # 保留同包其他入口及布局; 仅确认包已卸载后才复用 PACKAGE_REMOVED 清理链路.
     invoke-virtual {v3}, Landroid/content/ComponentName;->getPackageName()Ljava/lang/String;
 
-    move-result-object v4
+    move-result-object v5
+
+    :try_start_package_check
+    invoke-virtual {v4, v5, v9}, Landroid/content/pm/PackageManager;->getApplicationInfo(Ljava/lang/String;I)Landroid/content/pm/ApplicationInfo;
+    :try_end_package_check
+    .catch Landroid/content/pm/PackageManager$NameNotFoundException; {:try_start_package_check .. :try_end_package_check} :catch_package_missing
+
+    const/4 v0, 0x0
+
+    goto :goto_4
+
+    :catch_package_missing
+    move-exception v0
+
+    move-object v4, v5
 
     const/4 v5, 0x1
 

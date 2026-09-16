@@ -363,7 +363,7 @@
 
     move-result-object v6
 
-    # 应用已卸载: 跳过该 shortcut 的场景元素创建, 条目由删除链路异步清理
+    # 启动入口已失效: 跳过该 shortcut 的场景元素创建
     if-nez v6, :cond_1a
 
     goto :goto_0
@@ -459,7 +459,7 @@
 
     move-result-object v7
 
-    # 应用已卸载: 跳过该 shortcut 的场景元素创建, 条目由删除链路异步清理
+    # 启动入口已失效: 跳过该 shortcut 的场景元素创建
     if-nez v7, :cond_3a
 
     goto :goto_2
@@ -563,6 +563,50 @@
 
     .line 214
     :cond_6
+    # 恢复旧布局并补入新入口后保存完整顺序. 未落库的入口若只保存点击次数,
+    # mindex 会为空, 下次启动又按首字母插入, 导致同组图标换位.
+    invoke-virtual {v4}, Ljava/util/ArrayList;->size()I
+
+    move-result v1
+
+    const/4 v2, 0x0
+
+    :goto_save_order
+    if-ge v2, v1, :cond_order_saved
+
+    invoke-virtual {v4, v2}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Lcom/tsf/shell/f/i/b;
+
+    invoke-virtual {v0}, Lcom/tsf/shell/f/i/b;->K()Lcom/censivn/C3DEngine/api/element/info/ItemInfo;
+
+    move-result-object v0
+
+    iget v3, v0, Lcom/censivn/C3DEngine/api/element/info/ItemInfo;->id:I
+
+    const/4 v5, -0x1
+
+    if-eq v3, v5, :cond_save_order
+
+    iget v3, v0, Lcom/censivn/C3DEngine/api/element/info/ItemInfo;->index:I
+
+    if-eq v3, v2, :cond_next_order
+
+    :cond_save_order
+    iput v2, v0, Lcom/censivn/C3DEngine/api/element/info/ItemInfo;->index:I
+
+    const/4 v3, 0x2
+
+    invoke-virtual {p0, v0, v3}, Lcom/tsf/shell/manager/a/d;->a(Lcom/censivn/C3DEngine/api/element/info/ItemInfo;I)V
+
+    :cond_next_order
+    add-int/lit8 v2, v2, 0x1
+
+    goto :goto_save_order
+
+    :cond_order_saved
     return-object v4
 .end method
 

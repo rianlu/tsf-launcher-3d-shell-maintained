@@ -262,7 +262,7 @@
 
     move-result-object v2
 
-    # 应用已卸载: 返回 null, 由调用方跳过该条目的元素创建
+    # 启动入口已失效: 返回 null, 由调用方跳过该条目的元素创建
     if-nez v2, :cond_app_ok
 
     goto :goto_0
