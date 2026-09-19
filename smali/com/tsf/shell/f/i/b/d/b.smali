@@ -815,6 +815,8 @@
 
     .line 914
     :cond_0
+    if-eqz v0, :cond_1
+
     const/4 v1, 0x0
 
     invoke-virtual {v0, v1}, Lcom/tsf/shell/f/i/b/e/b;->g(F)V
@@ -843,6 +845,7 @@
     invoke-virtual {v0, v1}, Lcom/tsf/shell/f/i/b/e/b;->a(Lcom/tsf/shell/f/i/a;)V
 
     .line 926
+    :cond_1
     return-void
 .end method
 

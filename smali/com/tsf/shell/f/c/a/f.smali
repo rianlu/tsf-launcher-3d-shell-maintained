@@ -1182,6 +1182,8 @@
 
     .line 374
     :goto_0
+    if-eqz v0, :cond_1
+
     iget-object v1, p0, Lcom/tsf/shell/f/c/a/f;->S:Lcom/tsf/shell/f/c/a/b;
 
     const/4 v2, 0x0
@@ -1194,6 +1196,7 @@
     invoke-virtual {v1, v0}, Lcom/tsf/shell/f/c/a/b;->addChild(Lcom/censivn/C3DEngine/b/f/i;)V
 
     .line 378
+    :cond_1
     return-void
 
     .line 370

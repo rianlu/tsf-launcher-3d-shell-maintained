@@ -388,8 +388,11 @@
     move-result-object v0
 
     .line 332
+    if-eqz v0, :cond_item_ok2
+
     invoke-static {v0}, Lcom/tsf/shell/manager/l/a;->a(Lcom/tsf/shell/f/i/b/e/b;)V
 
+    :cond_item_ok2
     goto :goto_0
 .end method
 

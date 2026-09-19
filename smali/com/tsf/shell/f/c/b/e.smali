@@ -144,6 +144,8 @@
 
     .line 568
     :goto_0
+    if-eqz v0, :cond_1
+
     const/4 v1, 0x0
 
     invoke-virtual {p1, v0, v1}, Lcom/tsf/shell/f/c/b/a;->a(Lcom/tsf/shell/f/i/b;Z)V
@@ -152,6 +154,7 @@
     invoke-virtual {p1, v0}, Lcom/tsf/shell/f/c/b/a;->addChild(Lcom/censivn/C3DEngine/b/f/i;)V
 
     .line 572
+    :cond_1
     return-void
 
     .line 564
@@ -227,6 +230,8 @@
 
     .line 534
     :goto_1
+    if-eqz v1, :cond_2
+
     const/4 v3, 0x0
 
     invoke-virtual {v0, v1, v3}, Lcom/tsf/shell/f/c/b/a;->a(Lcom/tsf/shell/f/i/b;Z)V
@@ -237,6 +242,7 @@
     .line 538
     invoke-virtual {v0}, Lcom/tsf/shell/f/c/b/a;->i()V
 
+    :cond_2
     goto :goto_0
 
     .line 530

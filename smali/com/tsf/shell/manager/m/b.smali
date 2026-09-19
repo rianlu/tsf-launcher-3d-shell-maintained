@@ -1215,6 +1215,8 @@
     move-result-object v0
 
     .line 758
+    if-eqz v0, :cond_1
+
     const/4 v2, 0x0
 
     invoke-virtual {p0, v0, v2}, Lcom/tsf/shell/manager/m/b;->a(Lcom/tsf/shell/f/i/b;Z)V
@@ -1224,6 +1226,7 @@
 
     invoke-virtual {v2, v0}, Lcom/tsf/shell/manager/m/a;->addChild(Lcom/censivn/C3DEngine/b/f/i;)V
 
+    :cond_1
     goto :goto_0
 
     .line 763
