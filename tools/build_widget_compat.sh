@@ -89,7 +89,8 @@ mkdir -p "$build_dir/classes" "$build_dir/dex" "$build_dir/smali" "$build_dir/ba
 javac -source 1.8 -target 1.8 -encoding UTF-8 \
   -classpath "$android_jar" \
   -d "$build_dir/classes" \
-  "$src_root"/com/tsf/shell/compat/WidgetCompat.java
+  "$src_root"/com/tsf/shell/compat/WidgetCompat.java \
+  "$src_root"/com/tsf/shell/compat/DrawerCompat.java
 
 "$d8_bin" \
   --lib "$android_jar" \
@@ -112,9 +113,10 @@ java -cp "$apktool_jar:$build_dir/baksmali-run" BaksmaliRun \
   "$seed_apk"
 
 mkdir -p "$out_smali_dir"
-# Only replace WidgetCompat's own classes; the directory is shared with AppIndexCompat.
-find "$out_smali_dir" -mindepth 1 -name 'WidgetCompat*.smali' -delete
+# Only replace generated compat classes; the directory is shared with AppIndexCompat.
+find "$out_smali_dir" -mindepth 1 \( -name 'WidgetCompat*.smali' -o -name 'DrawerCompat*.smali' \) -delete
 cp "$build_dir"/smali/com/tsf/shell/compat/WidgetCompat*.smali "$out_smali_dir/"
+cp "$build_dir"/smali/com/tsf/shell/compat/DrawerCompat*.smali "$out_smali_dir/"
 
 echo
 echo "smali files written to: $out_smali_dir"
