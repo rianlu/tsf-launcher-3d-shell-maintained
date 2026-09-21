@@ -194,6 +194,8 @@
     .line 50
     invoke-static {}, Lcom/tsf/shell/f/i/b/e/c;->aV()V
 
+    invoke-static {}, Lcom/tsf/shell/f/i/b/e/f;->aX()V
+
     .line 52
     return-void
 .end method

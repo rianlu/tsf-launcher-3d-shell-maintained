@@ -3,7 +3,32 @@
 .source "SourceFile"
 
 
+# static fields
+.field private static q:Ljava/util/ArrayList;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "Ljava/util/ArrayList",
+            "<",
+            "Lcom/tsf/shell/f/i/b/e/f;",
+            ">;"
+        }
+    .end annotation
+.end field
+
+
 # direct methods
+.method static constructor <clinit>()V
+    .locals 1
+
+    new-instance v0, Ljava/util/ArrayList;
+
+    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+
+    sput-object v0, Lcom/tsf/shell/f/i/b/e/f;->q:Ljava/util/ArrayList;
+
+    return-void
+.end method
+
 .method public constructor <init>(Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcut3DInfo;Lcom/tsf/shell/manager/o/a;Z)V
     .locals 2
 
@@ -11,6 +36,15 @@
     .line 35
     invoke-direct {p0, p1, p2}, Lcom/tsf/shell/f/i/b/e/a;-><init>(Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcut3DInfo;Lcom/tsf/shell/manager/o/a;)V
 
+    iget-object v0, p1, Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcut3DInfo;->themeResourceName:Ljava/lang/String;
+
+    if-eqz v0, :cond_reg
+
+    sget-object v0, Lcom/tsf/shell/f/i/b/e/f;->q:Ljava/util/ArrayList;
+
+    invoke-virtual {v0, p0}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    :cond_reg
     .line 37
     if-eqz p3, :cond_0
 
@@ -164,10 +198,52 @@
     return-void
 .end method
 
+.method public static aX()V
+    .locals 2
+
+    sget-object v0, Lcom/tsf/shell/f/i/b/e/f;->q:Ljava/util/ArrayList;
+
+    if-nez v0, :cond_ax0
+
+    return-void
+
+    :cond_ax0
+    invoke-virtual {v0}, Ljava/util/ArrayList;->iterator()Ljava/util/Iterator;
+
+    move-result-object v1
+
+    :goto_ax
+    invoke-interface {v1}, Ljava/util/Iterator;->hasNext()Z
+
+    move-result v0
+
+    if-eqz v0, :cond_ax1
+
+    invoke-interface {v1}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Lcom/tsf/shell/f/i/b/e/f;
+
+    invoke-virtual {v0}, Lcom/tsf/shell/f/i/b/e/f;->k()V
+
+    goto :goto_ax
+
+    :cond_ax1
+    return-void
+.end method
+
 .method public g()V
-    .locals 0
+    .locals 1
 
     .prologue
+    sget-object v0, Lcom/tsf/shell/f/i/b/e/f;->q:Ljava/util/ArrayList;
+
+    if-eqz v0, :cond_g0
+
+    invoke-virtual {v0, p0}, Ljava/util/ArrayList;->remove(Ljava/lang/Object;)Z
+
+    :cond_g0
     .line 140
     invoke-super {p0}, Lcom/tsf/shell/f/i/b/e/a;->g()V
 
