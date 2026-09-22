@@ -533,7 +533,7 @@
 .end method
 
 .method public c()V
-    .locals 2
+    .locals 4
 
     .prologue
     const/4 v1, 0x0
@@ -541,8 +541,31 @@
     .line 386
     iget-boolean v0, p0, Lcom/tsf/shell/ShellProvider$a;->d:Z
 
-    if-eqz v0, :cond_0
+    if-nez v0, :cond_seed
 
+    invoke-virtual {p0}, Lcom/tsf/shell/ShellProvider$a;->getReadableDatabase()Landroid/database/sqlite/SQLiteDatabase;
+
+    move-result-object v0
+
+    const-string v2, "SELECT COUNT(*) FROM favorites"
+
+    const/4 v3, 0x0
+
+    invoke-virtual {v0, v2, v3}, Landroid/database/sqlite/SQLiteDatabase;->rawQuery(Ljava/lang/String;[Ljava/lang/String;)Landroid/database/Cursor;
+
+    move-result-object v2
+
+    invoke-interface {v2}, Landroid/database/Cursor;->moveToFirst()Z
+
+    invoke-interface {v2, v1}, Landroid/database/Cursor;->getInt(I)I
+
+    move-result v0
+
+    invoke-interface {v2}, Landroid/database/Cursor;->close()V
+
+    if-nez v0, :cond_0
+
+    :cond_seed
     .line 388
     invoke-virtual {p0}, Lcom/tsf/shell/ShellProvider$a;->getWritableDatabase()Landroid/database/sqlite/SQLiteDatabase;
 
