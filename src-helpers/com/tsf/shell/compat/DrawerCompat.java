@@ -16,7 +16,8 @@ import java.util.Set;
 
 /**
  * Expands MAIN/LAUNCHER results so same-package dual entries (Phone + Contacts)
- * are not dropped, while still collapsing icon-swap aliases that share a label.
+ * are not dropped, while still collapsing icon-swap aliases that resolve to
+ * the same target component.
  */
 public final class DrawerCompat {
 
@@ -65,16 +66,18 @@ public final class DrawerCompat {
         }
 
         List<ResolveInfo> out = new ArrayList<ResolveInfo>();
-        Set<String> seenPkgLabel = new HashSet<String>();
+        Set<String> seenTarget = new HashSet<String>();
         for (ResolveInfo ri : byComponent.values()) {
             ActivityInfo ai = ri.activityInfo;
-            CharSequence label = ri.loadLabel(pm);
-            String key = ai.packageName + "\0" + (label == null ? "" : label.toString());
-            boolean alias = ai.targetActivity != null && ai.targetActivity.length() > 0;
-            if (alias && !seenPkgLabel.add(key)) {
+            // Deduplicate by the final target component, not by label. Labels can
+            // resolve identically across distinct entries (e.g. Honor/Huawei SMS
+            // launcher aliases), which previously dropped real launcher entries.
+            String target = ai.targetActivity != null && ai.targetActivity.length() > 0
+                    ? ai.targetActivity : ai.name;
+            String key = ai.packageName + "\0" + target;
+            if (!seenTarget.add(key)) {
                 continue;
             }
-            seenPkgLabel.add(key);
             out.add(ri);
         }
         return out;
