@@ -211,12 +211,6 @@
         </receiver>
         <provider android:authorities="com.tsf.extend.wallpaper" android:name="com.tsf.extend.wallpaper.WallpaperContentProvider" android:process=":wallpaper"/>
         <provider android:authorities="com.tsf.shell.ThemeCmClubProvider" android:exported="false" android:name="com.tsf.extend.theme.ThemeCmClubProvider"/>
-        <receiver android:name="com.tsf.shell.toggle.LockReceiver" android:exported="false" android:permission="android.permission.BIND_DEVICE_ADMIN">
-            <meta-data android:name="android.app.device_admin" android:resource="@xml/device_admin"/>
-            <intent-filter>
-                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED"/>
-            </intent-filter>
-        </receiver>
         <activity android:name="com.tsf.shell.toggle.PermissionRequestActivity" android:exported="false" android:excludeFromRecents="true" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
     </application>
 </manifest>

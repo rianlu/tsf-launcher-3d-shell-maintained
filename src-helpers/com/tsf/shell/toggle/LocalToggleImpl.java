@@ -1,8 +1,6 @@
 package com.tsf.shell.toggle;
 
 import android.Manifest;
-import android.app.admin.DevicePolicyManager;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -179,24 +177,11 @@ public final class LocalToggleImpl implements a {
         launch(home);
     }
 
-    /** Lock screen (0x4268). */
+    /** Lock screen (0x4268). Disabled: device-admin lock screen unsupported. */
     @Override
     public void e() {
-        Log.d(TAG, "toggle e() lock");
-        DevicePolicyManager dpm = (DevicePolicyManager) ctx.getSystemService(Context.DEVICE_POLICY_SERVICE);
-        ComponentName admin = new ComponentName(ctx, LockReceiver.class);
-        if (dpm != null && dpm.isAdminActive(admin)) {
-            try {
-                dpm.lockNow();
-                return;
-            } catch (SecurityException se) {
-                Log.w(TAG, "lockNow denied", se);
-            }
-        }
-        toastRes("toast_toggle_lock_request_admin");
-        Intent enable = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-        enable.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, admin);
-        launch(enable);
+        Log.d(TAG, "toggle e() lock (disabled)");
+        toastRes("notic_function_unavailable");
     }
 
     /** NFC (0x5208). */

@@ -543,11 +543,11 @@
 .method public e()V
     .locals 2
 
-    const-string v0, "toggle e() lock"
+    const-string v0, "TsfToggle"
 
-    const-string v1, "TsfToggle"
+    const-string v1, "toggle e() lock (disabled)"
 
-    invoke-static {v1, v0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
     const-string v0, "notic_function_unavailable"
 
@@ -754,7 +754,7 @@
 .end method
 
 .method public k()V
-    .locals 2
+    .locals 5
 
     const-string v0, "toggle k() sync"
 
@@ -762,18 +762,55 @@
 
     invoke-static {v1, v0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
-    const-string v0, "toast_toggle_redirect_settings"
+    :try_start_0
+    invoke-static {}, Landroid/content/ContentResolver;->getMasterSyncAutomatically()Z
+
+    move-result v0
+
+    const/4 v2, 0x1
+
+    const/4 v3, 0x0
+
+    if-nez v0, :cond_0
+
+    const/4 v0, 0x1
+
+    goto :goto_0
+
+    :cond_0
+    const/4 v0, 0x0
+
+    :goto_0
+    invoke-static {v0}, Landroid/content/ContentResolver;->setMasterSyncAutomatically(Z)V
+
+    const-string v4, "ON_SYNC_CHANGED"
+
+    if-eqz v0, :cond_1
+
+    goto :goto_1
+
+    :cond_1
+    const/4 v2, 0x0
+
+    :goto_1
+    invoke-direct {p0, v4, v2}, Lcom/tsf/shell/toggle/LocalToggleImpl;->notifyChanged(Ljava/lang/String;I)V
+    :try_end_0
+    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+
+    goto :goto_2
+
+    :catch_0
+    move-exception v0
+
+    const-string v2, "sync toggle failed"
+
+    invoke-static {v1, v2, v0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    const-string v0, "toast_toggle_failed"
 
     invoke-direct {p0, v0}, Lcom/tsf/shell/toggle/LocalToggleImpl;->toastRes(Ljava/lang/String;)V
 
-    new-instance v0, Landroid/content/Intent;
-
-    const-string v1, "android.settings.SYNC_SETTINGS"
-
-    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
-
-    invoke-direct {p0, v0}, Lcom/tsf/shell/toggle/LocalToggleImpl;->launch(Landroid/content/Intent;)V
-
+    :goto_2
     return-void
 .end method
 

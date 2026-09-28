@@ -101,7 +101,6 @@ javac -source 1.8 -target 1.8 -encoding UTF-8 \
   -classpath "$android_jar:$build_dir/stubs-classes" \
   -d "$build_dir/impl-classes" \
   "$src_root"/com/tsf/shell/toggle/LocalToggleImpl.java \
-  "$src_root"/com/tsf/shell/toggle/LockReceiver.java \
   "$src_root"/com/tsf/shell/toggle/PermissionRequestActivity.java
 
 # Step 3: dex only the impl classes. --classpath gives d8 visibility into the AIDL
@@ -129,8 +128,10 @@ java -cp "$apktool_jar:$build_dir/baksmali-run" BaksmaliRun \
 
 # Step 5: copy outputs into the project smali tree.
 mkdir -p "$out_smali_dir"
-# Wipe existing toggle smali so removed classes don't linger.
-find "$out_smali_dir" -mindepth 1 -name '*.smali' -delete
+# Only replace generated toggle classes so removed classes don't linger, while
+# keeping non-generated smali (SystemToggleCompat*) referenced by toggle actions.
+find "$out_smali_dir" -mindepth 1 \
+  \( -name 'LocalToggleImpl*.smali' -o -name 'PermissionRequestActivity*.smali' -o -name 'LockReceiver*.smali' \) -delete
 cp "$build_dir"/smali/com/tsf/shell/toggle/*.smali "$out_smali_dir/"
 
 echo
