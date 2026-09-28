@@ -585,7 +585,58 @@
     .locals 3
 
     .prologue
+    # Honor keeps the home task separate. MAIN/LAUNCHER aimed at Home opens a
+    # second instance, and onCreate then restarts the process. Dispatch here.
+    invoke-virtual {p1}, Landroid/content/Intent;->getComponent()Landroid/content/ComponentName;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_launch
+
+    invoke-virtual {v0}, Landroid/content/ComponentName;->getClassName()Ljava/lang/String;
+
+    move-result-object v0
+
+    const-string v1, "com.tsf.shell.Home"
+
+    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_launch
+
+    invoke-virtual {p1}, Landroid/content/Intent;->getAction()Ljava/lang/String;
+
+    move-result-object v0
+
+    const-string v1, "android.intent.action.MAIN"
+
+    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_launch
+
+    const-string v0, "action"
+
+    const/4 v1, -0x1
+
+    invoke-virtual {p1, v0, v1}, Landroid/content/Intent;->getIntExtra(Ljava/lang/String;I)I
+
+    move-result v0
+
+    if-eq v0, v1, :cond_launch
+
+    sget-object v1, Lcom/tsf/shell/manager/a;->d:Lcom/tsf/shell/manager/action/b;
+
+    if-eqz v1, :cond_launch
+
+    invoke-virtual {v1, v0}, Lcom/tsf/shell/manager/action/b;->a(I)V
+
+    return-void
+
     .line 867
+    :cond_launch
     const/high16 v0, 0x10000000
 
     invoke-virtual {p1, v0}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;

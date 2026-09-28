@@ -152,6 +152,7 @@ build_apk() {
   clean_apktool_workspace
   rm -f "$unsigned_apk" "$aligned_apk" "$signed_apk"
   apktool b "$repo_root" -o "$unsigned_apk"
+  python3 "$script_dir/patch_home_asset_paths.py" "$unsigned_apk"
 }
 
 sign_with_apksigner() {
