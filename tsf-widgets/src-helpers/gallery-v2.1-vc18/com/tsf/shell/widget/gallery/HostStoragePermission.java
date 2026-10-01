@@ -8,27 +8,40 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 
 public final class HostStoragePermission {
-    private static final String HOST_PACKAGE = "com.tsf.shell";
-    private static final String REQUEST_ACTIVITY = "com.tsf.shell.toggle.PermissionRequestActivity";
+    static final String PACKAGE_NAME = "com.tsf.shell.widget.gallery";
+    private static final String PERMISSION_ACTIVITY =
+            "com.tsf.shell.widget.gallery.GalleryPermissionActivity";
+    private static long lastLaunchElapsed;
 
     private HostStoragePermission() {
     }
 
-    public static void ensure(Context context) {
+    public static boolean hasPermission(Context context) {
         if (context == null || Build.VERSION.SDK_INT < 23) {
+            return true;
+        }
+        return context.getPackageManager().checkPermission(
+                Manifest.permission.READ_EXTERNAL_STORAGE, PACKAGE_NAME)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static void ensure(Context context) {
+        if (context == null || Build.VERSION.SDK_INT < 23 || hasPermission(context)) {
             return;
         }
-        if (context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        long now = SystemClock.elapsedRealtime();
+        if (now - lastLaunchElapsed < 1500L) {
             return;
         }
+        lastLaunchElapsed = now;
         try {
             Intent intent = new Intent();
-            intent.setComponent(new ComponentName(HOST_PACKAGE, REQUEST_ACTIVITY));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra("permissions", new String[]{Manifest.permission.READ_EXTERNAL_STORAGE});
+            intent.setComponent(new ComponentName(PACKAGE_NAME, PERMISSION_ACTIVITY));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
             context.startActivity(intent);
         } catch (Throwable ignored) {
         }
@@ -38,7 +51,6 @@ public final class HostStoragePermission {
         if (context == null) {
             return;
         }
-        ensure(context);
         Intent intent = new Intent(MediaStore.ACTION_REVIEW);
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);

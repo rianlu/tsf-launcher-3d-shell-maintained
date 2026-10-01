@@ -100,7 +100,7 @@ As of the current `main` branch, 36 maintenance commits have landed (excluding t
 ### External Widgets & Adornments
 
 - Archiving the original APKs while providing adapted Gallery, Memo, Calendar, Message, Music and Weather widget builds.
-- Gallery widget: fixed blank thumbnails, jank, random covers and crashes on large libraries via host permissions and cache warming; improved system image preview.
+- Gallery widget: the plugin requests photo permission itself instead of opening the launcher permission page; album selection still warms the thumbnail cache. This fixes blank thumbnails, jank, random covers and crashes on large libraries, and improves system image preview.
 - Memo widget: adapted to modern system bars and transitions, removing black overlays from the legacy transparent status bar approach.
 - Calendar widget: fixed permission requests, service reads, auto settings popups and event queries.
 - Message widget: fixed SMS/contact permissions and explicit service binding on modern Android.

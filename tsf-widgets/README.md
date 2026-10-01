@@ -49,7 +49,7 @@ Gitee 镜像使用相同标签 `tsf-widgets-v1` 和相同文件名.
 - `modified/gallery-v2.1-vc18.apk`
   - 原版: `original/gallery-v2.1-vc18.apk`。
   - 将相册插件 `targetSdkVersion` 从 21 提升到 28。
-  - 通过宿主桌面申请 `READ_EXTERNAL_STORAGE`。
+  - 添加到桌面时由相册插件自己申请 `READ_EXTERNAL_STORAGE`, 不再打开桌面的权限页。
   - 选择相册时后台预生成缩略图缓存, 避免桌面进程缺少图片权限导致 3D 小部件只显示数量不显示照片, 同时不再阻塞设置页。
   - 相册选择页的 `All` 封面固定为稳定首图, 不再每次随机变化。
   - 相册选择页目录封面按实际列表尺寸采样, 并将目录扫描改为单次归并, 降低大图库下的卡顿和闪退概率。
