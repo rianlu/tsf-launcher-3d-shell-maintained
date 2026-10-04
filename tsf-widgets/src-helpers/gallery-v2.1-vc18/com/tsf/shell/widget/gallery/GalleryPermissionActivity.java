@@ -2,6 +2,7 @@ package com.tsf.shell.widget.gallery;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ public class GalleryPermissionActivity extends Activity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        sendBroadcast(new Intent("com.tsf.shell.widget.gallery.refresh"));
         finish();
     }
 
