@@ -261,96 +261,108 @@
     goto :goto_2
 
     :cond_6
-    new-instance p0, Ljava/util/ArrayList;
+    new-instance v0, Ljava/util/ArrayList;
 
-    invoke-direct {p0}, Ljava/util/ArrayList;-><init>()V
+    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
 
-    new-instance v0, Ljava/util/HashSet;
+    new-instance v1, Ljava/util/HashSet;
 
-    invoke-direct {v0}, Ljava/util/HashSet;-><init>()V
+    invoke-direct {v1}, Ljava/util/HashSet;-><init>()V
 
     invoke-interface {v5}, Ljava/util/Map;->values()Ljava/util/Collection;
 
-    move-result-object v1
+    move-result-object v2
 
-    invoke-interface {v1}, Ljava/util/Collection;->iterator()Ljava/util/Iterator;
-
-    move-result-object v1
-
-    :goto_4
-    invoke-interface {v1}, Ljava/util/Iterator;->hasNext()Z
-
-    move-result v2
-
-    if-eqz v2, :cond_9
-
-    invoke-interface {v1}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+    invoke-interface {v2}, Ljava/util/Collection;->iterator()Ljava/util/Iterator;
 
     move-result-object v2
 
-    check-cast v2, Landroid/content/pm/ResolveInfo;
+    :goto_4
+    invoke-interface {v2}, Ljava/util/Iterator;->hasNext()Z
 
-    iget-object v3, v2, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
+    move-result v3
 
-    iget-object v4, v3, Landroid/content/pm/ActivityInfo;->targetActivity:Ljava/lang/String;
+    if-eqz v3, :cond_9
 
-    if-eqz v4, :cond_7
+    invoke-interface {v2}, Ljava/util/Iterator;->next()Ljava/lang/Object;
 
-    iget-object v4, v3, Landroid/content/pm/ActivityInfo;->targetActivity:Ljava/lang/String;
+    move-result-object v3
 
-    invoke-virtual {v4}, Ljava/lang/String;->length()I
+    check-cast v3, Landroid/content/pm/ResolveInfo;
 
-    move-result v4
+    iget-object v4, v3, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
 
-    if-lez v4, :cond_7
+    iget-object v5, v4, Landroid/content/pm/ActivityInfo;->targetActivity:Ljava/lang/String;
 
-    iget-object v4, v3, Landroid/content/pm/ActivityInfo;->targetActivity:Ljava/lang/String;
+    if-eqz v5, :cond_7
+
+    iget-object v5, v4, Landroid/content/pm/ActivityInfo;->targetActivity:Ljava/lang/String;
+
+    invoke-virtual {v5}, Ljava/lang/String;->length()I
+
+    move-result v5
+
+    if-lez v5, :cond_7
+
+    iget-object v5, v4, Landroid/content/pm/ActivityInfo;->targetActivity:Ljava/lang/String;
 
     goto :goto_5
 
     :cond_7
-    iget-object v4, v3, Landroid/content/pm/ActivityInfo;->name:Ljava/lang/String;
+    iget-object v5, v4, Landroid/content/pm/ActivityInfo;->name:Ljava/lang/String;
 
     :goto_5
-    new-instance v5, Ljava/lang/StringBuilder;
+    new-instance v6, Ljava/lang/StringBuilder;
 
-    invoke-direct {v5}, Ljava/lang/StringBuilder;-><init>()V
+    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
 
-    iget-object v3, v3, Landroid/content/pm/ActivityInfo;->packageName:Ljava/lang/String;
+    iget-object v4, v4, Landroid/content/pm/ActivityInfo;->packageName:Ljava/lang/String;
 
-    invoke-virtual {v5, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {v6, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    move-result-object v3
+    move-result-object v4
 
-    const-string v5, "\u0000"
+    const-string v6, "\u0000"
 
-    invoke-virtual {v3, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {v4, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    move-result-object v3
+    move-result-object v4
 
-    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    move-result-object v3
+    move-result-object v4
 
-    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    invoke-virtual {v4, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    move-result-object v3
+    move-result-object v4
 
-    invoke-interface {v0, v3}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
+    invoke-static {v3, p0}, Lcom/tsf/shell/compat/DrawerCompat;->safeLabel(Landroid/content/pm/ResolveInfo;Landroid/content/pm/PackageManager;)Ljava/lang/String;
 
-    move-result v3
+    move-result-object v5
 
-    if-nez v3, :cond_8
+    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v4
+
+    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v4
+
+    invoke-interface {v1, v4}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
+
+    move-result v4
+
+    if-nez v4, :cond_8
 
     goto :goto_4
 
     :cond_8
-    invoke-interface {p0, v2}, Ljava/util/List;->add(Ljava/lang/Object;)Z
+    invoke-interface {v0, v3}, Ljava/util/List;->add(Ljava/lang/Object;)Z
 
     goto :goto_4
 
     :cond_9
-    return-object p0
+    return-object v0
 
     :cond_a
     :goto_6

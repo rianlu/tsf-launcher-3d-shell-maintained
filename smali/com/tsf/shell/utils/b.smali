@@ -585,6 +585,198 @@
     invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
 
     .line 76
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->a:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.hihonor.contacts"
+
+    const-string v3, "com.android.contacts.activities.DialtactsActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->a:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.hihonor.contacts"
+
+    const-string v3, "com.hihonor.contacts.activities.DialtactsActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->a:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.huawei.contacts"
+
+    const-string v3, "com.android.contacts.activities.DialtactsActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->a:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.huawei.contacts"
+
+    const-string v3, "com.huawei.contacts.activities.DialtactsActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->a:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.google.android.dialer"
+
+    const-string v3, "com.android.dialer.main.impl.MainActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->a:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "cn.nubia.contacts"
+
+    const-string v3, "com.android.contacts.activities.DialtactsActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->a:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.nubia.contacts"
+
+    const-string v3, "com.android.contacts.activities.DialtactsActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->a:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.samsung.android.dialer"
+
+    const-string v3, "com.samsung.android.dialer.DialtactsActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->a:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.samsung.android.contacts"
+
+    const-string v3, "com.android.dialer.DialtactsActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->a:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.android.dialer"
+
+    const-string v3, "com.android.dialer.app.DialtactsActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->a:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.google.android.dialer"
+
+    const-string v3, "com.android.dialer.app.DialtactsActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->a:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.oplus.dialer"
+
+    const-string v3, "com.android.dialer.DialtactsActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->a:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.oplus.dialer"
+
+    const-string v3, "com.oplus.dialer.DialtactsActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->a:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.coloros.contacts"
+
+    const-string v3, "com.android.contacts.activities.DialtactsActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->a:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.oneplus.contacts"
+
+    const-string v3, "com.android.contacts.activities.DialtactsActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->a:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.vivo.contacts"
+
+    const-string v3, "com.android.contacts.activities.DialtactsActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
     sget-object v0, Lcom/tsf/shell/utils/b;->q:Ljava/util/ArrayList;
 
     sget-object v1, Lcom/tsf/shell/utils/b;->a:Ljava/util/ArrayList;
@@ -755,6 +947,138 @@
     invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
 
     .line 91
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->b:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.hihonor.mms"
+
+    const-string v3, "com.android.mms.ui.ConversationList"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->b:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.huawei.mms"
+
+    const-string v3, "com.android.mms.ui.ConversationList"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->b:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.google.android.apps.messaging"
+
+    const-string v3, "com.google.android.apps.messaging.ui.ConversationListActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->b:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.google.android.apps.messaging"
+
+    const-string v3, "com.google.android.apps.messaging.main.MainActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->b:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "cn.nubia.mms"
+
+    const-string v3, "com.android.mms.ui.ConversationList"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->b:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.samsung.android.messaging"
+
+    const-string v3, "com.android.mms.ui.ConversationList"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->b:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.samsung.android.messaging"
+
+    const-string v3, "com.samsung.android.messaging.ui.view.main.WithActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->b:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.oplus.mms"
+
+    const-string v3, "com.android.mms.ui.ConversationList"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->b:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.coloros.mms"
+
+    const-string v3, "com.android.mms.ui.ConversationList"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->b:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.vivo.mms"
+
+    const-string v3, "com.android.mms.ui.ConversationList"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->b:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.oneplus.mms"
+
+    const-string v3, "com.android.mms.ui.ConversationList"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
     sget-object v0, Lcom/tsf/shell/utils/b;->q:Ljava/util/ArrayList;
 
     sget-object v1, Lcom/tsf/shell/utils/b;->b:Ljava/util/ArrayList;
@@ -1063,6 +1387,114 @@
     invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
 
     .line 122
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->d:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.hihonor.camera"
+
+    const-string v3, "com.hihonor.camera.CameraActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->d:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.huawei.camera"
+
+    const-string v3, "com.huawei.camera.CameraActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->d:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.android.camera2"
+
+    const-string v3, "com.android.camera.CameraLauncher"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->d:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.motorola.camera3"
+
+    const-string v3, "com.motorola.camera.Camera"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->d:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.motorola.camera5"
+
+    const-string v3, "com.motorola.camera.Camera"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->d:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.oplus.camera"
+
+    const-string v3, "com.oplus.camera.Camera"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->d:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.oppo.camera"
+
+    const-string v3, "com.oppo.camera.Camera"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->d:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.oneplus.camera"
+
+    const-string v3, "com.oneplus.camera.Camera"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->d:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.vivo.camera"
+
+    const-string v3, "com.android.camera.CameraActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
     sget-object v0, Lcom/tsf/shell/utils/b;->q:Ljava/util/ArrayList;
 
     sget-object v1, Lcom/tsf/shell/utils/b;->d:Ljava/util/ArrayList;
@@ -1377,6 +1809,162 @@
     invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
 
     .line 150
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->c:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.hihonor.contacts"
+
+    const-string v3, "com.android.contacts.activities.PeopleActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->c:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.hihonor.contacts"
+
+    const-string v3, "com.hihonor.contacts.activities.PeopleActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->c:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.huawei.contacts"
+
+    const-string v3, "com.android.contacts.activities.PeopleActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->c:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.huawei.contacts"
+
+    const-string v3, "com.huawei.contacts.activities.PeopleActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->c:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.google.android.contacts"
+
+    const-string v3, "com.android.contacts.activities.PeopleActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->c:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "cn.nubia.contacts"
+
+    const-string v3, "com.android.contacts.activities.PeopleActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->c:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.nubia.contacts"
+
+    const-string v3, "com.android.contacts.activities.PeopleActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->c:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.samsung.android.app.contacts"
+
+    const-string v3, "com.samsung.android.contacts.contactslist.PeopleActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->c:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.samsung.android.contacts"
+
+    const-string v3, "com.android.contacts.activities.PeopleActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->c:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.coloros.contacts"
+
+    const-string v3, "com.android.contacts.activities.PeopleActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->c:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.oplus.contacts"
+
+    const-string v3, "com.android.contacts.activities.PeopleActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->c:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.vivo.contacts"
+
+    const-string v3, "com.android.contacts.activities.PeopleActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    sget-object v0, Lcom/tsf/shell/utils/b;->c:Ljava/util/ArrayList;
+
+    new-instance v1, Landroid/content/ComponentName;
+
+    const-string v2, "com.oneplus.contacts"
+
+    const-string v3, "com.android.contacts.activities.PeopleActivity"
+
+    invoke-direct {v1, v2, v3}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
     sget-object v0, Lcom/tsf/shell/utils/b;->q:Ljava/util/ArrayList;
 
     sget-object v1, Lcom/tsf/shell/utils/b;->c:Ljava/util/ArrayList;

@@ -16,8 +16,8 @@ import java.util.Set;
 
 /**
  * Expands MAIN/LAUNCHER results so same-package dual entries (Phone + Contacts)
- * are not dropped, while still collapsing icon-swap aliases that resolve to
- * the same target component.
+ * are not dropped, while still collapsing icon-swap aliases that share both
+ * the same target component and the same display label.
  */
 public final class DrawerCompat {
 
@@ -69,12 +69,14 @@ public final class DrawerCompat {
         Set<String> seenTarget = new HashSet<String>();
         for (ResolveInfo ri : byComponent.values()) {
             ActivityInfo ai = ri.activityInfo;
-            // Deduplicate by the final target component, not by label. Labels can
-            // resolve identically across distinct entries (e.g. Honor/Huawei SMS
-            // launcher aliases), which previously dropped real launcher entries.
+            // Collapse only true icon-swap aliases: same package, same final
+            // target, and the same label. Phone and Contacts on MIUI share a
+            // target activity but use different labels, so both must stay.
+            // Honor/Huawei SMS aliases share a label but point at different
+            // targets, so those stay as well.
             String target = ai.targetActivity != null && ai.targetActivity.length() > 0
                     ? ai.targetActivity : ai.name;
-            String key = ai.packageName + "\0" + target;
+            String key = ai.packageName + "\0" + target + "\0" + safeLabel(ri, pm);
             if (!seenTarget.add(key)) {
                 continue;
             }
