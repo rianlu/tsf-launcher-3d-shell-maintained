@@ -71,6 +71,12 @@
     .line 594
     invoke-virtual {v0, v1, v4, v4}, Landroid/content/ContentResolver;->delete(Landroid/net/Uri;Ljava/lang/String;[Ljava/lang/String;)I
 
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v0
+
+    invoke-static {v0}, Lcom/tsf/shell/shortcut/PinnedShortcutSync;->reconcile(Landroid/content/Context;)V
+
     .line 596
     return-void
 .end method

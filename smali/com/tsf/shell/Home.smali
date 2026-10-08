@@ -2590,6 +2590,8 @@
     .line 1204
     invoke-super {p0}, Landroid/app/ActivityGroup;->onResume()V
 
+    invoke-static {p0}, Lcom/tsf/shell/shortcut/PinnedShortcutSync;->reconcile(Landroid/content/Context;)V
+
     .line 1205
     iget-boolean v0, p0, Lcom/tsf/shell/Home;->s:Z
 
