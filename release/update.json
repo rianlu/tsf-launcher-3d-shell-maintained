@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "versionCode": 30906,
-  "versionName": "3.9.4-r3",
-  "tag": "v3.9.4-r3",
-  "fileName": "tsf-launcher-maintained-3.9.4-r3.apk",
-  "sha256": "25add898ac395b3829f09afab093b99c76bf35b7c96796d73b3e6316611a478d",
-  "changelog": "Fixes the Honor launcher restarting when using built-in desktop buttons or after applying a theme. Fixes same-package Phone and Contacts collapsing to one entry, and alias entries such as Messages being removed by display-name dedup. Fixes the dock and built-in icons never returning after an interrupted first-run setup, and desktop shortcuts not redrawing after a theme change. Fixes the alarm receiver crashing the launcher without permission to modify system settings. Aligns Samsung Weather and similar widgets with the system launcher for configure pages, placement, and the picker list, and corrects widget size and rounded corners. The lock-screen toggle no longer requests device admin.",
-  "changelogZh": "修复荣耀上点击主题等桌面按钮和换主题成功后桌面重启；修复小米、荣耀等同包电话和联系人只留一个入口，以及按显示名去重误删短信等 alias；修复首次引导中断后底栏和图标不再出现、换主题后桌面快捷方式不更新；修复没有修改系统设置权限时闹钟把桌面打崩；三星天气等小部件的配置页、落桌面和选择器列表对齐系统桌面，并修正尺寸与圆角；锁屏开关不再申请设备管理员。"
+  "versionCode": 30907,
+  "versionName": "3.9.4-r4",
+  "tag": "v3.9.4-r4",
+  "fileName": "tsf-launcher-maintained-3.9.4-r4.apk",
+  "sha256": "376c1c52cfab1712cf2b1b6ba5789f8dfb98ea80ae843b7e209a943564de8a18",
+  "changelog": "Fixes the Phone entry disappearing after a clean install on some devices, and adds more brands to the first-run dock for Phone, Messages, Camera, and Contacts. Apps can now pin shortcuts onto the desktop, such as a WeChat mini program. Shortcut icons follow the current theme.",
+  "changelogZh": "修复部分机型卸载重装后电话入口消失，并补齐更多品牌首次安装时底栏的电话、短信、相机和联系人。支持应用内把快捷方式固定到桌面，例如微信小程序「添加到桌面」；图标跟随当前主题。"
 }
