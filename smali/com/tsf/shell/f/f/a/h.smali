@@ -928,6 +928,8 @@
 
     iput v1, v0, Lcom/censivn/C3DEngine/api/element/PositionNumber3d;->y:F
 
+    invoke-static {}, Lcom/tsf/shell/dock/DockInset;->place()V
+
     .line 632
     :cond_4
     iget-object v0, p0, Lcom/tsf/shell/f/f/a/h;->Y:Lcom/censivn/C3DEngine/b/f/j;

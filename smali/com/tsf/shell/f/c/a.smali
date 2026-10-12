@@ -54,7 +54,7 @@
 .end method
 
 .method private d()V
-    .locals 1
+    .locals 3
 
     .prologue
     .line 118
@@ -65,6 +65,13 @@
     .line 120
     if-eqz v0, :cond_0
 
+    iget v1, p0, Lcom/tsf/shell/f/c/a;->c:I
+
+    if-eqz v1, :show_indicator
+
+    invoke-static {}, Lcom/tsf/shell/dock/DockInset;->place()V
+
+    :show_indicator
     .line 122
     iget-object v0, p0, Lcom/tsf/shell/f/c/a;->a:Lcom/tsf/shell/f/c/b/e;
 
@@ -211,6 +218,8 @@
     .line 113
     :cond_0
     :goto_0
+    invoke-static {}, Lcom/tsf/shell/dock/DockInset;->place()V
+
     invoke-direct {p0}, Lcom/tsf/shell/f/c/a;->d()V
 
     .line 114

@@ -1477,6 +1477,8 @@
     .line 427
     invoke-super {p0, p1}, Landroid/app/ActivityGroup;->onConfigurationChanged(Landroid/content/res/Configuration;)V
 
+    invoke-static {p0}, Lcom/tsf/shell/dock/DockInset;->schedule(Landroid/app/Activity;)V
+
     .line 428
     iget-boolean v0, p0, Lcom/tsf/shell/Home;->s:Z
 
@@ -2591,6 +2593,8 @@
     invoke-super {p0}, Landroid/app/ActivityGroup;->onResume()V
 
     invoke-static {p0}, Lcom/tsf/shell/shortcut/PinnedShortcutSync;->reconcile(Landroid/content/Context;)V
+
+    invoke-static {p0}, Lcom/tsf/shell/dock/DockInset;->schedule(Landroid/app/Activity;)V
 
     .line 1205
     iget-boolean v0, p0, Lcom/tsf/shell/Home;->s:Z

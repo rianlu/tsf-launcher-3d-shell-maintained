@@ -370,6 +370,12 @@
 
     .prologue
     .line 134
+    invoke-static {}, Lcom/tsf/shell/dock/DockInset;->lift()I
+
+    move-result v1
+
+    sput v1, Lcom/tsf/shell/f/c/a/f;->n:I
+
     sget-object v0, Lcom/censivn/C3DEngine/api/element/Number3d;->TEMPNUMBER3D:Lcom/censivn/C3DEngine/api/element/Number3d;
 
     invoke-virtual {p1}, Lcom/censivn/C3DEngine/b/f/i;->position()Lcom/censivn/C3DEngine/api/element/PositionNumber3d;
@@ -386,6 +392,10 @@
     sget v1, Lcom/censivn/C3DEngine/b/b/a;->C:I
 
     sget v2, Lcom/tsf/shell/f/c/a/f;->a:I
+
+    add-int/2addr v1, v2
+
+    sget v2, Lcom/tsf/shell/f/c/a/f;->n:I
 
     add-int/2addr v1, v2
 

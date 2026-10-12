@@ -513,32 +513,11 @@
 .end method
 
 .method private static d(Landroid/app/Activity;)I
-    .locals 4
+    .locals 1
 
-    invoke-virtual {p0}, Landroid/app/Activity;->getResources()Landroid/content/res/Resources;
-
-    move-result-object v0
-
-    const-string v1, "navigation_bar_height"
-
-    const-string v2, "dimen"
-
-    const-string v3, "android"
-
-    invoke-virtual {v0, v1, v2, v3}, Landroid/content/res/Resources;->getIdentifier(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)I
-
-    move-result v1
-
-    if-lez v1, :cond_0
-
-    invoke-virtual {v0, v1}, Landroid/content/res/Resources;->getDimensionPixelSize(I)I
+    invoke-static {p0}, Lcom/tsf/shell/dock/DockInset;->read(Landroid/app/Activity;)I
 
     move-result v0
-
-    return v0
-
-    :cond_0
-    const/4 v0, 0x0
 
     return v0
 .end method

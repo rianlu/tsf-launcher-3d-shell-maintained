@@ -19,6 +19,8 @@
 
 .field public static b:I
 
+.field public static n:I
+
 .field public static c:F
 
 .field public static d:F
@@ -543,6 +545,10 @@
 
     add-int/2addr v0, v1
 
+    sget v1, Lcom/tsf/shell/f/c/a/f;->n:I
+
+    add-int/2addr v0, v1
+
     int-to-float v0, v0
 
     iput v0, p0, Lcom/tsf/shell/f/c/a/f;->v:F
@@ -725,6 +731,10 @@
 
     add-int/2addr v2, v3
 
+    sget v3, Lcom/tsf/shell/f/c/a/f;->n:I
+
+    add-int/2addr v2, v3
+
     int-to-float v2, v2
 
     cmpg-float v0, v0, v2
@@ -735,6 +745,10 @@
     sget v0, Lcom/censivn/C3DEngine/b/b/a;->C:I
 
     sget v2, Lcom/tsf/shell/f/c/a/f;->a:I
+
+    add-int/2addr v0, v2
+
+    sget v2, Lcom/tsf/shell/f/c/a/f;->n:I
 
     add-int/2addr v0, v2
 
@@ -1427,6 +1441,10 @@
 
     add-int/2addr v0, v1
 
+    sget v1, Lcom/tsf/shell/f/c/a/f;->n:I
+
+    add-int/2addr v0, v1
+
     int-to-float v0, v0
 
     iput v0, p0, Lcom/tsf/shell/f/c/a/f;->v:F
@@ -1556,6 +1574,10 @@
     sget v0, Lcom/censivn/C3DEngine/b/b/a;->C:I
 
     sget v1, Lcom/tsf/shell/f/c/a/f;->a:I
+
+    add-int/2addr v0, v1
+
+    sget v1, Lcom/tsf/shell/f/c/a/f;->n:I
 
     add-int/2addr v0, v1
 
@@ -2297,6 +2319,12 @@
 
     sput v0, Lcom/tsf/shell/f/c/a/f;->b:I
 
+    invoke-static {}, Lcom/tsf/shell/dock/DockInset;->lift()I
+
+    move-result v0
+
+    sput v0, Lcom/tsf/shell/f/c/a/f;->n:I
+
     .line 443
     new-instance v0, Lcom/tsf/shell/f/c/a/b;
 
@@ -2389,6 +2417,10 @@
     sget v1, Lcom/censivn/C3DEngine/b/b/a;->C:I
 
     sget v2, Lcom/tsf/shell/f/c/a/f;->a:I
+
+    add-int/2addr v1, v2
+
+    sget v2, Lcom/tsf/shell/f/c/a/f;->n:I
 
     add-int/2addr v1, v2
 
@@ -4014,6 +4046,8 @@
 
     invoke-virtual {p0, v0}, Lcom/tsf/shell/f/c/a/f;->b(Z)V
 
+    invoke-static {}, Lcom/tsf/shell/dock/DockInset;->releaseIndicator()V
+
     .line 1794
     return-void
 .end method
@@ -4046,6 +4080,8 @@
     move-result-object v1
 
     invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/f/j;->visible(Ljava/lang/Boolean;)V
+
+    invoke-static {}, Lcom/tsf/shell/dock/DockInset;->alignIndicator()V
 
     .line 1850
     iget-object v0, p0, Lcom/tsf/shell/f/c/a/f;->n:Lcom/tsf/shell/f/c/a/a/a;
