@@ -4363,6 +4363,8 @@
     iput-boolean v0, p0, Lcom/tsf/shell/f/f/a/h;->an:Z
 
     .line 268
+    invoke-static {}, Lcom/tsf/shell/dock/DockInset;->noteDockBeforeSubmenu()V
+
     sget-object v1, Lcom/tsf/shell/manager/a;->c:Lcom/tsf/shell/manager/f/c;
 
     invoke-virtual {v1, p0}, Lcom/tsf/shell/manager/f/c;->c(Ljava/lang/Object;)V
@@ -4439,10 +4441,17 @@
     iput-boolean v0, p0, Lcom/tsf/shell/f/f/a/h;->an:Z
 
     .line 307
+    invoke-static {}, Lcom/tsf/shell/dock/DockInset;->skipDockRestore()Z
+
+    move-result v0
+
+    if-nez v0, :cond_after_dock
+
     sget-object v0, Lcom/tsf/shell/manager/a;->c:Lcom/tsf/shell/manager/f/c;
 
     invoke-virtual {v0, p0}, Lcom/tsf/shell/manager/f/c;->b(Ljava/lang/Object;)V
 
+    :cond_after_dock
     .line 308
     invoke-direct {p0}, Lcom/tsf/shell/f/f/a/h;->aQ()V
 

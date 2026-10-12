@@ -336,4 +336,40 @@ public final class DockInset {
         }
         point.getClass().getField("y").setFloat(point, y);
     }
+
+    private static boolean dockHiddenBeforeSubmenu = true;
+
+    /** Remember whether the sliding dock was already hidden before the drawer submenu opened. */
+    public static void noteDockBeforeSubmenu() {
+        try {
+            Object dock = Class.forName("com.tsf.shell.manager.a").getField("g").get(null);
+            Object sliding = dock == null ? null : dock.getClass().getField("b").get(dock);
+            dockHiddenBeforeSubmenu = sliding == null || hidden(sliding);
+        } catch (Throwable ignored) {
+            dockHiddenBeforeSubmenu = true;
+        }
+    }
+
+    /**
+     * The drawer submenu returns through the same path that shows the desktop dock.
+     * When the dock was already hidden, restore the other controls and leave it hidden.
+     */
+    public static boolean skipDockRestore() {
+        if (!dockHiddenBeforeSubmenu) {
+            return false;
+        }
+        try {
+            Class<?> shell = Class.forName("com.tsf.shell.manager.a");
+            Object hotseat = shell.getField("o").get(null);
+            if (hotseat != null) {
+                hotseat.getClass().getMethod("i").invoke(hotseat);
+            }
+            Object pages = shell.getField("n").get(null);
+            if (pages != null) {
+                pages.getClass().getMethod("j").invoke(pages);
+            }
+        } catch (Throwable ignored) {
+        }
+        return true;
+    }
 }

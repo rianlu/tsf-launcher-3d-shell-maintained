@@ -3,7 +3,22 @@
 .source "DockInset.java"
 
 
+# static fields
+.field private static dockHiddenBeforeSubmenu:Z
+
+
 # direct methods
+.method static constructor <clinit>()V
+    .locals 1
+
+    .line 340
+    const/4 v0, 0x1
+
+    sput-boolean v0, Lcom/tsf/shell/dock/DockInset;->dockHiddenBeforeSubmenu:Z
+
+    return-void
+.end method
+
 .method private constructor <init>()V
     .locals 0
 
@@ -783,6 +798,95 @@
     invoke-static {v0, p0}, Lcom/tsf/shell/dock/DockInset;->setY(Ljava/lang/Object;F)V
 
     .line 126
+    return-void
+.end method
+
+.method public static noteDockBeforeSubmenu()V
+    .locals 4
+
+    .line 345
+    const/4 v0, 0x1
+
+    :try_start_0
+    const-string v1, "com.tsf.shell.manager.a"
+
+    invoke-static {v1}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
+
+    move-result-object v1
+
+    const-string v2, "g"
+
+    invoke-virtual {v1, v2}, Ljava/lang/Class;->getField(Ljava/lang/String;)Ljava/lang/reflect/Field;
+
+    move-result-object v1
+
+    const/4 v2, 0x0
+
+    invoke-virtual {v1, v2}, Ljava/lang/reflect/Field;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v1
+
+    .line 346
+    if-nez v1, :cond_0
+
+    :goto_0
+    goto :goto_1
+
+    :cond_0
+    invoke-virtual {v1}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+
+    move-result-object v2
+
+    const-string v3, "b"
+
+    invoke-virtual {v2, v3}, Ljava/lang/Class;->getField(Ljava/lang/String;)Ljava/lang/reflect/Field;
+
+    move-result-object v2
+
+    invoke-virtual {v2, v1}, Ljava/lang/reflect/Field;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v2
+
+    goto :goto_0
+
+    .line 347
+    :goto_1
+    if-eqz v2, :cond_2
+
+    invoke-static {v2}, Lcom/tsf/shell/dock/DockInset;->hidden(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_1
+
+    goto :goto_2
+
+    :cond_1
+    const/4 v1, 0x0
+
+    goto :goto_3
+
+    :cond_2
+    :goto_2
+    const/4 v1, 0x1
+
+    :goto_3
+    sput-boolean v1, Lcom/tsf/shell/dock/DockInset;->dockHiddenBeforeSubmenu:Z
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    .line 350
+    goto :goto_4
+
+    .line 348
+    :catchall_0
+    move-exception v1
+
+    .line 349
+    sput-boolean v0, Lcom/tsf/shell/dock/DockInset;->dockHiddenBeforeSubmenu:Z
+
+    .line 351
+    :goto_4
     return-void
 .end method
 
@@ -1634,6 +1738,110 @@
 
     .line 338
     return-void
+.end method
+
+.method public static skipDockRestore()Z
+    .locals 7
+
+    .line 358
+    sget-boolean v0, Lcom/tsf/shell/dock/DockInset;->dockHiddenBeforeSubmenu:Z
+
+    const/4 v1, 0x0
+
+    if-nez v0, :cond_0
+
+    .line 359
+    return v1
+
+    .line 362
+    :cond_0
+    :try_start_0
+    const-string v0, "com.tsf.shell.manager.a"
+
+    invoke-static {v0}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
+
+    move-result-object v0
+
+    .line 363
+    const-string v2, "o"
+
+    invoke-virtual {v0, v2}, Ljava/lang/Class;->getField(Ljava/lang/String;)Ljava/lang/reflect/Field;
+
+    move-result-object v2
+
+    const/4 v3, 0x0
+
+    invoke-virtual {v2, v3}, Ljava/lang/reflect/Field;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v2
+
+    .line 364
+    if-eqz v2, :cond_1
+
+    .line 365
+    invoke-virtual {v2}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+
+    move-result-object v4
+
+    const-string v5, "i"
+
+    new-array v6, v1, [Ljava/lang/Class;
+
+    invoke-virtual {v4, v5, v6}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+
+    move-result-object v4
+
+    new-array v5, v1, [Ljava/lang/Object;
+
+    invoke-virtual {v4, v2, v5}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+
+    .line 367
+    :cond_1
+    const-string v2, "n"
+
+    invoke-virtual {v0, v2}, Ljava/lang/Class;->getField(Ljava/lang/String;)Ljava/lang/reflect/Field;
+
+    move-result-object v0
+
+    invoke-virtual {v0, v3}, Ljava/lang/reflect/Field;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v0
+
+    .line 368
+    if-eqz v0, :cond_2
+
+    .line 369
+    invoke-virtual {v0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+
+    move-result-object v2
+
+    const-string v3, "j"
+
+    new-array v4, v1, [Ljava/lang/Class;
+
+    invoke-virtual {v2, v3, v4}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+
+    move-result-object v2
+
+    new-array v1, v1, [Ljava/lang/Object;
+
+    invoke-virtual {v2, v0, v1}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    .line 372
+    :cond_2
+    goto :goto_0
+
+    .line 371
+    :catchall_0
+    move-exception v0
+
+    .line 373
+    :goto_0
+    const/4 v0, 0x1
+
+    return v0
 .end method
 
 .method private static staticInt(Ljava/lang/Class;Ljava/lang/String;)Ljava/lang/reflect/Field;
