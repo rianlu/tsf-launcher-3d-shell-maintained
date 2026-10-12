@@ -116,7 +116,7 @@ TSF Launcher 3D Shell Maintained 配套XX APK. Adapted TSF ... APKs for the main
 - [ ] 使用同一个 APK 创建 GitHub 和 Gitee Release, 正文使用双语模板 (见上方).
 - [ ] 使用相同 tag, 例如 `v3.9.4-r1`. Gitee 侧 API: 先建 tag (`refs` 用完整 commit sha), 再建 release (`target_commitish` 必填), 资产通过 `/releases/{id}/attach_files` 上传, 替换旧资产需先按资产 id 删除.
 - [ ] 将 `release/update.json` 同步到 Gitee 镜像仓库根目录.
-- [ ] 将 APK 上传到蒲公英 `https://www.pgyer.com/tsflauncherprime` (作为国内高速下载渠道).
+- [ ] 运行 `sh tools/upload_pgyer.sh`, 把同一个 APK 上传到蒲公英. 同一包名会更新现有应用, 短链仍是 `https://www.pgyer.com/tsflauncherprime`. API Key 放在本机 `.local/signing/pgyer.env` 的 `PGYER_API_KEY`, 不提交.
 - [ ] 最后推送两个仓库的更新清单.
 
 ## 配套 APK
