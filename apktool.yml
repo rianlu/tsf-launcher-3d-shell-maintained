@@ -7,7 +7,7 @@ sdkInfo:
   minSdkVersion: 21
   targetSdkVersion: 28
 versionInfo:
-  versionCode: 30908
+  versionCode: 30909
   versionName: 3.9.4-r5
 resourcesInfo:
   packageId: 127
