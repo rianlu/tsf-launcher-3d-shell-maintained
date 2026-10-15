@@ -74,7 +74,7 @@ public final class PinnedShortcutSync {
                     if (user == null) {
                         user = info.getUserHandle();
                     }
-                    if (stillOnDesktop(info, keptIds, desktopIntents)) {
+                    if (stillOnDesktop(info, keptIds, desktopIntents) || justAdded(info)) {
                         keep.add(info.getId());
                     }
                 }
@@ -87,6 +87,11 @@ public final class PinnedShortcutSync {
         } catch (Throwable error) {
             Log.w(TAG, "reconcile skipped", error);
         }
+    }
+
+    private static boolean justAdded(ShortcutInfo info) {
+        long changed = info.getLastChangedTimestamp();
+        return changed > 0 && System.currentTimeMillis() - changed < 15000L;
     }
 
     private static boolean stillOnDesktop(ShortcutInfo info, Set<String> keptIds, List<Intent> desktopIntents) {

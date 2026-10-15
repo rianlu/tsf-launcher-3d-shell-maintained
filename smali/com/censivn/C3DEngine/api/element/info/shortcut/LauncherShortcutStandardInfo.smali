@@ -38,7 +38,22 @@
     .locals 7
 
     .prologue
+    iget v0, p0, Lcom/censivn/C3DEngine/api/element/info/ItemInfo;->iconType:I
+
+    const/4 v1, 0x2
+
+    if-ne v0, v1, :cond_normal
+
+    invoke-static {p0, p1, p2}, Lcom/tsf/shell/shortcut/ShortcutIcon;->texture(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Landroid/graphics/Bitmap;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_normal
+
+    return-object v0
+
     .line 99
+    :cond_normal
     iget-object v1, p0, Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcutStandardInfo;->title:Ljava/lang/String;
 
     const/4 v0, 0x1

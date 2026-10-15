@@ -25,7 +25,6 @@
 .method constructor <init>(Lcom/tsf/shell/shortcut/PinShortcutActivity;)V
     .locals 0
 
-    .line 168
     iput-object p1, p0, Lcom/tsf/shell/shortcut/PinShortcutActivity$3;->this$0:Lcom/tsf/shell/shortcut/PinShortcutActivity;
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
@@ -38,14 +37,12 @@
 .method public onCancel(Landroid/content/DialogInterface;)V
     .locals 1
 
-    .line 171
     iget-object p1, p0, Lcom/tsf/shell/shortcut/PinShortcutActivity$3;->this$0:Lcom/tsf/shell/shortcut/PinShortcutActivity;
 
     const/4 v0, 0x1
 
     invoke-static {p1, v0}, Lcom/tsf/shell/shortcut/PinShortcutActivity;->access$002(Lcom/tsf/shell/shortcut/PinShortcutActivity;Z)Z
 
-    .line 172
     new-instance p1, Ljava/lang/StringBuilder;
 
     invoke-direct {p1}, Ljava/lang/StringBuilder;-><init>()V
@@ -98,6 +95,5 @@
 
     invoke-static {v0, p1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
 
-    .line 173
     return-void
 .end method

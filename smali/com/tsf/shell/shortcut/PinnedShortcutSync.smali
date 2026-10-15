@@ -22,6 +22,42 @@
     return-void
 .end method
 
+.method private static justAdded(Landroid/content/pm/ShortcutInfo;)Z
+    .locals 4
+
+    invoke-virtual {p0}, Landroid/content/pm/ShortcutInfo;->getLastChangedTimestamp()J
+
+    move-result-wide v0
+
+    const-wide/16 v2, 0x0
+
+    cmp-long p0, v0, v2
+
+    if-lez p0, :cond_0
+
+    invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
+
+    move-result-wide v2
+
+    sub-long/2addr v2, v0
+
+    const-wide/16 v0, 0x3a98
+
+    cmp-long p0, v2, v0
+
+    if-gez p0, :cond_0
+
+    const/4 p0, 0x1
+
+    goto :goto_0
+
+    :cond_0
+    const/4 p0, 0x0
+
+    :goto_0
+    return p0
+.end method
+
 .method private static loadDesktop(Landroid/content/Context;Ljava/util/Set;Ljava/util/List;)Z
     .locals 7
     .annotation system Ldalvik/annotation/Signature;
@@ -237,7 +273,7 @@
 
     const-string v0, "PinShortcut"
 
-    if-eqz p0, :cond_f
+    if-eqz p0, :cond_10
 
     sget v1, Landroid/os/Build$VERSION;->SDK_INT:I
 
@@ -295,7 +331,7 @@
 
     move-result-object v3
 
-    if-eqz v3, :cond_e
+    if-eqz v3, :cond_f
 
     invoke-interface {v3}, Ljava/util/List;->isEmpty()Z
 
@@ -390,7 +426,7 @@
 
     move-result v4
 
-    if-eqz v4, :cond_d
+    if-eqz v4, :cond_e
 
     invoke-interface {v3}, Ljava/util/Iterator;->next()Ljava/lang/Object;
 
@@ -419,7 +455,7 @@
 
     move-result v10
 
-    if-ge v9, v10, :cond_b
+    if-ge v9, v10, :cond_c
 
     invoke-interface {v6, v9}, Ljava/util/List;->get(I)Ljava/lang/Object;
 
@@ -438,20 +474,27 @@
 
     move-result v11
 
-    if-eqz v11, :cond_a
+    if-nez v11, :cond_a
 
+    invoke-static {v10}, Lcom/tsf/shell/shortcut/PinnedShortcutSync;->justAdded(Landroid/content/pm/ShortcutInfo;)Z
+
+    move-result v11
+
+    if-eqz v11, :cond_b
+
+    :cond_a
     invoke-virtual {v10}, Landroid/content/pm/ShortcutInfo;->getId()Ljava/lang/String;
 
     move-result-object v10
 
     invoke-virtual {v7, v10}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
 
-    :cond_a
+    :cond_b
     add-int/lit8 v9, v9, 0x1
 
     goto :goto_3
 
-    :cond_b
+    :cond_c
     invoke-virtual {v7}, Ljava/util/ArrayList;->size()I
 
     move-result v9
@@ -462,11 +505,11 @@
 
     if-eq v9, v10, :cond_8
 
-    if-nez v8, :cond_c
+    if-nez v8, :cond_d
 
     goto :goto_2
 
-    :cond_c
+    :cond_d
     new-instance v9, Ljava/lang/StringBuilder;
 
     invoke-direct {v9}, Ljava/lang/StringBuilder;-><init>()V
@@ -533,10 +576,10 @@
 
     goto/16 :goto_2
 
-    :cond_d
+    :cond_e
     goto :goto_5
 
-    :cond_e
+    :cond_f
     :goto_4
     return-void
 
@@ -550,7 +593,7 @@
     :goto_5
     return-void
 
-    :cond_f
+    :cond_10
     :goto_6
     return-void
 .end method

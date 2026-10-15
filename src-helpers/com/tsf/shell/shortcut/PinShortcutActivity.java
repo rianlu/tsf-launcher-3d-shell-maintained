@@ -11,18 +11,19 @@ import android.content.pm.ShortcutInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
+import android.os.Process;
 import android.os.UserHandle;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Collections;
 
 /**
  * Accepts {@code ShortcutManager.requestPinShortcut} from other apps and
@@ -185,12 +186,16 @@ public class PinShortcutActivity extends Activity {
     }
 
     private void placeConfirmed() throws Exception {
+        Bitmap ahead = iconOf(mInfo);
         if (!mRequest.accept()) {
             Log.i(TAG, "accept returned false, still placing " + mInfo.getPackage() + " / " + mInfo.getId());
         } else {
             Log.i(TAG, "accepted " + mInfo.getPackage() + " / " + mInfo.getId());
         }
-        Bitmap icon = iconOf(mInfo);
+        Bitmap icon = iconOf(refreshed(mInfo));
+        if (icon == null) {
+            icon = ahead;
+        }
         if (icon == null) {
             Log.i(TAG, "icon missing after accept, using fallback");
             icon = fallbackIcon(mName);
@@ -256,92 +261,186 @@ public class PinShortcutActivity extends Activity {
         paint.setTextSize(size * 0.45f);
         String letter = label == null || label.length() == 0 ? "?" : label.substring(0, 1);
         canvas.drawText(letter, size / 2f, size / 2f - (paint.descent() + paint.ascent()) / 2f, paint);
-        return themeMask(bitmap);
+        return bitmap;
+    }
+
+    private ShortcutInfo refreshed(ShortcutInfo info) {
+        if (info == null || Build.VERSION.SDK_INT < 25 || info.getPackage() == null || info.getId() == null) {
+            return null;
+        }
+        try {
+            LauncherApps apps = (LauncherApps) getSystemService(LauncherApps.class);
+            if (apps == null) {
+                return null;
+            }
+            LauncherApps.ShortcutQuery query = new LauncherApps.ShortcutQuery();
+            query.setPackage(info.getPackage());
+            query.setShortcutIds(Collections.singletonList(info.getId()));
+            int flags = LauncherApps.ShortcutQuery.FLAG_MATCH_PINNED
+                    | LauncherApps.ShortcutQuery.FLAG_MATCH_DYNAMIC
+                    | LauncherApps.ShortcutQuery.FLAG_MATCH_MANIFEST;
+            if (Build.VERSION.SDK_INT >= 30) {
+                flags |= LauncherApps.ShortcutQuery.FLAG_MATCH_CACHED;
+            }
+            query.setQueryFlags(flags);
+            UserHandle user = info.getUserHandle() != null ? info.getUserHandle() : Process.myUserHandle();
+            java.util.List<ShortcutInfo> found = apps.getShortcuts(query, user);
+            if (found != null && !found.isEmpty()) {
+                return found.get(0);
+            }
+        } catch (Throwable error) {
+            Log.w(TAG, "shortcut refresh failed", error);
+        }
+        return null;
     }
 
     private Bitmap iconOf(ShortcutInfo info) {
-        if (Build.VERSION.SDK_INT < 25) {
+        if (info == null || Build.VERSION.SDK_INT < 25) {
             return null;
         }
-        LauncherApps apps = (LauncherApps) getSystemService(LauncherApps.class);
-        Drawable drawable = null;
-        if (apps != null) {
-            drawable = apps.getShortcutIconDrawable(info, getResources().getDisplayMetrics().densityDpi);
+        Drawable drawable = shortcutDrawable(info);
+        String source = "shortcut";
+        if (drawable == null || isPlaceholder(drawable)) {
+            drawable = attachedIcon(info);
+            source = "attached";
         }
-        if (drawable == null) {
+        if (drawable == null || isPlaceholder(drawable)) {
             try {
                 drawable = getPackageManager().getApplicationIcon(info.getPackage());
+                source = "application";
             } catch (Throwable ignored) {
-                return null;
+                drawable = null;
             }
         }
-        int size = Math.max(1, (int) (48f * getResources().getDisplayMetrics().density));
+        if (drawable == null || isPlaceholder(drawable)) {
+            Log.i(TAG, "no shortcut icon for " + info.getPackage() + " / " + info.getId());
+            return null;
+        }
+        Log.i(TAG, "icon " + source + " " + drawable.getClass().getSimpleName()
+                + " " + drawable.getIntrinsicWidth() + "x" + drawable.getIntrinsicHeight()
+                + " " + info.getId());
+        return raster(drawable);
+    }
+
+    private Drawable shortcutDrawable(ShortcutInfo info) {
+        LauncherApps apps = (LauncherApps) getSystemService(LauncherApps.class);
+        if (apps == null) {
+            return null;
+        }
+        int density = getResources().getDisplayMetrics().densityDpi;
+        Drawable atNative = apps.getShortcutIconDrawable(info, 0);
+        if (atNative != null && !isPlaceholder(atNative)) {
+            return atNative;
+        }
+        Drawable atDensity = apps.getShortcutIconDrawable(info, density);
+        if (atDensity != null && !isPlaceholder(atDensity)) {
+            return atDensity;
+        }
+        return atNative != null ? atNative : atDensity;
+    }
+
+    private Drawable attachedIcon(ShortcutInfo info) {
+        try {
+            Method method = ShortcutInfo.class.getDeclaredMethod("getIcon");
+            method.setAccessible(true);
+            Object raw = method.invoke(info);
+            if (raw instanceof Icon) {
+                return ((Icon) raw).loadDrawable(this);
+            }
+        } catch (Throwable ignored) {
+        }
+        try {
+            Field field = ShortcutInfo.class.getDeclaredField("mIcon");
+            field.setAccessible(true);
+            Object raw = field.get(info);
+            if (raw instanceof Icon) {
+                return ((Icon) raw).loadDrawable(this);
+            }
+        } catch (Throwable ignored) {
+        }
+        return null;
+    }
+
+    private boolean isPlaceholder(Drawable drawable) {
+        if (drawable == null) {
+            return true;
+        }
+        Bitmap probe = raster(drawable, 24);
+        Bitmap system = systemRobot();
+        Bitmap app = appRobot();
+        boolean empty = averageAlpha(probe) < 16;
+        boolean robot = !empty && (similar(probe, system) || similar(probe, app));
+        probe.recycle();
+        if (system != null) {
+            system.recycle();
+        }
+        if (app != null) {
+            app.recycle();
+        }
+        return empty || robot;
+    }
+
+    private Bitmap systemRobot() {
+        Drawable drawable = android.content.res.Resources.getSystem()
+                .getDrawable(android.R.drawable.sym_def_app_icon, null);
+        return drawable == null ? null : raster(drawable, 24);
+    }
+
+    private Bitmap appRobot() {
+        int id = getResources().getIdentifier("sym_def_app_icon", "drawable", getPackageName());
+        if (id == 0) {
+            return null;
+        }
+        Drawable drawable = getDrawable(id);
+        return drawable == null ? null : raster(drawable, 24);
+    }
+
+    private boolean similar(Bitmap left, Bitmap right) {
+        if (left == null || right == null) {
+            return false;
+        }
+        long diff = 0;
+        int count = left.getWidth() * left.getHeight();
+        for (int y = 0; y < left.getHeight(); y++) {
+            for (int x = 0; x < left.getWidth(); x++) {
+                int a = left.getPixel(x, y);
+                int b = right.getPixel(x, y);
+                diff += Math.abs(((a >> 16) & 0xff) - ((b >> 16) & 0xff));
+                diff += Math.abs(((a >> 8) & 0xff) - ((b >> 8) & 0xff));
+                diff += Math.abs((a & 0xff) - (b & 0xff));
+            }
+        }
+        return count > 0 && diff / count < 36;
+    }
+
+    private int averageAlpha(Bitmap bitmap) {
+        long alpha = 0;
+        int count = bitmap.getWidth() * bitmap.getHeight();
+        for (int y = 0; y < bitmap.getHeight(); y++) {
+            for (int x = 0; x < bitmap.getWidth(); x++) {
+                alpha += (bitmap.getPixel(x, y) >>> 24) & 0xff;
+            }
+        }
+        return count == 0 ? 0 : (int) (alpha / count);
+    }
+
+    private Bitmap raster(Drawable drawable) {
+        int size = Math.max(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        int floor = Math.max(1, (int) (96f * getResources().getDisplayMetrics().density));
+        if (size < floor) {
+            size = floor;
+        }
+        if (size > 256) {
+            size = 256;
+        }
+        return raster(drawable, size);
+    }
+
+    private Bitmap raster(Drawable drawable, int size) {
         Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, size, size);
         drawable.draw(canvas);
-        return themeMask(bitmap);
-    }
-
-    /**
-     * Clip the shortcut picture with the current theme icon mask, the same
-     * DST_OUT pass used for normal app icons.
-     */
-    private Bitmap themeMask(Bitmap source) {
-        Bitmap mask = null;
-        try {
-            Class<?> styles = Class.forName("com.tsf.shell.manager.o.b");
-            Object style = styles.getField("a").get(null);
-            Class<?> themeManager = Class.forName("com.tsf.shell.theme.inside.ThemeManager");
-            Object mix = themeManager.getField("mix").get(null);
-            if (style == null || mix == null) {
-                return source;
-            }
-            Object iconManager = mix.getClass().getField("icon").get(mix);
-            if (iconManager == null) {
-                return source;
-            }
-            Class<?> styleClass = Class.forName("com.tsf.shell.manager.o.a");
-            Method getMask = iconManager.getClass().getMethod("getDefaultIconMaskBitmap", styleClass);
-            Object rawMask = getMask.invoke(iconManager, style);
-            if (!(rawMask instanceof Bitmap)) {
-                return source;
-            }
-            mask = (Bitmap) rawMask;
-            int outW = mask.getWidth();
-            int outH = mask.getHeight();
-            if (outW <= 0 || outH <= 0) {
-                return source;
-            }
-            float scale = 1f;
-            try {
-                Object rawScale = iconManager.getClass().getMethod("getDefaultIconScale").invoke(iconManager);
-                if (rawScale instanceof Float) {
-                    scale = (Float) rawScale;
-                }
-            } catch (Throwable ignored) {
-            }
-            if (scale <= 0f) {
-                scale = 1f;
-            }
-            Bitmap out = Bitmap.createBitmap(outW, outH, Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(out);
-            int iconW = Math.max(1, Math.round(outW * scale));
-            int iconH = Math.max(1, Math.round(outH * scale));
-            int left = (outW - iconW) / 2;
-            int top = (outH - iconH) / 2;
-            canvas.drawBitmap(source, null, new Rect(left, top, left + iconW, top + iconH), null);
-            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
-            canvas.drawBitmap(mask, 0, 0, paint);
-            if (out != source) {
-                source.recycle();
-            }
-            Log.i(TAG, "applied theme mask " + outW + "x" + outH + " scale=" + scale);
-            return out;
-        } catch (Throwable error) {
-            Log.w(TAG, "theme mask skipped", error);
-            return source;
-        }
+        return bitmap;
     }
 }
