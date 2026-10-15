@@ -23,7 +23,9 @@ import android.widget.Toast;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Accepts {@code ShortcutManager.requestPinShortcut} from other apps and
@@ -71,20 +73,87 @@ public class PinShortcutActivity extends Activity {
     }
 
     private void openPinned(Intent source) {
+        String pkg = source.getStringExtra(EXTRA_PKG);
+        String id = source.getStringExtra(EXTRA_ID);
+        LauncherApps apps = (LauncherApps) getSystemService(LauncherApps.class);
+        if (pkg == null || id == null || apps == null || Build.VERSION.SDK_INT < 25) {
+            Log.i(TAG, "open missing pkg=" + pkg + " id=" + id);
+            toast("打不开这个快捷方式");
+            return;
+        }
+        UserHandle stored = userHandle(source.getIntExtra(EXTRA_USER, 0));
+        ShortcutInfo info = findShortcut(apps, pkg, id, stored);
+        if (info == null) {
+            info = findShortcut(apps, pkg, id, Process.myUserHandle());
+        }
         try {
-            String pkg = source.getStringExtra(EXTRA_PKG);
-            String id = source.getStringExtra(EXTRA_ID);
-            int userId = source.getIntExtra(EXTRA_USER, 0);
-            LauncherApps apps = (LauncherApps) getSystemService(LauncherApps.class);
-            if (pkg == null || id == null || apps == null || Build.VERSION.SDK_INT < 25) {
-                toast("打不开这个快捷方式");
+            if (info != null) {
+                ensurePinned(apps, info);
+                Log.i(TAG, "startShortcut info " + pkg + " / " + id);
+                apps.startShortcut(info, source.getSourceBounds(), null);
                 return;
             }
-            Log.i(TAG, "startShortcut " + pkg + " / " + id + " user=" + userId);
-            apps.startShortcut(pkg, id, source.getSourceBounds(), null, userHandle(userId));
+            Log.i(TAG, "startShortcut id " + pkg + " / " + id);
+            apps.startShortcut(pkg, id, source.getSourceBounds(), null, stored);
         } catch (Throwable error) {
-            Log.e(TAG, "startShortcut failed", error);
+            Log.e(TAG, "startShortcut failed " + pkg + " / " + id, error);
             toast("打不开这个快捷方式");
+        }
+    }
+
+    private ShortcutInfo findShortcut(LauncherApps apps, String pkg, String id, UserHandle user) {
+        if (user == null) {
+            return null;
+        }
+        try {
+            LauncherApps.ShortcutQuery query = new LauncherApps.ShortcutQuery();
+            query.setPackage(pkg);
+            query.setShortcutIds(Collections.singletonList(id));
+            int flags = LauncherApps.ShortcutQuery.FLAG_MATCH_PINNED
+                    | LauncherApps.ShortcutQuery.FLAG_MATCH_DYNAMIC
+                    | LauncherApps.ShortcutQuery.FLAG_MATCH_MANIFEST;
+            if (Build.VERSION.SDK_INT >= 30) {
+                flags |= LauncherApps.ShortcutQuery.FLAG_MATCH_CACHED;
+            }
+            query.setQueryFlags(flags);
+            List<ShortcutInfo> found = apps.getShortcuts(query, user);
+            if (found != null && !found.isEmpty()) {
+                return found.get(0);
+            }
+        } catch (Throwable error) {
+            Log.w(TAG, "shortcut lookup failed", error);
+        }
+        return null;
+    }
+
+    private void ensurePinned(LauncherApps apps, ShortcutInfo info) {
+        try {
+            LauncherApps.ShortcutQuery query = new LauncherApps.ShortcutQuery();
+            query.setPackage(info.getPackage());
+            query.setQueryFlags(LauncherApps.ShortcutQuery.FLAG_MATCH_PINNED);
+            UserHandle user = info.getUserHandle() != null ? info.getUserHandle() : Process.myUserHandle();
+            List<ShortcutInfo> pinned = apps.getShortcuts(query, user);
+            ArrayList<String> ids = new ArrayList<String>();
+            boolean found = false;
+            if (pinned != null) {
+                for (int i = 0; i < pinned.size(); i++) {
+                    ShortcutInfo item = pinned.get(i);
+                    if (item == null || item.getId() == null) {
+                        continue;
+                    }
+                    ids.add(item.getId());
+                    if (item.getId().equals(info.getId())) {
+                        found = true;
+                    }
+                }
+            }
+            if (!found) {
+                ids.add(info.getId());
+                apps.pinShortcuts(info.getPackage(), ids, user);
+                Log.i(TAG, "repin " + info.getPackage() + " / " + info.getId());
+            }
+        } catch (Throwable error) {
+            Log.w(TAG, "repin skipped", error);
         }
     }
 

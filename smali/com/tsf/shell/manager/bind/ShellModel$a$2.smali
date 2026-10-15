@@ -112,6 +112,12 @@
     .line 438
     monitor-exit v1
 
+    invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;
+
+    move-result-object v0
+
+    invoke-static {v0}, Lcom/tsf/shell/shortcut/PinnedShortcutSync;->afterDelete(Landroid/content/Context;)V
+
     .line 440
     return-void
 

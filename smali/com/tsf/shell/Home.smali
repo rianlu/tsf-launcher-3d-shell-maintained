@@ -2592,8 +2592,6 @@
     .line 1204
     invoke-super {p0}, Landroid/app/ActivityGroup;->onResume()V
 
-    invoke-static {p0}, Lcom/tsf/shell/shortcut/PinnedShortcutSync;->reconcile(Landroid/content/Context;)V
-
     invoke-static {p0}, Lcom/tsf/shell/dock/DockInset;->schedule(Landroid/app/Activity;)V
 
     .line 1205

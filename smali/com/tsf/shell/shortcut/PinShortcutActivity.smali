@@ -280,6 +280,184 @@
     return v3
 .end method
 
+.method private ensurePinned(Landroid/content/pm/LauncherApps;Landroid/content/pm/ShortcutInfo;)V
+    .locals 8
+
+    const-string v0, "PinShortcut"
+
+    :try_start_0
+    new-instance v1, Landroid/content/pm/LauncherApps$ShortcutQuery;
+
+    invoke-direct {v1}, Landroid/content/pm/LauncherApps$ShortcutQuery;-><init>()V
+
+    invoke-virtual {p2}, Landroid/content/pm/ShortcutInfo;->getPackage()Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-virtual {v1, v2}, Landroid/content/pm/LauncherApps$ShortcutQuery;->setPackage(Ljava/lang/String;)Landroid/content/pm/LauncherApps$ShortcutQuery;
+
+    const/4 v2, 0x2
+
+    invoke-virtual {v1, v2}, Landroid/content/pm/LauncherApps$ShortcutQuery;->setQueryFlags(I)Landroid/content/pm/LauncherApps$ShortcutQuery;
+
+    invoke-virtual {p2}, Landroid/content/pm/ShortcutInfo;->getUserHandle()Landroid/os/UserHandle;
+
+    move-result-object v2
+
+    if-eqz v2, :cond_0
+
+    invoke-virtual {p2}, Landroid/content/pm/ShortcutInfo;->getUserHandle()Landroid/os/UserHandle;
+
+    move-result-object v2
+
+    goto :goto_0
+
+    :cond_0
+    invoke-static {}, Landroid/os/Process;->myUserHandle()Landroid/os/UserHandle;
+
+    move-result-object v2
+
+    :goto_0
+    invoke-virtual {p1, v1, v2}, Landroid/content/pm/LauncherApps;->getShortcuts(Landroid/content/pm/LauncherApps$ShortcutQuery;Landroid/os/UserHandle;)Ljava/util/List;
+
+    move-result-object v1
+
+    new-instance v3, Ljava/util/ArrayList;
+
+    invoke-direct {v3}, Ljava/util/ArrayList;-><init>()V
+
+    nop
+
+    const/4 v4, 0x0
+
+    if-eqz v1, :cond_4
+
+    const/4 v5, 0x0
+
+    :goto_1
+    invoke-interface {v1}, Ljava/util/List;->size()I
+
+    move-result v6
+
+    if-ge v4, v6, :cond_3
+
+    invoke-interface {v1, v4}, Ljava/util/List;->get(I)Ljava/lang/Object;
+
+    move-result-object v6
+
+    check-cast v6, Landroid/content/pm/ShortcutInfo;
+
+    if-eqz v6, :cond_2
+
+    invoke-virtual {v6}, Landroid/content/pm/ShortcutInfo;->getId()Ljava/lang/String;
+
+    move-result-object v7
+
+    if-nez v7, :cond_1
+
+    goto :goto_2
+
+    :cond_1
+    invoke-virtual {v6}, Landroid/content/pm/ShortcutInfo;->getId()Ljava/lang/String;
+
+    move-result-object v7
+
+    invoke-virtual {v3, v7}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    invoke-virtual {v6}, Landroid/content/pm/ShortcutInfo;->getId()Ljava/lang/String;
+
+    move-result-object v6
+
+    invoke-virtual {p2}, Landroid/content/pm/ShortcutInfo;->getId()Ljava/lang/String;
+
+    move-result-object v7
+
+    invoke-virtual {v6, v7}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v6
+
+    if-eqz v6, :cond_2
+
+    const/4 v5, 0x1
+
+    :cond_2
+    :goto_2
+    add-int/lit8 v4, v4, 0x1
+
+    goto :goto_1
+
+    :cond_3
+    move v4, v5
+
+    :cond_4
+    if-nez v4, :cond_5
+
+    invoke-virtual {p2}, Landroid/content/pm/ShortcutInfo;->getId()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v3, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    invoke-virtual {p2}, Landroid/content/pm/ShortcutInfo;->getPackage()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {p1, v1, v3, v2}, Landroid/content/pm/LauncherApps;->pinShortcuts(Ljava/lang/String;Ljava/util/List;Landroid/os/UserHandle;)V
+
+    new-instance p1, Ljava/lang/StringBuilder;
+
+    invoke-direct {p1}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v1, "repin "
+
+    invoke-virtual {p1, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object p1
+
+    invoke-virtual {p2}, Landroid/content/pm/ShortcutInfo;->getPackage()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {p1, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object p1
+
+    const-string v1, " / "
+
+    invoke-virtual {p1, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object p1
+
+    invoke-virtual {p2}, Landroid/content/pm/ShortcutInfo;->getId()Ljava/lang/String;
+
+    move-result-object p2
+
+    invoke-virtual {p1, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object p1
+
+    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object p1
+
+    invoke-static {v0, p1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    :cond_5
+    goto :goto_3
+
+    :catchall_0
+    move-exception p1
+
+    const-string p2, "repin skipped"
+
+    invoke-static {v0, p2, p1}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    :goto_3
+    return-void
+.end method
+
 .method private fallbackIcon(Ljava/lang/String;)Landroid/graphics/Bitmap;
     .locals 8
 
@@ -386,6 +564,87 @@
     invoke-virtual {v3, p1, v6, v0, v4}, Landroid/graphics/Canvas;->drawText(Ljava/lang/String;FFLandroid/graphics/Paint;)V
 
     return-object v2
+.end method
+
+.method private findShortcut(Landroid/content/pm/LauncherApps;Ljava/lang/String;Ljava/lang/String;Landroid/os/UserHandle;)Landroid/content/pm/ShortcutInfo;
+    .locals 2
+
+    const/4 v0, 0x0
+
+    if-nez p4, :cond_0
+
+    return-object v0
+
+    :cond_0
+    :try_start_0
+    new-instance v1, Landroid/content/pm/LauncherApps$ShortcutQuery;
+
+    invoke-direct {v1}, Landroid/content/pm/LauncherApps$ShortcutQuery;-><init>()V
+
+    invoke-virtual {v1, p2}, Landroid/content/pm/LauncherApps$ShortcutQuery;->setPackage(Ljava/lang/String;)Landroid/content/pm/LauncherApps$ShortcutQuery;
+
+    invoke-static {p3}, Ljava/util/Collections;->singletonList(Ljava/lang/Object;)Ljava/util/List;
+
+    move-result-object p2
+
+    invoke-virtual {v1, p2}, Landroid/content/pm/LauncherApps$ShortcutQuery;->setShortcutIds(Ljava/util/List;)Landroid/content/pm/LauncherApps$ShortcutQuery;
+
+    nop
+
+    sget p2, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 p3, 0x1e
+
+    if-lt p2, p3, :cond_1
+
+    const/16 p2, 0x1b
+
+    goto :goto_0
+
+    :cond_1
+    const/16 p2, 0xb
+
+    :goto_0
+    invoke-virtual {v1, p2}, Landroid/content/pm/LauncherApps$ShortcutQuery;->setQueryFlags(I)Landroid/content/pm/LauncherApps$ShortcutQuery;
+
+    invoke-virtual {p1, v1, p4}, Landroid/content/pm/LauncherApps;->getShortcuts(Landroid/content/pm/LauncherApps$ShortcutQuery;Landroid/os/UserHandle;)Ljava/util/List;
+
+    move-result-object p1
+
+    if-eqz p1, :cond_2
+
+    invoke-interface {p1}, Ljava/util/List;->isEmpty()Z
+
+    move-result p2
+
+    if-nez p2, :cond_2
+
+    const/4 p2, 0x0
+
+    invoke-interface {p1, p2}, Ljava/util/List;->get(I)Ljava/lang/Object;
+
+    move-result-object p1
+
+    check-cast p1, Landroid/content/pm/ShortcutInfo;
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    return-object p1
+
+    :cond_2
+    goto :goto_1
+
+    :catchall_0
+    move-exception p1
+
+    const-string p2, "PinShortcut"
+
+    const-string p3, "shortcut lookup failed"
+
+    invoke-static {p2, p3, p1}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    :goto_1
+    return-object v0
 .end method
 
 .method private iconOf(Landroid/content/pm/ShortcutInfo;)Landroid/graphics/Bitmap;
@@ -868,25 +1127,47 @@
 .end method
 
 .method private openPinned(Landroid/content/Intent;)V
-    .locals 9
+    .locals 11
 
-    const-string v0, "\u6253\u4e0d\u5f00\u8fd9\u4e2a\u5feb\u6377\u65b9\u5f0f"
+    const-string v0, "pkg"
 
-    const-string v1, "PinShortcut"
+    invoke-virtual {p1, v0}, Landroid/content/Intent;->getStringExtra(Ljava/lang/String;)Ljava/lang/String;
 
-    :try_start_0
-    const-string v2, "pkg"
+    move-result-object v0
 
-    invoke-virtual {p1, v2}, Landroid/content/Intent;->getStringExtra(Ljava/lang/String;)Ljava/lang/String;
+    const-string v1, "id"
 
-    move-result-object v4
+    invoke-virtual {p1, v1}, Landroid/content/Intent;->getStringExtra(Ljava/lang/String;)Ljava/lang/String;
 
-    const-string v2, "id"
+    move-result-object v7
 
-    invoke-virtual {p1, v2}, Landroid/content/Intent;->getStringExtra(Ljava/lang/String;)Ljava/lang/String;
+    const-class v1, Landroid/content/pm/LauncherApps;
 
-    move-result-object v5
+    invoke-virtual {p0, v1}, Lcom/tsf/shell/shortcut/PinShortcutActivity;->getSystemService(Ljava/lang/Class;)Ljava/lang/Object;
 
+    move-result-object v1
+
+    check-cast v1, Landroid/content/pm/LauncherApps;
+
+    const-string v8, "\u6253\u4e0d\u5f00\u8fd9\u4e2a\u5feb\u6377\u65b9\u5f0f"
+
+    const-string v9, "PinShortcut"
+
+    if-eqz v0, :cond_3
+
+    if-eqz v7, :cond_3
+
+    if-eqz v1, :cond_3
+
+    sget v2, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 v3, 0x19
+
+    if-ge v2, v3, :cond_0
+
+    goto/16 :goto_2
+
+    :cond_0
     const-string v2, "user"
 
     const/4 v3, 0x0
@@ -895,101 +1176,188 @@
 
     move-result v2
 
-    const-class v3, Landroid/content/pm/LauncherApps;
+    invoke-direct {p0, v2}, Lcom/tsf/shell/shortcut/PinShortcutActivity;->userHandle(I)Landroid/os/UserHandle;
 
-    invoke-virtual {p0, v3}, Lcom/tsf/shell/shortcut/PinShortcutActivity;->getSystemService(Ljava/lang/Class;)Ljava/lang/Object;
+    move-result-object v6
+
+    invoke-direct {p0, v1, v0, v7, v6}, Lcom/tsf/shell/shortcut/PinShortcutActivity;->findShortcut(Landroid/content/pm/LauncherApps;Ljava/lang/String;Ljava/lang/String;Landroid/os/UserHandle;)Landroid/content/pm/ShortcutInfo;
+
+    move-result-object v2
+
+    if-nez v2, :cond_1
+
+    invoke-static {}, Landroid/os/Process;->myUserHandle()Landroid/os/UserHandle;
+
+    move-result-object v2
+
+    invoke-direct {p0, v1, v0, v7, v2}, Lcom/tsf/shell/shortcut/PinShortcutActivity;->findShortcut(Landroid/content/pm/LauncherApps;Ljava/lang/String;Ljava/lang/String;Landroid/os/UserHandle;)Landroid/content/pm/ShortcutInfo;
+
+    move-result-object v2
+
+    :cond_1
+    const-string v10, " / "
+
+    if-eqz v2, :cond_2
+
+    :try_start_0
+    invoke-direct {p0, v1, v2}, Lcom/tsf/shell/shortcut/PinShortcutActivity;->ensurePinned(Landroid/content/pm/LauncherApps;Landroid/content/pm/ShortcutInfo;)V
+
+    new-instance v3, Ljava/lang/StringBuilder;
+
+    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v4, "startShortcut info "
+
+    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     move-result-object v3
 
-    check-cast v3, Landroid/content/pm/LauncherApps;
+    invoke-virtual {v3, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    if-eqz v4, :cond_1
+    move-result-object v3
 
-    if-eqz v5, :cond_1
+    invoke-virtual {v3, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    if-eqz v3, :cond_1
+    move-result-object v3
 
-    sget v6, Landroid/os/Build$VERSION;->SDK_INT:I
+    invoke-virtual {v3, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    const/16 v7, 0x19
+    move-result-object v3
 
-    if-ge v6, v7, :cond_0
+    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 
-    goto :goto_0
+    move-result-object v3
 
-    :cond_0
-    new-instance v6, Ljava/lang/StringBuilder;
-
-    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v7, "startShortcut "
-
-    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v6
-
-    invoke-virtual {v6, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v6
-
-    const-string v7, " / "
-
-    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v6
-
-    invoke-virtual {v6, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v6
-
-    const-string v7, " user="
-
-    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v6
-
-    invoke-virtual {v6, v2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
-
-    move-result-object v6
-
-    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v6
-
-    invoke-static {v1, v6}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+    invoke-static {v9, v3}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
 
     invoke-virtual {p1}, Landroid/content/Intent;->getSourceBounds()Landroid/graphics/Rect;
 
-    move-result-object v6
+    move-result-object p1
 
-    invoke-direct {p0, v2}, Lcom/tsf/shell/shortcut/PinShortcutActivity;->userHandle(I)Landroid/os/UserHandle;
+    const/4 v3, 0x0
 
-    move-result-object v8
-
-    const/4 v7, 0x0
-
-    invoke-virtual/range {v3 .. v8}, Landroid/content/pm/LauncherApps;->startShortcut(Ljava/lang/String;Ljava/lang/String;Landroid/graphics/Rect;Landroid/os/Bundle;Landroid/os/UserHandle;)V
-
-    goto :goto_1
-
-    :cond_1
-    :goto_0
-    invoke-direct {p0, v0}, Lcom/tsf/shell/shortcut/PinShortcutActivity;->toast(Ljava/lang/String;)V
-    :try_end_0
-    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+    invoke-virtual {v1, v2, p1, v3}, Landroid/content/pm/LauncherApps;->startShortcut(Landroid/content/pm/ShortcutInfo;Landroid/graphics/Rect;Landroid/os/Bundle;)V
 
     return-void
 
     :catchall_0
     move-exception p1
 
-    const-string v2, "startShortcut failed"
+    goto :goto_0
 
-    invoke-static {v1, v2, p1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+    :cond_2
+    new-instance v2, Ljava/lang/StringBuilder;
 
-    invoke-direct {p0, v0}, Lcom/tsf/shell/shortcut/PinShortcutActivity;->toast(Ljava/lang/String;)V
+    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v3, "startShortcut id "
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-static {v9, v2}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+
+    invoke-virtual {p1}, Landroid/content/Intent;->getSourceBounds()Landroid/graphics/Rect;
+
+    move-result-object v4
+
+    const/4 v5, 0x0
+
+    move-object v2, v0
+
+    move-object v3, v7
+
+    invoke-virtual/range {v1 .. v6}, Landroid/content/pm/LauncherApps;->startShortcut(Ljava/lang/String;Ljava/lang/String;Landroid/graphics/Rect;Landroid/os/Bundle;Landroid/os/UserHandle;)V
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    goto :goto_1
+
+    :goto_0
+    new-instance v1, Ljava/lang/StringBuilder;
+
+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v2, "startShortcut failed "
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    invoke-virtual {v0, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    invoke-virtual {v0, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-static {v9, v0, p1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    invoke-direct {p0, v8}, Lcom/tsf/shell/shortcut/PinShortcutActivity;->toast(Ljava/lang/String;)V
 
     :goto_1
+    return-void
+
+    :cond_3
+    :goto_2
+    new-instance p1, Ljava/lang/StringBuilder;
+
+    invoke-direct {p1}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v1, "open missing pkg="
+
+    invoke-virtual {p1, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object p1
+
+    invoke-virtual {p1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object p1
+
+    const-string v0, " id="
+
+    invoke-virtual {p1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object p1
+
+    invoke-virtual {p1, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object p1
+
+    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object p1
+
+    invoke-static {v9, p1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+
+    invoke-direct {p0, v8}, Lcom/tsf/shell/shortcut/PinShortcutActivity;->toast(Ljava/lang/String;)V
+
     return-void
 .end method
 

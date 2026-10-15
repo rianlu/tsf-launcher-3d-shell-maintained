@@ -22,6 +22,9 @@ import java.util.Set;
  * WeChat treats a shortcut as already installed while the system still has it
  * pinned. Deleting the desktop icon has to clear that pin, or the same
  * mini-program cannot be added again.
+ *
+ * Pins are updated only after a favorites row is removed. Returning to the
+ * desktop must not rewrite them.
  */
 public final class PinnedShortcutSync {
     private static final String TAG = "PinShortcut";
@@ -32,14 +35,15 @@ public final class PinnedShortcutSync {
     private PinnedShortcutSync() {
     }
 
-    public static void reconcile(Context context) {
+    public static void afterDelete(Context context) {
         if (context == null || Build.VERSION.SDK_INT < 26) {
             return;
         }
         try {
             Set<String> keptIds = new HashSet<String>();
             List<Intent> desktopIntents = new ArrayList<Intent>();
-            if (!loadDesktop(context, keptIds, desktopIntents)) {
+            List<String> rawIntents = new ArrayList<String>();
+            if (!loadDesktop(context, keptIds, desktopIntents, rawIntents)) {
                 return;
             }
             LauncherApps apps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
@@ -74,7 +78,7 @@ public final class PinnedShortcutSync {
                     if (user == null) {
                         user = info.getUserHandle();
                     }
-                    if (stillOnDesktop(info, keptIds, desktopIntents) || justAdded(info)) {
+                    if (stillOnDesktop(info, keptIds, desktopIntents, rawIntents)) {
                         keep.add(info.getId());
                     }
                 }
@@ -89,14 +93,20 @@ public final class PinnedShortcutSync {
         }
     }
 
-    private static boolean justAdded(ShortcutInfo info) {
-        long changed = info.getLastChangedTimestamp();
-        return changed > 0 && System.currentTimeMillis() - changed < 15000L;
-    }
-
-    private static boolean stillOnDesktop(ShortcutInfo info, Set<String> keptIds, List<Intent> desktopIntents) {
-        if (keptIds.contains(info.getPackage() + "\0" + info.getId())) {
+    private static boolean stillOnDesktop(ShortcutInfo info, Set<String> keptIds, List<Intent> desktopIntents,
+            List<String> rawIntents) {
+        String pkg = info.getPackage();
+        String id = info.getId();
+        if (pkg != null && id != null && keptIds.contains(pkg + "\0" + id)) {
             return true;
+        }
+        if (pkg != null && id != null) {
+            for (int i = 0; i < rawIntents.size(); i++) {
+                String raw = rawIntents.get(i);
+                if (raw.contains(pkg) && raw.contains(id)) {
+                    return true;
+                }
+            }
         }
         Intent launch = info.getIntent();
         if (launch == null) {
@@ -110,8 +120,10 @@ public final class PinnedShortcutSync {
         return false;
     }
 
-    private static boolean loadDesktop(Context context, Set<String> keptIds, List<Intent> desktopIntents) throws Exception {
-        Uri uri = (Uri) Class.forName("com.tsf.shell.g$b").getField("a").get(null);
+    private static boolean loadDesktop(Context context, Set<String> keptIds, List<Intent> desktopIntents,
+            List<String> rawIntents) throws Exception {
+        // g$e is the favorites table. g$b is the app drawer and has no shortcut intents.
+        Uri uri = (Uri) Class.forName("com.tsf.shell.g$e").getField("a").get(null);
         if (uri == null) {
             return false;
         }
@@ -135,6 +147,7 @@ public final class PinnedShortcutSync {
                 } catch (Throwable ignored) {
                     continue;
                 }
+                rawIntents.add(raw);
                 desktopIntents.add(intent);
                 if (!ACTION_START.equals(intent.getAction())) {
                     continue;
