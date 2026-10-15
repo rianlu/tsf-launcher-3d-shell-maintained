@@ -83,7 +83,7 @@
         <activity android:configChanges="keyboard|keyboardHidden|orientation" android:launchMode="singleTask" android:name="com.tsf.shell.RestartActivity" android:process=":restart" android:theme="@style/Theme.NoTitleBar.NoBackground"/>
         <activity android:excludeFromRecents="true" android:finishOnTaskLaunch="true" android:launchMode="singleInstance" android:name="org.acra.CrashReportDialog" android:theme="@style/DialogTheme"/>
         <!-- assetsPaths is applied after apktool; the bundled framework attr does not list that flag. -->
-        <activity android:autoRemoveFromRecents="true" android:excludeFromRecents="true" android:exported="true" android:name="com.tsf.shell.shortcut.PinShortcutActivity" android:noHistory="true" android:taskAffinity="" android:theme="@android:style/Theme.Translucent.NoTitleBar">
+        <activity android:autoRemoveFromRecents="true" android:excludeFromRecents="true" android:exported="true" android:name="com.tsf.shell.shortcut.PinShortcutActivity" android:taskAffinity="" android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.content.pm.action.CONFIRM_PIN_SHORTCUT"/>
                 <category android:name="android.intent.category.DEFAULT"/>

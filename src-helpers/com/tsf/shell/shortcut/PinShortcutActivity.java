@@ -1,7 +1,9 @@
 package com.tsf.shell.shortcut;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.LauncherApps;
 import android.content.pm.LauncherApps.PinItemRequest;
@@ -33,23 +35,38 @@ public class PinShortcutActivity extends Activity {
     private static final String EXTRA_ID = "id";
     private static final String EXTRA_USER = "user";
 
+    private PinItemRequest mRequest;
+    private ShortcutInfo mInfo;
+    private Intent mLaunch;
+    private String mName;
+    private boolean mDecided;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate");
-        try {
-            Intent source = getIntent();
-            if (source != null && ACTION_START.equals(source.getAction())) {
-                openPinned(source);
-            } else {
-                place(source);
-            }
-        } catch (Throwable error) {
-            Log.e(TAG, "place failed", error);
-            toast("添加快捷方式失败");
+        Intent source = getIntent();
+        boolean opening = source != null && ACTION_START.equals(source.getAction());
+        if (opening) {
+            setTheme(android.R.style.Theme_Translucent_NoTitleBar);
         }
-        finish();
-        overridePendingTransition(0, 0);
+        super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreate opening=" + opening);
+        if (opening) {
+            try {
+                openPinned(source);
+            } catch (Throwable error) {
+                Log.e(TAG, "startShortcut failed", error);
+                toast("打不开这个快捷方式");
+            }
+            finish();
+            overridePendingTransition(0, 0);
+            return;
+        }
+        if (!prepare(source)) {
+            finish();
+            overridePendingTransition(0, 0);
+            return;
+        }
+        showConfirm();
     }
 
     private void openPinned(Intent source) {
@@ -83,56 +100,110 @@ public class PinShortcutActivity extends Activity {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 
-    private void place(Intent source) throws Exception {
+    private boolean prepare(Intent source) {
         if (source == null || Build.VERSION.SDK_INT < 26) {
             Log.i(TAG, "skip: no intent or sdk " + Build.VERSION.SDK_INT);
-            return;
+            return false;
         }
         PinItemRequest request = readRequest(source);
         if (request == null) {
             Log.i(TAG, "skip: pin request missing, extras=" + source.getExtras());
             toast("没有收到快捷方式请求");
-            return;
+            return false;
         }
         if (!request.isValid() || request.getRequestType() != PinItemRequest.REQUEST_TYPE_SHORTCUT) {
             Log.i(TAG, "skip: invalid request type=" + request.getRequestType() + " valid=" + request.isValid());
             toast("快捷方式请求已失效");
-            return;
+            return false;
         }
         ShortcutInfo info = request.getShortcutInfo();
         if (info == null) {
             Log.i(TAG, "skip: shortcut info null");
             toast("快捷方式内容为空");
-            return;
+            return false;
         }
         Intent launch = launchOf(info);
         if (launch == null) {
             Log.i(TAG, "skip: no package or id");
             toast("快捷方式内容为空");
-            return;
+            return false;
         }
-        Bitmap icon = iconOf(info);
-        if (icon == null) {
-            Log.i(TAG, "skip: icon null");
-            toast("读不到快捷方式图标");
-            return;
-        }
-        if (!request.accept()) {
-            Log.i(TAG, "skip: accept returned false");
-            toast("系统没有接受这个快捷方式");
-            return;
-        }
-        Log.i(TAG, "accepted " + info.getPackage() + " / " + info.getId());
-        Intent install = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
         CharSequence label = info.getShortLabel();
-        install.putExtra("android.intent.extra.shortcut.NAME", label == null ? "" : label.toString());
-        install.putExtra("android.intent.extra.shortcut.INTENT", launch);
+        mRequest = request;
+        mInfo = info;
+        mLaunch = launch;
+        mName = label == null ? "" : label.toString();
+        return true;
+    }
+
+    private void showConfirm() {
+        String label = mName.length() == 0 ? mInfo.getPackage() : mName;
+        Bitmap preview = iconOf(mInfo);
+        AlertDialog.Builder builder = new AlertDialog.Builder(
+                this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
+        builder.setTitle("添加到桌面");
+        builder.setMessage(label);
+        if (preview != null) {
+            builder.setIcon(new android.graphics.drawable.BitmapDrawable(getResources(), preview));
+        }
+        builder.setPositiveButton("添加", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mDecided = true;
+                try {
+                    placeConfirmed();
+                } catch (Throwable error) {
+                    Log.e(TAG, "place failed", error);
+                    toast("添加快捷方式失败");
+                }
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mDecided = true;
+                Log.i(TAG, "cancelled " + mInfo.getPackage() + " / " + mInfo.getId());
+            }
+        });
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                mDecided = true;
+                Log.i(TAG, "cancelled " + mInfo.getPackage() + " / " + mInfo.getId());
+            }
+        });
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (!isFinishing()) {
+                    finish();
+                    overridePendingTransition(0, 0);
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void placeConfirmed() throws Exception {
+        if (!mRequest.accept()) {
+            Log.i(TAG, "accept returned false, still placing " + mInfo.getPackage() + " / " + mInfo.getId());
+        } else {
+            Log.i(TAG, "accepted " + mInfo.getPackage() + " / " + mInfo.getId());
+        }
+        Bitmap icon = iconOf(mInfo);
+        if (icon == null) {
+            Log.i(TAG, "icon missing after accept, using fallback");
+            icon = fallbackIcon(mName);
+        }
+        Intent install = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+        install.putExtra("android.intent.extra.shortcut.NAME", mName);
+        install.putExtra("android.intent.extra.shortcut.INTENT", mLaunch);
         install.putExtra("android.intent.extra.shortcut.ICON", icon);
         Class<?> installer = Class.forName("com.tsf.shell.manager.l.a");
         Class<?> callback = Class.forName("com.tsf.shell.manager.l.a$a");
         Method method = installer.getMethod("a", Intent.class, callback);
         method.invoke(null, install, null);
-        Toast.makeText(this, "已添加到桌面", Toast.LENGTH_SHORT).show();
+        toast("已添加到桌面");
     }
 
     private Intent launchOf(ShortcutInfo info) {
@@ -171,6 +242,21 @@ public class PinShortcutActivity extends Activity {
         } finally {
             parcel.recycle();
         }
+    }
+
+    private Bitmap fallbackIcon(String label) {
+        int size = Math.max(1, (int) (48f * getResources().getDisplayMetrics().density));
+        Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(0xFF5C6BC0);
+        canvas.drawCircle(size / 2f, size / 2f, size / 2f, paint);
+        paint.setColor(0xFFFFFFFF);
+        paint.setTextAlign(Paint.Align.CENTER);
+        paint.setTextSize(size * 0.45f);
+        String letter = label == null || label.length() == 0 ? "?" : label.substring(0, 1);
+        canvas.drawText(letter, size / 2f, size / 2f - (paint.descent() + paint.ascent()) / 2f, paint);
+        return themeMask(bitmap);
     }
 
     private Bitmap iconOf(ShortcutInfo info) {
