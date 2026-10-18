@@ -231,6 +231,8 @@
 
     if-eqz v0, :cond_4
 
+    invoke-static {v6}, Lcom/tsf/shell/manager/b/d;->g(Ljava/io/File;)V
+
     move v2, v1
 
     .line 249
