@@ -19,7 +19,9 @@ import java.io.File;
 public final class GalleryCachePrimer {
     private static final int THUMB_WIDTH = 512;
     private static final int THUMB_HEIGHT = 320;
+    private static final int MAX_PRIME_COUNT = 256;
     private static final String TAG = "GalleryCachePrimer";
+    private static Context appContext;
 
     private GalleryCachePrimer() {
     }
@@ -29,6 +31,7 @@ public final class GalleryCachePrimer {
         if (context == null) {
             return;
         }
+        appContext = context;
         ModernBitmap.init(context);
         ContentResolver resolver = context.getContentResolver();
         Cursor cursor = null;
@@ -43,13 +46,16 @@ public final class GalleryCachePrimer {
                     },
                     null,
                     null,
-                    MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+                    "datetaken DESC, date_added DESC");
             if (cursor == null) {
                 Log.w(TAG, "media query returned null");
                 return;
             }
             int count = 0;
             while (cursor.moveToNext()) {
+                if (count >= MAX_PRIME_COUNT) {
+                    break;
+                }
                 int id = cursor.getInt(0);
                 String path = cursor.getString(1);
                 int degrees = cursor.getInt(2);
@@ -123,7 +129,14 @@ public final class GalleryCachePrimer {
             }
         }
 
-        return scaleCenterCrop(rotated, THUMB_WIDTH, THUMB_HEIGHT);
+        Bitmap cropped = scaleCenterCrop(rotated, 492, 300);
+        Bitmap frame = PhotoUtils.makeBitmapFromResourceId(appContext, 0x7f020001);
+        Bitmap scaledFrame = Bitmap.createScaledBitmap(frame, 512, 320, true);
+        frame.recycle();
+        Canvas canvas = new Canvas(scaledFrame);
+        canvas.drawBitmap(cropped, 10f, 8f, null);
+        cropped.recycle();
+        return scaledFrame;
     }
 
     private static Bitmap scaleCenterCrop(Bitmap source, int newWidth, int newHeight) {
@@ -144,6 +157,7 @@ public final class GalleryCachePrimer {
     }
 
     private static void saveCache(ContentResolver resolver, int id, String path, Bitmap bitmap) {
+        resolver.delete(CachesColumns.CONTENT_URI, "rawid=?", new String[]{String.valueOf(id)});
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
         ContentValues values = new ContentValues();
