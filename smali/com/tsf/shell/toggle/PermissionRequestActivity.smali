@@ -167,8 +167,27 @@
 .end method
 
 .method public onRequestPermissionsResult(I[Ljava/lang/String;[I)V
-    .locals 0
+    .locals 3
 
+    invoke-virtual {p0}, Lcom/tsf/shell/toggle/PermissionRequestActivity;->getIntent()Landroid/content/Intent;
+
+    move-result-object v0
+
+    const-string v1, "refreshAction"
+
+    invoke-virtual {v0, v1}, Landroid/content/Intent;->getStringExtra(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_0
+
+    new-instance v1, Landroid/content/Intent;
+
+    invoke-direct {v1, v0}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    invoke-virtual {p0, v1}, Lcom/tsf/shell/toggle/PermissionRequestActivity;->sendBroadcast(Landroid/content/Intent;)V
+
+    :cond_0
     invoke-virtual {p0}, Lcom/tsf/shell/toggle/PermissionRequestActivity;->finish()V
 
     return-void
