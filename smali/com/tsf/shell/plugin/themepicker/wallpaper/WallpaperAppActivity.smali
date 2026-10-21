@@ -17,20 +17,42 @@
 
 # virtual methods
 .method protected onCreate(Landroid/os/Bundle;)V
-    .locals 1
+    .locals 3
 
     .prologue
     .line 16
     invoke-super {p0, p1}, Landroid/support/v4/app/FragmentActivity;->onCreate(Landroid/os/Bundle;)V
 
-    if-nez p1, :cond_0
+    if-nez p1, :cond_return
 
+    sget v0, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 v1, 0x17
+
+    if-ge v0, v1, :cond_pick
+
+    const/4 v0, 0x1
+
+    new-array v1, v0, [Ljava/lang/String;
+
+    const/4 v2, 0x0
+
+    const-string v0, "android.permission.READ_EXTERNAL_STORAGE"
+
+    aput-object v0, v1, v2
+
+    const/16 v2, 0x43
+
+    invoke-virtual {p0, v1, v2}, Lcom/tsf/shell/plugin/themepicker/wallpaper/WallpaperAppActivity;->requestPermissions([Ljava/lang/String;I)V
+
+    return-void
+
+    :cond_pick
     const/16 v0, 0x42
 
     invoke-static {p0, v0}, Lcom/tsf/extend/base/j/n;->a(Landroid/app/Activity;I)V
 
-    .line 33
-    :cond_0
+    :cond_return
     return-void
 .end method
 
