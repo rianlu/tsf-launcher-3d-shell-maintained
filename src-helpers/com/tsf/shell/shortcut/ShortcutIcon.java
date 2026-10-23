@@ -5,15 +5,19 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
- * Draws a bitmap shortcut with the same plate, scale, mask and border as an app icon.
- * The stored picture stays the shortcut's own artwork.
+ * Shortcuts and unmatched app icons use the same 88% inset inside the icon pack
+ * shape. A mask clips the artwork, and the pack border is drawn on top. The
+ * colored back plate is only a silhouette, so its random color is not drawn.
  */
 public final class ShortcutIcon {
     private static final String TAG = "ShortcutIcon";
@@ -82,61 +86,90 @@ public final class ShortcutIcon {
         Class<?> iconClass = Class.forName("com.tsf.shell.theme.inside.mix.ThemeIconManager");
         Object mix = Class.forName("com.tsf.shell.theme.inside.ThemeManager").getField("mix").get(null);
         Object icons = mix.getClass().getField("icon").get(mix);
-        Bitmap back = (Bitmap) iconClass.getMethod("getDefaultIconBackBitmap", styleClass).invoke(icons, style);
-        if (back != null) {
-            styleClass.getMethod("a", Canvas.class, Bitmap.class, boolean.class)
-                    .invoke(style, canvas, back, Boolean.FALSE);
+        Bitmap glyph = compose(icons, iconClass, style, styleClass, source, iconW, iconH, 0.88f);
+        if (glyph == null) {
+            glyph = cover(source, iconW, iconH, true);
         }
-        float scale = 1f;
-        Object rawScale = iconClass.getMethod("getDefaultIconScale").invoke(icons);
-        if (back != null && rawScale instanceof Float && ((Float) rawScale).floatValue() > 0f) {
-            scale = ((Float) rawScale).floatValue();
-        }
-        int glyphW = Math.max(1, Math.round(iconW * scale));
-        int glyphH = Math.max(1, Math.round(iconH * scale));
-        Bitmap glyph = cover(source, glyphW, glyphH);
         source.recycle();
-        Paint paint = colorizePaint(iconClass, icons);
-        if (Boolean.TRUE.equals(iconClass.getMethod("polyEffectEnable").invoke(icons))) {
-            float[] param = (float[]) iconClass.getMethod("getPolyEffectParam").invoke(icons);
-            if (param != null && param.length >= 8) {
-                int originX = styleClass.getField("D").getInt(style);
-                int originY = styleClass.getField("E").getInt(style);
-                float[] dest = new float[8];
-                for (int i = 0; i < 8; i++) {
-                    int base = (i % 2 == 0) ? iconW : iconH;
-                    int origin = (i % 2 == 0) ? originX : originY;
-                    dest[i] = base * param[i] + origin;
-                }
-                Class.forName("com.tsf.shell.utils.q")
-                        .getMethod("a", Canvas.class, Bitmap.class, float[].class, Paint.class)
-                        .invoke(null, canvas, glyph, dest, paint);
-                glyph.recycle();
-                drawUpon(canvas, style, styleClass, iconClass, icons);
-                Log.i(TAG, "plate back=" + sizeOf(back) + " glyph=" + glyphW + "x" + glyphH
-                        + " icon=" + iconW + "x" + iconH + " scale=" + scale + " poly");
-                return;
-            }
+        if (glyph == null) {
+            return;
         }
-        Bitmap mask = (Bitmap) iconClass.getMethod("getDefaultIconMaskBitmap", styleClass).invoke(icons, style);
-        String shape;
-        if (mask != null) {
-            Bitmap scaledMask = Bitmap.createScaledBitmap(mask, glyph.getWidth(), glyph.getHeight(), true);
-            Canvas glyphCanvas = new Canvas(glyph);
-            Class.forName("com.tsf.shell.utils.q")
-                    .getMethod("a", Canvas.class, Bitmap.class, int.class, int.class)
-                    .invoke(null, glyphCanvas, scaledMask, Integer.valueOf(0), Integer.valueOf(0));
-            if (scaledMask != mask) {
-                scaledMask.recycle();
-            }
-            shape = "theme " + mask.getWidth() + "x" + mask.getHeight();
-        } else {
-            shape = "rounded";
-        }
-        styleClass.getMethod("a", Canvas.class, Bitmap.class, Paint.class).invoke(style, canvas, glyph, paint);
+        styleClass.getMethod("a", Canvas.class, Bitmap.class, boolean.class)
+                .invoke(style, canvas, glyph, Boolean.TRUE);
         drawUpon(canvas, style, styleClass, iconClass, icons);
-        Log.i(TAG, "plate back=" + sizeOf(back) + " glyph=" + glyphW + "x" + glyphH
-                + " icon=" + iconW + "x" + iconH + " scale=" + scale + " shape=" + shape);
+        Log.i(TAG, "fill glyph=" + iconW + "x" + iconH + " inset=0.88");
+    }
+
+    public static Bitmap adapt(Bitmap source, Object style) {
+        if (source == null || style == null) {
+            return null;
+        }
+        try {
+            Class<?> styleClass = style.getClass();
+            int iconW = styleClass.getField("H").getInt(style);
+            int iconH = styleClass.getField("I").getInt(style);
+            if (iconW <= 0 || iconH <= 0) {
+                return null;
+            }
+            Class<?> iconClass = Class.forName("com.tsf.shell.theme.inside.mix.ThemeIconManager");
+            Object mix = Class.forName("com.tsf.shell.theme.inside.ThemeManager").getField("mix").get(null);
+            Object icons = mix.getClass().getField("icon").get(mix);
+            return compose(icons, iconClass, style, styleClass, source, iconW, iconH, 0.88f);
+        } catch (Throwable error) {
+            Log.w(TAG, "adapt failed", error);
+            return null;
+        }
+    }
+
+    private static Bitmap compose(Object icons, Class<?> iconClass, Object style, Class<?> styleClass,
+            Bitmap source, int iconW, int iconH, float contentScale) throws Exception {
+        boolean poly = false;
+        if (Boolean.TRUE.equals(iconClass.getMethod("polyEffectEnable").invoke(icons))) {
+            float[] polyParam = (float[]) iconClass.getMethod("getPolyEffectParam").invoke(icons);
+            poly = polyParam != null && polyParam.length >= 8;
+        }
+        if (poly) {
+            return null;
+        }
+        Bitmap plate = firstPlate(icons, iconClass, styleClass, style);
+        Bitmap mask = (Bitmap) iconClass.getMethod("getDefaultIconMaskBitmap", styleClass).invoke(icons, style);
+        if (plate != null) {
+            Bitmap glyph = Bitmap.createBitmap(iconW, iconH, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(glyph);
+            Bitmap scaledPlate = Bitmap.createScaledBitmap(plate, iconW, iconH, true);
+            canvas.drawBitmap(scaledPlate, 0, 0, null);
+            Rect plateBounds = opaqueBounds(scaledPlate);
+            Bitmap foreground = Bitmap.createBitmap(iconW, iconH, Bitmap.Config.ARGB_8888);
+            drawInset(new Canvas(foreground), source, plateBounds.exactCenterX(), plateBounds.exactCenterY(),
+                    Math.max(1, Math.round(plateBounds.width() * contentScale)),
+                    Math.max(1, Math.round(plateBounds.height() * contentScale)));
+            clipToShape(foreground, scaledPlate, mask);
+            canvas.drawBitmap(foreground, 0, 0, null);
+            foreground.recycle();
+            if (scaledPlate != plate) {
+                scaledPlate.recycle();
+            }
+            Log.i(TAG, "compose scale=" + contentScale + " plate=true mask=" + (mask != null));
+            return tint(glyph, iconClass, icons);
+        }
+        boolean shaped = mask != null;
+        Bitmap glyph = shaped ? inset(source, iconW, iconH, contentScale, true) : cover(source, iconW, iconH, true);
+        if (shaped) {
+            clipToShape(glyph, null, mask);
+        }
+        Log.i(TAG, "compose scale=" + contentScale + " shaped=" + shaped);
+        return tint(glyph, iconClass, icons);
+    }
+
+    private static Bitmap tint(Bitmap glyph, Class<?> iconClass, Object icons) throws Exception {
+        Paint paint = colorizePaint(iconClass, icons);
+        if (paint == null) {
+            return glyph;
+        }
+        Bitmap tinted = Bitmap.createBitmap(glyph.getWidth(), glyph.getHeight(), Bitmap.Config.ARGB_8888);
+        new Canvas(tinted).drawBitmap(glyph, 0, 0, paint);
+        glyph.recycle();
+        return tinted;
     }
 
     private static void drawUpon(Canvas canvas, Object style, Class<?> styleClass, Class<?> iconClass,
@@ -163,19 +196,151 @@ public final class ShortcutIcon {
         return paint;
     }
 
-    private static Bitmap cover(Bitmap source, int width, int height) {
+    private static Bitmap firstPlate(Object icons, Class<?> iconClass, Class<?> styleClass, Object style) {
+        try {
+            Field description = iconClass.getDeclaredField("mIconDescription");
+            description.setAccessible(true);
+            Object theme = description.get(icons);
+            if (theme == null) {
+                return null;
+            }
+            Object backs = theme.getClass().getField("iconBackItems").get(theme);
+            if (!(backs instanceof List) || ((List) backs).isEmpty()) {
+                return null;
+            }
+            Object item = ((List) backs).get(0);
+            return (Bitmap) item.getClass().getMethod("getBitmap", styleClass).invoke(item, style);
+        } catch (Throwable ignored) {
+            return null;
+        }
+    }
+
+    private static boolean plateShapes(Bitmap plate) {
+        if (plate == null || plate.getWidth() < 2 || plate.getHeight() < 2) {
+            return false;
+        }
+        return ((plate.getPixel(0, 0) >>> 24) & 0xff) <= 16;
+    }
+
+    private static void clipToShape(Bitmap glyph, Bitmap plate, Bitmap mask) throws Exception {
+        if (plateShapes(plate)) {
+            Bitmap scaled = Bitmap.createScaledBitmap(plate, glyph.getWidth(), glyph.getHeight(), true);
+            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+            new Canvas(glyph).drawBitmap(scaled, 0, 0, paint);
+            if (scaled != plate) {
+                scaled.recycle();
+            }
+        }
+        if (mask != null) {
+            Bitmap scaledMask = Bitmap.createScaledBitmap(mask, glyph.getWidth(), glyph.getHeight(), true);
+            Class.forName("com.tsf.shell.utils.q")
+                    .getMethod("a", Canvas.class, Bitmap.class, int.class, int.class)
+                    .invoke(null, new Canvas(glyph), scaledMask, Integer.valueOf(0), Integer.valueOf(0));
+            if (scaledMask != mask) {
+                scaledMask.recycle();
+            }
+        }
+    }
+
+    private static boolean fills(Bitmap source, Rect bounds) {
+        int right = Math.max(bounds.left, bounds.right - 1);
+        int bottom = Math.max(bounds.top, bounds.bottom - 1);
+        int[] xs = new int[] {bounds.left, right};
+        int[] ys = new int[] {bounds.top, bottom};
+        for (int y : ys) {
+            for (int x : xs) {
+                if (x < 0 || y < 0 || x >= source.getWidth() || y >= source.getHeight()) {
+                    return false;
+                }
+                if (((source.getPixel(x, y) >>> 24) & 0xff) <= 16) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private static int iconColor(Bitmap source) {
         Rect bounds = opaqueBounds(source);
+        int step = Math.max(1, Math.min(bounds.width(), bounds.height()) / 16);
+        int[] counts = new int[4096];
+        int bestKey = -1;
+        int bestCount = 0;
+        for (int y = bounds.top; y < bounds.bottom; y += step) {
+            for (int x = bounds.left; x < bounds.right; x += step) {
+                int color = source.getPixel(x, y);
+                if (((color >>> 24) & 0xff) <= 16) {
+                    continue;
+                }
+                int key = (((color >> 20) & 0xf) << 8)
+                        | (((color >> 12) & 0xf) << 4)
+                        | ((color >> 4) & 0xf);
+                counts[key]++;
+                if (counts[key] > bestCount) {
+                    bestCount = counts[key];
+                    bestKey = key;
+                }
+            }
+        }
+        if (bestKey < 0) {
+            return 0xff888888;
+        }
+        int red = ((bestKey >> 8) & 0xf) * 17;
+        int green = ((bestKey >> 4) & 0xf) * 17;
+        int blue = (bestKey & 0xf) * 17;
+        return 0xff000000 | (red << 16) | (green << 8) | blue;
+    }
+
+    private static void drawInset(Canvas canvas, Bitmap source, float centerX, float centerY,
+            int boxW, int boxH) {
+        Rect bounds = opaqueBounds(source);
+        float scale = Math.min(boxW / (float) bounds.width(), boxH / (float) bounds.height());
+        float drawnW = bounds.width() * scale;
+        float drawnH = bounds.height() * scale;
+        float left = centerX - drawnW / 2f;
+        float top = centerY - drawnH / 2f;
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+        canvas.drawBitmap(source, bounds, new RectF(left, top, left + drawnW, top + drawnH), paint);
+    }
+
+    private static Bitmap inset(Bitmap source, int width, int height, float contentScale, boolean fill) {
         Bitmap out = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(out);
-        float scale = Math.max(width / (float) bounds.width(), height / (float) bounds.height());
+        if (fill) {
+            canvas.drawColor(iconColor(source));
+        }
+        Rect bounds = opaqueBounds(source);
+        int boxW = Math.max(1, Math.round(width * contentScale));
+        int boxH = Math.max(1, Math.round(height * contentScale));
+        float scale = Math.min(boxW / (float) bounds.width(), boxH / (float) bounds.height());
         float drawnW = bounds.width() * scale;
         float drawnH = bounds.height() * scale;
         float left = (width - drawnW) / 2f;
         float top = (height - drawnH) / 2f;
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
         canvas.drawBitmap(source, bounds, new RectF(left, top, left + drawnW, top + drawnH), paint);
-        bleed(out);
-        clipRounded(out, 0.35f);
+        return out;
+    }
+
+    private static Bitmap cover(Bitmap source, int width, int height, boolean round) {
+        Rect bounds = opaqueBounds(source);
+        Bitmap out = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(out);
+        float scale = Math.max(width / (float) bounds.width(), height / (float) bounds.height());
+        if (!round && !fills(source, bounds)) {
+            scale *= (float) Math.sqrt(2.0);
+        }
+        float drawnW = bounds.width() * scale;
+        float drawnH = bounds.height() * scale;
+        float left = (width - drawnW) / 2f;
+        float top = (height - drawnH) / 2f;
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+        canvas.drawBitmap(source, bounds, new RectF(left, top, left + drawnW, top + drawnH), paint);
+        if (round) {
+            bleed(out);
+            clipRounded(out, 0.35f);
+        }
         return out;
     }
 
@@ -298,10 +463,4 @@ public final class ShortcutIcon {
         }
     }
 
-    private static String sizeOf(Bitmap bitmap) {
-        if (bitmap == null) {
-            return "none";
-        }
-        return bitmap.getWidth() + "x" + bitmap.getHeight();
-    }
 }

@@ -36,15 +36,9 @@
     .line 35
     invoke-direct {p0, p1, p2}, Lcom/tsf/shell/f/i/b/e/a;-><init>(Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcut3DInfo;Lcom/tsf/shell/manager/o/a;)V
 
-    iget-object v0, p1, Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcut3DInfo;->themeResourceName:Ljava/lang/String;
-
-    if-eqz v0, :cond_reg
-
     sget-object v0, Lcom/tsf/shell/f/i/b/e/f;->q:Ljava/util/ArrayList;
 
     invoke-virtual {v0, p0}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
-
-    :cond_reg
     .line 37
     if-eqz p3, :cond_0
 

@@ -839,6 +839,8 @@
 
     .line 563
     :cond_4
+    invoke-static {}, Lcom/tsf/shell/f/i/b/e/f;->aX()V
+
     return-void
 .end method
 

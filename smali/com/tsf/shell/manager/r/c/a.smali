@@ -892,6 +892,32 @@
 
     .line 105
     :cond_6
+    invoke-virtual {p2}, Lcom/tsf/shell/manager/a/f;->g()Landroid/graphics/Bitmap;
+
+    move-result-object v6
+
+    if-eqz v6, :legacy_unmatched
+
+    invoke-static {v6, p1}, Lcom/tsf/shell/shortcut/ShortcutIcon;->adapt(Landroid/graphics/Bitmap;Ljava/lang/Object;)Landroid/graphics/Bitmap;
+
+    move-result-object v2
+
+    if-eqz v2, :legacy_unmatched
+
+    const/4 v3, 0x1
+
+    invoke-virtual {p1, v5, v2, v3}, Lcom/tsf/shell/manager/o/a;->a(Landroid/graphics/Canvas;Landroid/graphics/Bitmap;Z)V
+
+    if-eq v2, v6, :adapted_done
+
+    invoke-virtual {v6}, Landroid/graphics/Bitmap;->recycle()V
+
+    :adapted_done
+    const/4 v0, 0x0
+
+    goto/16 :goto_1
+
+    :legacy_unmatched
     sget-object v2, Lcom/tsf/shell/theme/inside/ThemeManager;->mix:Lcom/tsf/shell/theme/inside/ThemesMixManager;
 
     iget-object v2, v2, Lcom/tsf/shell/theme/inside/ThemesMixManager;->icon:Lcom/tsf/shell/theme/inside/mix/ThemeIconManager;
