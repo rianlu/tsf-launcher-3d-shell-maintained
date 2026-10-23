@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "versionCode": 30909,
-  "versionName": "3.9.4-r5",
-  "tag": "v3.9.4-r5",
-  "fileName": "tsf-launcher-maintained-3.9.4-r5.apk",
-  "sha256": "fc1b663fea56e9da8d2bcb209d50b88b5e060c232b6559ea8fc091232e9b34e9",
-  "changelog": "Fixes the sliding dock overlapping the page indicator, and the page indicator disappearing when leaving the app drawer submenu. Pinning a shortcut now asks for confirmation before placing it, and shortcut icon corners match app icons. Fixes shortcuts that could not be added again after deletion, and shortcuts that stopped opening after the launcher was reopened.",
-  "changelogZh": "修复滑动停靠栏与页面指示器重叠，以及从抽屉二级菜单返回时指示器消失的问题。添加到桌面的快捷方式会先确认再放置，图标圆角与应用图标一致。修复快捷方式删除后无法再次添加，以及重新打开后打不开的问题。"
+  "versionCode": 30910,
+  "versionName": "3.9.4-r6",
+  "tag": "v3.9.4-r6",
+  "fileName": "tsf-launcher-maintained-3.9.4-r6.apk",
+  "sha256": "ba57b755881c43c89b574167ef291f0fc53fd9dfc9a7ade2c111fb2da43731d2",
+  "changelog": "Shortcuts and unmatched icons are redrawn to match the icon pack. Backups are saved to the folder shown in Settings and remain after app data is cleared. The gallery widget asks for photo access, expands closer to the edges on narrow screens, and shows sharper thumbnails. Choosing a wallpaper from the gallery asks for storage access. If an older gallery plugin is installed, uninstall it and install it again.",
+  "changelogZh": "快捷方式和未适配图标会跟随图标包重画。桌面备份改存到设置页显示的目录，清除数据后仍然保留。相册小部件补上照片权限，窄屏展开更贴边，缩略图更清晰；从相册设置壁纸时会申请存储权限。已安装旧版相册插件的，请先卸载再重新安装。"
 }
