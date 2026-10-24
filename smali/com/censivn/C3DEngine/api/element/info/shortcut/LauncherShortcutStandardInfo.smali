@@ -273,7 +273,7 @@
 .end method
 
 .method public getIconBitmap()Landroid/graphics/Bitmap;
-    .locals 2
+    .locals 3
 
     .prologue
     .line 84
@@ -285,6 +285,19 @@
 
     check-cast v0, Lcom/tsf/shell/f/i/b/e/b;
 
+    instance-of v2, v0, Lcom/tsf/shell/f/i/b/e/d;
+
+    if-eqz v2, :cond_editor_style
+
+    move-object v2, v0
+
+    check-cast v2, Lcom/tsf/shell/f/i/b/e/d;
+
+    invoke-virtual {v2}, Lcom/tsf/shell/f/i/b/e/d;->aW()Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcutStandardInfo$ResourceControler;
+
+    move-result-object v1
+
+    :cond_editor_style
     invoke-virtual {v0}, Lcom/tsf/shell/f/i/b/e/b;->aE()Lcom/tsf/shell/manager/o/a;
 
     move-result-object v0
