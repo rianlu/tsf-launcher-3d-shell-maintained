@@ -982,6 +982,13 @@
 
     .line 558
     :sswitch_3
+    const/4 v4, 0x3
+
+    if-ne v0, v4, :cond_not_cancel
+
+    iput-boolean v1, p0, Lcom/censivn/C3DEngine/a/b;->o:Z
+
+    :cond_not_cancel
     iget-object v0, p0, Lcom/censivn/C3DEngine/a/b;->j:Landroid/os/Handler;
 
     invoke-virtual {v0, v8}, Landroid/os/Handler;->removeMessages(I)V
