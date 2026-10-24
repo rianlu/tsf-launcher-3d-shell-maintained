@@ -248,6 +248,8 @@
     .locals 2
 
     .prologue
+    invoke-static {p0}, Lcom/tsf/shell/shortcut/ShortcutIconOriginal;->drop(Ljava/lang/Object;)V
+
     .line 371
     new-instance v0, Lcom/tsf/shell/manager/bind/ShellModel$a$2;
 

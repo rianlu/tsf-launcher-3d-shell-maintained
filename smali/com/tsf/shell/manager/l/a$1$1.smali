@@ -128,6 +128,7 @@
     .line 139
     check-cast v1, Landroid/graphics/Bitmap;
 
+    :bitmap_ready
     invoke-static {}, Lcom/tsf/shell/manager/l/a;->c()I
 
     move-result v6
@@ -173,6 +174,15 @@
     .line 144
     check-cast v8, Landroid/content/Intent$ShortcutIconResource;
 
+    invoke-static {v8}, Lcom/tsf/shell/shortcut/ShortcutResourceIcon;->load(Landroid/content/Intent$ShortcutIconResource;)Landroid/graphics/Bitmap;
+
+    move-result-object v1
+
+    if-eqz v1, :cond_resource
+
+    goto :bitmap_ready
+
+    :cond_resource
     invoke-static {}, Lcom/tsf/shell/manager/l/a;->c()I
 
     move-result v1

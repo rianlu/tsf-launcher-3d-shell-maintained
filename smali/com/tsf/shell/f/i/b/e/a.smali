@@ -69,6 +69,13 @@
     invoke-virtual {v0, p2, v1}, Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcut3DInfo;->onUpdateName(Ljava/lang/String;Z)V
 
     .line 107
+    instance-of v3, p0, Lcom/tsf/shell/f/i/b/e/f;
+
+    if-eqz v3, :cond_keep
+
+    invoke-static {v0}, Lcom/tsf/shell/shortcut/ShortcutIconOriginal;->keep(Ljava/lang/Object;)V
+
+    :cond_keep
     new-instance v1, Lcom/tsf/shell/f/i/b/e/a$2;
 
     invoke-direct {v1, p0}, Lcom/tsf/shell/f/i/b/e/a$2;-><init>(Lcom/tsf/shell/f/i/b/e/a;)V
@@ -210,16 +217,19 @@
 
     if-eqz v2, :cond_2
 
-    .line 61
-    iget-object v2, v0, Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcut3DInfo;->iconResource:Landroid/content/Intent$ShortcutIconResource;
+    invoke-static {v0}, Lcom/tsf/shell/shortcut/ShortcutIconOriginal;->take(Ljava/lang/Object;)Landroid/graphics/Bitmap;
+
+    move-result-object v2
 
     if-eqz v2, :cond_1
 
-    .line 63
+    invoke-virtual {v0, v2, v1}, Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcut3DInfo;->onUpdatePhoto(Landroid/graphics/Bitmap;Ljava/lang/Runnable;)V
+
+    goto :goto_0
+
+    :cond_1
     invoke-virtual {v0, v3, v1}, Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcut3DInfo;->onUpdatePhoto(Landroid/graphics/Bitmap;Ljava/lang/Runnable;)V
 
-    .line 73
-    :cond_1
     :goto_0
     return-void
 

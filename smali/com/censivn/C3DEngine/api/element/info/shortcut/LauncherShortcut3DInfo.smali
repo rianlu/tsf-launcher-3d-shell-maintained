@@ -147,6 +147,14 @@
 
     move-result-object v0
 
+    if-nez v0, :goto_0
+
+    iget-object v1, p0, Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcut3DInfo;->iconResource:Landroid/content/Intent$ShortcutIconResource;
+
+    invoke-static {v1}, Lcom/tsf/shell/shortcut/ShortcutResourceIcon;->load(Landroid/content/Intent$ShortcutIconResource;)Landroid/graphics/Bitmap;
+
+    move-result-object v0
+
     goto :goto_0
 
     .line 122
@@ -185,6 +193,12 @@
     .line 115
     :catch_0
     move-exception v1
+
+    iget-object v1, p0, Lcom/censivn/C3DEngine/api/element/info/shortcut/LauncherShortcut3DInfo;->iconResource:Landroid/content/Intent$ShortcutIconResource;
+
+    invoke-static {v1}, Lcom/tsf/shell/shortcut/ShortcutResourceIcon;->load(Landroid/content/Intent$ShortcutIconResource;)Landroid/graphics/Bitmap;
+
+    move-result-object v0
 
     goto :goto_0
 

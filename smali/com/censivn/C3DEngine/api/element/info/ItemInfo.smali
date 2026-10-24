@@ -1194,21 +1194,27 @@
 
     invoke-virtual {p1, v0, v1}, Landroid/content/ContentValues;->put(Ljava/lang/String;Ljava/lang/Integer;)V
 
-    .line 269
-    const-string v0, "iconPackage"
+    iget-object v0, p0, Lcom/censivn/C3DEngine/api/element/info/ItemInfo;->iconResource:Landroid/content/Intent$ShortcutIconResource;
 
-    const-string v1, ""
+    if-eqz v0, :cond_bitmap
 
-    invoke-virtual {p1, v0, v1}, Landroid/content/ContentValues;->put(Ljava/lang/String;Ljava/lang/String;)V
+    const-string v1, "iconPackage"
 
-    .line 270
+    iget-object v0, p0, Lcom/censivn/C3DEngine/api/element/info/ItemInfo;->iconResource:Landroid/content/Intent$ShortcutIconResource;
+
+    iget-object v0, v0, Landroid/content/Intent$ShortcutIconResource;->packageName:Ljava/lang/String;
+
+    invoke-virtual {p1, v1, v0}, Landroid/content/ContentValues;->put(Ljava/lang/String;Ljava/lang/String;)V
+
     const-string v0, "iconResource"
 
-    const-string v1, ""
+    iget-object v1, p0, Lcom/censivn/C3DEngine/api/element/info/ItemInfo;->iconResource:Landroid/content/Intent$ShortcutIconResource;
+
+    iget-object v1, v1, Landroid/content/Intent$ShortcutIconResource;->resourceName:Ljava/lang/String;
 
     invoke-virtual {p1, v0, v1}, Landroid/content/ContentValues;->put(Ljava/lang/String;Ljava/lang/String;)V
 
-    .line 271
+    :cond_bitmap
     invoke-static {p1, p2}, Lcom/censivn/C3DEngine/api/element/info/ItemInfo;->writeBitmap(Landroid/content/ContentValues;Landroid/graphics/Bitmap;)V
 
     .line 272
