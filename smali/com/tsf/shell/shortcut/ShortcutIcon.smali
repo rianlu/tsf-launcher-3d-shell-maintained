@@ -2123,6 +2123,53 @@
     return v0
 .end method
 
+.method private static isTsfAction(Ljava/lang/Object;)Z
+    .locals 3
+
+    const/4 v0, 0x0
+
+    :try_start_0
+    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+
+    move-result-object v1
+
+    const-string v2, "intent"
+
+    invoke-virtual {v1, v2}, Ljava/lang/Class;->getField(Ljava/lang/String;)Ljava/lang/reflect/Field;
+
+    move-result-object v1
+
+    invoke-virtual {v1, p0}, Ljava/lang/reflect/Field;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object p0
+
+    instance-of v1, p0, Landroid/content/Intent;
+
+    if-eqz v1, :cond_0
+
+    check-cast p0, Landroid/content/Intent;
+
+    const-string v1, "action"
+
+    invoke-virtual {p0, v1}, Landroid/content/Intent;->hasExtra(Ljava/lang/String;)Z
+
+    move-result p0
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    if-eqz p0, :cond_0
+
+    const/4 v0, 0x1
+
+    :cond_0
+    return v0
+
+    :catchall_0
+    move-exception p0
+
+    return v0
+.end method
+
 .method private static neighborColor([IIIII)I
     .locals 7
 
@@ -2380,7 +2427,13 @@
 
     if-eqz v1, :cond_9
 
-    if-nez v3, :cond_0
+    if-eqz v3, :cond_9
+
+    invoke-static {v1}, Lcom/tsf/shell/shortcut/ShortcutIcon;->isTsfAction(Ljava/lang/Object;)Z
+
+    move-result v2
+
+    if-eqz v2, :cond_0
 
     goto/16 :goto_4
 

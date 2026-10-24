@@ -1,5 +1,6 @@
 package com.tsf.shell.shortcut;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
@@ -15,9 +16,9 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * Shortcuts and unmatched app icons use the same 88% inset inside the icon pack
- * shape. A mask clips the artwork, and the pack border is drawn on top. The
- * colored back plate is only a silhouette, so its random color is not drawn.
+ * App shortcuts and unmatched app icons use the same 88% inset inside the icon
+ * pack shape. A mask clips the artwork, and the pack border is drawn on top.
+ * A customized TSF built-in shortcut keeps the picture the user picked.
  */
 public final class ShortcutIcon {
     private static final String TAG = "ShortcutIcon";
@@ -26,7 +27,7 @@ public final class ShortcutIcon {
     }
 
     public static Bitmap texture(Object info, Object controller, Object style) {
-        if (info == null || style == null) {
+        if (info == null || style == null || isTsfAction(info)) {
             return null;
         }
         Bitmap source = null;
@@ -78,6 +79,15 @@ public final class ShortcutIcon {
                 source.recycle();
             }
             return canvasBitmap;
+        }
+    }
+
+    private static boolean isTsfAction(Object info) {
+        try {
+            Object intent = info.getClass().getField("intent").get(info);
+            return intent instanceof Intent && ((Intent) intent).hasExtra("action");
+        } catch (Throwable ignored) {
+            return false;
         }
     }
 
