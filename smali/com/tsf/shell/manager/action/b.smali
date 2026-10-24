@@ -128,6 +128,41 @@
     :cond_1
     invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
 
+    if-nez p0, :cond_builtin
+
+    const/16 v1, 0xc8
+
+    invoke-static {v1}, Lcom/tsf/shell/manager/action/b;->b(I)Lcom/tsf/shell/manager/action/b$a;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    const/16 v1, 0x320
+
+    invoke-static {v1}, Lcom/tsf/shell/manager/action/b;->b(I)Lcom/tsf/shell/manager/action/b$a;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    const/16 v1, 0x12c
+
+    invoke-static {v1}, Lcom/tsf/shell/manager/action/b;->b(I)Lcom/tsf/shell/manager/action/b$a;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    const/16 v1, 0x190
+
+    invoke-static {v1}, Lcom/tsf/shell/manager/action/b;->b(I)Lcom/tsf/shell/manager/action/b$a;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    :cond_builtin
     .line 176
     const/16 v1, 0x578
 
