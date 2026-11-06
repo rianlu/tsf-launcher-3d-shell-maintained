@@ -91,9 +91,7 @@
 
     iget-object v1, v1, Lcom/tsf/shell/manager/l/a$1;->a:Landroid/content/Intent;
 
-    const-string v6, "android.intent.extra.shortcut.ICON"
-
-    invoke-virtual {v1, v6}, Landroid/content/Intent;->getParcelableExtra(Ljava/lang/String;)Landroid/os/Parcelable;
+    invoke-static {v1}, Lcom/tsf/shell/shortcut/ShortcutResourceIcon;->iconFrom(Landroid/content/Intent;)Landroid/graphics/Bitmap;
 
     move-result-object v1
 

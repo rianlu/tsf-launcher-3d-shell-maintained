@@ -368,47 +368,11 @@
     .line 94
     check-cast v0, Landroid/content/Intent$ShortcutIconResource;
 
-    .line 96
-    iget-object v2, p0, Lcom/tsf/shell/manager/action/c;->e:Landroid/content/Context;
-
-    invoke-virtual {v2}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
-
-    move-result-object v2
-
-    .line 98
-    :try_start_0
-    iget-object v3, v0, Landroid/content/Intent$ShortcutIconResource;->packageName:Ljava/lang/String;
-
-    invoke-virtual {v2, v3}, Landroid/content/pm/PackageManager;->getResourcesForApplication(Ljava/lang/String;)Landroid/content/res/Resources;
-
-    move-result-object v2
-
-    .line 99
-    iget-object v0, v0, Landroid/content/Intent$ShortcutIconResource;->resourceName:Ljava/lang/String;
-
-    const/4 v3, 0x0
-
-    const/4 v4, 0x0
-
-    invoke-virtual {v2, v0, v3, v4}, Landroid/content/res/Resources;->getIdentifier(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)I
-
-    move-result v0
-
-    .line 100
-    invoke-static {v2, v0}, Lcom/tsf/shell/utils/x;->a(Landroid/content/res/Resources;I)Landroid/graphics/Bitmap;
+    invoke-static {v0}, Lcom/tsf/shell/shortcut/ShortcutResourceIcon;->load(Landroid/content/Intent$ShortcutIconResource;)Landroid/graphics/Bitmap;
 
     move-result-object v0
 
-    .line 101
     iput-object v0, v1, Lcom/tsf/shell/manager/action/c$a;->c:Landroid/graphics/Bitmap;
-    :try_end_0
-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
-
-    goto :goto_2
-
-    .line 102
-    :catch_0
-    move-exception v0
 
     goto :goto_2
 .end method
