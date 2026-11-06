@@ -16,9 +16,10 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * App shortcuts and unmatched app icons use the same 88% inset inside the icon
- * pack shape. A mask clips the artwork, and the pack border is drawn on top.
- * A customized TSF built-in shortcut keeps the picture the user picked.
+ * App shortcuts and unmatched app icons sit inside the theme plate at the
+ * theme's own icon scale. A mask punches the frame out of the artwork, and the
+ * pack border is drawn on top. A customized TSF built-in shortcut keeps the
+ * picture the user picked.
  */
 public final class ShortcutIcon {
     private static final String TAG = "ShortcutIcon";
@@ -93,10 +94,10 @@ public final class ShortcutIcon {
 
     private static void drawIcon(Canvas canvas, Object style, Class<?> styleClass, Bitmap source,
             int iconW, int iconH) throws Exception {
-        Class<?> iconClass = Class.forName("com.tsf.shell.theme.inside.mix.ThemeIconManager");
-        Object mix = Class.forName("com.tsf.shell.theme.inside.ThemeManager").getField("mix").get(null);
-        Object icons = mix.getClass().getField("icon").get(mix);
-        Bitmap glyph = compose(icons, iconClass, style, styleClass, source, iconW, iconH, 0.88f);
+            Class<?> iconClass = Class.forName("com.tsf.shell.theme.inside.mix.ThemeIconManager");
+            Object mix = Class.forName("com.tsf.shell.theme.inside.ThemeManager").getField("mix").get(null);
+            Object icons = mix.getClass().getField("icon").get(mix);
+            Bitmap glyph = compose(icons, iconClass, style, styleClass, source, iconW, iconH);
         if (glyph == null) {
             glyph = cover(source, iconW, iconH, true);
         }
@@ -107,7 +108,7 @@ public final class ShortcutIcon {
         styleClass.getMethod("a", Canvas.class, Bitmap.class, boolean.class)
                 .invoke(style, canvas, glyph, Boolean.TRUE);
         drawUpon(canvas, style, styleClass, iconClass, icons);
-        Log.i(TAG, "fill glyph=" + iconW + "x" + iconH + " inset=0.88");
+        Log.i(TAG, "fill glyph=" + iconW + "x" + iconH);
     }
 
     public static Bitmap adapt(Bitmap source, Object style) {
@@ -124,7 +125,7 @@ public final class ShortcutIcon {
             Class<?> iconClass = Class.forName("com.tsf.shell.theme.inside.mix.ThemeIconManager");
             Object mix = Class.forName("com.tsf.shell.theme.inside.ThemeManager").getField("mix").get(null);
             Object icons = mix.getClass().getField("icon").get(mix);
-            return compose(icons, iconClass, style, styleClass, source, iconW, iconH, 0.88f);
+            return compose(icons, iconClass, style, styleClass, source, iconW, iconH);
         } catch (Throwable error) {
             Log.w(TAG, "adapt failed", error);
             return null;
@@ -132,7 +133,7 @@ public final class ShortcutIcon {
     }
 
     private static Bitmap compose(Object icons, Class<?> iconClass, Object style, Class<?> styleClass,
-            Bitmap source, int iconW, int iconH, float contentScale) throws Exception {
+            Bitmap source, int iconW, int iconH) throws Exception {
         boolean poly = false;
         if (Boolean.TRUE.equals(iconClass.getMethod("polyEffectEnable").invoke(icons))) {
             float[] polyParam = (float[]) iconClass.getMethod("getPolyEffectParam").invoke(icons);
@@ -143,32 +144,41 @@ public final class ShortcutIcon {
         }
         Bitmap plate = firstPlate(icons, iconClass, styleClass, style);
         Bitmap mask = (Bitmap) iconClass.getMethod("getDefaultIconMaskBitmap", styleClass).invoke(icons, style);
-        if (plate != null) {
+        float contentScale = themeScale(icons, iconClass);
+        if (plate != null || mask != null) {
             Bitmap glyph = Bitmap.createBitmap(iconW, iconH, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(glyph);
-            Bitmap scaledPlate = Bitmap.createScaledBitmap(plate, iconW, iconH, true);
-            canvas.drawBitmap(scaledPlate, 0, 0, null);
-            Rect plateBounds = opaqueBounds(scaledPlate);
+            Bitmap scaledPlate = null;
+            if (plate != null) {
+                scaledPlate = Bitmap.createScaledBitmap(plate, iconW, iconH, true);
+                canvas.drawBitmap(scaledPlate, 0, 0, null);
+            }
             Bitmap foreground = Bitmap.createBitmap(iconW, iconH, Bitmap.Config.ARGB_8888);
-            drawInset(new Canvas(foreground), source, plateBounds.exactCenterX(), plateBounds.exactCenterY(),
-                    Math.max(1, Math.round(plateBounds.width() * contentScale)),
-                    Math.max(1, Math.round(plateBounds.height() * contentScale)));
+            drawInset(new Canvas(foreground), source, iconW / 2f, iconH / 2f,
+                    Math.max(1, Math.round(iconW * contentScale)),
+                    Math.max(1, Math.round(iconH * contentScale)));
             clipToShape(foreground, scaledPlate, mask);
             canvas.drawBitmap(foreground, 0, 0, null);
             foreground.recycle();
-            if (scaledPlate != plate) {
+            if (scaledPlate != null && scaledPlate != plate) {
                 scaledPlate.recycle();
             }
-            Log.i(TAG, "compose scale=" + contentScale + " plate=true mask=" + (mask != null));
+            Log.i(TAG, "compose scale=" + contentScale + " plate=" + (plate != null) + " mask=" + (mask != null));
             return tint(glyph, iconClass, icons);
         }
-        boolean shaped = mask != null;
-        Bitmap glyph = shaped ? inset(source, iconW, iconH, contentScale, true) : cover(source, iconW, iconH, true);
-        if (shaped) {
-            clipToShape(glyph, null, mask);
+        Log.i(TAG, "compose scale=" + contentScale + " shaped=false");
+        return tint(cover(source, iconW, iconH, true), iconClass, icons);
+    }
+
+    private static float themeScale(Object icons, Class<?> iconClass) {
+        try {
+            float scale = ((Float) iconClass.getMethod("getDefaultIconScale").invoke(icons)).floatValue();
+            if (scale > 0f) {
+                return scale;
+            }
+        } catch (Throwable ignored) {
         }
-        Log.i(TAG, "compose scale=" + contentScale + " shaped=" + shaped);
-        return tint(glyph, iconClass, icons);
+        return 0.8f;
     }
 
     private static Bitmap tint(Bitmap glyph, Class<?> iconClass, Object icons) throws Exception {
