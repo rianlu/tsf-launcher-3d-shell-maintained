@@ -7,7 +7,6 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.SystemClock;
@@ -16,20 +15,7 @@ import android.util.Log;
 
 public final class HostStoragePermission {
     static final String PACKAGE_NAME = "com.tsf.shell.widget.gallery";
-    private static final String PERMISSION_ACTIVITY =
-            "com.tsf.shell.widget.gallery.GalleryPermissionActivity";
     private static final String TAG = "GalleryOpen";
-    private static final String[] VIEWERS = new String[] {
-            "com.motorola.cn.gallery",
-            "com.google.android.apps.photos",
-            "com.android.gallery3d",
-            "com.google.android.apps.photosgo",
-            "com.sec.android.gallery3d",
-            "com.oplus.gallery",
-            "com.coloros.gallery3d",
-            "com.vivo.gallery",
-            "com.miui.gallery"
-    };
     private static long lastLaunchElapsed;
 
     private HostStoragePermission() {
@@ -44,8 +30,19 @@ public final class HostStoragePermission {
                 == PackageManager.PERMISSION_GRANTED;
     }
 
+    public static boolean hasHostPermission(Context context) {
+        if (context == null) {
+            return false;
+        }
+        if (Build.VERSION.SDK_INT < 23) {
+            return true;
+        }
+        return context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
     public static void ensure(Context context) {
-        if (context == null || Build.VERSION.SDK_INT < 23 || hasPermission(context)) {
+        if (context == null || Build.VERSION.SDK_INT < 23 || hasHostPermission(context)) {
             return;
         }
         long now = SystemClock.elapsedRealtime();
@@ -55,7 +52,10 @@ public final class HostStoragePermission {
         lastLaunchElapsed = now;
         try {
             Intent intent = new Intent();
-            intent.setComponent(new ComponentName(PACKAGE_NAME, PERMISSION_ACTIVITY));
+            intent.setComponent(new ComponentName(
+                    "com.tsf.shell", "com.tsf.shell.toggle.PermissionRequestActivity"));
+            intent.putExtra("permissions", new String[]{Manifest.permission.READ_EXTERNAL_STORAGE});
+            intent.putExtra("refreshAction", "com.tsf.shell.widget.gallery.refresh");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
             context.startActivity(intent);
         } catch (Throwable ignored) {
@@ -67,41 +67,27 @@ public final class HostStoragePermission {
             return;
         }
         Uri uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, mediaId);
-        if (startPreferredViewer(context, uri)) {
+        if (start(context, viewIntent(uri))) {
             return;
         }
-        if (startReview(context, uri)) {
-            return;
+        Intent target = viewIntent(uri);
+        target.setClipData(ClipData.newRawUri("image", uri));
+        target.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        Intent chooser = Intent.createChooser(target, null);
+        chooser.setClipData(ClipData.newRawUri("image", uri));
+        chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        try {
+            context.startActivity(chooser);
+        } catch (Throwable error) {
+            Log.w(TAG, "no image viewer for " + uri, error);
         }
-        Log.w(TAG, "no image viewer for " + uri);
     }
 
-    private static boolean startReview(Context context, Uri uri) {
-        Intent intent = new Intent(MediaStore.ACTION_REVIEW);
+    private static Intent viewIntent(Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.setDataAndType(uri, "image/*");
-        ResolveInfo info = context.getPackageManager().resolveActivity(intent, 0);
-        if (info != null && info.activityInfo != null) {
-            intent.setComponent(new ComponentName(info.activityInfo.packageName, info.activityInfo.name));
-        }
-        return start(context, intent);
-    }
-
-    private static boolean startPreferredViewer(Context context, Uri uri) {
-        PackageManager manager = context.getPackageManager();
-        for (int i = 0; i < VIEWERS.length; i++) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.addCategory(Intent.CATEGORY_DEFAULT);
-            intent.setDataAndType(uri, "image/*");
-            intent.setPackage(VIEWERS[i]);
-            if (intent.resolveActivity(manager) == null) {
-                continue;
-            }
-            if (start(context, intent)) {
-                return true;
-            }
-        }
-        return false;
+        return intent;
     }
 
     private static boolean start(Context context, Intent intent) {
