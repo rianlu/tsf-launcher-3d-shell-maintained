@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "versionCode": 30910,
-  "versionName": "3.9.4-r6",
-  "tag": "v3.9.4-r6",
-  "fileName": "tsf-launcher-maintained-3.9.4-r6.apk",
-  "sha256": "ba57b755881c43c89b574167ef291f0fc53fd9dfc9a7ade2c111fb2da43731d2",
-  "changelog": "Shortcuts and unmatched icons are redrawn to match the icon pack. Backups are saved to the folder shown in Settings and remain after app data is cleared. The gallery widget asks for photo access, expands closer to the edges on narrow screens, and shows sharper thumbnails. Choosing a wallpaper from the gallery asks for storage access. If an older gallery plugin is installed, uninstall it and install it again.",
-  "changelogZh": "快捷方式和未适配图标会跟随图标包重画。桌面备份改存到设置页显示的目录，清除数据后仍然保留。相册小部件补上照片权限，窄屏展开更贴边，缩略图更清晰；从相册设置壁纸时会申请存储权限。已安装旧版相册插件的，请先卸载再重新安装。"
+  "versionCode": 30911,
+  "versionName": "3.9.4-r7",
+  "tag": "v3.9.4-r7",
+  "fileName": "tsf-launcher-maintained-3.9.4-r7.apk",
+  "sha256": "d89f71e15e65523783558e3c16ae117a60e8909bf56d025dbdfaeb6f9e931f83",
+  "changelog": "Custom shortcut icons are no longer cropped by icon packs, and unmatched icons and shortcuts follow the theme scale. Theme, dock, effects, and gesture buttons can be added to the desktop again. Full-screen gesture back no longer opens the app under the finger. The gallery widget opens photos with the system default app. The gallery plugin version is unchanged; uninstall it and install it again to use the new open behavior.",
+  "changelogZh": "自定义快捷方式图标不再被图标包裁切，未适配图标和快捷方式跟随主题缩放。主题、停靠栏、效果、手势可以重新加到桌面。全面屏手势返回时不再误打开手指下的应用。相册小部件点击照片按系统默认应用打开。相册插件版本号未变，要使用新的打开方式请先卸载再安装。"
 }
