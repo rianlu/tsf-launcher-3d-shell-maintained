@@ -1420,6 +1420,20 @@
 
     .line 203
     :cond_0
+    if-eqz p1, :cond_1
+
+    invoke-static {p1}, Landroid/view/MotionEvent;->obtain(Landroid/view/MotionEvent;)Landroid/view/MotionEvent;
+
+    move-result-object p1
+
+    :cond_1
+    if-eqz p2, :cond_2
+
+    invoke-static {p2}, Landroid/view/MotionEvent;->obtain(Landroid/view/MotionEvent;)Landroid/view/MotionEvent;
+
+    move-result-object p2
+
+    :cond_2
     new-instance v0, Lcom/tsf/shell/f/e/h$1;
 
     invoke-direct {v0, p0, p1, p2}, Lcom/tsf/shell/f/e/h$1;-><init>(Lcom/tsf/shell/f/e/h;Landroid/view/MotionEvent;Landroid/view/MotionEvent;)V

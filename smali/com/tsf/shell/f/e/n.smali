@@ -1952,17 +1952,7 @@
 
     new-array v2, v4, [I
 
-    aput v6, v2, v1
-
-    sget v1, Lcom/censivn/C3DEngine/b/b/a;->a:F
-
-    const/high16 v3, 0x42580000    # 54.0f
-
-    mul-float/2addr v1, v3
-
-    float-to-int v1, v1
-
-    aput v1, v2, v5
+    fill-array-data v2, :array_4
 
     aput-object v2, v0, v5
 
@@ -2051,6 +2041,12 @@
     :array_3
     .array-data 4
         -0xa6
+        0x36
+    .end array-data
+
+    :array_4
+    .array-data 4
+        0xa0
         0x36
     .end array-data
 .end method

@@ -87,6 +87,28 @@
     .line 321
     :cond_0
     :goto_0
+    iget-object v0, p0, Lcom/tsf/shell/f/e/h$1;->a:Landroid/view/MotionEvent;
+
+    if-eqz v0, :cond_recycle_b
+
+    invoke-virtual {v0}, Landroid/view/MotionEvent;->recycle()V
+
+    const/4 v0, 0x0
+
+    iput-object v0, p0, Lcom/tsf/shell/f/e/h$1;->a:Landroid/view/MotionEvent;
+
+    :cond_recycle_b
+    iget-object v0, p0, Lcom/tsf/shell/f/e/h$1;->b:Landroid/view/MotionEvent;
+
+    if-eqz v0, :cond_recycle_done
+
+    invoke-virtual {v0}, Landroid/view/MotionEvent;->recycle()V
+
+    const/4 v0, 0x0
+
+    iput-object v0, p0, Lcom/tsf/shell/f/e/h$1;->b:Landroid/view/MotionEvent;
+
+    :cond_recycle_done
     return-void
 
     .line 218
@@ -147,9 +169,21 @@
     invoke-static {v0, v1}, Lcom/tsf/shell/f/e/h;->a(Lcom/tsf/shell/f/e/h;Landroid/view/MotionEvent;)V
 
     .line 232
+    iget-object v1, p0, Lcom/tsf/shell/f/e/h$1;->a:Landroid/view/MotionEvent;
+
+    invoke-virtual {v1}, Landroid/view/MotionEvent;->getX()F
+
+    move-result v2
+
+    iget-object v1, p0, Lcom/tsf/shell/f/e/h$1;->a:Landroid/view/MotionEvent;
+
+    invoke-virtual {v1}, Landroid/view/MotionEvent;->getY()F
+
+    move-result v3
+
     new-instance v0, Lcom/tsf/shell/f/e/h$1$1;
 
-    invoke-direct {v0, p0}, Lcom/tsf/shell/f/e/h$1$1;-><init>(Lcom/tsf/shell/f/e/h$1;)V
+    invoke-direct {v0, p0, v2, v3}, Lcom/tsf/shell/f/e/h$1$1;-><init>(Lcom/tsf/shell/f/e/h$1;FF)V
 
     .line 242
     invoke-static {}, Lcom/censivn/C3DEngine/a;->a()Lcom/censivn/C3DEngine/b/c/c;
@@ -327,7 +361,7 @@
     .line 274
     new-instance v0, Lcom/tsf/shell/f/e/h$1$2;
 
-    invoke-direct {v0, p0}, Lcom/tsf/shell/f/e/h$1$2;-><init>(Lcom/tsf/shell/f/e/h$1;)V
+    invoke-direct {v0, p0, v4, v5}, Lcom/tsf/shell/f/e/h$1$2;-><init>(Lcom/tsf/shell/f/e/h$1;FF)V
 
     .line 284
     invoke-static {}, Lcom/censivn/C3DEngine/a;->a()Lcom/censivn/C3DEngine/b/c/c;

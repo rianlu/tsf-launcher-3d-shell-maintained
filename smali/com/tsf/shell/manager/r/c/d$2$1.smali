@@ -139,5 +139,11 @@
     invoke-virtual {v0, v1, v2}, Lcom/tsf/shell/f/e/h;->a(Landroid/view/MotionEvent;Landroid/view/MotionEvent;)V
 
     .line 131
+    invoke-virtual {v1}, Landroid/view/MotionEvent;->recycle()V
+
+    .line 132
+    invoke-virtual {v2}, Landroid/view/MotionEvent;->recycle()V
+
+    .line 133
     return-void
 .end method

@@ -20,14 +20,22 @@
 # instance fields
 .field final synthetic a:Lcom/tsf/shell/f/e/h$1;
 
+.field final b:F
+
+.field final c:F
+
 
 # direct methods
-.method constructor <init>(Lcom/tsf/shell/f/e/h$1;)V
+.method constructor <init>(Lcom/tsf/shell/f/e/h$1;FF)V
     .locals 0
 
     .prologue
     .line 274
     iput-object p1, p0, Lcom/tsf/shell/f/e/h$1$2;->a:Lcom/tsf/shell/f/e/h$1;
+
+    iput p2, p0, Lcom/tsf/shell/f/e/h$1$2;->b:F
+
+    iput p3, p0, Lcom/tsf/shell/f/e/h$1$2;->c:F
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
@@ -45,21 +53,9 @@
 
     move-result-object v0
 
-    iget-object v1, p0, Lcom/tsf/shell/f/e/h$1$2;->a:Lcom/tsf/shell/f/e/h$1;
+    iget v1, p0, Lcom/tsf/shell/f/e/h$1$2;->b:F
 
-    iget-object v1, v1, Lcom/tsf/shell/f/e/h$1;->b:Landroid/view/MotionEvent;
-
-    invoke-virtual {v1}, Landroid/view/MotionEvent;->getX()F
-
-    move-result v1
-
-    iget-object v2, p0, Lcom/tsf/shell/f/e/h$1$2;->a:Lcom/tsf/shell/f/e/h$1;
-
-    iget-object v2, v2, Lcom/tsf/shell/f/e/h$1;->b:Landroid/view/MotionEvent;
-
-    invoke-virtual {v2}, Landroid/view/MotionEvent;->getY()F
-
-    move-result v2
+    iget v2, p0, Lcom/tsf/shell/f/e/h$1$2;->c:F
 
     invoke-virtual {v0, v1, v2}, Lcom/tsf/shell/i;->b(FF)V
 
