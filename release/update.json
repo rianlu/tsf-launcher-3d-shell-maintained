@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "versionCode": 30911,
-  "versionName": "3.9.4-r7",
-  "tag": "v3.9.4-r7",
-  "fileName": "tsf-launcher-maintained-3.9.4-r7.apk",
-  "sha256": "d89f71e15e65523783558e3c16ae117a60e8909bf56d025dbdfaeb6f9e931f83",
-  "changelog": "Custom shortcut icons are no longer cropped by icon packs, and unmatched icons and shortcuts follow the theme scale. Theme, dock, effects, and gesture buttons can be added to the desktop again. Full-screen gesture back no longer opens the app under the finger. The gallery widget opens photos with the system default app. The gallery plugin version is unchanged; uninstall it and install it again to use the new open behavior.",
-  "changelogZh": "自定义快捷方式图标不再被图标包裁切，未适配图标和快捷方式跟随主题缩放。主题、停靠栏、效果、手势可以重新加到桌面。全面屏手势返回时不再误打开手指下的应用。相册小部件点击照片按系统默认应用打开。相册插件版本号未变，要使用新的打开方式请先卸载再安装。"
+  "versionCode": 30912,
+  "versionName": "3.9.4-r8",
+  "tag": "v3.9.4-r8",
+  "fileName": "tsf-launcher-maintained-3.9.4-r8.apk",
+  "sha256": "a335717c736aa38c542dac5275a1a0b845dbf433e51b26ac31cbabd7ea492efc",
+  "changelog": "Fixed repeated wallpaper reloads and frequent media reads on some devices after setting a wallpaper, along with an inverted permission check in the wallpaper picker. Fixed the label position of the Stack option in the lasso menu. The gallery widget fixes tilted photos and leftover stacked visuals after expanding; its version remains 2.1 (versionCode 18), so uninstall it and reinstall from tsf-widgets-v1 to apply the fix.",
+  "changelogZh": "修复设置壁纸后部分设备反复重载壁纸与读取媒体文件的问题，修正壁纸页权限判断。修正圈选菜单「图标堆叠」文字位置。相册小部件修复展开后照片倾斜及残留堆叠显示，版本号仍为 2.1（versionCode 18），如需更新请先卸载相册插件再从 tsf-widgets-v1 重新安装。"
 }
