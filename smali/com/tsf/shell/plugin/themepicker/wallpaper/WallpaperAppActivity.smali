@@ -29,15 +29,21 @@
 
     const/16 v1, 0x17
 
-    if-ge v0, v1, :cond_pick
-
-    const/4 v0, 0x1
-
-    new-array v1, v0, [Ljava/lang/String;
-
-    const/4 v2, 0x0
+    if-lt v0, v1, :cond_pick
 
     const-string v0, "android.permission.READ_EXTERNAL_STORAGE"
+
+    invoke-virtual {p0, v0}, Lcom/tsf/shell/plugin/themepicker/wallpaper/WallpaperAppActivity;->checkSelfPermission(Ljava/lang/String;)I
+
+    move-result v1
+
+    if-eqz v1, :cond_pick
+
+    const/4 v1, 0x1
+
+    new-array v1, v1, [Ljava/lang/String;
+
+    const/4 v2, 0x0
 
     aput-object v0, v1, v2
 

@@ -113,6 +113,10 @@
 
     invoke-virtual {v0}, Landroid/graphics/Bitmap;->recycle()V
 
+    const/4 v0, 0x0
+
+    iput-object v0, p0, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager$b;->e:Landroid/graphics/Bitmap;
+
     .line 791
     :cond_0
     iget-object v0, p0, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager$b;->a:Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager;
@@ -148,12 +152,15 @@
     invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
 
     .line 807
+    if-eqz v0, :cond_recycled_or_null
+
     invoke-virtual {v0}, Landroid/graphics/Bitmap;->isRecycled()Z
 
     move-result v2
 
     if-eqz v2, :cond_2
 
+    :cond_recycled_or_null
     .line 809
     monitor-exit v1
 
@@ -660,6 +667,10 @@
     :cond_reload_wallpaper
     invoke-direct {p0}, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager$b;->e()V
 
+    iget-object v0, p0, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager$b;->a:Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager;
+
+    iput-boolean v4, v0, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager;->c:Z
+
     .line 717
     :cond_0
     iget-object v0, p0, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager$b;->e:Landroid/graphics/Bitmap;
@@ -668,10 +679,6 @@
 
     .line 719
     invoke-direct {p0}, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager$b;->g()V
-
-    iget-object v0, p0, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager$b;->a:Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager;
-
-    iput-boolean v4, v0, Lcom/tsf/shell/manager/wallpaper/ShellWallpaperManager;->c:Z
 
     .line 723
     :cond_1

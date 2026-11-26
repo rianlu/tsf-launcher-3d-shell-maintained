@@ -759,6 +759,34 @@
 
     move-result-object v0
 
+    instance-of v2, v0, Landroid/graphics/drawable/BitmapDrawable;
+
+    if-eqz v2, :cond_check_null
+
+    move-object v2, v0
+
+    check-cast v2, Landroid/graphics/drawable/BitmapDrawable;
+
+    invoke-virtual {v2}, Landroid/graphics/drawable/BitmapDrawable;->getBitmap()Landroid/graphics/Bitmap;
+
+    move-result-object v2
+
+    if-eqz v2, :cond_retry_forget
+
+    invoke-virtual {v2}, Landroid/graphics/Bitmap;->isRecycled()Z
+
+    move-result v2
+
+    if-eqz v2, :cond_check_null
+
+    :cond_retry_forget
+    invoke-virtual {p0}, Landroid/app/WallpaperManager;->forgetLoadedWallpaper()V
+
+    invoke-virtual {p0}, Landroid/app/WallpaperManager;->getDrawable()Landroid/graphics/drawable/Drawable;
+
+    move-result-object v0
+
+    :cond_check_null
     if-nez v0, :cond_6
 
     invoke-static {}, Lcom/censivn/C3DEngine/a;->d()Landroid/content/Context;

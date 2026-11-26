@@ -792,9 +792,6 @@
 
     move-result-object v0
 
-    .line 233
-    invoke-virtual {p0}, Landroid/graphics/Bitmap;->recycle()V
-
     move-object p0, v0
 
     .line 235
@@ -806,13 +803,6 @@
 
     move-result-object v0
 
-    .line 241
-    if-eq p0, v0, :cond_3
-
-    .line 243
-    invoke-virtual {p0}, Landroid/graphics/Bitmap;->recycle()V
-
-    :cond_3
     move-object p0, v0
 
     .line 247
@@ -830,7 +820,15 @@
 
     move-result v0
 
-    if-eq v0, p2, :cond_0
+    if-ne v0, p2, :cond_5
+
+    sget-object v0, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
+
+    invoke-virtual {p0, v0, v1}, Landroid/graphics/Bitmap;->copy(Landroid/graphics/Bitmap$Config;Z)Landroid/graphics/Bitmap;
+
+    move-result-object p0
+
+    goto :goto_0
 
     .line 257
     :cond_5
@@ -935,9 +933,6 @@
 
     .line 304
     invoke-virtual {v6, p0, v9, v9, v0}, Landroid/graphics/Canvas;->drawBitmap(Landroid/graphics/Bitmap;FFLandroid/graphics/Paint;)V
-
-    .line 306
-    invoke-virtual {p0}, Landroid/graphics/Bitmap;->recycle()V
 
     move-object p0, v4
 
