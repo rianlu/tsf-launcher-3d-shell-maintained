@@ -38,6 +38,7 @@ import java.util.List;
 public final class ShortcutIcon implements Runnable {
     private static final String TAG = "ShortcutIcon";
     private static final long RELOAD_START_DELAY_MS = 80L;
+    private static final long THEME_RELOAD_START_DELAY_MS = 40L;
     private static final int MAX_BUFFERED_GLYPHS = 4;
     private static final Object DESKTOP_DONE_MARKER = Boolean.TRUE;
 
@@ -105,6 +106,12 @@ public final class ShortcutIcon implements Runnable {
 
     public static void prepareDrawerSync(List<?> widgets) {
         DrawerIconCache.prepareDrawerSync(widgets);
+    }
+
+    public static void reloadThemeIconsAsync() {
+        int generation = ++sReloadGeneration;
+        Log.i(TAG, "theme icon changed, scheduling async reload gen=" + generation);
+        scheduleGlStep(new ShortcutIcon(generation), MODE_DISPATCH_GL, THEME_RELOAD_START_DELAY_MS);
     }
 
     static void ensureRuntimeMasksReady(Context context, int iconW, int iconH) {
@@ -719,7 +726,9 @@ public final class ShortcutIcon implements Runnable {
                 }
             }
             queue.addAll(desktopCustomInfos);
-            queue.add(DESKTOP_DONE_MARKER);
+            if (!modelItems.isEmpty() || !seenApps.isEmpty()) {
+                queue.add(DESKTOP_DONE_MARKER);
+            }
 
             Object appManager = Class.forName("com.tsf.shell.manager.bind.a").getMethod("c").invoke(null);
             if (appManager != null) {
@@ -752,6 +761,30 @@ public final class ShortcutIcon implements Runnable {
     }
 
     private static void reloadDesktopShortcutsAndFolders() {
+        try {
+            HashMap<Object, Object> modelItems = new HashMap<Object, Object>();
+            Class.forName("com.tsf.shell.manager.bind.ShellModel")
+                    .getMethod("a", HashMap.class).invoke(null, modelItems);
+            Class<?> appShortcutInfoClass = Class.forName(
+                    "com.censivn.C3DEngine.api.element.info.shortcut.LauncherShortcutAppInfo");
+            Method getWidgetMethod = appShortcutInfoClass.getMethod("getWidget");
+            Method isCustomTextureMethod = appShortcutInfoClass.getMethod("isCustomTexture");
+            Method refreshWidgetMethod = Class.forName("com.tsf.shell.f.i.b").getMethod("C");
+            for (Object info : modelItems.values()) {
+                if (info == null || !appShortcutInfoClass.isInstance(info)) {
+                    continue;
+                }
+                if (Boolean.TRUE.equals(isCustomTextureMethod.invoke(info))) {
+                    continue;
+                }
+                Object widget = getWidgetMethod.invoke(info);
+                if (widget != null) {
+                    refreshWidgetMethod.invoke(widget);
+                }
+            }
+        } catch (Throwable error) {
+            Log.w(TAG, "refresh desktop app widgets failed", error);
+        }
         try {
             Class.forName("com.tsf.shell.f.i.b.e.f").getMethod("aX").invoke(null);
         } catch (Throwable error) {
@@ -986,7 +1019,6 @@ public final class ShortcutIcon implements Runnable {
             if (scaledPlate != null && scaledPlate != plate) {
                 scaledPlate.recycle();
             }
-            Log.i(TAG, "compose scale=" + contentScale + " plate=" + (plate != null) + " mask=" + (mask != null));
             return tint(glyph, iconClass, icons);
         }
         if (Build.VERSION.SDK_INT >= 26) {
@@ -999,51 +1031,38 @@ public final class ShortcutIcon implements Runnable {
             }
             if (sysMask != null && maskPixels != null) {
                 if (!shortcut) {
-                    Rect bounds = new Rect();
-                    if (!shouldApplySystemMaskDirect(source, iconW, iconH, maskPixels, bounds)) {
-                        Log.i(TAG, "compose scale=" + contentScale + " shaped=false skip");
+                    if (!shouldApplySystemMaskDirect(source, iconW, iconH, maskPixels)) {
                         return null;
                     }
-                    Bitmap fitted = fit(source, bounds, iconW, iconH);
+                    Bitmap fitted = fit(source, opaqueBounds(source), iconW, iconH);
                     applyMask(fitted, sysMask);
-                    Log.i(TAG, "compose scale=" + contentScale + " shaped=false systemMask=true");
                     return tint(fitted, iconClass, icons);
                 }
                 Rect bounds = opaqueBounds(source);
                 Bitmap fitted = fit(source, bounds, iconW, iconH);
                 if (shouldApplySystemMask(fitted, maskPixels)) {
                     applyMask(fitted, sysMask);
-                    Log.i(TAG, "compose scale=" + contentScale + " shaped=false systemMask=true");
                     return tint(fitted, iconClass, icons);
                 }
-                Log.i(TAG, "compose scale=" + contentScale + " shaped=false keep");
                 return tint(fitted, iconClass, icons);
             }
             if (!shortcut) {
-                Log.i(TAG, "compose scale=" + contentScale + " shaped=false skip");
                 return null;
             }
             Rect bounds = opaqueBounds(source);
             Bitmap fitted = fit(source, bounds, iconW, iconH);
             if (fills(source, bounds)) {
                 clipRounded(fitted, 0.22f);
-                Log.i(TAG, "compose scale=" + contentScale + " shaped=false round");
-            } else {
-                Log.i(TAG, "compose scale=" + contentScale + " shaped=false keep");
             }
             return tint(fitted, iconClass, icons);
         }
         if (!shortcut) {
-            Log.i(TAG, "compose scale=" + contentScale + " shaped=false skip");
             return null;
         }
         Rect bounds = opaqueBounds(source);
         Bitmap fitted = fit(source, bounds, iconW, iconH);
         if (fills(source, bounds)) {
             clipRounded(fitted, 0.22f);
-            Log.i(TAG, "compose scale=" + contentScale + " shaped=false round");
-        } else {
-            Log.i(TAG, "compose scale=" + contentScale + " shaped=false keep");
         }
         return tint(fitted, iconClass, icons);
     }
@@ -1251,7 +1270,7 @@ public final class ShortcutIcon implements Runnable {
     }
 
     private static boolean shouldApplySystemMaskDirect(Bitmap source, int maskW, int maskH,
-            int[] maskPixels, Rect outBounds) {
+            int[] maskPixels) {
         int sw = source.getWidth();
         int sh = source.getHeight();
         if (sw <= 0 || sh <= 0 || maskW <= 0 || maskH <= 0 || maskPixels == null || maskPixels.length < maskW * maskH) {
@@ -1263,9 +1282,9 @@ public final class ShortcutIcon implements Runnable {
         int top = sh;
         int right = -1;
         int bottom = -1;
-        for (int y = 0; y < sh; y++) {
+        for (int y = 0; y < sh; y += 2) {
             int row = y * sw;
-            for (int x = 0; x < sw; x++) {
+            for (int x = 0; x < sw; x += 2) {
                 if (((srcPixels[row + x] >>> 24) & 0xff) > 16) {
                     if (x < left) {
                         left = x;
@@ -1287,7 +1306,6 @@ public final class ShortcutIcon implements Runnable {
         }
         int bw = right - left + 1;
         int bh = bottom - top + 1;
-        outBounds.set(left, top, right + 1, bottom + 1);
 
         float scale = Math.min(maskW / (float) bw, maskH / (float) bh);
         float drawnW = bw * scale;

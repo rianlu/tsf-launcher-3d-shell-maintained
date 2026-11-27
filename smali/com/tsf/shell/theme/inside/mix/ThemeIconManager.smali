@@ -419,7 +419,7 @@
 
     .prologue
     .line 259
-    invoke-static {}, Lcom/tsf/shell/manager/l/a;->b()V
+    invoke-static {}, Lcom/tsf/shell/shortcut/ShortcutIcon;->reloadThemeIconsAsync()V
 
     .line 261
     return-void

@@ -27,6 +27,8 @@
 
 .field private static final TAG:Ljava/lang/String; = "ShortcutIcon"
 
+.field private static final THEME_RELOAD_START_DELAY_MS:J = 0x28L
+
 .field private static sCachedMaskBitmap:Landroid/graphics/Bitmap;
 
 .field private static sCachedMaskH:I
@@ -867,7 +869,7 @@
 .end method
 
 .method private static compose(Ljava/lang/Object;Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Class;Landroid/graphics/Bitmap;IIZ)Landroid/graphics/Bitmap;
-    .locals 18
+    .locals 17
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "(",
@@ -995,19 +997,19 @@
 
     move-result-object v2
 
-    move-object v12, v2
+    move-object v9, v2
 
-    check-cast v12, Landroid/graphics/Bitmap;
+    check-cast v9, Landroid/graphics/Bitmap;
 
     invoke-static/range {p0 .. p1}, Lcom/tsf/shell/shortcut/ShortcutIcon;->themeScale(Ljava/lang/Object;Ljava/lang/Class;)F
 
-    move-result v13
+    move-result v2
 
     if-nez v11, :cond_d
 
-    if-eqz v12, :cond_3
+    if-eqz v9, :cond_3
 
-    goto/16 :goto_3
+    goto/16 :goto_1
 
     :cond_3
     sget v2, Landroid/os/Build$VERSION;->SDK_INT:I
@@ -1039,80 +1041,24 @@
 
     if-nez p7, :cond_5
 
-    new-instance v2, Landroid/graphics/Rect;
+    invoke-static {v4, v5, v6, v8}, Lcom/tsf/shell/shortcut/ShortcutIcon;->shouldApplySystemMaskDirect(Landroid/graphics/Bitmap;II[I)Z
 
-    invoke-direct {v2}, Landroid/graphics/Rect;-><init>()V
+    move-result v2
 
-    invoke-static {v4, v5, v6, v8, v2}, Lcom/tsf/shell/shortcut/ShortcutIcon;->shouldApplySystemMaskDirect(Landroid/graphics/Bitmap;II[ILandroid/graphics/Rect;)Z
-
-    move-result v7
-
-    if-nez v7, :cond_4
-
-    const-string v0, "ShortcutIcon"
-
-    new-instance v1, Ljava/lang/StringBuilder;
-
-    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v2, "compose scale="
-
-    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v1
-
-    invoke-virtual {v1, v13}, Ljava/lang/StringBuilder;->append(F)Ljava/lang/StringBuilder;
-
-    move-result-object v1
-
-    const-string v2, " shaped=false skip"
-
-    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v1
-
-    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v1
-
-    invoke-static {v0, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+    if-nez v2, :cond_4
 
     return-object v10
 
     :cond_4
+    invoke-static {v4}, Lcom/tsf/shell/shortcut/ShortcutIcon;->opaqueBounds(Landroid/graphics/Bitmap;)Landroid/graphics/Rect;
+
+    move-result-object v2
+
     invoke-static {v4, v2, v5, v6}, Lcom/tsf/shell/shortcut/ShortcutIcon;->fit(Landroid/graphics/Bitmap;Landroid/graphics/Rect;II)Landroid/graphics/Bitmap;
 
     move-result-object v2
 
     invoke-static {v2, v3}, Lcom/tsf/shell/shortcut/ShortcutIcon;->applyMask(Landroid/graphics/Bitmap;Landroid/graphics/Bitmap;)V
-
-    const-string v3, "ShortcutIcon"
-
-    new-instance v4, Ljava/lang/StringBuilder;
-
-    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v5, "compose scale="
-
-    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    invoke-virtual {v4, v13}, Ljava/lang/StringBuilder;->append(F)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    const-string v5, " shaped=false systemMask=true"
-
-    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v4
-
-    invoke-static {v3, v4}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
 
     invoke-static {v2, v1, v0}, Lcom/tsf/shell/shortcut/ShortcutIcon;->tint(Landroid/graphics/Bitmap;Ljava/lang/Class;Ljava/lang/Object;)Landroid/graphics/Bitmap;
 
@@ -1137,34 +1083,6 @@
 
     invoke-static {v2, v3}, Lcom/tsf/shell/shortcut/ShortcutIcon;->applyMask(Landroid/graphics/Bitmap;Landroid/graphics/Bitmap;)V
 
-    const-string v3, "ShortcutIcon"
-
-    new-instance v4, Ljava/lang/StringBuilder;
-
-    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v5, "compose scale="
-
-    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    invoke-virtual {v4, v13}, Ljava/lang/StringBuilder;->append(F)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    const-string v5, " shaped=false systemMask=true"
-
-    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v4
-
-    invoke-static {v3, v4}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
-
     invoke-static {v2, v1, v0}, Lcom/tsf/shell/shortcut/ShortcutIcon;->tint(Landroid/graphics/Bitmap;Ljava/lang/Class;Ljava/lang/Object;)Landroid/graphics/Bitmap;
 
     move-result-object v0
@@ -1172,34 +1090,6 @@
     return-object v0
 
     :cond_6
-    const-string v3, "ShortcutIcon"
-
-    new-instance v4, Ljava/lang/StringBuilder;
-
-    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v5, "compose scale="
-
-    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    invoke-virtual {v4, v13}, Ljava/lang/StringBuilder;->append(F)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    const-string v5, " shaped=false keep"
-
-    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v4
-
-    invoke-static {v3, v4}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
-
     invoke-static {v2, v1, v0}, Lcom/tsf/shell/shortcut/ShortcutIcon;->tint(Landroid/graphics/Bitmap;Ljava/lang/Class;Ljava/lang/Object;)Landroid/graphics/Bitmap;
 
     move-result-object v0
@@ -1208,34 +1098,6 @@
 
     :cond_7
     if-nez p7, :cond_8
-
-    const-string v0, "ShortcutIcon"
-
-    new-instance v1, Ljava/lang/StringBuilder;
-
-    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v2, "compose scale="
-
-    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v1
-
-    invoke-virtual {v1, v13}, Ljava/lang/StringBuilder;->append(F)Ljava/lang/StringBuilder;
-
-    move-result-object v1
-
-    const-string v2, " shaped=false skip"
-
-    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v1
-
-    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v1
-
-    invoke-static {v0, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
 
     return-object v10
 
@@ -1256,66 +1118,7 @@
 
     invoke-static {v3, v7}, Lcom/tsf/shell/shortcut/ShortcutIcon;->clipRounded(Landroid/graphics/Bitmap;F)V
 
-    const-string v2, "ShortcutIcon"
-
-    new-instance v4, Ljava/lang/StringBuilder;
-
-    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v5, "compose scale="
-
-    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    invoke-virtual {v4, v13}, Ljava/lang/StringBuilder;->append(F)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    const-string v5, " shaped=false round"
-
-    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v4
-
-    invoke-static {v2, v4}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
-
-    goto :goto_1
-
     :cond_9
-    const-string v2, "ShortcutIcon"
-
-    new-instance v4, Ljava/lang/StringBuilder;
-
-    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v5, "compose scale="
-
-    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    invoke-virtual {v4, v13}, Ljava/lang/StringBuilder;->append(F)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    const-string v5, " shaped=false keep"
-
-    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v4
-
-    invoke-static {v2, v4}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
-
-    :goto_1
     invoke-static {v3, v1, v0}, Lcom/tsf/shell/shortcut/ShortcutIcon;->tint(Landroid/graphics/Bitmap;Ljava/lang/Class;Ljava/lang/Object;)Landroid/graphics/Bitmap;
 
     move-result-object v0
@@ -1334,34 +1137,6 @@
 
     :cond_a
     if-nez p7, :cond_b
-
-    const-string v0, "ShortcutIcon"
-
-    new-instance v1, Ljava/lang/StringBuilder;
-
-    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v2, "compose scale="
-
-    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v1
-
-    invoke-virtual {v1, v13}, Ljava/lang/StringBuilder;->append(F)Ljava/lang/StringBuilder;
-
-    move-result-object v1
-
-    const-string v2, " shaped=false skip"
-
-    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v1
-
-    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v1
-
-    invoke-static {v0, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
 
     return-object v10
 
@@ -1382,66 +1157,7 @@
 
     invoke-static {v3, v7}, Lcom/tsf/shell/shortcut/ShortcutIcon;->clipRounded(Landroid/graphics/Bitmap;F)V
 
-    const-string v2, "ShortcutIcon"
-
-    new-instance v4, Ljava/lang/StringBuilder;
-
-    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v5, "compose scale="
-
-    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    invoke-virtual {v4, v13}, Ljava/lang/StringBuilder;->append(F)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    const-string v5, " shaped=false round"
-
-    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v4
-
-    invoke-static {v2, v4}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
-
-    goto :goto_2
-
     :cond_c
-    const-string v2, "ShortcutIcon"
-
-    new-instance v4, Ljava/lang/StringBuilder;
-
-    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v5, "compose scale="
-
-    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    invoke-virtual {v4, v13}, Ljava/lang/StringBuilder;->append(F)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    const-string v5, " shaped=false keep"
-
-    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v4
-
-    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v4
-
-    invoke-static {v2, v4}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
-
-    :goto_2
     invoke-static {v3, v1, v0}, Lcom/tsf/shell/shortcut/ShortcutIcon;->tint(Landroid/graphics/Bitmap;Ljava/lang/Class;Ljava/lang/Object;)Landroid/graphics/Bitmap;
 
     move-result-object v0
@@ -1449,20 +1165,20 @@
     return-object v0
 
     :cond_d
-    :goto_3
-    sget-object v2, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
+    :goto_1
+    sget-object v3, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
 
-    invoke-static {v5, v6, v2}, Landroid/graphics/Bitmap;->createBitmap(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;
+    invoke-static {v5, v6, v3}, Landroid/graphics/Bitmap;->createBitmap(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;
 
-    move-result-object v14
+    move-result-object v12
 
-    new-instance v15, Landroid/graphics/Canvas;
+    new-instance v13, Landroid/graphics/Canvas;
 
-    invoke-direct {v15, v14}, Landroid/graphics/Canvas;-><init>(Landroid/graphics/Bitmap;)V
+    invoke-direct {v13, v12}, Landroid/graphics/Canvas;-><init>(Landroid/graphics/Bitmap;)V
 
     nop
 
-    const/4 v2, 0x0
+    const/4 v14, 0x0
 
     if-eqz v11, :cond_e
 
@@ -1470,37 +1186,39 @@
 
     move-result-object v3
 
-    invoke-virtual {v15, v3, v2, v2, v10}, Landroid/graphics/Canvas;->drawBitmap(Landroid/graphics/Bitmap;FFLandroid/graphics/Paint;)V
+    invoke-virtual {v13, v3, v14, v14, v10}, Landroid/graphics/Canvas;->drawBitmap(Landroid/graphics/Bitmap;FFLandroid/graphics/Paint;)V
 
-    goto :goto_4
+    move-object v15, v3
+
+    goto :goto_2
 
     :cond_e
-    move-object v3, v10
+    move-object v15, v10
 
-    :goto_4
-    sget-object v7, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
+    :goto_2
+    sget-object v3, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
 
-    invoke-static {v5, v6, v7}, Landroid/graphics/Bitmap;->createBitmap(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;
+    invoke-static {v5, v6, v3}, Landroid/graphics/Bitmap;->createBitmap(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;
 
-    move-result-object v7
+    move-result-object v3
 
-    const/16 v16, 0x0
+    move v7, v2
 
     new-instance v2, Landroid/graphics/Canvas;
 
-    invoke-direct {v2, v7}, Landroid/graphics/Canvas;-><init>(Landroid/graphics/Bitmap;)V
+    invoke-direct {v2, v3}, Landroid/graphics/Canvas;-><init>(Landroid/graphics/Bitmap;)V
 
     int-to-float v5, v5
 
-    const/high16 v17, 0x40000000    # 2.0f
+    const/high16 v16, 0x40000000    # 2.0f
 
-    div-float v4, v5, v17
+    div-float v4, v5, v16
 
     int-to-float v6, v6
 
-    div-float v17, v6, v17
+    div-float v16, v6, v16
 
-    mul-float v5, v5, v13
+    mul-float v5, v5, v7
 
     invoke-static {v5}, Ljava/lang/Math;->round(F)I
 
@@ -1510,7 +1228,7 @@
 
     move-result v5
 
-    mul-float v6, v6, v13
+    mul-float v6, v6, v7
 
     invoke-static {v6}, Ljava/lang/Math;->round(F)I
 
@@ -1518,102 +1236,32 @@
 
     invoke-static {v8, v6}, Ljava/lang/Math;->max(II)I
 
-    move-result v6
+    move-result v7
 
-    move-object v9, v3
-
-    move-object v8, v7
-
-    const/4 v0, 0x0
-
-    move-object/from16 v3, p4
-
-    move v7, v6
+    move-object v8, v3
 
     move v6, v5
 
-    move/from16 v5, v17
+    move/from16 v5, v16
+
+    move-object/from16 v3, p4
 
     invoke-static/range {v2 .. v7}, Lcom/tsf/shell/shortcut/ShortcutIcon;->drawInset(Landroid/graphics/Canvas;Landroid/graphics/Bitmap;FFII)V
 
-    invoke-static {v8, v9, v12}, Lcom/tsf/shell/shortcut/ShortcutIcon;->clipToShape(Landroid/graphics/Bitmap;Landroid/graphics/Bitmap;Landroid/graphics/Bitmap;)V
+    invoke-static {v8, v15, v9}, Lcom/tsf/shell/shortcut/ShortcutIcon;->clipToShape(Landroid/graphics/Bitmap;Landroid/graphics/Bitmap;Landroid/graphics/Bitmap;)V
 
-    invoke-virtual {v15, v8, v0, v0, v10}, Landroid/graphics/Canvas;->drawBitmap(Landroid/graphics/Bitmap;FFLandroid/graphics/Paint;)V
+    invoke-virtual {v13, v8, v14, v14, v10}, Landroid/graphics/Canvas;->drawBitmap(Landroid/graphics/Bitmap;FFLandroid/graphics/Paint;)V
 
     invoke-virtual {v8}, Landroid/graphics/Bitmap;->recycle()V
 
-    if-eqz v9, :cond_f
+    if-eqz v15, :cond_f
 
-    if-eq v9, v11, :cond_f
+    if-eq v15, v11, :cond_f
 
-    invoke-virtual {v9}, Landroid/graphics/Bitmap;->recycle()V
+    invoke-virtual {v15}, Landroid/graphics/Bitmap;->recycle()V
 
     :cond_f
-    const-string v0, "ShortcutIcon"
-
-    new-instance v2, Ljava/lang/StringBuilder;
-
-    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v3, "compose scale="
-
-    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v2
-
-    invoke-virtual {v2, v13}, Ljava/lang/StringBuilder;->append(F)Ljava/lang/StringBuilder;
-
-    move-result-object v2
-
-    const-string v3, " plate="
-
-    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v2
-
-    if-eqz v11, :cond_10
-
-    const/4 v3, 0x1
-
-    goto :goto_5
-
-    :cond_10
-    const/4 v3, 0x0
-
-    :goto_5
-    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
-
-    move-result-object v2
-
-    const-string v3, " mask="
-
-    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v2
-
-    if-eqz v12, :cond_11
-
-    const/4 v9, 0x1
-
-    goto :goto_6
-
-    :cond_11
-    const/4 v9, 0x0
-
-    :goto_6
-    invoke-virtual {v2, v9}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
-
-    move-result-object v2
-
-    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v2
-
-    invoke-static {v0, v2}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
-
-    move-object/from16 v0, p0
-
-    invoke-static {v14, v1, v0}, Lcom/tsf/shell/shortcut/ShortcutIcon;->tint(Landroid/graphics/Bitmap;Ljava/lang/Class;Ljava/lang/Object;)Landroid/graphics/Bitmap;
+    invoke-static {v12, v1, v0}, Lcom/tsf/shell/shortcut/ShortcutIcon;->tint(Landroid/graphics/Bitmap;Ljava/lang/Class;Ljava/lang/Object;)Landroid/graphics/Bitmap;
 
     move-result-object v0
 
@@ -4421,104 +4069,130 @@
 
     invoke-virtual {v11}, Ljava/util/HashMap;->values()Ljava/util/Collection;
 
-    move-result-object v11
+    move-result-object v12
 
-    invoke-interface {v11}, Ljava/util/Collection;->iterator()Ljava/util/Iterator;
-
-    move-result-object v11
-
-    :cond_1
-    :goto_1
-    invoke-interface {v11}, Ljava/util/Iterator;->hasNext()Z
-
-    move-result v12
-
-    if-eqz v12, :cond_5
-
-    invoke-interface {v11}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+    invoke-interface {v12}, Ljava/util/Collection;->iterator()Ljava/util/Iterator;
 
     move-result-object v12
 
-    if-eqz v12, :cond_1
-
-    iget-object v14, v1, Lcom/tsf/shell/shortcut/ShortcutIcon;->mAppShortcutInfoClass:Ljava/lang/Class;
-
-    invoke-virtual {v14, v12}, Ljava/lang/Class;->isInstance(Ljava/lang/Object;)Z
+    :goto_1
+    invoke-interface {v12}, Ljava/util/Iterator;->hasNext()Z
 
     move-result v14
 
-    if-nez v14, :cond_2
+    if-eqz v14, :cond_5
+
+    invoke-interface {v12}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v14
+
+    if-eqz v14, :cond_4
+
+    iget-object v15, v1, Lcom/tsf/shell/shortcut/ShortcutIcon;->mAppShortcutInfoClass:Ljava/lang/Class;
+
+    invoke-virtual {v15, v14}, Ljava/lang/Class;->isInstance(Ljava/lang/Object;)Z
+
+    move-result v15
+
+    if-nez v15, :cond_1
 
     goto :goto_1
 
+    :cond_1
+    sget-object v15, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
+
+    const/16 v16, 0x1
+
+    new-array v13, v3, [Ljava/lang/Object;
+
+    invoke-virtual {v7, v14, v13}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v13
+
+    invoke-virtual {v15, v13}, Ljava/lang/Boolean;->equals(Ljava/lang/Object;)Z
+
+    move-result v13
+
+    if-eqz v13, :cond_2
+
+    invoke-virtual {v10, v14}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
     :cond_2
-    sget-object v14, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
+    new-array v13, v3, [Ljava/lang/Object;
 
-    new-array v15, v3, [Ljava/lang/Object;
+    invoke-virtual {v6, v14, v13}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
 
-    invoke-virtual {v7, v12, v15}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    move-result-object v13
 
-    move-result-object v15
+    if-eqz v13, :cond_3
 
-    invoke-virtual {v14, v15}, Ljava/lang/Boolean;->equals(Ljava/lang/Object;)Z
+    invoke-virtual {v5, v13}, Ljava/lang/Class;->isInstance(Ljava/lang/Object;)Z
 
     move-result v14
 
     if-eqz v14, :cond_3
 
-    invoke-virtual {v10, v12}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
-
-    :cond_3
     new-array v14, v3, [Ljava/lang/Object;
 
-    invoke-virtual {v6, v12, v14}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    invoke-virtual {v8, v13, v14}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
 
-    move-result-object v12
+    move-result-object v13
 
-    if-eqz v12, :cond_4
-
-    invoke-virtual {v5, v12}, Ljava/lang/Class;->isInstance(Ljava/lang/Object;)Z
-
-    move-result v14
-
-    if-eqz v14, :cond_4
-
-    new-array v14, v3, [Ljava/lang/Object;
-
-    invoke-virtual {v8, v12, v14}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
-
-    move-result-object v12
-
-    if-eqz v12, :cond_4
+    if-eqz v13, :cond_3
 
     iget-object v14, v1, Lcom/tsf/shell/shortcut/ShortcutIcon;->mAppTextureField:Ljava/lang/reflect/Field;
 
     iget-object v15, v1, Lcom/tsf/shell/shortcut/ShortcutIcon;->mTextureIdField:Ljava/lang/reflect/Field;
 
-    invoke-static {v12, v14, v15}, Lcom/tsf/shell/shortcut/ShortcutIcon;->hasLoadedTexture(Ljava/lang/Object;Ljava/lang/reflect/Field;Ljava/lang/reflect/Field;)Z
+    invoke-static {v13, v14, v15}, Lcom/tsf/shell/shortcut/ShortcutIcon;->hasLoadedTexture(Ljava/lang/Object;Ljava/lang/reflect/Field;Ljava/lang/reflect/Field;)Z
 
     move-result v14
 
-    if-eqz v14, :cond_4
+    if-eqz v14, :cond_3
 
-    invoke-virtual {v9, v12}, Ljava/util/HashSet;->add(Ljava/lang/Object;)Z
+    invoke-virtual {v9, v13}, Ljava/util/HashSet;->add(Ljava/lang/Object;)Z
 
     move-result v14
 
-    if-eqz v14, :cond_4
+    if-eqz v14, :cond_3
 
-    invoke-virtual {v0, v12}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+    invoke-virtual {v0, v13}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    :cond_3
+    const/4 v13, 0x1
+
+    goto :goto_1
 
     :cond_4
+    const/16 v16, 0x1
+
+    const/4 v13, 0x1
+
     goto :goto_1
 
     :cond_5
+    const/16 v16, 0x1
+
     invoke-virtual {v0, v10}, Ljava/util/ArrayList;->addAll(Ljava/util/Collection;)Z
 
+    invoke-virtual {v11}, Ljava/util/HashMap;->isEmpty()Z
+
+    move-result v5
+
+    if-eqz v5, :cond_6
+
+    invoke-virtual {v9}, Ljava/util/HashSet;->isEmpty()Z
+
+    move-result v5
+
+    if-nez v5, :cond_7
+
+    :cond_6
     sget-object v5, Lcom/tsf/shell/shortcut/ShortcutIcon;->DESKTOP_DONE_MARKER:Ljava/lang/Object;
 
     invoke-virtual {v0, v5}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
 
+    :cond_7
     const-string v5, "com.tsf.shell.manager.bind.a"
 
     invoke-static {v5}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
@@ -4539,7 +4213,7 @@
 
     move-result-object v4
 
-    if-eqz v4, :cond_7
+    if-eqz v4, :cond_9
 
     invoke-virtual {v4}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
 
@@ -4555,7 +4229,7 @@
 
     instance-of v4, v2, Ljava/util/List;
 
-    if-eqz v4, :cond_7
+    if-eqz v4, :cond_9
 
     new-instance v4, Ljava/util/ArrayList;
 
@@ -4572,13 +4246,13 @@
 
     move-result v4
 
-    if-eqz v4, :cond_7
+    if-eqz v4, :cond_9
 
     invoke-interface {v2}, Ljava/util/Iterator;->next()Ljava/lang/Object;
 
     move-result-object v4
 
-    if-eqz v4, :cond_6
+    if-eqz v4, :cond_8
 
     iget-object v5, v1, Lcom/tsf/shell/shortcut/ShortcutIcon;->mAppTextureField:Ljava/lang/reflect/Field;
 
@@ -4588,27 +4262,27 @@
 
     move-result v5
 
-    if-eqz v5, :cond_6
+    if-eqz v5, :cond_8
 
     invoke-virtual {v9, v4}, Ljava/util/HashSet;->add(Ljava/lang/Object;)Z
 
     move-result v5
 
-    if-eqz v5, :cond_6
+    if-eqz v5, :cond_8
 
     invoke-virtual {v0, v4}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
 
-    :cond_6
+    :cond_8
     goto :goto_2
 
-    :cond_7
+    :cond_9
     iput-object v0, v1, Lcom/tsf/shell/shortcut/ShortcutIcon;->mQueue:Ljava/util/ArrayList;
 
     iput v3, v1, Lcom/tsf/shell/shortcut/ShortcutIcon;->mDecodeIndex:I
     :try_end_2
     .catchall {:try_start_2 .. :try_end_2} :catchall_1
 
-    return v13
+    return v16
 
     :catchall_1
     move-exception v0
@@ -4766,178 +4440,363 @@
 .end method
 
 .method private static reloadDesktopShortcutsAndFolders()V
-    .locals 7
+    .locals 12
 
-    const-string v0, "ShortcutIcon"
+    const-string v0, "a"
 
-    const/4 v1, 0x0
+    const-string v1, "ShortcutIcon"
 
     const/4 v2, 0x0
 
+    const/4 v3, 0x0
+
     :try_start_0
-    const-string v3, "com.tsf.shell.f.i.b.e.f"
+    new-instance v4, Ljava/util/HashMap;
 
-    invoke-static {v3}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
+    invoke-direct {v4}, Ljava/util/HashMap;-><init>()V
 
-    move-result-object v3
+    const-string v5, "com.tsf.shell.manager.bind.ShellModel"
 
-    const-string v4, "aX"
+    invoke-static {v5}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
 
-    new-array v5, v2, [Ljava/lang/Class;
+    move-result-object v5
 
-    invoke-virtual {v3, v4, v5}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    const/4 v6, 0x1
 
-    move-result-object v3
+    new-array v7, v6, [Ljava/lang/Class;
 
-    new-array v4, v2, [Ljava/lang/Object;
+    const-class v8, Ljava/util/HashMap;
 
-    invoke-virtual {v3, v1, v4}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
-    :try_end_0
-    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+    aput-object v8, v7, v3
+
+    invoke-virtual {v5, v0, v7}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+
+    move-result-object v5
+
+    new-array v6, v6, [Ljava/lang/Object;
+
+    aput-object v4, v6, v3
+
+    invoke-virtual {v5, v2, v6}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+
+    const-string v5, "com.censivn.C3DEngine.api.element.info.shortcut.LauncherShortcutAppInfo"
+
+    invoke-static {v5}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
+
+    move-result-object v5
+
+    const-string v6, "getWidget"
+
+    new-array v7, v3, [Ljava/lang/Class;
+
+    invoke-virtual {v5, v6, v7}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+
+    move-result-object v6
+
+    const-string v7, "isCustomTexture"
+
+    new-array v8, v3, [Ljava/lang/Class;
+
+    invoke-virtual {v5, v7, v8}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+
+    move-result-object v7
+
+    const-string v8, "com.tsf.shell.f.i.b"
+
+    invoke-static {v8}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
+
+    move-result-object v8
+
+    const-string v9, "C"
+
+    new-array v10, v3, [Ljava/lang/Class;
+
+    invoke-virtual {v8, v9, v10}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+
+    move-result-object v8
+
+    invoke-virtual {v4}, Ljava/util/HashMap;->values()Ljava/util/Collection;
+
+    move-result-object v4
+
+    invoke-interface {v4}, Ljava/util/Collection;->iterator()Ljava/util/Iterator;
+
+    move-result-object v4
+
+    :cond_0
+    :goto_0
+    invoke-interface {v4}, Ljava/util/Iterator;->hasNext()Z
+
+    move-result v9
+
+    if-eqz v9, :cond_4
+
+    invoke-interface {v4}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v9
+
+    if-eqz v9, :cond_0
+
+    invoke-virtual {v5, v9}, Ljava/lang/Class;->isInstance(Ljava/lang/Object;)Z
+
+    move-result v10
+
+    if-nez v10, :cond_1
 
     goto :goto_0
 
-    :catchall_0
-    move-exception v3
-
-    const-string v4, "reload shortcut icons failed"
-
-    invoke-static {v0, v4, v3}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
-
-    :goto_0
-    :try_start_1
-    const-string v3, "com.tsf.shell.manager.a"
-
-    invoke-static {v3}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
-
-    move-result-object v3
-
-    const-string v4, "w"
-
-    invoke-virtual {v3, v4}, Ljava/lang/Class;->getField(Ljava/lang/String;)Ljava/lang/reflect/Field;
-
-    move-result-object v3
-
-    invoke-virtual {v3, v1}, Ljava/lang/reflect/Field;->get(Ljava/lang/Object;)Ljava/lang/Object;
-
-    move-result-object v1
-
-    if-nez v1, :cond_0
-
-    return-void
-
-    :cond_0
-    invoke-virtual {v1}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
-
-    move-result-object v3
-
-    const-string v4, "d"
-
-    new-array v5, v2, [Ljava/lang/Class;
-
-    invoke-virtual {v3, v4, v5}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
-
-    move-result-object v3
-
-    new-array v4, v2, [Ljava/lang/Object;
-
-    invoke-virtual {v3, v1, v4}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
-
-    move-result-object v1
-
-    if-nez v1, :cond_1
-
-    return-void
-
     :cond_1
-    invoke-virtual {v1}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+    sget-object v10, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
 
-    move-result-object v3
+    new-array v11, v3, [Ljava/lang/Object;
 
-    const-string v4, "a"
+    invoke-virtual {v7, v9, v11}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
 
-    new-array v5, v2, [Ljava/lang/Class;
+    move-result-object v11
 
-    invoke-virtual {v3, v4, v5}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    invoke-virtual {v10, v11}, Ljava/lang/Boolean;->equals(Ljava/lang/Object;)Z
 
-    move-result-object v3
+    move-result v10
 
-    new-array v4, v2, [Ljava/lang/Object;
+    if-eqz v10, :cond_2
 
-    invoke-virtual {v3, v1, v4}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
-
-    move-result-object v1
-
-    instance-of v3, v1, Ljava/util/List;
-
-    if-nez v3, :cond_2
-
-    return-void
+    goto :goto_0
 
     :cond_2
-    const-string v3, "com.tsf.shell.f.i.b.d.b"
+    new-array v10, v3, [Ljava/lang/Object;
 
-    invoke-static {v3}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
+    invoke-virtual {v6, v9, v10}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
 
-    move-result-object v3
+    move-result-object v9
+
+    if-eqz v9, :cond_3
+
+    new-array v10, v3, [Ljava/lang/Object;
+
+    invoke-virtual {v8, v9, v10}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    :cond_3
+    goto :goto_0
+
+    :cond_4
+    goto :goto_1
+
+    :catchall_0
+    move-exception v4
+
+    const-string v5, "refresh desktop app widgets failed"
+
+    invoke-static {v1, v5, v4}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    :goto_1
+    :try_start_1
+    const-string v4, "com.tsf.shell.f.i.b.e.f"
+
+    invoke-static {v4}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
+
+    move-result-object v4
+
+    const-string v5, "aX"
+
+    new-array v6, v3, [Ljava/lang/Class;
+
+    invoke-virtual {v4, v5, v6}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+
+    move-result-object v4
+
+    new-array v5, v3, [Ljava/lang/Object;
+
+    invoke-virtual {v4, v2, v5}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    :try_end_1
+    .catchall {:try_start_1 .. :try_end_1} :catchall_1
+
+    goto :goto_2
+
+    :catchall_1
+    move-exception v4
+
+    const-string v5, "reload shortcut icons failed"
+
+    invoke-static {v1, v5, v4}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    :goto_2
+    :try_start_2
+    const-string v4, "com.tsf.shell.manager.a"
+
+    invoke-static {v4}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
+
+    move-result-object v4
+
+    const-string v5, "w"
+
+    invoke-virtual {v4, v5}, Ljava/lang/Class;->getField(Ljava/lang/String;)Ljava/lang/reflect/Field;
+
+    move-result-object v4
+
+    invoke-virtual {v4, v2}, Ljava/lang/reflect/Field;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v2
+
+    if-nez v2, :cond_5
+
+    return-void
+
+    :cond_5
+    invoke-virtual {v2}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+
+    move-result-object v4
+
+    const-string v5, "d"
+
+    new-array v6, v3, [Ljava/lang/Class;
+
+    invoke-virtual {v4, v5, v6}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+
+    move-result-object v4
+
+    new-array v5, v3, [Ljava/lang/Object;
+
+    invoke-virtual {v4, v2, v5}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v2
+
+    if-nez v2, :cond_6
+
+    return-void
+
+    :cond_6
+    invoke-virtual {v2}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+
+    move-result-object v4
+
+    new-array v5, v3, [Ljava/lang/Class;
+
+    invoke-virtual {v4, v0, v5}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+
+    move-result-object v0
+
+    new-array v4, v3, [Ljava/lang/Object;
+
+    invoke-virtual {v0, v2, v4}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v0
+
+    instance-of v2, v0, Ljava/util/List;
+
+    if-nez v2, :cond_7
+
+    return-void
+
+    :cond_7
+    const-string v2, "com.tsf.shell.f.i.b.d.b"
+
+    invoke-static {v2}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
+
+    move-result-object v2
 
     const-string v4, "aQ"
 
-    new-array v5, v2, [Ljava/lang/Class;
+    new-array v5, v3, [Ljava/lang/Class;
 
-    invoke-virtual {v3, v4, v5}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    invoke-virtual {v2, v4, v5}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
 
     move-result-object v4
 
     new-instance v5, Ljava/util/ArrayList;
 
-    check-cast v1, Ljava/util/List;
+    check-cast v0, Ljava/util/List;
 
-    invoke-direct {v5, v1}, Ljava/util/ArrayList;-><init>(Ljava/util/Collection;)V
+    invoke-direct {v5, v0}, Ljava/util/ArrayList;-><init>(Ljava/util/Collection;)V
 
     invoke-virtual {v5}, Ljava/util/ArrayList;->iterator()Ljava/util/Iterator;
 
-    move-result-object v1
+    move-result-object v0
 
-    :goto_1
-    invoke-interface {v1}, Ljava/util/Iterator;->hasNext()Z
+    :goto_3
+    invoke-interface {v0}, Ljava/util/Iterator;->hasNext()Z
 
     move-result v5
 
-    if-eqz v5, :cond_4
+    if-eqz v5, :cond_9
 
-    invoke-interface {v1}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+    invoke-interface {v0}, Ljava/util/Iterator;->next()Ljava/lang/Object;
 
     move-result-object v5
 
-    if-eqz v5, :cond_3
+    if-eqz v5, :cond_8
 
-    invoke-virtual {v3, v5}, Ljava/lang/Class;->isInstance(Ljava/lang/Object;)Z
+    invoke-virtual {v2, v5}, Ljava/lang/Class;->isInstance(Ljava/lang/Object;)Z
 
     move-result v6
 
-    if-eqz v6, :cond_3
+    if-eqz v6, :cond_8
 
-    new-array v6, v2, [Ljava/lang/Object;
+    new-array v6, v3, [Ljava/lang/Object;
 
     invoke-virtual {v4, v5, v6}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
-    :try_end_1
-    .catchall {:try_start_1 .. :try_end_1} :catchall_1
+    :try_end_2
+    .catchall {:try_start_2 .. :try_end_2} :catchall_2
 
-    :cond_3
-    goto :goto_1
+    :cond_8
+    goto :goto_3
 
-    :cond_4
-    goto :goto_2
+    :cond_9
+    goto :goto_4
 
-    :catchall_1
-    move-exception v1
+    :catchall_2
+    move-exception v0
 
     const-string v2, "reload folder previews failed"
 
-    invoke-static {v0, v2, v1}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+    invoke-static {v1, v2, v0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
 
-    :goto_2
+    :goto_4
+    return-void
+.end method
+
+.method public static reloadThemeIconsAsync()V
+    .locals 5
+
+    sget v0, Lcom/tsf/shell/shortcut/ShortcutIcon;->sReloadGeneration:I
+
+    const/4 v1, 0x1
+
+    add-int/2addr v0, v1
+
+    sput v0, Lcom/tsf/shell/shortcut/ShortcutIcon;->sReloadGeneration:I
+
+    new-instance v2, Ljava/lang/StringBuilder;
+
+    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v3, "theme icon changed, scheduling async reload gen="
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v2
+
+    const-string v3, "ShortcutIcon"
+
+    invoke-static {v3, v2}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+
+    new-instance v2, Lcom/tsf/shell/shortcut/ShortcutIcon;
+
+    invoke-direct {v2, v0}, Lcom/tsf/shell/shortcut/ShortcutIcon;-><init>(I)V
+
+    const-wide/16 v3, 0x28
+
+    invoke-static {v2, v1, v3, v4}, Lcom/tsf/shell/shortcut/ShortcutIcon;->scheduleGlStep(Lcom/tsf/shell/shortcut/ShortcutIcon;IJ)V
+
     return-void
 .end method
 
@@ -6115,7 +5974,7 @@
     return v8
 .end method
 
-.method private static shouldApplySystemMaskDirect(Landroid/graphics/Bitmap;II[ILandroid/graphics/Rect;)Z
+.method private static shouldApplySystemMaskDirect(Landroid/graphics/Bitmap;II[I)Z
     .locals 23
 
     move/from16 v0, p1
@@ -6229,12 +6088,12 @@
     move v5, v9
 
     :cond_4
-    add-int/lit8 v14, v14, 0x1
+    add-int/lit8 v14, v14, 0x2
 
     goto :goto_1
 
     :cond_5
-    add-int/lit8 v9, v9, 0x1
+    add-int/lit8 v9, v9, 0x2
 
     goto :goto_0
 
@@ -6258,29 +6117,21 @@
 
     add-int/2addr v13, v10
 
-    add-int/lit8 v14, v3, 0x1
-
-    add-int/lit8 v15, v5, 0x1
-
-    move-object/from16 v10, p4
-
-    invoke-virtual {v10, v7, v8, v14, v15}, Landroid/graphics/Rect;->set(IIII)V
-
-    int-to-float v10, v0
+    int-to-float v14, v0
 
     int-to-float v9, v9
 
-    div-float v14, v10, v9
+    div-float v15, v14, v9
 
-    int-to-float v15, v1
+    int-to-float v10, v1
 
     int-to-float v13, v13
 
     const/16 v16, 0x0
 
-    div-float v11, v15, v13
+    div-float v11, v10, v13
 
-    invoke-static {v14, v11}, Ljava/lang/Math;->min(FF)F
+    invoke-static {v15, v11}, Ljava/lang/Math;->min(FF)F
 
     move-result v11
 
@@ -6288,23 +6139,23 @@
 
     mul-float v13, v13, v11
 
-    sub-float/2addr v10, v9
+    sub-float/2addr v14, v9
 
-    const/high16 v14, 0x40000000    # 2.0f
+    const/high16 v15, 0x40000000    # 2.0f
 
-    div-float/2addr v10, v14
+    div-float/2addr v14, v15
 
-    sub-float/2addr v15, v13
+    sub-float/2addr v10, v13
 
-    div-float/2addr v15, v14
-
-    nop
+    div-float/2addr v10, v15
 
     nop
 
     nop
 
-    const/4 v14, 0x0
+    nop
+
+    const/4 v15, 0x0
 
     const/16 v17, 0x0
 
@@ -6313,17 +6164,17 @@
     const/16 v19, 0x0
 
     :goto_2
-    if-ge v14, v1, :cond_12
+    if-ge v15, v1, :cond_12
 
-    mul-int v20, v14, v0
+    mul-int v20, v15, v0
 
-    int-to-float v12, v14
+    int-to-float v12, v15
 
-    cmpl-float v21, v12, v15
+    cmpl-float v21, v12, v10
 
     if-ltz v21, :cond_8
 
-    add-float v21, v15, v13
+    add-float v21, v10, v13
 
     cmpg-float v21, v12, v21
 
@@ -6341,7 +6192,7 @@
 
     if-eqz v21, :cond_a
 
-    sub-float/2addr v12, v15
+    sub-float/2addr v12, v10
 
     div-float/2addr v12, v11
 
@@ -6380,11 +6231,11 @@
 
     int-to-float v0, v1
 
-    cmpg-float v22, v0, v10
+    cmpg-float v22, v0, v14
 
     if-ltz v22, :cond_f
 
-    add-float v22, v10, v9
+    add-float v22, v14, v9
 
     cmpl-float v22, v0, v22
 
@@ -6397,7 +6248,7 @@
     goto :goto_7
 
     :cond_c
-    sub-float/2addr v0, v10
+    sub-float/2addr v0, v14
 
     div-float/2addr v0, v11
 
@@ -6466,7 +6317,7 @@
     :cond_11
     const/16 v1, 0x10
 
-    add-int/lit8 v14, v14, 0x2
+    add-int/lit8 v15, v15, 0x2
 
     move/from16 v0, p1
 
