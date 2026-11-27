@@ -2117,6 +2117,8 @@
 
     move-result-object v0
 
+    invoke-static {v0}, Lcom/tsf/shell/shortcut/ShortcutIcon;->prepareDrawerSync(Ljava/util/List;)V
+
     invoke-virtual {v0}, Ljava/util/ArrayList;->size()I
 
     move-result v4
@@ -4194,6 +4196,8 @@
     invoke-virtual {v0}, Lcom/tsf/shell/f/f/a/b;->a()Ljava/util/ArrayList;
 
     move-result-object v0
+
+    invoke-static {v0}, Lcom/tsf/shell/shortcut/ShortcutIcon;->prepareDrawerSync(Ljava/util/List;)V
 
     invoke-virtual {v0}, Ljava/util/ArrayList;->size()I
 

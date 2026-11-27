@@ -1,5 +1,6 @@
 package com.tsf.shell.shortcut;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -17,6 +18,7 @@ import android.graphics.drawable.AdaptiveIconDrawable;
 import android.os.Build;
 import android.util.Log;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -36,12 +38,14 @@ import java.util.List;
 public final class ShortcutIcon implements Runnable {
     private static final String TAG = "ShortcutIcon";
     private static final long RELOAD_START_DELAY_MS = 80L;
+    private static final int MAX_BUFFERED_GLYPHS = 4;
     private static final Object DESKTOP_DONE_MARKER = Boolean.TRUE;
 
     private static final int MODE_INIT_GL = 0;
     private static final int MODE_DISPATCH_GL = 1;
     private static final int MODE_BG_DECODE = 2;
     private static final int MODE_GL_UPLOAD = 3;
+    private static final int MODE_DISPATCH_UPLOAD = 4;
 
     private static final Object MASK_LOCK = new Object();
     private static String sSystemMaskSignature;
@@ -54,11 +58,22 @@ public final class ShortcutIcon implements Runnable {
 
     private final int mGeneration;
     private final ShortcutIcon mGlTarget;
+    private final Object mPipeLock = new Object();
     private int mMode;
     private ArrayList<Object> mQueue;
-    private int mIndex;
-    private Object mPendingItem;
-    private Bitmap mReadyGlyph;
+    private int mDecodeIndex;
+    private boolean mWorkerScheduled;
+    private boolean mUploadScheduled;
+
+    // Small bounded producer-consumer buffer: worker decodes ahead up to 4 icons
+    // while GL thread uploads strictly 1 icon per frame (< 1ms) so 120Hz animations stay smooth.
+    private final ArrayList<Object> mReadyApps = new ArrayList<Object>(MAX_BUFFERED_GLYPHS);
+    private final ArrayList<Bitmap> mReadyGlyphs = new ArrayList<Bitmap>(MAX_BUFFERED_GLYPHS);
+    private final ArrayList<Boolean> mReadySkipUpon = new ArrayList<Boolean>(MAX_BUFFERED_GLYPHS);
+    private final ArrayList<Object> mReadyIconDescs = new ArrayList<Object>(MAX_BUFFERED_GLYPHS);
+    private final ArrayList<String> mReadyMaskSigs = new ArrayList<String>(MAX_BUFFERED_GLYPHS);
+    private boolean mDecodingDone;
+
     private Object mStyle;
     private Class<?> mStyleClass;
     private Class<?> mAppClass;
@@ -69,7 +84,12 @@ public final class ShortcutIcon implements Runnable {
     private Field mAppComponentField;
     private Field mAppTitleField;
     private Field mAppTextureField;
+    private Field mTextureIdField;
     private Method mInfoReloadMethod;
+    private File mCacheBucketDir;
+    private HashMap<String, long[]> mCachePkgStamps;
+    private int mCacheIconW;
+    private int mCacheIconH;
 
     private ShortcutIcon(int generation) {
         mGeneration = generation;
@@ -77,10 +97,129 @@ public final class ShortcutIcon implements Runnable {
         mMode = MODE_INIT_GL;
     }
 
-    private ShortcutIcon(ShortcutIcon glTarget) {
+    private ShortcutIcon(ShortcutIcon glTarget, int mode) {
         mGeneration = glTarget.mGeneration;
         mGlTarget = glTarget;
-        mMode = MODE_DISPATCH_GL;
+        mMode = mode;
+    }
+
+    public static void prepareDrawerSync(List<?> widgets) {
+        DrawerIconCache.prepareDrawerSync(widgets);
+    }
+
+    static void ensureRuntimeMasksReady(Context context, int iconW, int iconH) {
+        if (Build.VERSION.SDK_INT < 26) {
+            return;
+        }
+        if (sSystemMaskSignature == null && context != null) {
+            String sig = currentSystemMaskSignature(context);
+            if (sig != null && sig.length() > 0) {
+                sSystemMaskSignature = sig;
+            }
+        }
+        synchronized (MASK_LOCK) {
+            ensureSystemMaskCached(iconW, iconH);
+        }
+    }
+
+    static void warmThemeResourcesOnGl(Object icons, Class<?> iconClass, Class<?> styleClass, Object style) {
+        try {
+            firstPlate(icons, iconClass, styleClass, style);
+            iconClass.getMethod("getDefaultIconMaskBitmap", styleClass).invoke(icons, style);
+            iconClass.getMethod("getDefaultIconUponBitmap", styleClass).invoke(icons, style);
+        } catch (Throwable ignored) {
+        }
+    }
+
+    static Bitmap getThemePlateSnapshot(Object icons, Class<?> iconClass, Class<?> styleClass, Object style) {
+        return firstPlate(icons, iconClass, styleClass, style);
+    }
+
+    static String getSystemMaskSignatureSnapshot() {
+        return sSystemMaskSignature;
+    }
+
+    static Bitmap decodeAppGlyphForBatch(Object app, Object style, Class<?> styleClass,
+            int iconW, int iconH, Field appComponentField, Method appLoadRawMethod,
+            boolean[] skipUponOut) throws Exception {
+        Class<?> iconClass = Class.forName("com.tsf.shell.theme.inside.mix.ThemeIconManager");
+        Object mix = Class.forName("com.tsf.shell.theme.inside.ThemeManager").getField("mix").get(null);
+        Object icons = mix.getClass().getField("icon").get(mix);
+        if (Boolean.TRUE.equals(iconClass.getMethod("polyEffectEnable").invoke(icons))) {
+            return null;
+        }
+        Object component = appComponentField.get(app);
+        if (component != null) {
+            Bitmap matched = (Bitmap) iconClass.getMethod("getIconFilterBitmap", String.class, styleClass)
+                    .invoke(icons, component.toString(), style);
+            if (matched != null) {
+                skipUponOut[0] = true;
+                return matched;
+            }
+        }
+        Bitmap raw = (Bitmap) appLoadRawMethod.invoke(app);
+        if (raw == null) {
+            return null;
+        }
+        Bitmap glyph = compose(icons, iconClass, style, styleClass, raw, iconW, iconH, false);
+        if (glyph != null) {
+            if (glyph != raw && !raw.isRecycled()) {
+                raw.recycle();
+            }
+            return glyph;
+        }
+        Bitmap scaled = Bitmap.createScaledBitmap(raw, iconW, iconH, true);
+        if (scaled != raw && !raw.isRecycled()) {
+            raw.recycle();
+        }
+        return tint(scaled, iconClass, icons);
+    }
+
+    static boolean uploadPreparedGlyphFast(Object app, Bitmap glyph, boolean skipUpon, Bitmap uponBitmap,
+            Object style, Method styleCanvasMethod, Method styleDrawIconMethod,
+            Method styleTitleBitmapMethod, Method styleDrawTitleMethod,
+            Field appTitleField, Field appTextureField, Object texMgr, Method uploadMethod) {
+        if (glyph == null || glyph.isRecycled() || style == null || texMgr == null || uploadMethod == null) {
+            if (glyph != null && !glyph.isRecycled()) {
+                glyph.recycle();
+            }
+            return false;
+        }
+        try {
+            Bitmap canvasBitmap = (Bitmap) styleCanvasMethod.invoke(style);
+            if (canvasBitmap == null) {
+                glyph.recycle();
+                return false;
+            }
+            Canvas canvas = new Canvas(canvasBitmap);
+            canvas.drawColor(-1, PorterDuff.Mode.CLEAR);
+            styleDrawIconMethod.invoke(style, canvas, glyph, Boolean.TRUE);
+            glyph = null;
+
+            if (!skipUpon && uponBitmap != null && !uponBitmap.isRecycled()) {
+                styleDrawIconMethod.invoke(style, canvas, uponBitmap, Boolean.FALSE);
+            }
+
+            Object rawTitle = appTitleField.get(app);
+            String title = rawTitle == null ? "" : rawTitle.toString();
+            Bitmap titleBitmap = (Bitmap) styleTitleBitmapMethod.invoke(style, title);
+            if (titleBitmap != null) {
+                styleDrawTitleMethod.invoke(style, canvas, titleBitmap, Boolean.TRUE);
+            }
+
+            Object tex = appTextureField.get(app);
+            if (tex != null) {
+                uploadMethod.invoke(texMgr, tex, canvasBitmap);
+                return true;
+            }
+            return false;
+        } catch (Throwable error) {
+            Log.w(TAG, "fast upload app icon on GL failed", error);
+            if (glyph != null && !glyph.isRecycled()) {
+                glyph.recycle();
+            }
+            return false;
+        }
     }
 
     public static void refreshIfSystemShapeChanged(Context context) {
@@ -103,21 +242,25 @@ public final class ShortcutIcon implements Runnable {
         clearSystemMaskCache();
         int generation = ++sReloadGeneration;
         Log.i(TAG, "system icon shape changed, scheduling async reload gen=" + generation);
-        scheduleGlStep(new ShortcutIcon(generation), RELOAD_START_DELAY_MS);
+        scheduleGlStep(new ShortcutIcon(generation), MODE_DISPATCH_GL, RELOAD_START_DELAY_MS);
     }
 
-    private static void scheduleGlStep(ShortcutIcon glTarget, long delayMs) {
+    private static void scheduleGlStep(ShortcutIcon host, int dispatchMode, long delayMs) {
         try {
             Object engine = Class.forName("com.censivn.C3DEngine.a").getMethod("a").invoke(null);
             if (engine != null) {
                 engine.getClass().getMethod("a", Runnable.class, long.class)
-                        .invoke(engine, new ShortcutIcon(glTarget), Long.valueOf(delayMs));
+                        .invoke(engine, new ShortcutIcon(host, dispatchMode), Long.valueOf(delayMs));
                 return;
             }
         } catch (Throwable error) {
             Log.w(TAG, "schedule async reload failed", error);
         }
-        glTarget.run();
+        if (dispatchMode == MODE_DISPATCH_UPLOAD) {
+            host.clearBufferedGlyphs();
+        } else {
+            host.run();
+        }
     }
 
     private static boolean postToGl(Runnable task) {
@@ -148,13 +291,20 @@ public final class ShortcutIcon implements Runnable {
 
     @Override
     public void run() {
+        ShortcutIcon host = mGlTarget != null ? mGlTarget : this;
         if (mGeneration != sReloadGeneration) {
-            recycleReadyGlyph();
+            host.clearBufferedGlyphs();
             return;
         }
         if (mMode == MODE_DISPATCH_GL) {
-            if (mGlTarget != null && !postToGl(mGlTarget)) {
-                mGlTarget.run();
+            if (!postToGl(host)) {
+                host.run();
+            }
+            return;
+        }
+        if (mMode == MODE_DISPATCH_UPLOAD) {
+            if (!postToGl(new ShortcutIcon(host, MODE_GL_UPLOAD))) {
+                host.clearBufferedGlyphs();
             }
             return;
         }
@@ -163,92 +313,233 @@ public final class ShortcutIcon implements Runnable {
                 fallbackFullReload();
                 return;
             }
-            advanceFromGl();
+            if (mQueue.isEmpty()) {
+                Log.i(TAG, "system icon shape reload complete gen=" + mGeneration + " items=0");
+                return;
+            }
+            kickWorkerIfNeeded();
             return;
         }
         if (mMode == MODE_BG_DECODE) {
-            decodePendingOnWorker();
+            host.runWorkerStep();
             return;
         }
         if (mMode == MODE_GL_UPLOAD) {
-            uploadPendingOnGl();
-            advanceFromGl();
+            host.runGlUploadStep();
         }
     }
 
-    private void recycleReadyGlyph() {
-        Bitmap glyph = mReadyGlyph;
-        mReadyGlyph = null;
-        if (glyph != null && !glyph.isRecycled()) {
-            glyph.recycle();
+    private void clearBufferedGlyphs() {
+        synchronized (mPipeLock) {
+            for (int i = 0; i < mReadyGlyphs.size(); i++) {
+                Bitmap glyph = mReadyGlyphs.get(i);
+                if (glyph != null && !glyph.isRecycled()) {
+                    glyph.recycle();
+                }
+            }
+            mReadyApps.clear();
+            mReadyGlyphs.clear();
+            mReadySkipUpon.clear();
+            mReadyIconDescs.clear();
+            mReadyMaskSigs.clear();
+            mWorkerScheduled = false;
+            mUploadScheduled = false;
         }
     }
 
-    private void advanceFromGl() {
-        while (mIndex < mQueue.size()) {
-            if (mGeneration != sReloadGeneration) {
-                recycleReadyGlyph();
-                return;
+    private void kickWorkerIfNeeded() {
+        boolean shouldPost = false;
+        synchronized (mPipeLock) {
+            if (!mWorkerScheduled && !mDecodingDone && mReadyApps.size() < MAX_BUFFERED_GLYPHS
+                    && mGeneration == sReloadGeneration) {
+                mWorkerScheduled = true;
+                shouldPost = true;
             }
-            Object item = mQueue.get(mIndex++);
-            if (item == DESKTOP_DONE_MARKER) {
-                reloadDesktopShortcutsAndFolders();
-                continue;
+        }
+        if (shouldPost && !postToWorker(new ShortcutIcon(this, MODE_BG_DECODE))) {
+            synchronized (mPipeLock) {
+                mWorkerScheduled = false;
             }
-            if (mAppClass != null && mAppClass.isInstance(item)) {
-                mPendingItem = item;
-                mReadyGlyph = null;
-                mMode = MODE_BG_DECODE;
-                if (postToWorker(this)) {
+            fallbackFullReload();
+        }
+    }
+
+    private void kickUploadIfNeeded() {
+        boolean shouldPost = false;
+        synchronized (mPipeLock) {
+            if (!mUploadScheduled && (!mReadyApps.isEmpty() || mDecodingDone)
+                    && mGeneration == sReloadGeneration) {
+                mUploadScheduled = true;
+                shouldPost = true;
+            }
+        }
+        if (shouldPost && !postToGl(new ShortcutIcon(this, MODE_GL_UPLOAD))) {
+            clearBufferedGlyphs();
+        }
+    }
+
+    private void runWorkerStep() {
+        while (true) {
+            Object item = null;
+            synchronized (mPipeLock) {
+                if (mGeneration != sReloadGeneration) {
+                    mWorkerScheduled = false;
+                    clearBufferedGlyphs();
                     return;
                 }
-                // Fallback if worker queue unavailable
-                try {
-                    mAppReloadMethod.invoke(item);
-                } catch (Throwable error) {
-                    Log.w(TAG, "reload app fallback failed", error);
+                if (mReadyApps.size() >= MAX_BUFFERED_GLYPHS) {
+                    mWorkerScheduled = false;
+                    return;
                 }
+                if (mDecodeIndex >= mQueue.size()) {
+                    mDecodingDone = true;
+                    mWorkerScheduled = false;
+                    break;
+                }
+                item = mQueue.get(mDecodeIndex++);
+            }
+
+            if (item == DESKTOP_DONE_MARKER || (mAppShortcutInfoClass != null && mAppShortcutInfoClass.isInstance(item))) {
+                synchronized (mPipeLock) {
+                    mReadyApps.add(item);
+                    mReadyGlyphs.add(null);
+                    mReadySkipUpon.add(Boolean.FALSE);
+                    mReadyIconDescs.add(null);
+                    mReadyMaskSigs.add(null);
+                }
+                kickUploadIfNeeded();
                 continue;
             }
-            if (mAppShortcutInfoClass != null && mAppShortcutInfoClass.isInstance(item)) {
+
+            Object iconDescSnapshot = currentIconDescription();
+            String maskSigSnapshot = sSystemMaskSignature;
+            Bitmap glyph = null;
+            boolean[] skipUponOut = new boolean[1];
+            if (mStyle != null && mStyleClass != null) {
                 try {
-                    mInfoReloadMethod.invoke(item);
+                    int unread = ((Integer) mAppUnreadMethod.invoke(item)).intValue();
+                    if (unread == 0) {
+                        Object compObj = mAppComponentField.get(item);
+                        ComponentName component = compObj instanceof ComponentName ? (ComponentName) compObj : null;
+                        long[] stamp = DrawerIconCache.resolvePackageStamp(component, mCachePkgStamps);
+                        if (mCacheBucketDir != null && component != null && stamp != null
+                                && mCacheIconW > 0 && mCacheIconH > 0) {
+                            glyph = DrawerIconCache.readGlyph(mCacheBucketDir, component,
+                                    stamp[0], stamp[1], mCacheIconW, mCacheIconH, skipUponOut);
+                        }
+                        if (glyph == null) {
+                            glyph = decodeAppGlyphOffGl(item, mStyle, mStyleClass, skipUponOut);
+                            if (glyph != null && mCacheBucketDir != null && component != null && stamp != null
+                                    && currentIconDescription() == iconDescSnapshot
+                                    && sameString(sSystemMaskSignature, maskSigSnapshot)) {
+                                DrawerIconCache.writeGlyph(mCacheBucketDir, component,
+                                        stamp[0], stamp[1], glyph, skipUponOut[0]);
+                            }
+                        }
+                    }
                 } catch (Throwable error) {
-                    Log.w(TAG, "reload custom app info failed", error);
+                    Log.w(TAG, "background icon decode failed", error);
+                    glyph = null;
                 }
             }
+            if (mGeneration != sReloadGeneration) {
+                if (glyph != null && !glyph.isRecycled()) {
+                    glyph.recycle();
+                }
+                clearBufferedGlyphs();
+                return;
+            }
+            synchronized (mPipeLock) {
+                mReadyApps.add(item);
+                mReadyGlyphs.add(glyph);
+                mReadySkipUpon.add(Boolean.valueOf(skipUponOut[0]));
+                mReadyIconDescs.add(iconDescSnapshot);
+                mReadyMaskSigs.add(maskSigSnapshot);
+            }
+            kickUploadIfNeeded();
         }
-        Log.i(TAG, "system icon shape reload complete gen=" + mGeneration + " items=" + mQueue.size());
+        kickUploadIfNeeded();
     }
 
-    private void decodePendingOnWorker() {
-        if (mGeneration != sReloadGeneration) {
-            return;
-        }
-        Object app = mPendingItem;
+    private void runGlUploadStep() {
+        Object item = null;
         Bitmap glyph = null;
-        if (app != null && mStyle != null && mStyleClass != null) {
-            try {
-                glyph = decodeAppGlyphOffGl(app, mStyle, mStyleClass);
-            } catch (Throwable error) {
-                Log.w(TAG, "background icon decode failed", error);
-                glyph = null;
+        boolean skipUpon = false;
+        Object iconDescSnapshot = null;
+        String maskSigSnapshot = null;
+        boolean doneNow = false;
+
+        synchronized (mPipeLock) {
+            mUploadScheduled = false;
+            if (mGeneration != sReloadGeneration) {
+                clearBufferedGlyphs();
+                return;
+            }
+            if (!mReadyApps.isEmpty()) {
+                item = mReadyApps.remove(0);
+                glyph = mReadyGlyphs.remove(0);
+                skipUpon = Boolean.TRUE.equals(mReadySkipUpon.remove(0));
+                iconDescSnapshot = mReadyIconDescs.remove(0);
+                maskSigSnapshot = mReadyMaskSigs.remove(0);
+            } else if (mDecodingDone) {
+                doneNow = true;
             }
         }
-        if (mGeneration != sReloadGeneration) {
-            if (glyph != null && !glyph.isRecycled()) {
-                glyph.recycle();
-            }
+
+        if (doneNow) {
+            Log.i(TAG, "system icon shape reload complete gen=" + mGeneration + " items=" + mQueue.size());
             return;
         }
-        mReadyGlyph = glyph;
-        mMode = MODE_GL_UPLOAD;
-        if (!postToGl(this)) {
-            recycleReadyGlyph();
+
+        if (item == DESKTOP_DONE_MARKER) {
+            reloadDesktopShortcutsAndFolders();
+        } else if (mAppShortcutInfoClass != null && mAppShortcutInfoClass.isInstance(item)) {
+            try {
+                mInfoReloadMethod.invoke(item);
+            } catch (Throwable error) {
+                Log.w(TAG, "reload custom app info failed", error);
+            }
+        } else if (item != null) {
+            boolean staleSnapshot = currentIconDescription() != iconDescSnapshot
+                    || !sameString(sSystemMaskSignature, maskSigSnapshot);
+            if (staleSnapshot) {
+                if (glyph != null && !glyph.isRecycled()) {
+                    glyph.recycle();
+                }
+                try {
+                    mAppReloadMethod.invoke(item);
+                } catch (Throwable ignored) {
+                }
+            } else {
+                uploadSingleGlyphOnGl(item, glyph, skipUpon);
+            }
+        } else if (glyph != null && !glyph.isRecycled()) {
+            glyph.recycle();
+        }
+
+        // Wake worker to keep buffer topped up, and schedule next single-icon upload on the next frame
+        kickWorkerIfNeeded();
+        boolean finishCheck = false;
+        boolean postNext = false;
+        synchronized (mPipeLock) {
+            if (mReadyApps.isEmpty() && mDecodingDone) {
+                finishCheck = true;
+            } else if (!mUploadScheduled && !mReadyApps.isEmpty()) {
+                mUploadScheduled = true;
+                postNext = true;
+            }
+        }
+        if (finishCheck) {
+            Log.i(TAG, "system icon shape reload complete gen=" + mGeneration + " items=" + mQueue.size());
+            return;
+        }
+        if (postNext) {
+            scheduleGlStep(this, MODE_DISPATCH_UPLOAD, 0L);
         }
     }
 
-    private Bitmap decodeAppGlyphOffGl(Object app, Object style, Class<?> styleClass) throws Exception {
+    private Bitmap decodeAppGlyphOffGl(Object app, Object style, Class<?> styleClass, boolean[] skipUponOut)
+            throws Exception {
         int unread = ((Integer) mAppUnreadMethod.invoke(app)).intValue();
         if (unread != 0) {
             return null;
@@ -264,8 +555,8 @@ public final class ShortcutIcon implements Runnable {
             Bitmap matched = (Bitmap) iconClass.getMethod("getIconFilterBitmap", String.class, styleClass)
                     .invoke(icons, component.toString(), style);
             if (matched != null) {
-                matched.recycle();
-                return null;
+                skipUponOut[0] = true;
+                return matched;
             }
         }
         int iconW = styleClass.getField("H").getInt(style);
@@ -291,17 +582,7 @@ public final class ShortcutIcon implements Runnable {
         return tint(scaled, iconClass, icons);
     }
 
-    private void uploadPendingOnGl() {
-        Object app = mPendingItem;
-        Bitmap glyph = mReadyGlyph;
-        mPendingItem = null;
-        mReadyGlyph = null;
-        if (app == null) {
-            if (glyph != null && !glyph.isRecycled()) {
-                glyph.recycle();
-            }
-            return;
-        }
+    private void uploadSingleGlyphOnGl(Object app, Bitmap glyph, boolean skipUpon) {
         if (glyph == null || glyph.isRecycled() || mStyle == null || mStyleClass == null) {
             if (glyph != null && !glyph.isRecycled()) {
                 glyph.recycle();
@@ -325,10 +606,12 @@ public final class ShortcutIcon implements Runnable {
                     .invoke(mStyle, canvas, glyph, Boolean.TRUE);
             glyph = null;
 
-            Class<?> iconClass = Class.forName("com.tsf.shell.theme.inside.mix.ThemeIconManager");
-            Object mix = Class.forName("com.tsf.shell.theme.inside.ThemeManager").getField("mix").get(null);
-            Object icons = mix.getClass().getField("icon").get(mix);
-            drawUpon(canvas, mStyle, mStyleClass, iconClass, icons);
+            if (!skipUpon) {
+                Class<?> iconClass = Class.forName("com.tsf.shell.theme.inside.mix.ThemeIconManager");
+                Object mix = Class.forName("com.tsf.shell.theme.inside.ThemeManager").getField("mix").get(null);
+                Object icons = mix.getClass().getField("icon").get(mix);
+                drawUpon(canvas, mStyle, mStyleClass, iconClass, icons);
+            }
 
             Object rawTitle = mAppTitleField.get(app);
             String title = rawTitle == null ? "" : rawTitle.toString();
@@ -357,13 +640,30 @@ public final class ShortcutIcon implements Runnable {
         }
     }
 
+    private static Object currentIconDescription() {
+        try {
+            Class<?> iconClass = Class.forName("com.tsf.shell.theme.inside.mix.ThemeIconManager");
+            Object mix = Class.forName("com.tsf.shell.theme.inside.ThemeManager").getField("mix").get(null);
+            Object icons = mix.getClass().getField("icon").get(mix);
+            Field description = iconClass.getDeclaredField("mIconDescription");
+            description.setAccessible(true);
+            return description.get(icons);
+        } catch (Throwable ignored) {
+            return null;
+        }
+    }
+
+    private static boolean sameString(String a, String b) {
+        return a == null ? b == null : a.equals(b);
+    }
+
     private boolean prepareReloadQueue() {
         try {
             mStyleClass = Class.forName("com.tsf.shell.manager.o.a");
             mStyle = Class.forName("com.tsf.shell.manager.o.b").getField("a").get(null);
             mAppClass = Class.forName("com.tsf.shell.manager.a.f");
-            mAppShortcutInfoClass = Class.forName("com.censivn.C3DEngine.api.element.info.shortcut.LauncherShortcutAppInfo");
             Class<?> appWidgetClass = Class.forName("com.tsf.shell.f.i.b.e.g");
+            mAppShortcutInfoClass = Class.forName("com.censivn.C3DEngine.api.element.info.shortcut.LauncherShortcutAppInfo");
             mAppReloadMethod = mAppClass.getMethod("f");
             mAppLoadRawMethod = mAppClass.getMethod("g");
             mAppUnreadMethod = mAppClass.getMethod("h");
@@ -374,7 +674,27 @@ public final class ShortcutIcon implements Runnable {
             Method getWidgetMethod = mAppShortcutInfoClass.getMethod("getWidget");
             Method isCustomTextureMethod = mAppShortcutInfoClass.getMethod("isCustomTexture");
             Method getAppMethod = appWidgetClass.getMethod("bd");
-            Field textureIdField = Class.forName("com.censivn.C3DEngine.api.element.TextureElement").getField("id");
+            mTextureIdField = Class.forName("com.censivn.C3DEngine.api.element.TextureElement").getField("id");
+
+            try {
+                if (mStyle != null) {
+                    mCacheIconW = mStyleClass.getField("H").getInt(mStyle);
+                    mCacheIconH = mStyleClass.getField("I").getInt(mStyle);
+                    Context context = DrawerIconCache.getAppContext();
+                    Class<?> iconClass = Class.forName("com.tsf.shell.theme.inside.mix.ThemeIconManager");
+                    Object mix = Class.forName("com.tsf.shell.theme.inside.ThemeManager").getField("mix").get(null);
+                    Object icons = mix.getClass().getField("icon").get(mix);
+                    if (mCacheIconW > 0 && mCacheIconH > 0) {
+                        ensureRuntimeMasksReady(context, mCacheIconW, mCacheIconH);
+                        warmThemeResourcesOnGl(icons, iconClass, mStyleClass, mStyle);
+                        mCachePkgStamps = DrawerIconCache.loadPackageStamps(context);
+                        mCacheBucketDir = DrawerIconCache.resolveBucketDir(context, icons, iconClass,
+                                mStyleClass, mStyle, mCacheIconW, mCacheIconH, mCachePkgStamps);
+                    }
+                }
+            } catch (Throwable ignored) {
+                mCacheBucketDir = null;
+            }
 
             ArrayList<Object> queue = new ArrayList<Object>();
             HashSet<Object> seenApps = new HashSet<Object>();
@@ -393,7 +713,7 @@ public final class ShortcutIcon implements Runnable {
                 Object widget = getWidgetMethod.invoke(info);
                 if (widget != null && appWidgetClass.isInstance(widget)) {
                     Object app = getAppMethod.invoke(widget);
-                    if (app != null && hasLoadedTexture(app, mAppTextureField, textureIdField) && seenApps.add(app)) {
+                    if (app != null && hasLoadedTexture(app, mAppTextureField, mTextureIdField) && seenApps.add(app)) {
                         queue.add(app);
                     }
                 }
@@ -407,14 +727,14 @@ public final class ShortcutIcon implements Runnable {
                 if (rawList instanceof List) {
                     ArrayList<Object> allApps = new ArrayList<Object>((List<?>) rawList);
                     for (Object app : allApps) {
-                        if (app != null && hasLoadedTexture(app, mAppTextureField, textureIdField) && seenApps.add(app)) {
+                        if (app != null && hasLoadedTexture(app, mAppTextureField, mTextureIdField) && seenApps.add(app)) {
                             queue.add(app);
                         }
                     }
                 }
             }
             mQueue = queue;
-            mIndex = 0;
+            mDecodeIndex = 0;
             return true;
         } catch (Throwable error) {
             Log.w(TAG, "build async reload queue failed", error);
@@ -669,9 +989,7 @@ public final class ShortcutIcon implements Runnable {
             Log.i(TAG, "compose scale=" + contentScale + " plate=" + (plate != null) + " mask=" + (mask != null));
             return tint(glyph, iconClass, icons);
         }
-        Rect bounds = opaqueBounds(source);
         if (Build.VERSION.SDK_INT >= 26) {
-            Bitmap fitted = fit(source, bounds, iconW, iconH);
             Bitmap sysMask;
             int[] maskPixels;
             synchronized (MASK_LOCK) {
@@ -680,25 +998,33 @@ public final class ShortcutIcon implements Runnable {
                 maskPixels = sCachedMaskPixels;
             }
             if (sysMask != null && maskPixels != null) {
-                boolean needClip = shouldApplySystemMask(fitted, maskPixels);
-                if (needClip) {
+                if (!shortcut) {
+                    Rect bounds = new Rect();
+                    if (!shouldApplySystemMaskDirect(source, iconW, iconH, maskPixels, bounds)) {
+                        Log.i(TAG, "compose scale=" + contentScale + " shaped=false skip");
+                        return null;
+                    }
+                    Bitmap fitted = fit(source, bounds, iconW, iconH);
                     applyMask(fitted, sysMask);
                     Log.i(TAG, "compose scale=" + contentScale + " shaped=false systemMask=true");
                     return tint(fitted, iconClass, icons);
                 }
-                if (!shortcut) {
-                    fitted.recycle();
-                    Log.i(TAG, "compose scale=" + contentScale + " shaped=false skip");
-                    return null;
+                Rect bounds = opaqueBounds(source);
+                Bitmap fitted = fit(source, bounds, iconW, iconH);
+                if (shouldApplySystemMask(fitted, maskPixels)) {
+                    applyMask(fitted, sysMask);
+                    Log.i(TAG, "compose scale=" + contentScale + " shaped=false systemMask=true");
+                    return tint(fitted, iconClass, icons);
                 }
                 Log.i(TAG, "compose scale=" + contentScale + " shaped=false keep");
                 return tint(fitted, iconClass, icons);
             }
             if (!shortcut) {
-                fitted.recycle();
                 Log.i(TAG, "compose scale=" + contentScale + " shaped=false skip");
                 return null;
             }
+            Rect bounds = opaqueBounds(source);
+            Bitmap fitted = fit(source, bounds, iconW, iconH);
             if (fills(source, bounds)) {
                 clipRounded(fitted, 0.22f);
                 Log.i(TAG, "compose scale=" + contentScale + " shaped=false round");
@@ -711,6 +1037,7 @@ public final class ShortcutIcon implements Runnable {
             Log.i(TAG, "compose scale=" + contentScale + " shaped=false skip");
             return null;
         }
+        Rect bounds = opaqueBounds(source);
         Bitmap fitted = fit(source, bounds, iconW, iconH);
         if (fills(source, bounds)) {
             clipRounded(fitted, 0.22f);
@@ -921,6 +1248,89 @@ public final class ShortcutIcon implements Runnable {
             Log.w(TAG, "system shape mask failed", error);
             return null;
         }
+    }
+
+    private static boolean shouldApplySystemMaskDirect(Bitmap source, int maskW, int maskH,
+            int[] maskPixels, Rect outBounds) {
+        int sw = source.getWidth();
+        int sh = source.getHeight();
+        if (sw <= 0 || sh <= 0 || maskW <= 0 || maskH <= 0 || maskPixels == null || maskPixels.length < maskW * maskH) {
+            return false;
+        }
+        int[] srcPixels = new int[sw * sh];
+        source.getPixels(srcPixels, 0, sw, 0, 0, sw, sh);
+        int left = sw;
+        int top = sh;
+        int right = -1;
+        int bottom = -1;
+        for (int y = 0; y < sh; y++) {
+            int row = y * sw;
+            for (int x = 0; x < sw; x++) {
+                if (((srcPixels[row + x] >>> 24) & 0xff) > 16) {
+                    if (x < left) {
+                        left = x;
+                    }
+                    if (y < top) {
+                        top = y;
+                    }
+                    if (x > right) {
+                        right = x;
+                    }
+                    if (y > bottom) {
+                        bottom = y;
+                    }
+                }
+            }
+        }
+        if (right < left || bottom < top) {
+            return false;
+        }
+        int bw = right - left + 1;
+        int bh = bottom - top + 1;
+        outBounds.set(left, top, right + 1, bottom + 1);
+
+        float scale = Math.min(maskW / (float) bw, maskH / (float) bh);
+        float drawnW = bw * scale;
+        float drawnH = bh * scale;
+        float offsetX = (maskW - drawnW) / 2f;
+        float offsetY = (maskH - drawnH) / 2f;
+
+        int sampled = 0;
+        int opaque = 0;
+        int outside = 0;
+        for (int y = 0; y < maskH; y += 2) {
+            int maskRow = y * maskW;
+            boolean inY = y >= offsetY && y < offsetY + drawnH;
+            int sy = 0;
+            if (inY) {
+                sy = top + (int) ((y - offsetY) / scale);
+                if (sy < top) {
+                    sy = top;
+                } else if (sy > bottom) {
+                    sy = bottom;
+                }
+            }
+            int srcRow = sy * sw;
+            for (int x = 0; x < maskW; x += 2) {
+                sampled++;
+                if (!inY || x < offsetX || x >= offsetX + drawnW) {
+                    continue;
+                }
+                int sx = left + (int) ((x - offsetX) / scale);
+                if (sx < left) {
+                    sx = left;
+                } else if (sx > right) {
+                    sx = right;
+                }
+                if (((srcPixels[srcRow + sx] >>> 24) & 0xff) > 16) {
+                    opaque++;
+                    if (((maskPixels[maskRow + x] >>> 24) & 0xff) <= 16) {
+                        outside++;
+                    }
+                }
+            }
+        }
+        return sampled > 0 && opaque * 100 >= sampled * 65 && outside * 1000 >= sampled * 15;
     }
 
     private static boolean shouldApplySystemMask(Bitmap fitted, int[] maskPixels) {
