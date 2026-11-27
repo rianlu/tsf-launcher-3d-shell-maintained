@@ -27,13 +27,17 @@
 
 # direct methods
 .method constructor <init>(Lcom/tsf/shell/f/f/a/c/c;Landroid/view/MotionEvent;Lcom/tsf/shell/f/i/c;)V
-    .locals 0
+    .locals 1
 
     .prologue
     .line 1030
     iput-object p1, p0, Lcom/tsf/shell/f/f/a/c/c$2;->c:Lcom/tsf/shell/f/f/a/c/c;
 
-    iput-object p2, p0, Lcom/tsf/shell/f/f/a/c/c$2;->a:Landroid/view/MotionEvent;
+    invoke-static {p2}, Lcom/tsf/shell/compat/MotionEventCompat;->obtainCopy(Landroid/view/MotionEvent;)Landroid/view/MotionEvent;
+
+    move-result-object v0
+
+    iput-object v0, p0, Lcom/tsf/shell/f/f/a/c/c$2;->a:Landroid/view/MotionEvent;
 
     iput-object p3, p0, Lcom/tsf/shell/f/f/a/c/c$2;->b:Lcom/tsf/shell/f/i/c;
 
@@ -48,6 +52,7 @@
     .locals 7
 
     .prologue
+    :try_start_me
     const/high16 v6, 0x40000000    # 2.0f
 
     const/4 v5, 0x1
@@ -71,7 +76,7 @@
     .line 1106
     :cond_0
     :goto_0
-    return-void
+    goto/16 :goto_me_exit
 
     .line 1042
     :cond_1
@@ -366,4 +371,23 @@
     invoke-virtual/range {v0 .. v5}, Lcom/tsf/shell/f/f/a/c/c;->a(Lcom/censivn/C3DEngine/b/f/j;Lcom/tsf/shell/f/i/b;IFF)V
 
     goto/16 :goto_0
+
+    :try_end_me
+    .catchall {:try_start_me .. :try_end_me} :catchall_me
+
+    :goto_me_exit
+    iget-object v0, p0, Lcom/tsf/shell/f/f/a/c/c$2;->a:Landroid/view/MotionEvent;
+
+    invoke-static {v0}, Lcom/tsf/shell/compat/MotionEventCompat;->recycleQuietly(Landroid/view/MotionEvent;)V
+
+    return-void
+
+    :catchall_me
+    move-exception v0
+
+    iget-object v1, p0, Lcom/tsf/shell/f/f/a/c/c$2;->a:Landroid/view/MotionEvent;
+
+    invoke-static {v1}, Lcom/tsf/shell/compat/MotionEventCompat;->recycleQuietly(Landroid/view/MotionEvent;)V
+
+    throw v0
 .end method

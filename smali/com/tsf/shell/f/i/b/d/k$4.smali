@@ -25,13 +25,17 @@
 
 # direct methods
 .method constructor <init>(Lcom/tsf/shell/f/i/b/d/k;Landroid/view/MotionEvent;)V
-    .locals 0
+    .locals 1
 
     .prologue
     .line 434
     iput-object p1, p0, Lcom/tsf/shell/f/i/b/d/k$4;->b:Lcom/tsf/shell/f/i/b/d/k;
 
-    iput-object p2, p0, Lcom/tsf/shell/f/i/b/d/k$4;->a:Landroid/view/MotionEvent;
+    invoke-static {p2}, Lcom/tsf/shell/compat/MotionEventCompat;->obtainCopy(Landroid/view/MotionEvent;)Landroid/view/MotionEvent;
+
+    move-result-object v0
+
+    iput-object v0, p0, Lcom/tsf/shell/f/i/b/d/k$4;->a:Landroid/view/MotionEvent;
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
@@ -44,6 +48,7 @@
     .locals 6
 
     .prologue
+    :try_start_me
     const/4 v1, 0x0
 
     const/4 v5, 0x1
@@ -297,7 +302,22 @@
     iget-object v0, p0, Lcom/tsf/shell/f/i/b/d/k$4;->b:Lcom/tsf/shell/f/i/b/d/k;
 
     iput-boolean v5, v0, Lcom/tsf/shell/f/i/b/d/k;->a:Z
+    :try_end_me
+    .catchall {:try_start_me .. :try_end_me} :catchall_me
+
+    iget-object v0, p0, Lcom/tsf/shell/f/i/b/d/k$4;->a:Landroid/view/MotionEvent;
+
+    invoke-static {v0}, Lcom/tsf/shell/compat/MotionEventCompat;->recycleQuietly(Landroid/view/MotionEvent;)V
 
     .line 490
     return-void
+
+    :catchall_me
+    move-exception v0
+
+    iget-object v1, p0, Lcom/tsf/shell/f/i/b/d/k$4;->a:Landroid/view/MotionEvent;
+
+    invoke-static {v1}, Lcom/tsf/shell/compat/MotionEventCompat;->recycleQuietly(Landroid/view/MotionEvent;)V
+
+    throw v0
 .end method

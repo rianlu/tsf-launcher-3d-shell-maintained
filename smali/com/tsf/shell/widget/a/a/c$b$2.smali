@@ -25,13 +25,17 @@
 
 # direct methods
 .method constructor <init>(Lcom/tsf/shell/widget/a/a/c$b;Landroid/view/MotionEvent;)V
-    .locals 0
+    .locals 1
 
     .prologue
     .line 257
     iput-object p1, p0, Lcom/tsf/shell/widget/a/a/c$b$2;->b:Lcom/tsf/shell/widget/a/a/c$b;
 
-    iput-object p2, p0, Lcom/tsf/shell/widget/a/a/c$b$2;->a:Landroid/view/MotionEvent;
+    invoke-static {p2}, Lcom/tsf/shell/compat/MotionEventCompat;->obtainCopy(Landroid/view/MotionEvent;)Landroid/view/MotionEvent;
+
+    move-result-object v0
+
+    iput-object v0, p0, Lcom/tsf/shell/widget/a/a/c$b$2;->a:Landroid/view/MotionEvent;
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
@@ -44,6 +48,7 @@
     .locals 3
 
     .prologue
+    :try_start_me
     .line 262
     iget-object v0, p0, Lcom/tsf/shell/widget/a/a/c$b$2;->b:Lcom/tsf/shell/widget/a/a/c$b;
 
@@ -67,7 +72,22 @@
     iget v0, v0, Lcom/censivn/C3DEngine/api/element/Number3d;->y:F
 
     invoke-virtual {v1, v2, v0}, Lcom/tsf/shell/widget/a/a/c$a;->a(FF)V
+    :try_end_me
+    .catchall {:try_start_me .. :try_end_me} :catchall_me
+
+    iget-object v0, p0, Lcom/tsf/shell/widget/a/a/c$b$2;->a:Landroid/view/MotionEvent;
+
+    invoke-static {v0}, Lcom/tsf/shell/compat/MotionEventCompat;->recycleQuietly(Landroid/view/MotionEvent;)V
 
     .line 266
     return-void
+
+    :catchall_me
+    move-exception v0
+
+    iget-object v1, p0, Lcom/tsf/shell/widget/a/a/c$b$2;->a:Landroid/view/MotionEvent;
+
+    invoke-static {v1}, Lcom/tsf/shell/compat/MotionEventCompat;->recycleQuietly(Landroid/view/MotionEvent;)V
+
+    throw v0
 .end method

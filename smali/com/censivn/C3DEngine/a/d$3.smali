@@ -31,15 +31,23 @@
 
 # direct methods
 .method constructor <init>(Lcom/censivn/C3DEngine/a/d;Landroid/view/MotionEvent;Landroid/view/MotionEvent;FF)V
-    .locals 0
+    .locals 1
 
     .prologue
     .line 380
     iput-object p1, p0, Lcom/censivn/C3DEngine/a/d$3;->e:Lcom/censivn/C3DEngine/a/d;
 
-    iput-object p2, p0, Lcom/censivn/C3DEngine/a/d$3;->a:Landroid/view/MotionEvent;
+    invoke-static {p2}, Lcom/tsf/shell/compat/MotionEventCompat;->obtainCopy(Landroid/view/MotionEvent;)Landroid/view/MotionEvent;
 
-    iput-object p3, p0, Lcom/censivn/C3DEngine/a/d$3;->b:Landroid/view/MotionEvent;
+    move-result-object v0
+
+    iput-object v0, p0, Lcom/censivn/C3DEngine/a/d$3;->a:Landroid/view/MotionEvent;
+
+    invoke-static {p3}, Lcom/tsf/shell/compat/MotionEventCompat;->obtainCopy(Landroid/view/MotionEvent;)Landroid/view/MotionEvent;
+
+    move-result-object v0
+
+    iput-object v0, p0, Lcom/censivn/C3DEngine/a/d$3;->b:Landroid/view/MotionEvent;
 
     iput p4, p0, Lcom/censivn/C3DEngine/a/d$3;->c:F
 
@@ -56,6 +64,7 @@
     .locals 5
 
     .prologue
+    :try_start_me
     .line 383
     iget-object v0, p0, Lcom/censivn/C3DEngine/a/d$3;->e:Lcom/censivn/C3DEngine/a/d;
 
@@ -72,7 +81,26 @@
     iget v4, p0, Lcom/censivn/C3DEngine/a/d$3;->d:F
 
     invoke-virtual {v0, v1, v2, v3, v4}, Lcom/tsf/shell/f/i/a/a;->b(Landroid/view/MotionEvent;Landroid/view/MotionEvent;FF)V
+    :try_end_me
+    .catchall {:try_start_me .. :try_end_me} :catchall_me
+
+    iget-object v0, p0, Lcom/censivn/C3DEngine/a/d$3;->a:Landroid/view/MotionEvent;
+
+    iget-object v1, p0, Lcom/censivn/C3DEngine/a/d$3;->b:Landroid/view/MotionEvent;
+
+    invoke-static {v0, v1}, Lcom/tsf/shell/compat/MotionEventCompat;->recycleQuietly(Landroid/view/MotionEvent;Landroid/view/MotionEvent;)V
 
     .line 385
     return-void
+
+    :catchall_me
+    move-exception v0
+
+    iget-object v1, p0, Lcom/censivn/C3DEngine/a/d$3;->a:Landroid/view/MotionEvent;
+
+    iget-object v2, p0, Lcom/censivn/C3DEngine/a/d$3;->b:Landroid/view/MotionEvent;
+
+    invoke-static {v1, v2}, Lcom/tsf/shell/compat/MotionEventCompat;->recycleQuietly(Landroid/view/MotionEvent;Landroid/view/MotionEvent;)V
+
+    throw v0
 .end method
