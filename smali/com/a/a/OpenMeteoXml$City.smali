@@ -21,28 +21,30 @@
 
 .field latitude:D
 
+.field locationKey:Ljava/lang/String;
+
 .field longitude:D
 
 .field name:Ljava/lang/String;
-
-.field stationId:Ljava/lang/String;
 
 .field timezone:Ljava/lang/String;
 
 
 # direct methods
 .method private constructor <init>()V
-    .locals 2
+    .locals 3
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
-    const-wide/high16 v0, 0x7ff8000000000000L    # Double.NaN
-
-    iput-wide v0, p0, Lcom/a/a/OpenMeteoXml$City;->latitude:D
-
-    iput-wide v0, p0, Lcom/a/a/OpenMeteoXml$City;->longitude:D
-
     const-string v0, ""
+
+    iput-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->locationKey:Ljava/lang/String;
+
+    const-wide/high16 v1, 0x7ff8000000000000L    # Double.NaN
+
+    iput-wide v1, p0, Lcom/a/a/OpenMeteoXml$City;->latitude:D
+
+    iput-wide v1, p0, Lcom/a/a/OpenMeteoXml$City;->longitude:D
 
     iput-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->timezone:Ljava/lang/String;
 
@@ -51,8 +53,6 @@
     iput-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->admin:Ljava/lang/String;
 
     iput-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->country:Ljava/lang/String;
-
-    iput-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->stationId:Ljava/lang/String;
 
     return-void
 .end method
@@ -108,36 +108,87 @@
     return v0
 .end method
 
-.method payload()Ljava/lang/String;
-    .locals 4
+.method isGlobal()Z
+    .locals 3
 
-    iget-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->stationId:Ljava/lang/String;
+    iget-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->locationKey:Ljava/lang/String;
 
-    const-string v1, "|"
+    const-string v1, "weathercn:"
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
+
+    move-result v0
+
+    const/4 v1, 0x0
 
     if-eqz v0, :cond_0
 
-    iget-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->stationId:Ljava/lang/String;
+    return v1
+
+    :cond_0
+    iget-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->locationKey:Ljava/lang/String;
 
     invoke-virtual {v0}, Ljava/lang/String;->length()I
 
     move-result v0
 
-    if-lez v0, :cond_0
+    const/4 v2, 0x1
+
+    if-lez v0, :cond_1
+
+    return v2
+
+    :cond_1
+    iget-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->country:Ljava/lang/String;
+
+    invoke-virtual {v0}, Ljava/lang/String;->length()I
+
+    move-result v0
+
+    if-lez v0, :cond_2
+
+    iget-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->country:Ljava/lang/String;
+
+    invoke-static {v0}, Lcom/a/a/OpenMeteoXml;->access$100(Ljava/lang/String;)Z
+
+    move-result v0
+
+    if-nez v0, :cond_2
+
+    const/4 v1, 0x1
+
+    :cond_2
+    return v1
+.end method
+
+.method payload()Ljava/lang/String;
+    .locals 5
+
+    iget-object v0, p0, Lcom/a/a/OpenMeteoXml$City;->locationKey:Ljava/lang/String;
+
+    invoke-virtual {v0}, Ljava/lang/String;->length()I
+
+    move-result v0
+
+    const-string v1, ","
+
+    const-string v2, "|"
+
+    if-lez v0, :cond_1
+
+    invoke-virtual {p0}, Lcom/a/a/OpenMeteoXml$City;->hasCoordinates()Z
+
+    move-result v0
+
+    if-eqz v0, :cond_0
 
     new-instance v0, Ljava/lang/StringBuilder;
 
     invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
 
-    const-string v2, "cn:"
+    iget-wide v3, p0, Lcom/a/a/OpenMeteoXml$City;->latitude:D
 
-    invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v0
-
-    iget-object v2, p0, Lcom/a/a/OpenMeteoXml$City;->stationId:Ljava/lang/String;
-
-    invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {v0, v3, v4}, Ljava/lang/StringBuilder;->append(D)Ljava/lang/StringBuilder;
 
     move-result-object v0
 
@@ -145,31 +196,79 @@
 
     move-result-object v0
 
-    iget-object v2, p0, Lcom/a/a/OpenMeteoXml$City;->name:Ljava/lang/String;
+    iget-wide v3, p0, Lcom/a/a/OpenMeteoXml$City;->longitude:D
 
-    invoke-static {v2}, Lcom/a/a/OpenMeteoXml$City;->safe(Ljava/lang/String;)Ljava/lang/String;
+    invoke-virtual {v0, v3, v4}, Ljava/lang/StringBuilder;->append(D)Ljava/lang/StringBuilder;
 
-    move-result-object v2
+    move-result-object v0
+
+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    goto :goto_0
+
+    :cond_0
+    const-string v0, ""
+
+    :goto_0
+    new-instance v1, Ljava/lang/StringBuilder;
+
+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v3, "xm:"
+
+    invoke-virtual {v1, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    iget-object v3, p0, Lcom/a/a/OpenMeteoXml$City;->locationKey:Ljava/lang/String;
+
+    invoke-static {v3}, Lcom/a/a/OpenMeteoXml$City;->safe(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v3
+
+    invoke-virtual {v1, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
 
     invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     move-result-object v0
 
+    iget-object v1, p0, Lcom/a/a/OpenMeteoXml$City;->name:Ljava/lang/String;
+
+    invoke-static {v1}, Lcom/a/a/OpenMeteoXml$City;->safe(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v1
+
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     move-result-object v0
-
-    iget-object v2, p0, Lcom/a/a/OpenMeteoXml$City;->admin:Ljava/lang/String;
-
-    invoke-static {v2}, Lcom/a/a/OpenMeteoXml$City;->safe(Ljava/lang/String;)Ljava/lang/String;
-
-    move-result-object v2
 
     invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     move-result-object v0
 
+    iget-object v1, p0, Lcom/a/a/OpenMeteoXml$City;->admin:Ljava/lang/String;
+
+    invoke-static {v1}, Lcom/a/a/OpenMeteoXml$City;->safe(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v1
+
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     move-result-object v0
 
@@ -189,26 +288,14 @@
 
     return-object v0
 
-    :cond_0
+    :cond_1
     new-instance v0, Ljava/lang/StringBuilder;
 
     invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
 
-    iget-wide v2, p0, Lcom/a/a/OpenMeteoXml$City;->latitude:D
+    iget-wide v3, p0, Lcom/a/a/OpenMeteoXml$City;->latitude:D
 
-    invoke-virtual {v0, v2, v3}, Ljava/lang/StringBuilder;->append(D)Ljava/lang/StringBuilder;
-
-    move-result-object v0
-
-    const-string v2, ","
-
-    invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v0
-
-    iget-wide v2, p0, Lcom/a/a/OpenMeteoXml$City;->longitude:D
-
-    invoke-virtual {v0, v2, v3}, Ljava/lang/StringBuilder;->append(D)Ljava/lang/StringBuilder;
+    invoke-virtual {v0, v3, v4}, Ljava/lang/StringBuilder;->append(D)Ljava/lang/StringBuilder;
 
     move-result-object v0
 
@@ -216,45 +303,55 @@
 
     move-result-object v0
 
-    iget-object v2, p0, Lcom/a/a/OpenMeteoXml$City;->timezone:Ljava/lang/String;
+    iget-wide v3, p0, Lcom/a/a/OpenMeteoXml$City;->longitude:D
 
-    invoke-static {v2}, Lcom/a/a/OpenMeteoXml$City;->safe(Ljava/lang/String;)Ljava/lang/String;
+    invoke-virtual {v0, v3, v4}, Ljava/lang/StringBuilder;->append(D)Ljava/lang/StringBuilder;
 
-    move-result-object v2
+    move-result-object v0
 
     invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     move-result-object v0
 
+    iget-object v1, p0, Lcom/a/a/OpenMeteoXml$City;->timezone:Ljava/lang/String;
+
+    invoke-static {v1}, Lcom/a/a/OpenMeteoXml$City;->safe(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v1
+
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     move-result-object v0
-
-    iget-object v2, p0, Lcom/a/a/OpenMeteoXml$City;->name:Ljava/lang/String;
-
-    invoke-static {v2}, Lcom/a/a/OpenMeteoXml$City;->safe(Ljava/lang/String;)Ljava/lang/String;
-
-    move-result-object v2
 
     invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     move-result-object v0
 
+    iget-object v1, p0, Lcom/a/a/OpenMeteoXml$City;->name:Ljava/lang/String;
+
+    invoke-static {v1}, Lcom/a/a/OpenMeteoXml$City;->safe(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v1
+
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     move-result-object v0
-
-    iget-object v2, p0, Lcom/a/a/OpenMeteoXml$City;->admin:Ljava/lang/String;
-
-    invoke-static {v2}, Lcom/a/a/OpenMeteoXml$City;->safe(Ljava/lang/String;)Ljava/lang/String;
-
-    move-result-object v2
 
     invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     move-result-object v0
 
+    iget-object v1, p0, Lcom/a/a/OpenMeteoXml$City;->admin:Ljava/lang/String;
+
+    invoke-static {v1}, Lcom/a/a/OpenMeteoXml$City;->safe(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v1
+
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     move-result-object v0
 

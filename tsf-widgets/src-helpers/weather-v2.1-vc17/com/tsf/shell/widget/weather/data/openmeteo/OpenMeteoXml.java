@@ -27,6 +27,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -39,12 +40,18 @@ public final class OpenMeteoXml {
             "http://androiddoes.accu-weather.com/widget/androiddoes/city-find.asp";
     private static final String ACCU_WEATHER =
             "http://androiddoes.accu-weather.com/widget/androiddoes/weather-data.asp";
-    private static final String CHINA_WEATHER_INDEX =
-            "https://d1.weather.com.cn/weather_index/";
-    private static final String CHINA_WEATHER_CURRENT =
-            "https://d1.weather.com.cn/sk_2d/";
-    private static final String NMC_WEATHER =
-            "https://www.nmc.cn/rest/weather?stationid=";
+    private static final String XIAOMI_WEATHER =
+            "https://weatherapi.market.xiaomi.com/wtr-v3/weather/all";
+    private static final String XIAOMI_CITY_SEARCH =
+            "https://weatherapi.market.xiaomi.com/wtr-v3/location/city/search";
+    private static final String XIAOMI_CITY_GEO =
+            "https://weatherapi.market.xiaomi.com/wtr-v3/location/city/geo";
+    private static final String XIAOMI_APP_KEY = "weather20151024";
+    private static final String XIAOMI_SIGN = "zUFJoAR2ZVrDy1vF3D07";
+    private static final String OPEN_METEO_GEO =
+            "https://geocoding-api.open-meteo.com/v1/search";
+    private static final String OPEN_METEO_FORECAST =
+            "https://api.open-meteo.com/v1/forecast";
     private static final int LOCATION_PERMISSION_REQUEST = 17001;
 
     private OpenMeteoXml() {
@@ -66,11 +73,7 @@ public final class OpenMeteoXml {
             String lat = queryParam(targetUrl, "slat");
             String lon = queryParam(targetUrl, "slon");
             if (lat != null && lon != null) {
-                City city = new City();
-                city.latitude = Double.parseDouble(lat);
-                city.longitude = Double.parseDouble(lon);
-                city.timezone = "auto";
-                applyLocationLabel(city, currentLocationName());
+                City city = resolveGeoCity(parseDouble(lat), parseDouble(lon));
                 return toStream(buildWeatherXml(city));
             }
         }
@@ -123,27 +126,42 @@ public final class OpenMeteoXml {
     }
 
     public static String describeLocation(Context context, double latitude, double longitude) {
-        if (context == null) {
-            return null;
-        }
-        try {
-            List<Address> addresses = new Geocoder(context, Locale.getDefault())
-                    .getFromLocation(latitude, longitude, 1);
-            if (addresses == null || addresses.isEmpty()) {
-                return null;
+        boolean preferXiaomi = isInChinaBounds(latitude, longitude) || isChineseLocale();
+        if (preferXiaomi) {
+            City geo = queryGeoCity(latitude, longitude);
+            if (geo != null && geo.name.length() > 0) {
+                return geo.name;
             }
-            Address address = addresses.get(0);
-            StringBuilder result = new StringBuilder();
-            appendPart(result, firstNonEmpty(
-                    address.getLocality(),
-                    address.getSubAdminArea(),
-                    address.getAdminArea()));
-            appendPart(result, address.getAdminArea());
-            appendPart(result, address.getCountryName());
-            return result.length() == 0 ? null : result.toString();
-        } catch (Exception ignored) {
-            return null;
         }
+        if (context != null) {
+            try {
+                List<Address> addresses = new Geocoder(context, Locale.getDefault())
+                        .getFromLocation(latitude, longitude, 1);
+                if (addresses != null && !addresses.isEmpty()) {
+                    Address address = addresses.get(0);
+                    String name = preferXiaomi
+                            ? firstNonEmpty(
+                                    address.getSubLocality(),
+                                    address.getLocality(),
+                                    firstNonEmpty(address.getSubAdminArea(), address.getAdminArea(), ""))
+                            : firstNonEmpty(
+                                    address.getLocality(),
+                                    address.getSubAdminArea(),
+                                    address.getAdminArea());
+                    if (name != null && name.length() > 0) {
+                        return name;
+                    }
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        if (!preferXiaomi) {
+            City geo = queryGeoCity(latitude, longitude);
+            if (geo != null && geo.name.length() > 0) {
+                return geo.name;
+            }
+        }
+        return null;
     }
 
     private static Location bestLastKnown(LocationManager manager) {
@@ -224,19 +242,6 @@ public final class OpenMeteoXml {
         return name == null || name.length() == 0 ? "Current Location" : name;
     }
 
-    private static void appendPart(StringBuilder builder, String value) {
-        if (value == null || value.length() == 0) {
-            return;
-        }
-        if (builder.indexOf(value) >= 0) {
-            return;
-        }
-        if (builder.length() > 0) {
-            builder.append(',');
-        }
-        builder.append(value);
-    }
-
     private static String displayLocation(String city, String admin) {
         StringBuilder builder = new StringBuilder();
         appendPart(builder, city);
@@ -244,162 +249,285 @@ public final class OpenMeteoXml {
         return builder.toString();
     }
 
-    private static void applyLocationLabel(City city, String label) {
-        if (city == null || label == null) {
-            return;
-        }
-        String[] parts = label.split("[,，]", -1);
-        if (parts.length > 0) {
-            city.name = safe(parts[0]);
-        } else {
-            city.name = safe(label);
-        }
-        if (parts.length > 1) {
-            city.admin = safe(parts[1]);
-        }
-        if (parts.length > 2) {
-            city.country = safe(parts[2]);
-        }
-    }
-
     private static String buildCityXml(String keyword) throws IOException {
         if (keyword == null || keyword.trim().length() == 0) {
             return "<locations/>";
         }
-        List<NmcCityIndex.Entry> localMatches = NmcCityIndex.search(keyword.trim(), 10);
+        String trimmed = keyword.trim();
+
+        // Offline ChinaCityIndex matches 3,221 Chinese cities/districts with zero latency.
+        List<ChinaCityIndex.Entry> localMatches = ChinaCityIndex.search(trimmed, 10);
         if (!localMatches.isEmpty()) {
             return buildChinaCityXml(localMatches);
         }
-        return buildInternationalCityXml(keyword.trim());
+
+        if (isChineseLocale()) {
+            String xiaomiXml = trySearchXiaomiCityXml(trimmed);
+            if (xiaomiXml != null) {
+                return xiaomiXml;
+            }
+            String openMeteoXml = trySearchOpenMeteoCityXml(trimmed);
+            if (openMeteoXml != null) {
+                return openMeteoXml;
+            }
+        } else {
+            String openMeteoXml = trySearchOpenMeteoCityXml(trimmed);
+            if (openMeteoXml != null) {
+                return openMeteoXml;
+            }
+            String xiaomiXml = trySearchXiaomiCityXml(trimmed);
+            if (xiaomiXml != null) {
+                return xiaomiXml;
+            }
+        }
+        return "<locations/>";
     }
 
-    private static String buildChinaCityXml(List<NmcCityIndex.Entry> matches) {
+    private static String trySearchXiaomiCityXml(String keyword) {
+        try {
+            JSONArray results = searchXiaomiCities(keyword);
+            if (results != null && results.length() > 0) {
+                String xml = buildXiaomiCityXml(results);
+                if (xml.indexOf("<location ") >= 0) {
+                    return xml;
+                }
+            }
+        } catch (IOException ignored) {
+        }
+        return null;
+    }
+
+    private static String trySearchOpenMeteoCityXml(String keyword) {
+        try {
+            String url = OPEN_METEO_GEO
+                    + "?name=" + URLEncoder.encode(keyword, "UTF-8")
+                    + "&count=10&language=" + URLEncoder.encode(openMeteoLanguage(), "UTF-8")
+                    + "&format=json";
+            JSONObject root = jsonObject(readUrl(url));
+            JSONArray results = root.optJSONArray("results");
+            if (results != null && results.length() > 0) {
+                StringBuilder xml = new StringBuilder();
+                xml.append("<locations>");
+                for (int i = 0; i < results.length(); i++) {
+                    JSONObject item = results.optJSONObject(i);
+                    if (item == null) {
+                        continue;
+                    }
+                    City city = fromOpenMeteoLocation(item);
+                    if (!city.hasCoordinates()) {
+                        continue;
+                    }
+                    appendLocationXml(xml, city);
+                }
+                xml.append("</locations>");
+                if (xml.indexOf("<location ") >= 0) {
+                    return xml.toString();
+                }
+            }
+        } catch (IOException ignored) {
+        }
+        return null;
+    }
+
+    private static JSONArray searchXiaomiCities(String keyword) throws IOException {
+        String url = XIAOMI_CITY_SEARCH
+                + "?name=" + URLEncoder.encode(keyword, "UTF-8")
+                + "&locale=" + URLEncoder.encode(xiaomiLocale(), "UTF-8");
+        return jsonArray(readUrl(url));
+    }
+
+    private static String buildXiaomiCityXml(JSONArray results) {
+        StringBuilder xml = new StringBuilder();
+        xml.append("<locations>");
+        int count = Math.min(10, results.length());
+        for (int i = 0; i < count; i++) {
+            JSONObject item = results.optJSONObject(i);
+            if (item == null) {
+                continue;
+            }
+            City city = fromXiaomiLocation(item);
+            if (city.locationKey.length() == 0 && !city.hasCoordinates()) {
+                continue;
+            }
+            appendLocationXml(xml, city);
+        }
+        xml.append("</locations>");
+        return xml.toString();
+    }
+
+    private static String buildChinaCityXml(List<ChinaCityIndex.Entry> matches) {
         StringBuilder xml = new StringBuilder();
         xml.append("<locations>");
         for (int i = 0; i < matches.size(); i++) {
-            NmcCityIndex.Entry entry = matches.get(i);
-            City city = fromNmcEntry(entry);
-            xml.append("<location city=\"")
-                    .append(escape(displayLocation(city.name, city.admin)))
-                    .append("\" location=\"")
-                    .append(escape(city.payload()))
-                    .append("\" country=\"")
-                    .append(escape(city.country))
-                    .append("\" adminArea=\"")
-                    .append(escape(city.admin))
-                    .append("\"/>");
+            appendLocationXml(xml, fromChinaEntry(matches.get(i)));
         }
         xml.append("</locations>");
         return xml.toString();
     }
 
-    private static String buildInternationalCityXml(String keyword) throws IOException {
-        String url = "https://geocoding-api.open-meteo.com/v1/search?name="
-                + URLEncoder.encode(keyword, "UTF-8")
-                + "&count=10&language=zh&format=json";
-        JSONObject root = jsonObject(readUrl(url));
-        JSONArray results = root.optJSONArray("results");
-        StringBuilder xml = new StringBuilder();
-        xml.append("<locations>");
-        if (results != null) {
-            for (int i = 0; i < results.length(); i++) {
-                JSONObject item = results.optJSONObject(i);
-                if (item == null) {
-                    continue;
-                }
-                City city = new City();
-                city.latitude = item.optDouble("latitude", Double.NaN);
-                city.longitude = item.optDouble("longitude", Double.NaN);
-                city.timezone = item.optString("timezone", "auto");
-                city.name = item.optString("name", "");
-                city.country = item.optString("country", "");
-                city.admin = item.optString("admin1", "");
-                xml.append("<location city=\"")
-                        .append(escape(displayLocation(city.name, city.admin)))
-                        .append("\" location=\"")
-                        .append(escape(city.payload()))
-                        .append("\" country=\"")
-                        .append(escape(city.country))
-                        .append("\" adminArea=\"")
-                        .append(escape(city.admin))
-                        .append("\"/>");
-            }
-        }
-        xml.append("</locations>");
-        return xml.toString();
+    private static void appendLocationXml(StringBuilder xml, City city) {
+        xml.append("<location city=\"")
+                .append(escape(displayLocation(city.name, city.admin)))
+                .append("\" location=\"")
+                .append(escape(city.payload()))
+                .append("\" country=\"")
+                .append(escape(city.country))
+                .append("\" adminArea=\"")
+                .append(escape(city.admin))
+                .append("\"/>");
     }
 
     private static String buildWeatherXml(City sourceCity) throws IOException {
-        City city = resolveChinaCity(sourceCity);
-        if (city.stationId != null && city.stationId.length() > 0) {
+        if (sourceCity == null) {
+            throw new IOException("Missing city");
+        }
+        City city = enrichChinaStationId(sourceCity);
+        boolean preferXiaomi = shouldPreferXiaomi(city);
+
+        if (preferXiaomi) {
             try {
-                return buildChinaWeatherXml(city);
-            } catch (IOException chinaError) {
-                if (!city.hasCoordinates()) {
-                    City fallback = geocodeInternational(displayLocation(city.name, city.admin));
-                    fallback.name = city.name;
-                    fallback.admin = city.admin;
-                    fallback.country = city.country;
-                    city = fallback;
+                return buildXiaomiWeatherXml(city);
+            } catch (IOException xiaomiError) {
+                try {
+                    return buildOpenMeteoWeatherXml(city);
+                } catch (IOException ignored) {
+                    throw xiaomiError;
+                }
+            }
+        } else {
+            try {
+                return buildOpenMeteoWeatherXml(city);
+            } catch (IOException openMeteoError) {
+                try {
+                    return buildXiaomiWeatherXml(city);
+                } catch (IOException ignored) {
+                    throw openMeteoError;
                 }
             }
         }
-        return buildInternationalWeatherXml(city);
     }
 
-    private static String buildChinaWeatherXml(City city) throws IOException {
-        JSONObject data = jsonObject(readNmcUrl(NMC_WEATHER
-                + URLEncoder.encode(city.stationId, "UTF-8"))).optJSONObject("data");
-        if (data == null) {
-            throw new IOException("Missing NMC weather data");
+    private static boolean shouldPreferXiaomi(City city) {
+        if (city.locationKey.startsWith("weathercn:")) {
+            return true;
         }
-        JSONObject real = data.optJSONObject("real");
-        JSONObject realWeather = real == null ? null : real.optJSONObject("weather");
-        JSONObject predict = data.optJSONObject("predict");
-        JSONArray forecast = predict == null ? null : predict.optJSONArray("detail");
-        JSONArray tempChart = data.optJSONArray("tempchart");
+        if (isChinaCountry(city.country)) {
+            return true;
+        }
+        if (city.hasCoordinates() && isInChinaBounds(city.latitude, city.longitude)) {
+            return true;
+        }
+        return isChineseLocale();
+    }
 
-        String currentCode = nmcString(realWeather, "img");
-        String currentWeather = nmcString(realWeather, "info");
-        double currentTemp = nmcDouble(realWeather, "temperature");
+    private static City enrichChinaStationId(City city) {
+        if (city.locationKey.length() > 0) {
+            return city;
+        }
+        if (city.name.length() > 0 && !"Current Location".equals(city.name)) {
+            ChinaCityIndex.Entry local = ChinaCityIndex.match(city.name, city.admin);
+            if (local != null) {
+                city.locationKey = "weathercn:" + local.stationId;
+                if (city.country.length() == 0) {
+                    city.country = "中国";
+                }
+            }
+        }
+        return city;
+    }
+
+    private static String buildXiaomiWeatherXml(City sourceCity) throws IOException {
+        City city = resolveForXiaomi(sourceCity);
+        boolean isGlobal = city.isGlobal();
+        StringBuilder url = new StringBuilder(XIAOMI_WEATHER);
+        url.append("?latitude=").append(city.hasCoordinates() ? String.valueOf(city.latitude) : "0");
+        url.append("&longitude=").append(city.hasCoordinates() ? String.valueOf(city.longitude) : "0");
+        if (city.locationKey.length() > 0) {
+            url.append("&locationKey=").append(URLEncoder.encode(city.locationKey, "UTF-8"));
+        }
+        url.append("&days=5");
+        url.append("&appKey=").append(XIAOMI_APP_KEY);
+        url.append("&sign=").append(XIAOMI_SIGN);
+        url.append("&isGlobal=").append(isGlobal ? "true" : "false");
+        url.append("&locale=").append(URLEncoder.encode(xiaomiLocale(), "UTF-8"));
+
+        JSONObject root = jsonObject(readUrl(url.toString()));
+        JSONObject current = root.optJSONObject("current");
+        JSONObject forecastDaily = root.optJSONObject("forecastDaily");
+        if (current == null && forecastDaily == null) {
+            throw new IOException("Missing Xiaomi weather data");
+        }
+
+        String currentWeatherCode = current == null ? "" : current.optString("weather", "");
+        String currentPubTime = current == null ? "" : current.optString("pubTime", "");
+        double currentTemp = readNestedDouble(current, "temperature");
+
+        JSONArray dailyTemps = readValueArray(forecastDaily, "temperature");
+        JSONArray dailyWeathers = readValueArray(forecastDaily, "weather");
+        JSONArray sunRiseSets = readValueArray(forecastDaily, "sunRiseSet");
+        String forecastPubTime = forecastDaily == null ? "" : forecastDaily.optString("pubTime", "");
+
+        if (Double.isNaN(currentTemp) && dailyTemps != null && dailyTemps.length() > 0) {
+            JSONObject todayTemp = dailyTemps.optJSONObject(0);
+            double from = todayTemp == null ? Double.NaN : parseDouble(todayTemp.optString("from", ""));
+            double to = todayTemp == null ? Double.NaN : parseDouble(todayTemp.optString("to", ""));
+            if (!Double.isNaN(from) && !Double.isNaN(to)) {
+                currentTemp = (from + to) / 2.0d;
+            } else if (!Double.isNaN(from)) {
+                currentTemp = from;
+            } else {
+                currentTemp = to;
+            }
+        }
+
+        boolean daylight = isDaylight(currentPubTime, sunRiseSets);
 
         StringBuilder xml = new StringBuilder();
         xml.append("<weather>");
         tag(xml, "country", safe(city.country));
-        tag(xml, "city", city.name);
+        tag(xml, "city", safe(city.name));
         xml.append("<currentconditions daylight=\"")
-                .append(isDaylight(currentCode) ? "true" : "false")
+                .append(daylight ? "true" : "false")
                 .append("\">");
         tag(xml, "temperature", toFahrenheitString(currentTemp));
-        tag(xml, "weathericon", String.valueOf(toChinaAccuIcon(currentCode, currentWeather)));
+        tag(xml, "weathericon", String.valueOf(toXiaomiAccuIcon(currentWeatherCode)));
         xml.append("</currentconditions>");
         xml.append("<forecast>");
 
-        int count = forecast == null ? 0 : Math.min(4, forecast.length());
+        int count = dailyTemps == null ? 0 : Math.min(4, dailyTemps.length());
         for (int i = 0; i < count; i++) {
-            JSONObject day = forecast.optJSONObject(i);
-            if (day == null) {
-                continue;
+            JSONObject tempObj = dailyTemps.optJSONObject(i);
+            JSONObject weaObj = dailyWeathers == null ? null : dailyWeathers.optJSONObject(i);
+            JSONObject sunObj = sunRiseSets == null ? null : sunRiseSets.optJSONObject(i);
+
+            double firstTemp = tempObj == null ? Double.NaN : parseDouble(tempObj.optString("from", ""));
+            double secondTemp = tempObj == null ? Double.NaN : parseDouble(tempObj.optString("to", ""));
+            double high;
+            double low;
+            if (!Double.isNaN(firstTemp) && !Double.isNaN(secondTemp)) {
+                high = Math.max(firstTemp, secondTemp);
+                low = Math.min(firstTemp, secondTemp);
+            } else {
+                high = Double.isNaN(firstTemp) ? secondTemp : firstTemp;
+                low = Double.isNaN(secondTemp) ? firstTemp : secondTemp;
             }
-            JSONObject dayWeather = child(child(day, "day"), "weather");
-            JSONObject nightWeather = child(child(day, "night"), "weather");
-            JSONObject chart = tempChartForDate(tempChart, day.optString("date", ""));
-            String dayCode = nmcString(dayWeather, "img");
-            String nightCode = nmcString(nightWeather, "img");
-            String weather = firstNonEmpty(
-                    nmcString(dayWeather, "info"),
-                    nmcString(nightWeather, "info"),
-                    "");
-            double high = chart == null
-                    ? nmcDouble(dayWeather, "temperature")
-                    : nmcDouble(chart, "max_temp");
-            double low = chart == null
-                    ? nmcDouble(nightWeather, "temperature")
-                    : nmcDouble(chart, "min_temp");
+
+            String dayCode = weaObj == null ? "" : weaObj.optString("from", "");
+            if (dayCode.length() == 0 && weaObj != null) {
+                dayCode = weaObj.optString("to", "");
+            }
+            if (dayCode.length() == 0) {
+                dayCode = currentWeatherCode;
+            }
+
+            String dateStr = extractDate(sunObj == null ? "" : sunObj.optString("from", ""));
+            if (dateStr.length() == 0) {
+                dateStr = offsetDate(extractDate(forecastPubTime), i);
+            }
+
             xml.append("<day>");
-            tag(xml, "daycode", dayLabel(day.optString("date", ""), city.timezone));
-            tag(xml, "weathericon", String.valueOf(toChinaAccuIcon(
-                    dayCode.length() > 0 ? dayCode : nightCode, weather)));
+            tag(xml, "daycode", dayLabel(dateStr, null));
+            tag(xml, "weathericon", String.valueOf(toXiaomiAccuIcon(dayCode)));
             tag(xml, "hightemperature", toFahrenheitString(high));
             tag(xml, "lowtemperature", toFahrenheitString(low));
             xml.append("</day>");
@@ -409,9 +537,10 @@ public final class OpenMeteoXml {
         return xml.toString();
     }
 
-    private static String buildInternationalWeatherXml(City city) throws IOException {
+    private static String buildOpenMeteoWeatherXml(City sourceCity) throws IOException {
+        City city = sourceCity;
         if (!city.hasCoordinates()) {
-            City resolved = geocodeInternational(displayLocation(city.name, city.admin));
+            City resolved = geocodeOpenMeteo(displayLocation(city.name, city.admin));
             resolved.name = city.name.length() == 0 ? resolved.name : city.name;
             resolved.admin = city.admin.length() == 0 ? resolved.admin : city.admin;
             resolved.country = city.country.length() == 0 ? resolved.country : city.country;
@@ -419,20 +548,23 @@ public final class OpenMeteoXml {
         }
         String timezone = city.timezone == null || city.timezone.length() == 0
                 ? "auto" : city.timezone;
-        String url = "https://api.open-meteo.com/v1/forecast?latitude="
-                + city.latitude
-                + "&longitude="
-                + city.longitude
-                + "&current=temperature_2m,weather_code"
+        String url = OPEN_METEO_FORECAST
+                + "?latitude=" + city.latitude
+                + "&longitude=" + city.longitude
+                + "&current=temperature_2m,weather_code,is_day"
                 + "&daily=weather_code,temperature_2m_max,temperature_2m_min"
-                + "&forecast_days=4&timezone="
-                + URLEncoder.encode(timezone, "UTF-8");
+                + "&forecast_days=4&timezone=" + URLEncoder.encode(timezone, "UTF-8");
         JSONObject root = jsonObject(readUrl(url));
         JSONObject current = root.optJSONObject("current");
         JSONObject daily = root.optJSONObject("daily");
+        if (current == null && daily == null) {
+            throw new IOException("Missing Open-Meteo weather data");
+        }
 
-        double currentTemp = current == null ? Double.NaN : current.optDouble("temperature_2m", Double.NaN);
+        double currentTemp = current == null ? Double.NaN
+                : current.optDouble("temperature_2m", Double.NaN);
         int currentCode = current == null ? 0 : current.optInt("weather_code", 0);
+        boolean daylight = current == null || current.optInt("is_day", 1) != 0;
 
         JSONArray dates = daily == null ? null : daily.optJSONArray("time");
         JSONArray codes = daily == null ? null : daily.optJSONArray("weather_code");
@@ -446,11 +578,13 @@ public final class OpenMeteoXml {
 
         StringBuilder xml = new StringBuilder();
         xml.append("<weather>");
-        tag(xml, "country", city.country);
-        tag(xml, "city", city.name);
-        xml.append("<currentconditions daylight=\"true\">");
+        tag(xml, "country", safe(city.country));
+        tag(xml, "city", safe(city.name));
+        xml.append("<currentconditions daylight=\"")
+                .append(daylight ? "true" : "false")
+                .append("\">");
         tag(xml, "temperature", toFahrenheitString(currentTemp));
-        tag(xml, "weathericon", String.valueOf(toAccuIcon(currentCode)));
+        tag(xml, "weathericon", String.valueOf(toOpenMeteoAccuIcon(currentCode)));
         xml.append("</currentconditions>");
         xml.append("<forecast>");
 
@@ -462,7 +596,7 @@ public final class OpenMeteoXml {
             double low = lows == null ? Double.NaN : lows.optDouble(i, Double.NaN);
             xml.append("<day>");
             tag(xml, "daycode", dayLabel(date, timezone));
-            tag(xml, "weathericon", String.valueOf(toAccuIcon(code)));
+            tag(xml, "weathericon", String.valueOf(toOpenMeteoAccuIcon(code)));
             tag(xml, "hightemperature", toFahrenheitString(high));
             tag(xml, "lowtemperature", toFahrenheitString(low));
             xml.append("</day>");
@@ -472,22 +606,101 @@ public final class OpenMeteoXml {
         return xml.toString();
     }
 
-    private static City parsePayload(String payload) throws IOException {
+    private static City resolveForXiaomi(City city) throws IOException {
+        if (city.locationKey.length() > 0) {
+            return city;
+        }
+        if (city.hasCoordinates()) {
+            City geo = queryGeoCity(city.latitude, city.longitude);
+            if (geo != null) {
+                if (city.name.length() > 0 && !"Current Location".equals(city.name)) {
+                    geo.name = city.name;
+                }
+                if (city.admin.length() > 0) {
+                    geo.admin = city.admin;
+                }
+                if (city.country.length() > 0) {
+                    geo.country = city.country;
+                }
+                return geo;
+            }
+            return city;
+        }
+        if (city.name.length() > 0) {
+            JSONArray results = searchXiaomiCities(displayLocation(city.name, city.admin));
+            if (results != null && results.length() > 0) {
+                JSONObject first = results.optJSONObject(0);
+                if (first != null) {
+                    City matched = fromXiaomiLocation(first);
+                    if (city.name.length() > 0) {
+                        matched.name = city.name;
+                    }
+                    if (city.admin.length() > 0) {
+                        matched.admin = city.admin;
+                    }
+                    if (city.country.length() > 0) {
+                        matched.country = city.country;
+                    }
+                    return matched;
+                }
+            }
+        }
+        throw new IOException("City not found in Xiaomi Weather");
+    }
+
+    private static City geocodeOpenMeteo(String keyword) throws IOException {
+        String url = OPEN_METEO_GEO
+                + "?name=" + URLEncoder.encode(keyword, "UTF-8")
+                + "&count=1&language=" + URLEncoder.encode(openMeteoLanguage(), "UTF-8")
+                + "&format=json";
+        JSONArray results = jsonObject(readUrl(url)).optJSONArray("results");
+        if (results == null || results.length() == 0) {
+            throw new IOException("City not found in Open-Meteo");
+        }
+        JSONObject item = results.optJSONObject(0);
+        if (item == null) {
+            throw new IOException("City not found in Open-Meteo");
+        }
+        return fromOpenMeteoLocation(item);
+    }
+
+    private static City parsePayload(String payload) {
         String[] parts = payload.split("\\|", -1);
+
+        // New Xiaomi format: xm:<locationKey>|<lat>,<lon>|<name>|<admin>|<country>
+        if (parts.length >= 5 && parts[0].startsWith("xm:")) {
+            City city = new City();
+            city.locationKey = parts[0].substring(3);
+            parseLatLon(city, parts[1]);
+            city.name = parts[2];
+            city.admin = parts[3];
+            city.country = parts[4];
+            return city;
+        }
+
+        // Legacy China format: cn:<stationId>|<name>|<admin>|<country>
         if (parts.length >= 4 && parts[0].startsWith("cn:")) {
             City city = new City();
-            city.stationId = parts[0].substring(3);
+            String stationId = parts[0].substring(3);
             city.name = parts[1];
             city.admin = parts[2];
             city.country = parts[3];
             city.timezone = "Asia/Shanghai";
-            return resolveChinaCity(city);
+            if (isChinaStationId(stationId)) {
+                city.locationKey = "weathercn:" + stationId;
+                return city;
+            }
+            ChinaCityIndex.Entry entry = ChinaCityIndex.match(city.name, city.admin);
+            if (entry != null) {
+                city.locationKey = "weathercn:" + entry.stationId;
+            }
+            return city;
         }
+
+        // Open-Meteo / legacy lat,lon format: <lat>,<lon>|<tz>|<name>|<admin>|<country>
         if (parts.length >= 5 && parts[0].indexOf(',') > 0) {
-            String[] ll = parts[0].split(",", -1);
             City city = new City();
-            city.latitude = Double.parseDouble(ll[0]);
-            city.longitude = Double.parseDouble(ll[1]);
+            parseLatLon(city, parts[0]);
             city.timezone = parts[1].length() == 0 ? "auto" : parts[1];
             city.name = parts[2];
             city.admin = parts[3];
@@ -495,150 +708,190 @@ public final class OpenMeteoXml {
             return city;
         }
 
-        City local = resolveChinaCity(payload, "");
+        // Plain keyword fallback
+        ChinaCityIndex.Entry local = ChinaCityIndex.match(payload, "");
         if (local != null) {
-            return local;
-        }
-        return geocodeInternational(payload);
-    }
-
-    private static City geocodeInternational(String keyword) throws IOException {
-        JSONArray results = jsonObject(readUrl(
-                "https://geocoding-api.open-meteo.com/v1/search?name="
-                        + URLEncoder.encode(keyword, "UTF-8")
-                        + "&count=1&language=zh&format=json")).optJSONArray("results");
-        if (results == null || results.length() == 0) {
-            throw new IOException("City not found");
-        }
-        JSONObject item = results.optJSONObject(0);
-        if (item == null) {
-            throw new IOException("City not found");
+            return fromChinaEntry(local);
         }
         City city = new City();
-        city.latitude = item.optDouble("latitude", Double.NaN);
-        city.longitude = item.optDouble("longitude", Double.NaN);
-        city.timezone = item.optString("timezone", "auto");
-        city.name = item.optString("name", keyword);
-        city.admin = item.optString("admin1", "");
-        city.country = item.optString("country", "");
+        city.name = payload;
         return city;
     }
 
-    private static City resolveChinaCity(City city) {
-        if (city == null) {
+    private static City resolveGeoCity(double latitude, double longitude) {
+        boolean inChina = !Double.isNaN(latitude) && !Double.isNaN(longitude)
+                && isInChinaBounds(latitude, longitude);
+        if (inChina || isChineseLocale()) {
+            City geo = queryGeoCity(latitude, longitude);
+            if (geo != null) {
+                return geo;
+            }
+        }
+        City city = new City();
+        city.latitude = latitude;
+        city.longitude = longitude;
+        city.timezone = "auto";
+        applyLocationLabel(city, currentLocationName());
+        return enrichChinaStationId(city);
+    }
+
+    private static City queryGeoCity(double latitude, double longitude) {
+        if (Double.isNaN(latitude) || Double.isNaN(longitude)) {
             return null;
         }
-        if (city.stationId != null && city.stationId.length() > 0) {
-            NmcCityIndex.Entry nmcEntry = NmcCityIndex.findByStationId(city.stationId);
-            if (nmcEntry != null) {
-                applyNmcEntry(city, nmcEntry);
-                return city;
-            }
-            ChinaCityIndex.Entry chinaEntry = ChinaCityIndex.findByStationId(city.stationId);
-            if (chinaEntry != null) {
-                nmcEntry = NmcCityIndex.match(chinaEntry.name, chinaEntry.displayAdmin());
-                if (nmcEntry != null) {
-                    applyNmcEntry(city, nmcEntry);
-                } else {
-                    applyEntry(city, chinaEntry);
+        try {
+            String url = XIAOMI_CITY_GEO
+                    + "?latitude=" + latitude
+                    + "&longitude=" + longitude
+                    + "&locale=" + URLEncoder.encode(xiaomiLocale(), "UTF-8");
+            JSONArray results = jsonArray(readUrl(url));
+            if (results != null && results.length() > 0) {
+                JSONObject first = results.optJSONObject(0);
+                if (first != null) {
+                    City city = fromXiaomiLocation(first);
+                    if (!city.hasCoordinates()) {
+                        city.latitude = latitude;
+                        city.longitude = longitude;
+                    }
+                    return city;
                 }
-                return city;
             }
-            City local = resolveChinaCity(city.name, city.admin);
-            if (local != null) {
-                return local;
-            }
-            return city;
-        }
-        City local = resolveChinaCity(city.name, city.admin);
-        if (local == null && isChinaCountry(city.country)) {
-            local = resolveChinaCity(displayLocation(city.name, city.admin), city.admin);
-        }
-        if (local != null) {
-            if (city.hasCoordinates()) {
-                local.latitude = city.latitude;
-                local.longitude = city.longitude;
-            }
-            if (city.timezone != null && city.timezone.length() > 0) {
-                local.timezone = city.timezone;
-            }
-            return local;
-        }
-        return city;
-    }
-
-    private static City resolveChinaCity(String name, String admin) {
-        NmcCityIndex.Entry nmcEntry = NmcCityIndex.match(name, admin);
-        if (nmcEntry != null) {
-            return fromNmcEntry(nmcEntry);
-        }
-        ChinaCityIndex.Entry chinaEntry = ChinaCityIndex.match(name, admin);
-        if (chinaEntry != null) {
-            nmcEntry = NmcCityIndex.match(chinaEntry.name, chinaEntry.displayAdmin());
-            if (nmcEntry != null) {
-                return fromNmcEntry(nmcEntry);
-            }
-            return fromChinaEntry(chinaEntry);
+        } catch (IOException ignored) {
         }
         return null;
     }
 
+    private static City fromXiaomiLocation(JSONObject item) {
+        City city = new City();
+        city.locationKey = item.optString("locationKey", item.optString("key", ""));
+        city.latitude = parseDouble(item.optString("latitude", ""));
+        city.longitude = parseDouble(item.optString("longitude", ""));
+        city.name = safe(item.optString("name", "")).trim();
+        applyAffiliation(city, item.optString("affiliation", ""));
+        return city;
+    }
+
+    private static City fromOpenMeteoLocation(JSONObject item) {
+        City city = new City();
+        city.latitude = item.optDouble("latitude", Double.NaN);
+        city.longitude = item.optDouble("longitude", Double.NaN);
+        city.timezone = item.optString("timezone", "auto");
+        city.name = safe(item.optString("name", "")).trim();
+        city.admin = safe(item.optString("admin1", "")).trim();
+        city.country = safe(item.optString("country", "")).trim();
+        return city;
+    }
+
+    private static void applyAffiliation(City city, String affiliation) {
+        if (affiliation == null || affiliation.trim().length() == 0) {
+            return;
+        }
+        String[] parts = affiliation.split("[,，]");
+        if (parts.length == 1) {
+            city.country = parts[0].trim();
+            city.admin = "";
+        } else {
+            city.country = parts[parts.length - 1].trim();
+            StringBuilder admin = new StringBuilder();
+            for (int i = 0; i < parts.length - 1; i++) {
+                String part = parts[i].trim();
+                if (part.length() == 0) {
+                    continue;
+                }
+                if (admin.length() > 0) {
+                    admin.append(", ");
+                }
+                admin.append(part);
+            }
+            city.admin = admin.toString();
+        }
+    }
+
     private static City fromChinaEntry(ChinaCityIndex.Entry entry) {
         City city = new City();
-        applyEntry(city, entry);
+        city.locationKey = "weathercn:" + entry.stationId;
         city.timezone = "Asia/Shanghai";
-        return city;
-    }
-
-    private static void applyEntry(City city, ChinaCityIndex.Entry entry) {
-        city.stationId = entry.stationId;
         city.name = entry.name;
         city.admin = entry.displayAdmin();
         city.country = "中国";
-    }
-
-    private static City fromNmcEntry(NmcCityIndex.Entry entry) {
-        City city = new City();
-        applyNmcEntry(city, entry);
-        city.timezone = "Asia/Shanghai";
         return city;
     }
 
-    private static void applyNmcEntry(City city, NmcCityIndex.Entry entry) {
-        city.stationId = entry.stationId;
-        city.name = entry.name;
-        city.admin = entry.displayAdmin();
-        city.country = "中国";
+    private static boolean isChinaStationId(String stationId) {
+        if (stationId == null || stationId.length() != 9 || !stationId.startsWith("101")) {
+            return false;
+        }
+        for (int i = 0; i < stationId.length(); i++) {
+            char ch = stationId.charAt(i);
+            if (ch < '0' || ch > '9') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean isChinaCountry(String country) {
+        if (country == null || country.length() == 0) {
+            return false;
+        }
+        String lower = country.toLowerCase(Locale.ROOT);
+        return country.contains("中国") || country.contains("中國")
+                || "cn".equals(lower) || lower.contains("china");
+    }
+
+    private static boolean isInChinaBounds(double lat, double lon) {
+        return lat >= 18.0d && lat <= 54.0d && lon >= 73.0d && lon <= 136.0d;
+    }
+
+    private static boolean isChineseLocale() {
+        Locale locale = Locale.getDefault();
+        return locale != null && "zh".equalsIgnoreCase(locale.getLanguage());
+    }
+
+    private static String xiaomiLocale() {
+        Locale locale = Locale.getDefault();
+        if (locale != null && "zh".equalsIgnoreCase(locale.getLanguage())) {
+            String country = locale.getCountry();
+            if ("TW".equalsIgnoreCase(country) || "HK".equalsIgnoreCase(country) || "MO".equalsIgnoreCase(country)) {
+                return "zh_tw";
+            }
+            return "zh_cn";
+        }
+        return "en_us";
+    }
+
+    private static String openMeteoLanguage() {
+        Locale locale = Locale.getDefault();
+        if (locale != null && locale.getLanguage() != null && locale.getLanguage().length() > 0) {
+            return locale.getLanguage().toLowerCase(Locale.ROOT);
+        }
+        return "en";
+    }
+
+    private static void parseLatLon(City city, String value) {
+        if (value == null || value.indexOf(',') <= 0) {
+            return;
+        }
+        String[] latLon = value.split(",", -1);
+        if (latLon.length >= 2) {
+            city.latitude = parseDouble(latLon[0]);
+            city.longitude = parseDouble(latLon[1]);
+        }
     }
 
     private static String readUrl(String url) throws IOException {
-        return readUrl(url, true, null);
-    }
-
-    private static String readChinaUrl(String url) throws IOException {
-        return readUrl(url, false, "https://www.weather.com.cn/");
-    }
-
-    private static String readNmcUrl(String url) throws IOException {
-        return readUrl(url, true, "https://www.nmc.cn/");
-    }
-
-    private static String readUrl(String url, boolean json, String referer) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setConnectTimeout(10000);
         connection.setReadTimeout(10000);
-        if (json) {
-            connection.setRequestProperty("Accept", "application/json");
-        }
+        connection.setRequestProperty("Accept", "application/json");
         connection.setRequestProperty("User-Agent", "Mozilla/5.0 TSFLauncher/3.9.4");
-        if (referer != null) {
-            connection.setRequestProperty("Referer", referer);
-        }
-        InputStream input = connection.getResponseCode() >= 400
+        int code = connection.getResponseCode();
+        InputStream input = code >= 400
                 ? connection.getErrorStream()
                 : connection.getInputStream();
         if (input == null) {
-            throw new IOException("Empty response");
+            connection.disconnect();
+            throw new IOException("Empty response: HTTP " + code);
         }
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -647,7 +900,11 @@ public final class OpenMeteoXml {
             while ((read = input.read(buffer)) != -1) {
                 output.write(buffer, 0, read);
             }
-            return new String(output.toByteArray(), "UTF-8");
+            String body = new String(output.toByteArray(), "UTF-8");
+            if (code >= 400) {
+                throw new IOException("HTTP " + code + ": " + body);
+            }
+            return body;
         } finally {
             input.close();
             connection.disconnect();
@@ -662,89 +919,91 @@ public final class OpenMeteoXml {
         }
     }
 
-    private static JSONObject child(JSONObject object, String key) {
-        return object == null ? null : object.optJSONObject(key);
+    private static JSONArray jsonArray(String value) throws IOException {
+        try {
+            return new JSONArray(value);
+        } catch (JSONException e) {
+            throw new IOException(e);
+        }
     }
 
-    private static JSONObject tempChartForDate(JSONArray items, String date) {
-        if (items == null || date == null || date.length() == 0) {
+    private static double readNestedDouble(JSONObject parent, String key) {
+        if (parent == null) {
+            return Double.NaN;
+        }
+        JSONObject obj = parent.optJSONObject(key);
+        if (obj != null) {
+            return parseDouble(obj.optString("value", ""));
+        }
+        return parseDouble(parent.optString(key, ""));
+    }
+
+    private static JSONArray readValueArray(JSONObject parent, String key) {
+        if (parent == null) {
             return null;
         }
-        String normalized = date.replace('-', '/');
-        for (int i = 0; i < items.length(); i++) {
-            JSONObject item = items.optJSONObject(i);
-            if (item != null && normalized.equals(item.optString("time", ""))) {
-                return item;
-            }
-        }
-        return null;
+        JSONObject obj = parent.optJSONObject(key);
+        return obj == null ? null : obj.optJSONArray("value");
     }
 
-    private static String nmcString(JSONObject object, String key) {
-        if (object == null) {
+    private static boolean isDaylight(String pubTime, JSONArray sunRiseSets) {
+        int currentMinutes = extractTimeMinutes(pubTime);
+        if (currentMinutes < 0 || sunRiseSets == null || sunRiseSets.length() == 0) {
+            return true;
+        }
+        JSONObject today = sunRiseSets.optJSONObject(0);
+        if (today == null) {
+            return true;
+        }
+        int sunriseMinutes = extractTimeMinutes(today.optString("from", ""));
+        int sunsetMinutes = extractTimeMinutes(today.optString("to", ""));
+        if (sunriseMinutes < 0 || sunsetMinutes < 0 || sunriseMinutes >= sunsetMinutes) {
+            return true;
+        }
+        return currentMinutes >= sunriseMinutes && currentMinutes < sunsetMinutes;
+    }
+
+    private static int extractTimeMinutes(String isoDateTime) {
+        if (isoDateTime == null) {
+            return -1;
+        }
+        int tIndex = isoDateTime.indexOf('T');
+        if (tIndex < 0 || isoDateTime.length() < tIndex + 6) {
+            return -1;
+        }
+        try {
+            int hour = Integer.parseInt(isoDateTime.substring(tIndex + 1, tIndex + 3));
+            int minute = Integer.parseInt(isoDateTime.substring(tIndex + 4, tIndex + 6));
+            return hour * 60 + minute;
+        } catch (NumberFormatException ignored) {
+            return -1;
+        }
+    }
+
+    private static String extractDate(String isoDateTime) {
+        if (isoDateTime == null || isoDateTime.length() < 10) {
             return "";
         }
-        String value = object.optString(key, "");
-        return value == null || value.length() == 0 || "9999".equals(value) ? "" : value;
+        String prefix = isoDateTime.substring(0, 10);
+        if (prefix.charAt(4) == '-' && prefix.charAt(7) == '-') {
+            return prefix;
+        }
+        return "";
     }
 
-    private static double nmcDouble(JSONObject object, String key) {
-        double value = parseDouble(nmcString(object, key));
-        return value == 9999.0d ? Double.NaN : value;
-    }
-
-    private static JSONObject tryExtractJsObject(String body, String name) {
+    private static String offsetDate(String baseDate, int offsetDays) {
         try {
-            return extractJsObject(body, name);
-        } catch (IOException ignored) {
-            return null;
+            SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            parser.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            if (baseDate != null && baseDate.length() == 10) {
+                cal.setTime(parser.parse(baseDate));
+            }
+            cal.add(Calendar.DAY_OF_MONTH, offsetDays);
+            return parser.format(cal.getTime());
+        } catch (Exception ignored) {
+            return "";
         }
-    }
-
-    private static JSONObject extractJsObject(String body, String name) throws IOException {
-        int index = body.indexOf(name);
-        if (index < 0) {
-            throw new IOException("Missing field: " + name);
-        }
-        int start = body.indexOf('{', index);
-        if (start < 0) {
-            throw new IOException("Invalid field: " + name);
-        }
-        int end = findJsonEnd(body, start);
-        return jsonObject(body.substring(start, end + 1));
-    }
-
-    private static int findJsonEnd(String value, int start) throws IOException {
-        int depth = 0;
-        boolean inString = false;
-        boolean escaping = false;
-        for (int i = start; i < value.length(); i++) {
-            char ch = value.charAt(i);
-            if (escaping) {
-                escaping = false;
-                continue;
-            }
-            if (ch == '\\') {
-                escaping = true;
-                continue;
-            }
-            if (ch == '"') {
-                inString = !inString;
-                continue;
-            }
-            if (inString) {
-                continue;
-            }
-            if (ch == '{') {
-                depth++;
-            } else if (ch == '}') {
-                depth--;
-                if (depth == 0) {
-                    return i;
-                }
-            }
-        }
-        throw new IOException("Unterminated JSON block");
     }
 
     private static InputStream toStream(String xml) throws IOException {
@@ -770,6 +1029,47 @@ public final class OpenMeteoXml {
             }
         }
         return null;
+    }
+
+    private static void applyLocationLabel(City city, String label) {
+        if (city == null || label == null) {
+            return;
+        }
+        String[] parts = label.split("[,，]", -1);
+        if (parts.length > 0) {
+            city.name = safe(parts[0]).trim();
+        } else {
+            city.name = safe(label).trim();
+        }
+        if (parts.length > 1) {
+            city.admin = safe(parts[1]).trim();
+        }
+        if (parts.length > 2) {
+            city.country = safe(parts[2]).trim();
+        }
+    }
+
+    private static void appendPart(StringBuilder builder, String value) {
+        if (value == null || value.length() == 0) {
+            return;
+        }
+        if (builder.indexOf(value) >= 0) {
+            return;
+        }
+        if (builder.length() > 0) {
+            builder.append(',');
+        }
+        builder.append(value);
+    }
+
+    private static String firstNonEmpty(String first, String second, String third) {
+        if (first != null && first.length() > 0) {
+            return first;
+        }
+        if (second != null && second.length() > 0) {
+            return second;
+        }
+        return third == null ? "" : third;
     }
 
     private static void tag(StringBuilder xml, String name, String value) {
@@ -801,35 +1101,19 @@ public final class OpenMeteoXml {
             parser.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date parsed = parser.parse(date);
             SimpleDateFormat format = new SimpleDateFormat("E", Locale.getDefault());
-            if (timezone != null && !"auto".equals(timezone)) {
+            if (timezone != null && timezone.length() > 0 && !"auto".equals(timezone)) {
                 format.setTimeZone(TimeZone.getTimeZone(timezone));
+            } else {
+                format.setTimeZone(TimeZone.getTimeZone("UTC"));
             }
             return format.format(parsed);
         } catch (Exception ignored) {
-            return date;
+            return safe(date);
         }
     }
 
-    private static String firstNonEmpty(String first, String second, String third) {
-        if (first != null && first.length() > 0) {
-            return first;
-        }
-        if (second != null && second.length() > 0) {
-            return second;
-        }
-        return third == null ? "" : third;
-    }
-
-    private static boolean isChinaCountry(String country) {
-        if (country == null) {
-            return false;
-        }
-        return country.contains("中国") || "cn".equalsIgnoreCase(country)
-                || country.toLowerCase(Locale.ROOT).contains("china");
-    }
-
-    private static boolean isDaylight(String weatherCode) {
-        return weatherCode == null || weatherCode.length() == 0 || weatherCode.startsWith("d");
+    private static String safe(String value) {
+        return value == null ? "" : value;
     }
 
     private static double parseDouble(String value) {
@@ -837,21 +1121,29 @@ public final class OpenMeteoXml {
             return Double.NaN;
         }
         try {
-            return Double.parseDouble(value);
+            String normalized = value.trim()
+                    .replace("℃", "")
+                    .replace("°C", "")
+                    .replace("°", "")
+                    .replace("C", "")
+                    .replace("c", "");
+            return Double.parseDouble(normalized);
         } catch (NumberFormatException ignored) {
             return Double.NaN;
         }
     }
 
-    private static int toChinaAccuIcon(String weatherCode, String weatherText) {
-        String code = weatherCode == null ? "" : weatherCode.trim().toLowerCase(Locale.ROOT);
-        if (code.startsWith("d") || code.startsWith("n")) {
-            code = code.substring(1);
-        }
+    private static int toXiaomiAccuIcon(String weatherCode) {
         int numeric = -1;
-        try {
-            numeric = Integer.parseInt(code);
-        } catch (NumberFormatException ignored) {
+        if (weatherCode != null) {
+            String code = weatherCode.trim().toLowerCase(Locale.ROOT);
+            if (code.startsWith("d") || code.startsWith("n")) {
+                code = code.substring(1);
+            }
+            try {
+                numeric = Integer.parseInt(code);
+            } catch (NumberFormatException ignored) {
+            }
         }
         if (numeric == 0) {
             return 1;
@@ -862,53 +1154,28 @@ public final class OpenMeteoXml {
         if (numeric == 2) {
             return 7;
         }
-        if (numeric == 3 || numeric == 7 || numeric == 8 || numeric == 21
-                || numeric == 22 || numeric == 23 || numeric == 24 || numeric == 25) {
+        if (numeric == 3 || (numeric >= 7 && numeric <= 12) || (numeric >= 21 && numeric <= 25)) {
             return 18;
         }
-        if (numeric == 4 || numeric == 5) {
+        if (numeric == 4 || numeric == 5 || numeric == 32 || numeric == 33) {
             return 15;
         }
         if (numeric == 6 || numeric == 19) {
             return 19;
         }
-        if (numeric == 13 || numeric == 14 || numeric == 15 || numeric == 16
-                || numeric == 17 || numeric == 26 || numeric == 27 || numeric == 28) {
+        if ((numeric >= 13 && numeric <= 17) || (numeric >= 26 && numeric <= 28) || numeric == 34) {
             return 22;
         }
-        if (numeric == 18 || numeric == 53) {
+        if (numeric == 18 || numeric == 35 || numeric == 53) {
             return 11;
         }
-        if (numeric == 20 || numeric == 29 || numeric == 30 || numeric == 31) {
+        if (numeric == 20 || (numeric >= 29 && numeric <= 31)) {
             return 19;
-        }
-        if (weatherText != null) {
-            if (weatherText.contains("雷")) {
-                return 15;
-            }
-            if (weatherText.contains("雪")) {
-                return 22;
-            }
-            if (weatherText.contains("雨")) {
-                return 18;
-            }
-            if (weatherText.contains("雾") || weatherText.contains("霾")) {
-                return 11;
-            }
-            if (weatherText.contains("阴")) {
-                return 7;
-            }
-            if (weatherText.contains("云")) {
-                return 3;
-            }
-            if (weatherText.contains("晴")) {
-                return 1;
-            }
         }
         return 1;
     }
 
-    private static int toAccuIcon(int code) {
+    private static int toOpenMeteoAccuIcon(int code) {
         if (code == 0) {
             return 1;
         }
@@ -934,26 +1201,34 @@ public final class OpenMeteoXml {
         return 1;
     }
 
-    private static String safe(String value) {
-        return value == null ? "" : value;
-    }
-
     private static final class City {
+        String locationKey = "";
         double latitude = Double.NaN;
         double longitude = Double.NaN;
         String timezone = "";
         String name = "";
         String admin = "";
         String country = "";
-        String stationId = "";
 
         boolean hasCoordinates() {
             return !Double.isNaN(latitude) && !Double.isNaN(longitude);
         }
 
+        boolean isGlobal() {
+            if (locationKey.startsWith("weathercn:")) {
+                return false;
+            }
+            if (locationKey.length() > 0) {
+                return true;
+            }
+            return country.length() > 0 && !isChinaCountry(country);
+        }
+
         String payload() {
-            if (stationId != null && stationId.length() > 0) {
-                return "cn:" + stationId + "|"
+            if (locationKey.length() > 0) {
+                String coords = hasCoordinates() ? (latitude + "," + longitude) : "";
+                return "xm:" + safe(locationKey) + "|"
+                        + coords + "|"
                         + safe(name) + "|"
                         + safe(admin) + "|"
                         + safe(country);
@@ -963,6 +1238,10 @@ public final class OpenMeteoXml {
                     + safe(name) + "|"
                     + safe(admin) + "|"
                     + safe(country);
+        }
+
+        private static String safe(String value) {
+            return value == null ? "" : value;
         }
     }
 }
