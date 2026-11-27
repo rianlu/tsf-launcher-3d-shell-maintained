@@ -34,7 +34,6 @@ public class GalleryPermissionActivity extends Activity {
     }
 
     private boolean hasPermission() {
-        return checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED;
+        return HostStoragePermission.hasHostPermission(this);
     }
 }

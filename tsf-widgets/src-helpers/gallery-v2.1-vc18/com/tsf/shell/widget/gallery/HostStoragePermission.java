@@ -15,6 +15,8 @@ import android.util.Log;
 
 public final class HostStoragePermission {
     static final String PACKAGE_NAME = "com.tsf.shell.widget.gallery";
+    private static final String READ_MEDIA_IMAGES = "android.permission.READ_MEDIA_IMAGES";
+    private static final String READ_MEDIA_VISUAL_USER_SELECTED = "android.permission.READ_MEDIA_VISUAL_USER_SELECTED";
     private static final String TAG = "GalleryOpen";
     private static long lastLaunchElapsed;
 
@@ -25,8 +27,17 @@ public final class HostStoragePermission {
         if (context == null || Build.VERSION.SDK_INT < 23) {
             return true;
         }
-        return context.getPackageManager().checkPermission(
-                Manifest.permission.READ_EXTERNAL_STORAGE, PACKAGE_NAME)
+        PackageManager pm = context.getPackageManager();
+        if (pm.checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE, PACKAGE_NAME)
+                == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        if (Build.VERSION.SDK_INT >= 33
+                && pm.checkPermission(READ_MEDIA_IMAGES, PACKAGE_NAME) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        return Build.VERSION.SDK_INT >= 34
+                && pm.checkPermission(READ_MEDIA_VISUAL_USER_SELECTED, PACKAGE_NAME)
                 == PackageManager.PERMISSION_GRANTED;
     }
 
@@ -37,7 +48,16 @@ public final class HostStoragePermission {
         if (Build.VERSION.SDK_INT < 23) {
             return true;
         }
-        return context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+        if (context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        if (Build.VERSION.SDK_INT >= 33
+                && context.checkSelfPermission(READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        return Build.VERSION.SDK_INT >= 34
+                && context.checkSelfPermission(READ_MEDIA_VISUAL_USER_SELECTED)
                 == PackageManager.PERMISSION_GRANTED;
     }
 
