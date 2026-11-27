@@ -1,15 +1,21 @@
 package com.tsf.shell.compat;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.LauncherActivityInfo;
+import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.Build;
+import android.os.Process;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,8 +40,8 @@ public final class DrawerCompat {
             return raw;
         }
 
-        Map<ComponentName, ResolveInfo> byComponent = new LinkedHashMap<ComponentName, ResolveInfo>();
-        Set<String> packages = new HashSet<String>();
+        Map<ComponentName, ResolveInfo> byComponent = new LinkedHashMap<ComponentName, ResolveInfo>(raw.size());
+        Set<String> packages = new HashSet<String>(raw.size());
         for (int i = 0; i < raw.size(); i++) {
             ResolveInfo ri = raw.get(i);
             ComponentName cn = componentOf(ri);
@@ -46,7 +52,11 @@ public final class DrawerCompat {
             packages.add(cn.getPackageName());
         }
 
-        for (String pkg : packages) {
+        Set<String> packagesToExpand = findExtraPackagesViaLauncherApps(byComponent);
+        if (packagesToExpand == null) {
+            packagesToExpand = packages;
+        }
+        for (String pkg : packagesToExpand) {
             Intent scoped = new Intent(Intent.ACTION_MAIN, null);
             scoped.addCategory(Intent.CATEGORY_LAUNCHER);
             scoped.setPackage(pkg);
@@ -65,24 +75,80 @@ public final class DrawerCompat {
             }
         }
 
-        List<ResolveInfo> out = new ArrayList<ResolveInfo>();
-        Set<String> seenTarget = new HashSet<String>();
+        // Only resolve labels when two entries actually collide on (packageName, target).
+        // Avoids ~140 redundant APK string lookups on cold start for unique apps.
+        Map<String, Integer> targetCounts = new HashMap<String, Integer>(byComponent.size());
         for (ResolveInfo ri : byComponent.values()) {
-            ActivityInfo ai = ri.activityInfo;
-            // Collapse only true icon-swap aliases: same package, same final
-            // target, and the same label. Phone and Contacts on MIUI share a
-            // target activity but use different labels, so both must stay.
-            // Honor/Huawei SMS aliases share a label but point at different
-            // targets, so those stay as well.
-            String target = ai.targetActivity != null && ai.targetActivity.length() > 0
-                    ? ai.targetActivity : ai.name;
-            String key = ai.packageName + "\0" + target + "\0" + safeLabel(ri, pm);
-            if (!seenTarget.add(key)) {
-                continue;
+            String targetKey = targetKeyOf(ri.activityInfo);
+            Integer count = targetCounts.get(targetKey);
+            targetCounts.put(targetKey, Integer.valueOf(count == null ? 1 : count.intValue() + 1));
+        }
+
+        List<ResolveInfo> out = new ArrayList<ResolveInfo>(byComponent.size());
+        Set<String> seenTargetLabel = new HashSet<String>();
+        for (ResolveInfo ri : byComponent.values()) {
+            String targetKey = targetKeyOf(ri.activityInfo);
+            Integer count = targetCounts.get(targetKey);
+            if (count != null && count.intValue() > 1) {
+                // Collapse only true icon-swap aliases: same package, same final
+                // target, and the same label. Phone and Contacts on MIUI share a
+                // target activity but use different labels, so both must stay.
+                // Honor/Huawei SMS aliases share a label but point at different
+                // targets, so those stay as well.
+                String key = targetKey + "\0" + safeLabel(ri, pm);
+                if (!seenTargetLabel.add(key)) {
+                    continue;
+                }
             }
             out.add(ri);
         }
         return out;
+    }
+
+    /**
+     * Uses LauncherApps (single IPC) on API 21+ to discover any launcher component missing
+     * from the global queryIntentActivities() result, returning only the packages that need
+     * a scoped query. Returns null when LauncherApps is unavailable so caller falls back.
+     */
+    private static Set<String> findExtraPackagesViaLauncherApps(Map<ComponentName, ResolveInfo> known) {
+        if (Build.VERSION.SDK_INT < 21) {
+            return null;
+        }
+        try {
+            Object ctxObj = Class.forName("com.censivn.C3DEngine.a").getMethod("d").invoke(null);
+            if (!(ctxObj instanceof Context)) {
+                return null;
+            }
+            LauncherApps launcherApps = (LauncherApps) ((Context) ctxObj)
+                    .getSystemService(Context.LAUNCHER_APPS_SERVICE);
+            if (launcherApps == null) {
+                return null;
+            }
+            List<LauncherActivityInfo> list = launcherApps.getActivityList(null, Process.myUserHandle());
+            if (list == null || list.isEmpty()) {
+                return null;
+            }
+            Set<String> missingPackages = new HashSet<String>();
+            for (int i = 0; i < list.size(); i++) {
+                LauncherActivityInfo info = list.get(i);
+                if (info == null) {
+                    continue;
+                }
+                ComponentName cn = info.getComponentName();
+                if (cn != null && !known.containsKey(cn)) {
+                    missingPackages.add(cn.getPackageName());
+                }
+            }
+            return missingPackages;
+        } catch (Throwable ignored) {
+            return null;
+        }
+    }
+
+    private static String targetKeyOf(ActivityInfo ai) {
+        String target = ai.targetActivity != null && ai.targetActivity.length() > 0
+                ? ai.targetActivity : ai.name;
+        return ai.packageName + "\0" + target;
     }
 
     private static ComponentName componentOf(ResolveInfo ri) {

@@ -20,16 +20,16 @@
 # instance fields
 .field final synthetic a:Lcom/censivn/C3DEngine/b/d/a;
 
-.field final synthetic b:Landroid/view/MotionEvent;
-
-.field final synthetic c:Landroid/view/MotionEvent;
-
 .field final synthetic d:Lcom/tsf/shell/f/f/a/h$4;
+
+.field private e:F
+
+.field private f:F
 
 
 # direct methods
 .method constructor <init>(Lcom/tsf/shell/f/f/a/h$4;Lcom/censivn/C3DEngine/b/d/a;Landroid/view/MotionEvent;Landroid/view/MotionEvent;)V
-    .locals 0
+    .locals 2
 
     .prologue
     .line 2531
@@ -37,12 +37,37 @@
 
     iput-object p2, p0, Lcom/tsf/shell/f/f/a/h$4$1;->a:Lcom/censivn/C3DEngine/b/d/a;
 
-    iput-object p3, p0, Lcom/tsf/shell/f/f/a/h$4$1;->b:Landroid/view/MotionEvent;
-
-    iput-object p4, p0, Lcom/tsf/shell/f/f/a/h$4$1;->c:Landroid/view/MotionEvent;
-
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
+    if-eqz p3, :cond_0
+
+    if-eqz p4, :cond_0
+
+    invoke-virtual {p3}, Landroid/view/MotionEvent;->getX()F
+
+    move-result v0
+
+    invoke-virtual {p4}, Landroid/view/MotionEvent;->getX()F
+
+    move-result v1
+
+    sub-float/2addr v0, v1
+
+    iput v0, p0, Lcom/tsf/shell/f/f/a/h$4$1;->e:F
+
+    invoke-virtual {p3}, Landroid/view/MotionEvent;->getY()F
+
+    move-result v0
+
+    invoke-virtual {p4}, Landroid/view/MotionEvent;->getY()F
+
+    move-result v1
+
+    sub-float/2addr v0, v1
+
+    iput v0, p0, Lcom/tsf/shell/f/f/a/h$4$1;->f:F
+
+    :cond_0
     return-void
 .end method
 
@@ -126,19 +151,7 @@
 
     move-result v3
 
-    iget-object v4, p0, Lcom/tsf/shell/f/f/a/h$4$1;->b:Landroid/view/MotionEvent;
-
-    invoke-virtual {v4}, Landroid/view/MotionEvent;->getX()F
-
-    move-result v4
-
-    iget-object v5, p0, Lcom/tsf/shell/f/f/a/h$4$1;->c:Landroid/view/MotionEvent;
-
-    invoke-virtual {v5}, Landroid/view/MotionEvent;->getX()F
-
-    move-result v5
-
-    sub-float/2addr v4, v5
+    iget v4, p0, Lcom/tsf/shell/f/f/a/h$4$1;->e:F
 
     add-float/2addr v3, v4
 
@@ -156,19 +169,7 @@
     if-eqz v2, :cond_1
 
     .line 2549
-    iget-object v2, p0, Lcom/tsf/shell/f/f/a/h$4$1;->b:Landroid/view/MotionEvent;
-
-    invoke-virtual {v2}, Landroid/view/MotionEvent;->getY()F
-
-    move-result v2
-
-    iget-object v3, p0, Lcom/tsf/shell/f/f/a/h$4$1;->c:Landroid/view/MotionEvent;
-
-    invoke-virtual {v3}, Landroid/view/MotionEvent;->getY()F
-
-    move-result v3
-
-    sub-float/2addr v2, v3
+    iget v2, p0, Lcom/tsf/shell/f/f/a/h$4$1;->f:F
 
     sget v3, Lcom/censivn/C3DEngine/b/b/a;->G:I
 

@@ -551,7 +551,7 @@
     if-ne v0, v1, :cond_1
 
     .line 134
-    invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
+    invoke-static {}, Landroid/os/SystemClock;->uptimeMillis()J
 
     move-result-wide v0
 
@@ -577,7 +577,7 @@
     if-nez v0, :cond_2
 
     .line 141
-    invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
+    invoke-static {}, Landroid/os/SystemClock;->uptimeMillis()J
 
     move-result-wide v0
 
@@ -590,7 +590,7 @@
 
     .line 145
     :cond_2
-    invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
+    invoke-static {}, Landroid/os/SystemClock;->uptimeMillis()J
 
     move-result-wide v0
 
