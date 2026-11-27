@@ -66,11 +66,13 @@ Gitee 镜像使用相同标签 `tsf-widgets-v1` 和相同文件名.
   - 点击照片按系统默认应用打开。未设置默认应用时弹出系统选择框；默认应用打不开时再弹出选择框。
   - 展开后按当前屏幕宽高铺一层全屏触摸板, 避免高屏上三维点选盖不住中间, 导致无法滑动、点击被当成返回而收起。
   - 展开后的螺旋半径取官方固定值与屏幕宽度对应半径中的较小值, 官方能放下时保持原值, 窄屏或高密度时贴近屏幕两侧并允许极少量裁切。
+  - 补齐带 intent-filter 的 Activity 组件的 `android:exported="true"` 声明。
   - 辅助源码: `src-helpers/gallery-v2.1-vc18/`。
 
 - `modified/memo-v1.6-vc10.apk`
   - 原版: `original/memo-v1.6-vc10.apk`。
   - 将备忘录插件 `targetSdkVersion` 从 21 提升到 28, 避免 Android 14+ 拒绝安装。
+  - 补齐带 intent-filter 的 Activity 组件的 `android:exported="true"` 声明。
   - 去掉编辑页和插件说明页的系统窗口转场动画, 保留便签自身 3D 展开动画。
   - 修复便签编辑页关闭时从上往下的系统退出动画, 改为无动画直接关闭。
   - 适配 Android 5.0+ 透明沉浸系统栏, 避免旧半透明状态栏和导航栏出现黑色遮罩。
@@ -86,6 +88,7 @@ Gitee 镜像使用相同标签 `tsf-widgets-v1` 和相同文件名.
   - 点击详情页照片时优先使用系统图片预览, 并通过媒体库 Uri 避免旧 `file://` 路径在现代 Android 被拦截。
   - 底部计数继续由日历插件服务读取, 移除会被现代 Android 拦截的显式后台 `startService`。
   - 日历事件按时间交集查询, 支持当天内事件, 全天事件和跨天事件。
+  - 修复 `CurlObjectContainer` 翻页滑动跨线程传递原始 `MotionEvent` 未拷贝/回收的问题, 避免 Android 16 触发 `libinput.so` SIGSEGV 闪退。
   - 辅助源码: `src-helpers/calendar-v2.0-vc14/`。
 
 - `modified/message-v2.4-vc19.apk`
@@ -119,6 +122,7 @@ Gitee 镜像使用相同标签 `tsf-widgets-v1` 和相同文件名.
   - 保留 Android 13+ 通知权限声明, 但小部件播放/暂停不主动弹出通知权限页。
   - 播放通知适配 Android 8.0+ 通知渠道, 并添加上一首、暂停、下一首控制按钮, 避免前台服务通知创建失败。
   - 小部件销毁时容忍服务未绑定状态, 避免移除小部件导致桌面崩溃。
+  - 屏蔽 Android 4.4+ 上已受保护的 `MEDIA_MOUNTED` + `file://` 旧扫描广播, 并将服务内 `registerReceiver` 统一为 Android 13+ 带 flag 兼容写法。
   - 辅助源码: `src-helpers/music-v2.2-vc20/`。
 
 - `modified/weather-v2.1-vc17.apk`
