@@ -1053,6 +1053,24 @@
 
     invoke-virtual {v0}, Lcom/tsf/shell/f/i/b/d/g;->n()V
 
+    iget-object v0, p0, Lcom/tsf/shell/f/i/b/d/a;->a:Lcom/tsf/shell/f/i/b/d/b;
+
+    invoke-virtual {v0}, Lcom/tsf/shell/f/i/b/d/b;->aJ()V
+
+    sget-object v0, Lcom/tsf/shell/manager/a;->p:Lcom/tsf/shell/f/e/e/c;
+
+    invoke-virtual {v0}, Lcom/tsf/shell/f/e/e/c;->c()V
+
+    iget-object v0, p0, Lcom/tsf/shell/f/i/b/d/a;->a:Lcom/tsf/shell/f/i/b/d/b;
+
+    invoke-virtual {v0}, Lcom/tsf/shell/f/i/b/d/b;->aP()V
+
+    iget-object v0, p0, Lcom/tsf/shell/f/i/b/d/a;->a:Lcom/tsf/shell/f/i/b/d/b;
+
+    invoke-virtual {v0}, Lcom/tsf/shell/f/i/b/d/b;->onIconRemovedCompat()V
+
+    goto :goto_0
+
     .line 356
     :goto_3
     iget-object v0, p0, Lcom/tsf/shell/f/i/b/d/a;->a:Lcom/tsf/shell/f/i/b/d/b;
