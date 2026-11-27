@@ -339,5 +339,11 @@
 
     .line 1920
     :cond_4
+    iget-object v0, p0, Lcom/tsf/shell/f/i/b/d/b$4$1;->a:Lcom/tsf/shell/f/i/b/d/b$4;
+
+    iget-object v0, v0, Lcom/tsf/shell/f/i/b/d/b$4;->b:Lcom/tsf/shell/f/i/b/d/b;
+
+    invoke-virtual {v0}, Lcom/tsf/shell/f/i/b/d/b;->onFolderClosedCompat()V
+
     return-void
 .end method

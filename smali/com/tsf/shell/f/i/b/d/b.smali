@@ -4477,6 +4477,12 @@
     .line 2116
     invoke-direct {p0, p1, v2}, Lcom/tsf/shell/f/i/b/d/b;->a(Lcom/tsf/shell/f/i/b/e/b;Z)V
 
+    invoke-virtual {p0}, Lcom/tsf/shell/f/i/b/d/b;->aC()Z
+
+    move-result v0
+
+    invoke-static {p0, v0}, Lcom/tsf/shell/compat/FolderCompat;->onIconDraggedOut(Lcom/tsf/shell/f/i/b;Z)V
+
     .line 2118
     invoke-virtual {p0, v2}, Lcom/tsf/shell/f/i/b/d/b;->m(Z)V
 
@@ -6913,8 +6919,83 @@
     .line 2930
     invoke-direct {p0}, Lcom/tsf/shell/f/i/b/d/b;->bg()V
 
+    invoke-virtual {p0}, Lcom/tsf/shell/f/i/b/d/b;->onIconRemovedCompat()V
+
     .line 2934
     :cond_0
+    return-void
+.end method
+
+.method public onIconRemovedCompat()V
+    .locals 4
+
+    invoke-virtual {p0}, Lcom/tsf/shell/f/i/b/d/b;->aC()Z
+
+    move-result v0
+
+    invoke-virtual {p0}, Lcom/tsf/shell/f/i/b/d/b;->aT()Z
+
+    move-result v1
+
+    invoke-virtual {p0}, Lcom/tsf/shell/f/i/b/d/b;->aV()I
+
+    move-result v2
+
+    sget v3, Lcom/tsf/shell/f/i/b/d/b;->a:I
+
+    if-ne v2, v3, :cond_0
+
+    const/4 v2, 0x1
+
+    goto :goto_0
+
+    :cond_0
+    const/4 v2, 0x0
+
+    :goto_0
+    invoke-static {p0, v0, v1, v2}, Lcom/tsf/shell/compat/FolderCompat;->onIconRemoved(Lcom/tsf/shell/f/i/b;ZZZ)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_1
+
+    const/4 v0, 0x1
+
+    invoke-virtual {p0, v0}, Lcom/tsf/shell/f/i/b/d/b;->m(Z)V
+
+    :cond_1
+    return-void
+.end method
+
+.method public onFolderClosedCompat()V
+    .locals 4
+
+    invoke-virtual {p0}, Lcom/tsf/shell/f/i/b/d/b;->aC()Z
+
+    move-result v0
+
+    invoke-virtual {p0}, Lcom/tsf/shell/f/i/b/d/b;->aT()Z
+
+    move-result v1
+
+    invoke-virtual {p0}, Lcom/tsf/shell/f/i/b/d/b;->aV()I
+
+    move-result v2
+
+    sget v3, Lcom/tsf/shell/f/i/b/d/b;->b:I
+
+    if-ne v2, v3, :cond_0
+
+    const/4 v2, 0x1
+
+    goto :goto_0
+
+    :cond_0
+    const/4 v2, 0x0
+
+    :goto_0
+    invoke-static {p0, v0, v1, v2}, Lcom/tsf/shell/compat/FolderCompat;->onFolderClosed(Lcom/tsf/shell/f/i/b;ZZZ)V
+
     return-void
 .end method
 

@@ -211,7 +211,7 @@
 
     iget v1, v1, Lcom/tsf/shell/f/i/b/d/j;->K:I
 
-    if-ge v0, v1, :cond_0
+    if-ge v0, v1, :cond_2
 
     .line 781
     iget-object v0, p0, Lcom/tsf/shell/f/i/b/d/b$18;->a:Lcom/tsf/shell/f/i/b/d/b;
@@ -231,6 +231,11 @@
     iget-object v1, p0, Lcom/tsf/shell/f/i/b/d/b$18;->a:Lcom/tsf/shell/f/i/b/d/b;
 
     invoke-virtual {v0, v1}, Lcom/tsf/shell/f/i/b/d/d;->c(Lcom/tsf/shell/f/i/b/d/b;)V
+
+    :cond_2
+    iget-object v0, p0, Lcom/tsf/shell/f/i/b/d/b$18;->a:Lcom/tsf/shell/f/i/b/d/b;
+
+    invoke-virtual {v0}, Lcom/tsf/shell/f/i/b/d/b;->onIconRemovedCompat()V
 
     goto :goto_0
 .end method

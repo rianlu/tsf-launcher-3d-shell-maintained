@@ -41,6 +41,12 @@
 
     .prologue
     .line 281
+    sget v0, Landroid/os/Build$VERSION;->SDK_INT:I
+
+    const/16 v1, 0x17
+
+    if-lt v0, v1, :cond_0
+
     iget-object v0, p0, Lcom/tsf/shell/widget/alarm/a$1$1;->a:Lcom/tsf/shell/widget/alarm/a$1;
 
     iget-object v0, v0, Lcom/tsf/shell/widget/alarm/a$1;->a:Lcom/tsf/shell/widget/alarm/a;
@@ -49,13 +55,25 @@
 
     move-result-object v0
 
-    invoke-static {v0}, Lcom/tsf/shell/a/a/e;->a(Landroid/content/Context;)Z
+    if-eqz v0, :cond_1
+
+    invoke-virtual {v0}, Landroid/content/Context;->getApplicationContext()Landroid/content/Context;
+
+    move-result-object v1
+
+    if-eqz v1, :cond_2
+
+    move-object v0, v1
+
+    :cond_2
+    invoke-static {v0}, Landroid/provider/Settings$System;->canWrite(Landroid/content/Context;)Z
 
     move-result v0
 
-    if-eqz v0, :cond_0
+    if-eqz v0, :cond_1
 
     .line 282
+    :cond_0
     new-instance v0, Lcom/tsf/shell/widget/alarm/a$b;
 
     iget-object v1, p0, Lcom/tsf/shell/widget/alarm/a$1$1;->a:Lcom/tsf/shell/widget/alarm/a$1;
@@ -67,9 +85,9 @@
     invoke-virtual {v0}, Lcom/tsf/shell/widget/alarm/a$b;->start()V
 
     .line 283
+    :cond_1
     invoke-static {}, Lcom/tsf/shell/widget/alarm/AlarmWidget;->b()V
 
     .line 285
-    :cond_0
     return-void
 .end method

@@ -10,6 +10,8 @@
 
 .field private c:I
 
+.field private d:Lcom/censivn/C3DEngine/b/e/a;
+
 
 # direct methods
 .method public constructor <init>()V
@@ -73,6 +75,39 @@
     invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/a;->a(Lcom/censivn/C3DEngine/b/e/a$a;)V
 
     .line 107
+    invoke-virtual {p0, v0}, Lcom/tsf/shell/preference/a/a/f;->b(Lcom/censivn/C3DEngine/b/e/f;)V
+
+    .line 108
+    new-instance v0, Lcom/censivn/C3DEngine/b/e/a;
+
+    invoke-direct {v0}, Lcom/censivn/C3DEngine/b/e/a;-><init>()V
+
+    iput-object v0, p0, Lcom/tsf/shell/preference/a/a/f;->d:Lcom/censivn/C3DEngine/b/e/a;
+
+    invoke-static {}, Lcom/tsf/shell/compat/FolderCompat;->getAutoRemoveEmptyTitle()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/a;->a(Ljava/lang/String;)V
+
+    invoke-static {}, Lcom/tsf/shell/compat/FolderCompat;->getAutoRemoveEmptySummary()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/a;->b(Ljava/lang/String;)V
+
+    invoke-static {}, Lcom/tsf/shell/compat/FolderCompat;->isAutoRemoveEmptyEnabled()Z
+
+    move-result v1
+
+    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/a;->c(Z)V
+
+    new-instance v1, Lcom/tsf/shell/preference/a/a/f$6;
+
+    invoke-direct {v1, p0}, Lcom/tsf/shell/preference/a/a/f$6;-><init>(Lcom/tsf/shell/preference/a/a/f;)V
+
+    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/a;->a(Lcom/censivn/C3DEngine/b/e/a$a;)V
+
     invoke-virtual {p0, v0}, Lcom/tsf/shell/preference/a/a/f;->b(Lcom/censivn/C3DEngine/b/e/f;)V
 
     .line 111
@@ -247,6 +282,28 @@
 
     .line 177
     :goto_0
+    iget-object v0, p0, Lcom/tsf/shell/preference/a/a/f;->a:Lcom/censivn/C3DEngine/b/e/a;
+
+    if-eqz v0, :cond_0
+
+    invoke-static {}, Lcom/tsf/shell/manager/b/e;->as()Z
+
+    move-result v1
+
+    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/a;->c(Z)V
+
+    :cond_0
+    iget-object v0, p0, Lcom/tsf/shell/preference/a/a/f;->d:Lcom/censivn/C3DEngine/b/e/a;
+
+    if-eqz v0, :cond_1
+
+    invoke-static {}, Lcom/tsf/shell/compat/FolderCompat;->isAutoRemoveEmptyEnabled()Z
+
+    move-result v1
+
+    invoke-virtual {v0, v1}, Lcom/censivn/C3DEngine/b/e/a;->c(Z)V
+
+    :cond_1
     return-void
 
     .line 169
