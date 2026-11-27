@@ -1484,6 +1484,8 @@
 
     if-eqz v0, :cond_0
 
+    invoke-static {p0}, Lcom/tsf/shell/shortcut/ShortcutIcon;->refreshIfSystemShapeChanged(Landroid/content/Context;)V
+
     .line 429
     sget-object v0, Lcom/tsf/shell/manager/a;->b:Lcom/censivn/C3DEngine/b/c/e;
 
@@ -2598,6 +2600,8 @@
     iget-boolean v0, p0, Lcom/tsf/shell/Home;->s:Z
 
     if-eqz v0, :cond_1
+
+    invoke-static {p0}, Lcom/tsf/shell/shortcut/ShortcutIcon;->refreshIfSystemShapeChanged(Landroid/content/Context;)V
 
     .line 1206
     iput-boolean v2, p0, Lcom/tsf/shell/Home;->j:Z

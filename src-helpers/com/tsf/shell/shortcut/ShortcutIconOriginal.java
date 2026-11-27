@@ -69,6 +69,22 @@ public final class ShortcutIconOriginal {
         }
     }
 
+    public static boolean isCustomized(Object info) {
+        try {
+            if (info == null || iconType(info) != 2) {
+                return false;
+            }
+            Object resource = info.getClass().getField("iconResource").get(info);
+            if (resource != null) {
+                return true;
+            }
+            File file = file(info);
+            return file != null && file.exists();
+        } catch (Throwable ignored) {
+            return false;
+        }
+    }
+
     public static void drop(Object info) {
         try {
             File file = file(info);
