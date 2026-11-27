@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "versionCode": 30912,
-  "versionName": "3.9.4-r8",
-  "tag": "v3.9.4-r8",
-  "fileName": "tsf-launcher-maintained-3.9.4-r8.apk",
-  "sha256": "a335717c736aa38c542dac5275a1a0b845dbf433e51b26ac31cbabd7ea492efc",
-  "changelog": "Fixed repeated wallpaper reloads and frequent media reads on some devices after setting a wallpaper, along with an inverted permission check in the wallpaper picker. Fixed the label position of the Stack option in the lasso menu. The gallery widget fixes tilted photos and leftover stacked visuals after expanding; its version remains 2.1 (versionCode 18), so uninstall it and reinstall from tsf-widgets-v1 to apply the fix.",
-  "changelogZh": "修复设置壁纸后部分设备反复重载壁纸与读取媒体文件的问题，修正壁纸页权限判断。修正圈选菜单「图标堆叠」文字位置。相册小部件修复展开后照片倾斜及残留堆叠显示，版本号仍为 2.1（versionCode 18），如需更新请先卸载相册插件再从 tsf-widgets-v1 重新安装。"
+  "versionCode": 30913,
+  "versionName": "3.9.4-r9",
+  "tag": "v3.9.4-r9",
+  "fileName": "tsf-launcher-maintained-3.9.4-r9.apk",
+  "sha256": "e466ad024ba0246eca5c452b3c76592d5ebe6f1fa29a83b8f722b34955337e03",
+  "changelog": "Fixed default icon over-clipping and aliasing, washed-out icons on translucent plate themes, and broken circular icon masks. Sped up app drawer loading and theme switching, and improved stability on modern Android. Migrated built-in clock and Weather widget to Xiaomi Weather + Open-Meteo for both China and overseas users. Added an auto-remove empty folder option and improved alarm navigation. Updated Gallery (sharper screenshots, auto-refresh, fixed blank expand), Weather, Calendar, Music, and Memo widgets; uninstall and reinstall old widget plugins from tsf-widgets-v1 to apply updates.",
+  "changelogZh": "修复默认图标圆角过裁锯齿、半透明底板主题图标发淡及部分第三方圆形遮罩失效问题；大幅提升应用抽屉加载速度与切换主题流畅度，提升高版本安卓稳定性；内置时钟与挂件天气切换为小米天气 + Open-Meteo 双源，海内外均可正常使用；新增空文件夹自动消失开关，优化闹钟返回体验。同步更新相册（提升截图清晰度、支持新照片自动刷新、修复空展开）、天气、日历、音乐、便签小部件，旧版小部件需先卸载再重新添加或从 tsf-widgets-v1 重新安装。"
 }
