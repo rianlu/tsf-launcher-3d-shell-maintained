@@ -15,8 +15,12 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.AdaptiveIconDrawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
+
+import org.xmlpull.v1.XmlPullParser;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -1001,12 +1005,17 @@ public final class ShortcutIcon implements Runnable {
         Bitmap plate = firstPlate(icons, iconClass, styleClass, style);
         Bitmap mask = (Bitmap) iconClass.getMethod("getDefaultIconMaskBitmap", styleClass).invoke(icons, style);
         float contentScale = themeScale(icons, iconClass);
+        if (plate == null && mask != null && contentScale < 1.0f) {
+            contentScale = 1.0f;
+        }
         if (plate != null || mask != null) {
             Bitmap glyph = Bitmap.createBitmap(iconW, iconH, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(glyph);
             Bitmap scaledPlate = null;
             if (plate != null) {
-                scaledPlate = Bitmap.createScaledBitmap(plate, iconW, iconH, true);
+                scaledPlate = (plate.getWidth() == iconW && plate.getHeight() == iconH)
+                        ? plate
+                        : Bitmap.createScaledBitmap(plate, iconW, iconH, true);
                 canvas.drawBitmap(scaledPlate, 0, 0, null);
             }
             Bitmap foreground = Bitmap.createBitmap(iconW, iconH, Bitmap.Config.ARGB_8888);
@@ -1153,40 +1162,251 @@ public final class ShortcutIcon implements Runnable {
                 return null;
             }
             Object backs = theme.getClass().getField("iconBackItems").get(theme);
-            if (!(backs instanceof List) || ((List) backs).isEmpty()) {
+            if (!(backs instanceof List)) {
                 return null;
             }
-            Object item = ((List) backs).get(0);
-            return (Bitmap) item.getClass().getMethod("getBitmap", styleClass).invoke(item, style);
+            List<?> list = (List<?>) backs;
+            for (int i = 0; i < list.size(); i++) {
+                Object item = list.get(i);
+                if (item == null) {
+                    continue;
+                }
+                Bitmap bmp = (Bitmap) item.getClass().getMethod("getBitmap", styleClass).invoke(item, style);
+                if (bmp != null && !bmp.isRecycled()) {
+                    return bmp;
+                }
+            }
+            return null;
         } catch (Throwable ignored) {
             return null;
         }
     }
 
-    private static boolean plateShapes(Bitmap plate) {
-        if (plate == null || plate.getWidth() < 2 || plate.getHeight() < 2) {
+    private static boolean isSolidShapedPlate(Bitmap plate) {
+        if (plate == null || plate.isRecycled()) {
             return false;
         }
-        return ((plate.getPixel(0, 0) >>> 24) & 0xff) <= 16;
+        int w = plate.getWidth();
+        int h = plate.getHeight();
+        if (w < 4 || h < 4) {
+            return false;
+        }
+        if (pixelAlpha(plate, 0, 0) > 16
+                || pixelAlpha(plate, w - 1, 0) > 16
+                || pixelAlpha(plate, 0, h - 1) > 16
+                || pixelAlpha(plate, w - 1, h - 1) > 16) {
+            return false;
+        }
+        int x1 = w / 3;
+        int x2 = (w * 2) / 3;
+        int y1 = h / 3;
+        int y2 = (h * 2) / 3;
+        return pixelAlpha(plate, w / 2, h / 2) >= 240
+                && pixelAlpha(plate, x1, y1) >= 240
+                && pixelAlpha(plate, x2, y1) >= 240
+                && pixelAlpha(plate, x1, y2) >= 240
+                && pixelAlpha(plate, x2, y2) >= 240;
+    }
+
+    private static int pixelAlpha(Bitmap bmp, int x, int y) {
+        return (bmp.getPixel(x, y) >>> 24) & 0xff;
+    }
+
+    private static int pixelLuma(int argb) {
+        int r = (argb >>> 16) & 0xff;
+        int g = (argb >>> 8) & 0xff;
+        int b = argb & 0xff;
+        return (r * 299 + g * 587 + b * 114) / 1000;
     }
 
     private static void clipToShape(Bitmap glyph, Bitmap plate, Bitmap mask) throws Exception {
-        if (plateShapes(plate)) {
-            Bitmap scaled = Bitmap.createScaledBitmap(plate, glyph.getWidth(), glyph.getHeight(), true);
+        if (mask != null && !mask.isRecycled()) {
+            applyThemeMask(glyph, mask);
+            return;
+        }
+        if (isSolidShapedPlate(plate)) {
+            Bitmap scaled = (plate.getWidth() == glyph.getWidth() && plate.getHeight() == glyph.getHeight())
+                    ? plate
+                    : Bitmap.createScaledBitmap(plate, glyph.getWidth(), glyph.getHeight(), true);
             applyMask(glyph, scaled);
             if (scaled != plate) {
                 scaled.recycle();
             }
         }
-        if (mask != null) {
-            Bitmap scaledMask = Bitmap.createScaledBitmap(mask, glyph.getWidth(), glyph.getHeight(), true);
-            Class.forName("com.tsf.shell.utils.q")
-                    .getMethod("a", Canvas.class, Bitmap.class, int.class, int.class)
-                    .invoke(null, new Canvas(glyph), scaledMask, Integer.valueOf(0), Integer.valueOf(0));
-            if (scaledMask != mask) {
+    }
+
+    private static void applyThemeMask(Bitmap target, Bitmap mask) {
+        int w = target.getWidth();
+        int h = target.getHeight();
+        if (w < 4 || h < 4 || mask == null || mask.isRecycled()) {
+            return;
+        }
+        Bitmap scaledMask = (mask.getWidth() == w && mask.getHeight() == h)
+                ? mask
+                : Bitmap.createScaledBitmap(mask, w, h, true);
+        try {
+            int[] cornerPixels = new int[] {
+                    scaledMask.getPixel(0, 0),
+                    scaledMask.getPixel(w - 1, 0),
+                    scaledMask.getPixel(0, h - 1),
+                    scaledMask.getPixel(w - 1, h - 1)
+            };
+            int cx = w / 2;
+            int cy = h / 2;
+            int dx = Math.max(1, w / 10);
+            int dy = Math.max(1, h / 10);
+            int[] centerPixels = new int[] {
+                    scaledMask.getPixel(cx, cy),
+                    scaledMask.getPixel(Math.max(0, cx - dx), cy),
+                    scaledMask.getPixel(Math.min(w - 1, cx + dx), cy),
+                    scaledMask.getPixel(cx, Math.max(0, cy - dy)),
+                    scaledMask.getPixel(cx, Math.min(h - 1, cy + dy))
+            };
+
+            int cornerAlphaSum = 0;
+            int cornerLumaSum = 0;
+            for (int i = 0; i < cornerPixels.length; i++) {
+                cornerAlphaSum += (cornerPixels[i] >>> 24) & 0xff;
+                cornerLumaSum += pixelLuma(cornerPixels[i]);
+            }
+            int centerAlphaSum = 0;
+            int centerLumaSum = 0;
+            for (int i = 0; i < centerPixels.length; i++) {
+                centerAlphaSum += (centerPixels[i] >>> 24) & 0xff;
+                centerLumaSum += pixelLuma(centerPixels[i]);
+            }
+            int cornerAlpha = cornerAlphaSum / cornerPixels.length;
+            int cornerLuma = cornerLumaSum / cornerPixels.length;
+            int centerAlpha = centerAlphaSum / centerPixels.length;
+            int centerLuma = centerLumaSum / centerPixels.length;
+
+            if (cornerAlpha >= 128 && centerAlpha <= 64) {
+                applyMaskOut(target, scaledMask);
+                return;
+            }
+            if (cornerAlpha <= 64 && centerAlpha >= 128) {
+                applyMask(target, scaledMask);
+                return;
+            }
+            if (cornerAlpha >= 200 && centerAlpha >= 200) {
+                if (Math.abs(centerLuma - cornerLuma) < 40) {
+                    return;
+                }
+                boolean keepBright = centerLuma > cornerLuma;
+                int total = w * h;
+                int[] pixels = new int[total];
+                scaledMask.getPixels(pixels, 0, w, 0, 0, w, h);
+                for (int i = 0; i < total; i++) {
+                    int luma = pixelLuma(pixels[i]);
+                    int alpha = keepBright ? luma : (255 - luma);
+                    pixels[i] = (alpha << 24) | 0x00ffffff;
+                }
+                Bitmap lumaMask = Bitmap.createBitmap(pixels, w, h, Bitmap.Config.ARGB_8888);
+                try {
+                    applyMask(target, lumaMask);
+                } finally {
+                    lumaMask.recycle();
+                }
+                return;
+            }
+            if (cornerAlpha > centerAlpha + 32) {
+                applyMaskOut(target, scaledMask);
+            } else if (centerAlpha > cornerAlpha + 32) {
+                applyMask(target, scaledMask);
+            }
+        } finally {
+            if (scaledMask != mask && !scaledMask.isRecycled()) {
                 scaledMask.recycle();
             }
         }
+    }
+
+    private static void applyMaskOut(Bitmap target, Bitmap mask) {
+        Paint clipPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+        clipPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+        new Canvas(target).drawBitmap(mask, 0f, 0f, clipPaint);
+    }
+
+    public static Bitmap decodeThemeDrawable(Context context, String name, int targetW, int targetH) {
+        if (context == null || name == null || name.length() == 0 || targetW <= 0 || targetH <= 0) {
+            return null;
+        }
+        try {
+            Resources res = context.getResources();
+            String pkg = context.getPackageName();
+            int id = res.getIdentifier(name, "drawable", pkg);
+            if (id == 0) {
+                id = res.getIdentifier(name, "mipmap", pkg);
+            }
+            if (id == 0) {
+                return null;
+            }
+            Drawable drawable = Build.VERSION.SDK_INT >= 21
+                    ? res.getDrawable(id, context.getTheme())
+                    : res.getDrawable(id);
+            if (drawable == null) {
+                return null;
+            }
+            if (drawable instanceof BitmapDrawable) {
+                Bitmap src = ((BitmapDrawable) drawable).getBitmap();
+                if (src != null && !src.isRecycled()) {
+                    if (src.getWidth() == targetW && src.getHeight() == targetH) {
+                        return src.copy(Bitmap.Config.ARGB_8888, false);
+                    }
+                    return Bitmap.createScaledBitmap(src, targetW, targetH, true);
+                }
+            }
+            Bitmap out = Bitmap.createBitmap(targetW, targetH, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(out);
+            drawable.setBounds(0, 0, targetW, targetH);
+            drawable.draw(canvas);
+            return out;
+        } catch (Throwable error) {
+            Log.w(TAG, "decodeThemeDrawable failed for " + name, error);
+            return null;
+        }
+    }
+
+    public static float parseScaleAttr(XmlPullParser parser, float fallback) {
+        if (parser == null) {
+            return fallback;
+        }
+        try {
+            String value = parser.getAttributeValue(null, "factor");
+            if ((value == null || value.length() == 0) && parser.getAttributeCount() > 0) {
+                value = parser.getAttributeValue(0);
+            }
+            if (value != null) {
+                value = value.trim();
+                if (value.length() > 0) {
+                    float parsed = Float.parseFloat(value);
+                    if (parsed > 0f && !Float.isNaN(parsed) && !Float.isInfinite(parsed)) {
+                        return parsed;
+                    }
+                }
+            }
+        } catch (Throwable ignored) {
+        }
+        return fallback;
+    }
+
+    public static String[] parseItemAttrs(XmlPullParser parser) {
+        if (parser == null) {
+            return null;
+        }
+        try {
+            String component = parser.getAttributeValue(null, "component");
+            String drawable = parser.getAttributeValue(null, "drawable");
+            if (component == null && drawable == null && parser.getAttributeCount() >= 2) {
+                component = parser.getAttributeValue(0);
+                drawable = parser.getAttributeValue(1);
+            }
+            if (component != null && drawable != null) {
+                return new String[] { component, drawable };
+            }
+        } catch (Throwable ignored) {
+        }
+        return null;
     }
 
     private static boolean fills(Bitmap source, Rect bounds) {

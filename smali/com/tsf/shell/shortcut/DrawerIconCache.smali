@@ -13,7 +13,7 @@
 
 .field private static final FILE_MAGIC:I = 0x54534649
 
-.field private static final FILE_VERSION:I = 0x1
+.field private static final FILE_VERSION:I = 0x2
 
 .field private static final FLAG_SKIP_UPON:I = 0x1
 
@@ -390,15 +390,15 @@
 
     move-result-object v1
 
-    const/4 v2, 0x1
+    const/4 v2, 0x2
 
     invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
 
     move-result-object v1
 
-    const/16 v3, 0x7c
+    const/16 v2, 0x7c
 
-    invoke-virtual {v1, v3}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
 
     move-result-object v1
 
@@ -416,7 +416,7 @@
 
     move-result-object p4
 
-    invoke-virtual {p4, v3}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
+    invoke-virtual {p4, v2}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
 
     const-string p4, ""
 
@@ -425,21 +425,21 @@
     :try_start_0
     const-string v1, "getThemePackageName"
 
-    new-array v4, p5, [Ljava/lang/Class;
+    new-array v3, p5, [Ljava/lang/Class;
 
-    invoke-virtual {p1, v1, v4}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
-
-    move-result-object v1
-
-    new-array v4, p5, [Ljava/lang/Object;
-
-    invoke-virtual {v1, p0, v4}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    invoke-virtual {p1, v1, v3}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
 
     move-result-object v1
 
-    instance-of v4, v1, Ljava/lang/String;
+    new-array v3, p5, [Ljava/lang/Object;
 
-    if-eqz v4, :cond_0
+    invoke-virtual {v1, p0, v3}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v1
+
+    instance-of v3, v1, Ljava/lang/String;
+
+    if-eqz v3, :cond_0
 
     check-cast v1, Ljava/lang/String;
     :try_end_0
@@ -461,17 +461,19 @@
     :goto_1
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    move-result-object v4
+    move-result-object v3
 
-    invoke-virtual {v4, v3}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
+    invoke-virtual {v3, v2}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
 
     invoke-virtual {v1}, Ljava/lang/String;->length()I
 
-    move-result v4
+    move-result v3
 
-    const/16 v5, 0x3a
+    const/16 v4, 0x3a
 
-    if-lez v4, :cond_1
+    const/4 v5, 0x1
+
+    if-lez v3, :cond_1
 
     if-eqz p6, :cond_1
 
@@ -489,17 +491,17 @@
 
     move-result-object v1
 
-    invoke-virtual {v1, v5}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
+    invoke-virtual {v1, v4}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
 
     move-result-object v1
 
-    aget-wide v6, p6, v2
+    aget-wide v6, p6, v5
 
     invoke-virtual {v1, v6, v7}, Ljava/lang/StringBuilder;->append(J)Ljava/lang/StringBuilder;
 
     move-result-object p6
 
-    invoke-virtual {p6, v3}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
+    invoke-virtual {p6, v2}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
 
     :cond_1
     nop
@@ -543,7 +545,7 @@
 
     move-result-object p6
 
-    invoke-virtual {p6, v3}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
+    invoke-virtual {p6, v2}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
 
     nop
 
@@ -554,15 +556,15 @@
 
     const-string v1, "isColorize"
 
-    new-array v4, p5, [Ljava/lang/Class;
+    new-array v3, p5, [Ljava/lang/Class;
 
-    invoke-virtual {p1, v1, v4}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    invoke-virtual {p1, v1, v3}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
 
     move-result-object v1
 
-    new-array v4, p5, [Ljava/lang/Object;
+    new-array v3, p5, [Ljava/lang/Object;
 
-    invoke-virtual {v1, p0, v4}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    invoke-virtual {v1, p0, v3}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
 
     move-result-object v1
 
@@ -577,15 +579,15 @@
     :try_start_3
     const-string v1, "colorize"
 
-    new-array v4, p5, [Ljava/lang/Class;
+    new-array v3, p5, [Ljava/lang/Class;
 
-    invoke-virtual {p1, v1, v4}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    invoke-virtual {p1, v1, v3}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
 
     move-result-object v1
 
-    new-array v4, p5, [Ljava/lang/Object;
+    new-array v3, p5, [Ljava/lang/Object;
 
-    invoke-virtual {v1, p0, v4}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    invoke-virtual {v1, p0, v3}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
 
     move-result-object v1
 
@@ -623,7 +625,7 @@
 
     move-result-object p6
 
-    invoke-virtual {p6, v5}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
+    invoke-virtual {p6, v4}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
 
     move-result-object p6
 
@@ -631,13 +633,13 @@
 
     move-result-object p6
 
-    invoke-virtual {p6, v3}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
+    invoke-virtual {p6, v2}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
 
     invoke-static {p0, p1, p2, p3}, Lcom/tsf/shell/shortcut/ShortcutIcon;->getThemePlateSnapshot(Ljava/lang/Object;Ljava/lang/Class;Ljava/lang/Class;Ljava/lang/Object;)Landroid/graphics/Bitmap;
 
     move-result-object p6
 
-    new-array v1, v2, [Ljava/lang/Class;
+    new-array v1, v5, [Ljava/lang/Class;
 
     aput-object p2, v1, p5
 
@@ -647,7 +649,7 @@
 
     move-result-object p2
 
-    new-array v1, v2, [Ljava/lang/Object;
+    new-array v1, v5, [Ljava/lang/Object;
 
     aput-object p3, v1, p5
 
@@ -671,7 +673,7 @@
 
     move-result-object p3
 
-    invoke-virtual {p3, v3}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
+    invoke-virtual {p3, v2}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
 
     const-string p3, "m="
 
@@ -687,7 +689,7 @@
 
     move-result-object p2
 
-    invoke-virtual {p2, v3}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
+    invoke-virtual {p2, v2}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
 
     :try_start_4
     const-string p2, "mIconDescription"
@@ -696,7 +698,7 @@
 
     move-result-object p1
 
-    invoke-virtual {p1, v2}, Ljava/lang/reflect/Field;->setAccessible(Z)V
+    invoke-virtual {p1, v5}, Ljava/lang/reflect/Field;->setAccessible(Z)V
 
     invoke-virtual {p1, p0}, Ljava/lang/reflect/Field;->get(Ljava/lang/Object;)Ljava/lang/Object;
 
@@ -738,7 +740,7 @@
 
     move-result-object p0
 
-    invoke-virtual {p0, v3}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
+    invoke-virtual {p0, v2}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
     :try_end_4
     .catchall {:try_start_4 .. :try_end_4} :catchall_4
 
@@ -2230,7 +2232,7 @@
 
     if-ne v9, v0, :cond_9
 
-    const/4 v0, 0x1
+    const/4 v0, 0x2
 
     if-ne v10, v0, :cond_9
 
@@ -2238,40 +2240,40 @@
 
     if-lez v12, :cond_9
 
-    const/16 v9, 0x200
+    const/16 v0, 0x200
 
-    if-gt v11, v9, :cond_9
+    if-gt v11, v0, :cond_9
 
-    if-gt v12, v9, :cond_9
+    if-gt v12, v0, :cond_9
 
-    move/from16 v9, p6
+    move/from16 v0, p6
 
-    if-ne v11, v9, :cond_9
+    if-ne v11, v0, :cond_9
 
-    move/from16 v9, p7
+    move/from16 v0, p7
 
-    if-ne v12, v9, :cond_9
+    if-ne v12, v0, :cond_9
 
-    cmp-long v9, v14, p2
+    cmp-long v0, v14, p2
 
-    if-nez v9, :cond_9
+    if-nez v0, :cond_9
 
-    cmp-long v9, v16, p4
+    cmp-long v0, v16, p4
 
-    if-eqz v9, :cond_4
+    if-eqz v0, :cond_4
 
     goto :goto_5
 
     :cond_4
-    mul-int v9, v11, v12
+    mul-int v0, v11, v12
 
-    mul-int/lit8 v9, v9, 0x4
+    mul-int/lit8 v0, v0, 0x4
 
-    int-to-long v14, v9
+    int-to-long v9, v0
 
-    add-long/2addr v14, v6
+    add-long/2addr v9, v6
 
-    cmp-long v6, v4, v14
+    cmp-long v6, v4, v9
 
     if-eqz v6, :cond_5
 
@@ -2298,13 +2300,13 @@
 
     :cond_5
     :try_start_5
-    new-array v4, v9, [B
+    new-array v0, v0, [B
 
-    invoke-static {v8, v4}, Lcom/tsf/shell/shortcut/DrawerIconCache;->readFully(Ljava/io/FileInputStream;[B)Z
+    invoke-static {v8, v0}, Lcom/tsf/shell/shortcut/DrawerIconCache;->readFully(Ljava/io/FileInputStream;[B)Z
 
-    move-result v5
+    move-result v4
 
-    if-nez v5, :cond_6
+    if-nez v4, :cond_6
 
     invoke-virtual {v3}, Ljava/io/File;->delete()Z
     :try_end_5
@@ -2329,29 +2331,31 @@
 
     :cond_6
     :try_start_7
-    sget-object v5, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
+    sget-object v4, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
 
-    invoke-static {v11, v12, v5}, Landroid/graphics/Bitmap;->createBitmap(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;
-
-    move-result-object v5
-
-    invoke-static {v4}, Ljava/nio/ByteBuffer;->wrap([B)Ljava/nio/ByteBuffer;
+    invoke-static {v11, v12, v4}, Landroid/graphics/Bitmap;->createBitmap(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;
 
     move-result-object v4
 
-    invoke-virtual {v5, v4}, Landroid/graphics/Bitmap;->copyPixelsFromBuffer(Ljava/nio/Buffer;)V
+    invoke-static {v0}, Ljava/nio/ByteBuffer;->wrap([B)Ljava/nio/ByteBuffer;
+
+    move-result-object v0
+
+    invoke-virtual {v4, v0}, Landroid/graphics/Bitmap;->copyPixelsFromBuffer(Ljava/nio/Buffer;)V
 
     if-eqz v1, :cond_8
 
-    array-length v4, v1
+    array-length v0, v1
 
-    if-lez v4, :cond_8
+    if-lez v0, :cond_8
 
-    and-int/lit8 v4, v13, 0x1
+    const/4 v0, 0x1
+
+    and-int/lit8 v5, v13, 0x1
 
     const/4 v6, 0x0
 
-    if-eqz v4, :cond_7
+    if-eqz v5, :cond_7
 
     goto :goto_3
 
@@ -2379,7 +2383,7 @@
     move-exception v0
 
     :goto_4
-    return-object v5
+    return-object v4
 
     :cond_9
     :goto_5
@@ -3275,7 +3279,7 @@
 
     invoke-virtual {p0, v5}, Ljava/nio/ByteBuffer;->putInt(I)Ljava/nio/ByteBuffer;
 
-    const/4 v5, 0x1
+    const/4 v5, 0x2
 
     invoke-virtual {p0, v5}, Ljava/nio/ByteBuffer;->putInt(I)Ljava/nio/ByteBuffer;
 
@@ -3285,13 +3289,15 @@
 
     if-eqz p7, :cond_4
 
+    const/4 p7, 0x1
+
     goto :goto_0
 
     :cond_4
-    const/4 v5, 0x0
+    const/4 p7, 0x0
 
     :goto_0
-    invoke-virtual {p0, v5}, Ljava/nio/ByteBuffer;->putInt(I)Ljava/nio/ByteBuffer;
+    invoke-virtual {p0, p7}, Ljava/nio/ByteBuffer;->putInt(I)Ljava/nio/ByteBuffer;
 
     invoke-virtual {p0, p2, p3}, Ljava/nio/ByteBuffer;->putLong(J)Ljava/nio/ByteBuffer;
 

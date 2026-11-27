@@ -168,14 +168,15 @@
     if-eqz p3, :cond_0
 
     .line 92
-    invoke-interface {v0, v3}, Lorg/xmlpull/v1/XmlPullParser;->getAttributeValue(I)Ljava/lang/String;
+    invoke-static {v0}, Lcom/tsf/shell/shortcut/ShortcutIcon;->parseItemAttrs(Lorg/xmlpull/v1/XmlPullParser;)[Ljava/lang/String;
 
-    move-result-object v2
+    move-result-object v5
 
-    .line 93
-    invoke-interface {v0, v7}, Lorg/xmlpull/v1/XmlPullParser;->getAttributeValue(I)Ljava/lang/String;
+    if-eqz v5, :cond_0
 
-    move-result-object v4
+    aget-object v2, v5, v3
+
+    aget-object v4, v5, v7
 
     .line 95
     invoke-virtual {p2, v2, v4}, Lcom/tsf/shell/theme/inside/description/ThemeIconDescription;->addIconFilterItem(Ljava/lang/String;Ljava/lang/String;)V
@@ -225,11 +226,7 @@
     if-eqz v4, :cond_2
 
     .line 101
-    invoke-interface {v0, v3}, Lorg/xmlpull/v1/XmlPullParser;->getAttributeValue(I)Ljava/lang/String;
-
-    move-result-object v1
-
-    invoke-static {v1}, Ljava/lang/Float;->parseFloat(Ljava/lang/String;)F
+    invoke-static {v0, v1}, Lcom/tsf/shell/shortcut/ShortcutIcon;->parseScaleAttr(Lorg/xmlpull/v1/XmlPullParser;F)F
 
     move-result v1
 

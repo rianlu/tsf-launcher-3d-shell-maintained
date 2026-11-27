@@ -38,7 +38,7 @@ public final class DrawerIconCache implements Runnable {
     private static final String TAG = "ShortcutIcon";
     private static final String CACHE_ROOT_NAME = "tsf_icon_glyphs_v1";
     private static final int FILE_MAGIC = 0x54534649; // "TSFI"
-    private static final int FILE_VERSION = 1;
+    private static final int FILE_VERSION = 2;
     private static final int HEADER_BYTES = 36;
     private static final int FLAG_SKIP_UPON = 1;
     private static final int MAX_CACHED_DIM = 512;

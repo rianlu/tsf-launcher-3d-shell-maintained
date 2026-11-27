@@ -167,6 +167,19 @@
     .line 383
     :cond_0
     :goto_0
+    if-nez v0, :return_bmp
+
+    if-eqz p0, :return_bmp
+
+    iget v1, p0, Lcom/tsf/shell/manager/o/a;->H:I
+
+    iget v2, p0, Lcom/tsf/shell/manager/o/a;->I:I
+
+    invoke-static {p1, p2, v1, v2}, Lcom/tsf/shell/shortcut/ShortcutIcon;->decodeThemeDrawable(Landroid/content/Context;Ljava/lang/String;II)Landroid/graphics/Bitmap;
+
+    move-result-object v0
+
+    :return_bmp
     return-object v0
 
     .line 345
