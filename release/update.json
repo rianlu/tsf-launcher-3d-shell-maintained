@@ -4,7 +4,7 @@
   "versionName": "3.9.4-r9",
   "tag": "v3.9.4-r9",
   "fileName": "tsf-launcher-maintained-3.9.4-r9.apk",
-  "sha256": "e466ad024ba0246eca5c452b3c76592d5ebe6f1fa29a83b8f722b34955337e03",
+  "sha256": "c6d61a52125f0cccaf065807c90a34ed2a7cebec50b92cb78b36f1913b7c47d4",
   "changelog": "Fixed default icon over-clipping and aliasing, washed-out icons on translucent plate themes, and broken circular icon masks. Sped up app drawer loading and theme switching, and improved stability on modern Android. Migrated built-in clock and Weather widget to Xiaomi Weather + Open-Meteo for both China and overseas users. Added an auto-remove empty folder option and improved alarm navigation. Updated Gallery (sharper screenshots, auto-refresh, fixed blank expand), Weather, Calendar, Music, and Memo widgets; uninstall and reinstall old widget plugins from tsf-widgets-v1 to apply updates.",
   "changelogZh": "修复默认图标圆角过裁锯齿、半透明底板主题图标发淡及部分第三方圆形遮罩失效问题；大幅提升应用抽屉加载速度与切换主题流畅度，提升高版本安卓稳定性；内置时钟与挂件天气切换为小米天气 + Open-Meteo 双源，海内外均可正常使用；新增空文件夹自动消失开关，优化闹钟返回体验。同步更新相册（提升截图清晰度、支持新照片自动刷新、修复空展开）、天气、日历、音乐、便签小部件，旧版小部件需先卸载再重新添加或从 tsf-widgets-v1 重新安装。"
 }
